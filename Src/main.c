@@ -46,6 +46,11 @@
 
 /* USER CODE BEGIN PV */
 
+uint8_t dataToReceive[12]= {0};
+uint8_t usbStatus = 0;
+
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -95,11 +100,15 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  usbStatus = hUsbDeviceFS.dev_state;
+
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  HAL_Delay(1);
   }
   /* USER CODE END 3 */
 }
