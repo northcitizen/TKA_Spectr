@@ -360,7 +360,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
   hpcd_USB_OTG_FS.Init.vbus_sensing_enable = DISABLE;
   if (HAL_PCD_Init(&hpcd_USB_OTG_FS) != HAL_OK)
   {
-    Error_Handler();
+	  _Error_Handler(__FILE__, __LINE__);
   }
 
   HAL_PCDEx_SetRxFiFo(&hpcd_USB_OTG_FS, 0x80);
