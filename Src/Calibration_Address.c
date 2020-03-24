@@ -25,28 +25,28 @@ uint16_t Calibration_Load_2byte(uint32_t Address, uint8_t num)
 }
 	
 
-
+	uint8_t byte1[8] = {0};
 uint8_t Calibration_Load_1byte(uint32_t Address, uint8_t num)
 {
 	uint64_t buff = 0;
 	uint8_t buff_array[8] = {0};
-	uint8_t byte[8] = {0};
+
 	uint8_t i = 0;
 	
 	i = num > 7 ? (num - 8) : num;
 	buff = flash_data_read_buff(Address);
 	memcpy(buff_array, &buff, sizeof(uint64_t));
 	
-	byte[0] =  buff_array[3];
-	byte[1] =  buff_array[2];
-	byte[2] =  buff_array[1];
-	byte[3] =  buff_array[0];
-	byte[4] =  buff_array[7];
-	byte[5] =  buff_array[6];
-	byte[6] =  buff_array[5];
-	byte[7] =  buff_array[4];
+	byte1[0] =  buff_array[3];
+	byte1[1] =  buff_array[2];
+	byte1[2] =  buff_array[1];
+	byte1[3] =  buff_array[0];
+	byte1[4] =  buff_array[7];
+	byte1[5] =  buff_array[6];
+	byte1[6] =  buff_array[5];
+	byte1[7] =  buff_array[4];
 	
-	return byte[i];
+	return byte1[i];
 }
 
 

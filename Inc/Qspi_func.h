@@ -1,4 +1,7 @@
+#ifndef __QSPI_H
+#define __QSPI_H
 #include "main.h"
+#include "stm32l4xx_hal.h"
 /* W25Q commands */
 
 #define write_enable			0x06
@@ -85,3 +88,6 @@ void QSPI_Transmit_32(uint32_t* data, uint32_t address, uint32_t size);
 void QSPI_Array(uint8_t* data, uint32_t address, uint32_t size);
 void QSPI_Array_16(uint16_t* data, uint32_t address, uint32_t size);
 void QSPI_Array_32(uint32_t* data, uint32_t address, uint32_t size);
+
+void Image_load(uint32_t address, uint32_t size);
+#endif /* __LTDC_H */

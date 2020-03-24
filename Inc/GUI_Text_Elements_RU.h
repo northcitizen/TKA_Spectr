@@ -34,7 +34,4 @@ void GUI_TextRu_Info_Ver(uint16_t X, uint16_t Y, float Version);
 void GUI_TextRu_Radiance(uint16_t X, uint16_t Y);
 void GUI_TextRu_Luminance(uint16_t X, uint16_t Y);
 void GUI_TextRu_WriteSD(uint16_t X, uint16_t Y);
-
-void GUI_TextRu_Wait(uint16_t X, uint16_t Y);
-void GUI_TextRu_Wait_END(uint16_t X, uint16_t Y);
 #endif

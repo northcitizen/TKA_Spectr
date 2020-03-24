@@ -1,17 +1,32 @@
-/* Библиотека GPIO для работы с SPI микросхемой W25Q128JVSIQ.
-* Работа реализована в двух режимах: Single SPI (функции, имеющие в названии SPI) и Quad SPI (Функции, имеющие в названии QSPI).
-*	Перед работой с SPI функциями необходим предварительный вызов функции Single_Mode().
-* Функции QSPI для чтения и записи сами переконфигурируют GPIO на необходимый режим работы ( Функции QSPI_Recieve_Init() и QSPI_Transmit_Init() ).
-* Чтение регистров происходит в Single SPI режиме.
-* QSPI функции для чтения и записи 8, 16 и 32 бит находятся после 480 стр этого файла.
+/* ВЁв¬ЁпіҐл  GPIO е¬ї р Ў®т» ± SPI тЄЎ»р­ќ®йЎ—25Q128JVSIQ.
+* С вЇІаЎ°жЎ«йЁ®гЎ­аЎў еЈіс °Ґз©¬бµє Single SPI (рі­ЄтЁЁ¬ й­Ґт№ЁҐ вЎ­бЁўб®ЁиЎ“PI) иЎ‘uad SPI (Хіо«¶йЁ¬ й­Ґт№ЁҐ вЎ­бЁўб®ЁиЎ‘SPI).
+*	РҐрҐ¤ р Ў®т®© с “ђI рі­ЄтЁї¬иЎ­жЇЎс®¤ЁмЎЇрҐ¤ўб±ЁтҐ«јој© гј§пў рі­ЄтЁЁ Single_Mode().
+* Хіо«¶йЁ QSPI е¬ї уІҐ­йї иЎ§б°ЁсЁ ±б­Ё а¦°ж«®оµЁдґ°й±ітІ ‡PIO о  о¦®в¶®е©¬у© °ж§ЁмЎ°бў®т» Ё Хіо«¶йЁ QSPI_Recieve_Init() иЎ‘SPI_Transmit_Init() ).
+* ШІж®ЁеЎ°ж¤ЁсІ°®вЎЇр®Ё±с®¤Ёт ў Single SPI рҐ¦Ёс« Ќ
+* QSPI рі­ЄтЁЁ е¬ї уІҐ­йї иЎ§б°ЁсЁ ё, 16 и і2 в©І оЎµпҐїт±ї аЇ±мҐ 480 сІ° сІ®ЈоЎґбЄ«а®Ќ
 
 */
 
 #include "main.h"
 #include "Qspi_func.h"
+#include <string.h>
+
+extern uint16_t bmp[108000];
 
 //OSPI_RegularCmdTypeDef idread;
 GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+void Image_load(uint32_t address, uint32_t size){
+
+	uint16_t q = 0;
+	uint16_t buff[1400] = {0};
+
+	for (uint32_t pn = 0; pn < size; pn=pn+0x578){
+			QSPI_Recieve_IO_16(buff, address+q*0x0B00, (sizeof(buff)/2));
+			memcpy(&bmp[0+q*1400], buff, sizeof(buff));
+			q = q+1;
+	}
+}
 
 void GPIO_QSPI_Init(void)
 {
@@ -510,8 +525,8 @@ void QSPI_Data(uint8_t* data, uint32_t size)
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* Функции QSPI_Recieve_IO и QSPI_Recieve_O отличаются только способом отправки адреса 
-		В _IO адрес отправляется по 4 пинам, а в _O последовательно через IO0
+/* Хіо«¶йЁ QSPI_Recieve_IO иЎ‘SPI_Recieve_O пі«йё тІ±ї т®«јл® сЇ®±пў®мЎ®тЇ° г«Ё бҐ°жІ  
+		В _IO бҐ°ж± піЇр ў«уҐІ±у Ї® 4 а©­б¬¬ аЎў _O аЇ±м¦¤пЈ тҐ«јо® уҐ°ҐзЎ‰O0
 */
 
 /* Read byte array from memory in quad mode */
@@ -566,7 +581,7 @@ void QSPI_Transmit(uint8_t* data, uint32_t address, uint32_t size)
 	Single_Mode();
 	SPI_Check_Busy();
 }
-/* Ниже функции для 16 и 32 бит */
+/* ОЁзҐ рі­ЄтЁЁ е¬ї 16 и і2 в©І */
 /* Read 16 bit array from memory in quad mode */
 void QSPI_Recieve_IO_16(uint16_t* arr, uint32_t address, uint32_t size)		// be aware that this function reconfigurates GPIO
 {

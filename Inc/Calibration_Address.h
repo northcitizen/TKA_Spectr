@@ -1,7 +1,7 @@
 #ifndef __CALIBRATION_ADDRESS_H
 #define __CALIBRATION_ADDRESS_H
 #include "stm32l4xx_hal.h"
-//#include "CRC_check.h"
+#include "CRC_check.h"
 #include "string.h"
 
 #define WAVELENGHT							0x08100000
@@ -71,12 +71,22 @@
 //CRI
 #define		CRI_R1									0x0811B040//float
 
-#define		SERIAL_DEVICE 					0x08129040 //uint16
-#define		CALIBRATION_DATE				0x08129048	//uint16
-#define		CALIBRATION_MONTH				0x08129049	//uint16
-#define		CALIBRATION_YEAR				0x0812904C	//uint16
+#define		SERIAL_DEVICE 					0x0812A040 //uint16
+#define		CALIBRATION_DATE				0x0812A048	//uint16
+#define		CALIBRATION_MONTH				0x0812A04A	//uint16
+#define		CALIBRATION_YEAR				0x0812A04C	//uint16
 	
-
+//dynamic settings_data
+#define		FILENUMBER							0x0812B020
+#define		SET_MODEEL							0x0812B030
+#define		SET_MEASUREFIELD				0x0812B038
+#define		SET_GRAPHFIELD					0x0812B040
+#define		SET_COLORFIELD					0x0812B048
+#define		SET_COLORRENDFIELD			0x0812B050
+#define		SET_LANGUAGE						0x0812B058
+#define		SET_SOURCETYPE					0x0812B060
+#define		SET_BLUETOOTH						0x0812B068	
+#define 	SCREENADDR							0x0812C020
 extern  const uint16_t Tc[31];
 
 

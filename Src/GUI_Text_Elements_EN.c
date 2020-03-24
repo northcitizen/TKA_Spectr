@@ -68,7 +68,7 @@ void GUI_Text_CIE_xy_1964(uint16_t X, uint16_t Y)
 	TFT_DrawChar(X+92, Y, '1');
 	TFT_DrawChar(X+105, Y, '9');
 	TFT_DrawChar(X+120, Y, '6');
-	TFT_DrawChar(X+135, Y, '9');
+	TFT_DrawChar(X+135, Y, '4');
 }
 
 
@@ -683,6 +683,20 @@ void GUI_TextEn_Red(uint16_t X, uint16_t Y)
 		TFT_DrawChar(X+16, Y+2, 'e');
 		TFT_DrawChar(X+29, Y+2, 'd');
 }
+
+void GUI_TextEn_WriteSD(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetFont(&Font16EN_arch_big);
+	TFT_DrawChar(X, Y, 'W');
+	TFT_SetFont(&Font16EN_arch_small);
+	TFT_DrawChar(X+17, Y+2, 'r');
+	TFT_DrawChar(X+28, Y+2, 'i');
+	TFT_DrawChar(X+41, Y+2, 't');
+	TFT_DrawChar(X+53, Y+2, 'e');
+}
+
 
 void GUI_TextEn_Info_Callibration(uint16_t X, uint16_t Y, uint8_t date, uint8_t month, uint16_t year)
 {

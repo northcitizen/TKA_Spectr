@@ -29,6 +29,8 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR)
 void GUI_Text_S_P_Measure(uint16_t X, uint16_t Y, float Value);
 void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA, int16_t ValueB);
 void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_light);
-
+void GUI_Axes_Locus_XY(uint16_t X_center, uint16_t Y_center, uint8_t direction);
+void GUI_Axes_Locus_LUV(uint16_t X_center, uint16_t Y_center, uint8_t direction);
+void GUI_Axes_Locus_Lab(uint16_t X_center, uint16_t Y_center, uint8_t direction);
 uint8_t deg_return(float Value);
 #endif

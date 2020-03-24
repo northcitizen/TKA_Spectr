@@ -13,13 +13,13 @@
 #include "GUI_Text_Elements_EN.h"
 #include "GUI_Text_Elements_RU.h"
 #include "GUI_Measure_Elements.h"
-//#include "CRI_graph.h"
-//#include "CQS_graph.h"
-//#include "Spectral_graph.h"
-//#include "SD_CARD.h"
-//#include "CQS_Calculate.h"
-//#include "CRI_Calculate.h"
-
+#include "CRI_graph.h"
+#include "CQS_graph.h"
+#include "Spectral_graph.h"
+#include "SD_CARD.h"
+#include "CQS_Calculate.h"
+#include "CRI_Calculate.h"
+#include "Qspi_func.h"
 
 #define VERSION 1.2
 
@@ -125,9 +125,6 @@ void GUI_OptionMenuRu();
 void GUI_OptionMenuEn();
 
 void GUI_SD_Write_Screen();
-
-void GUI_Wait_Screen(void);
-void GUI_Wait_END_Screen(void);
 	
-//void  GUI_LaserOnOff(void);
+void  GUI_LaserOnOff(void);
 #endif /* __GUI_H */

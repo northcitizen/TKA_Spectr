@@ -16,12 +16,12 @@ uint8_t deg_return(float Value)
 return deg;	
 }
 
-uint8_t old_meas_type_E = 2, old_num_e = 10, old_num_n = 10;
+uint8_t old_meas_type_E = 2, old_num_e = 10, old_num_n = 10, old_deg = 0xFF;
 uint8_t old_meas_type_L = 2, old_numL_e = 10, old_numL_n = 10;
 void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_light)
 {
 	char buffer[9] = {0};
-	uint8_t	delta_pos = 122, deg = 0, number = 0, meas_type; 
+	uint8_t	delta_pos = 122, deg = 0, number = 0, meas_type=0; 
 	uint32_t dec = 10;
 	
 	TFT_SetTextColor(TFT_White);
@@ -49,7 +49,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	TFT_SetFont(&Font26EN_arch_digit);
 	
 	if(energy_light){
-		sprintf (buffer, "%.2f", Value);}
+		sprintf (buffer, "%.1f", Value);}
 	else{
 		sprintf (buffer, "%.1f", Value);
 	}
@@ -67,10 +67,12 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	if(energy_light && number < old_num_e )
 	{
 		TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black_Bkgr);
+		old_meas_type_E = !old_meas_type_E;
 	} 
 	else if(!energy_light && number < old_num_n)
 	{
 		TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black_Bkgr);
+		old_meas_type_E = !old_meas_type_E;
 	}
 	
 	if(energy_light){
@@ -84,14 +86,14 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	
 	if (Language_status == Ru && !energy_light)
 	{
-		if (deg && old_meas_type_E != meas_type){
+		if (deg){
 			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black_Bkgr);
 			old_meas_type_E = 1;
 			TFT_SetFont(&Font26RU_arch_small);
 			TFT_DrawCharRus(X+200, Y+4, 'к');
 			TFT_DrawCharRus(X+215, Y+4, 'л');
 			TFT_DrawCharRus(X+232, Y+4, 'к');
-		}else if((!deg && old_meas_type_E != meas_type)){
+		}else if(!deg ){
 			old_meas_type_E = 0;
 			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black_Bkgr);
 			TFT_SetFont(&Font26RU_arch_small);
@@ -100,14 +102,14 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		}
 	} else if (Language_status == En && !energy_light)
 	{
-		if (deg && old_meas_type_E != meas_type){
+		if (deg){
 			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black_Bkgr);
 			old_meas_type_E = 1;
 			TFT_SetFont(&Font26EN_arch_small);
 			TFT_DrawChar(X+214, Y+4, 'l'-65);
 			TFT_DrawChar(X+200, Y+4, 'k'-65);
 			TFT_DrawChar(X+226, Y+4, 'x'-65);
-		}else if((!deg && old_meas_type_E != meas_type)){
+		}else if((!deg)){
 			old_meas_type_E = 0;
 			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black_Bkgr);
 			TFT_SetFont(&Font26EN_arch_small);
@@ -122,7 +124,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	{
 		GUI_TextEn_W_m2(244, Y);
 	}
-	
+	old_deg = deg;
 
 }
 
@@ -1101,3 +1103,87 @@ void GUI_Battery_Level(uint16_t X, uint16_t Y, double charge)
 
 }
 
+void GUI_Axes_Locus_XY(uint16_t X_center, uint16_t Y_center, uint8_t direction)
+{
+		TFT_FillRectangle(X_center-2, Y_center-XY2_LOCUS_BMP_SIZEY, X_center, Y_center, TFT_White); //Yline
+		TFT_FillRectangle(X_center-2, Y_center+1, X_center+XY2_LOCUS_BMP_SIZEX, Y_center+3, TFT_White);//XLine
+		
+		TFT_DrawLine(X_center-5, Y_center-300/2, X_center+3, Y_center-300/2, TFT_White);
+		TFT_DrawLine(X_center+295/2, Y_center-3, X_center+295/2, Y_center+6, TFT_White);
+		
+		TFT_SetFont(&Font6EN_arch_big);
+		TFT_SetTextColor(TFT_White);
+		TFT_SetBackColor(TFT_Black_Bkgr);
+		
+		TFT_DrawChar(4,  Y_center-300/2-2, '.');
+		TFT_DrawChar(0,  Y_center-300/2-2, '0');
+		TFT_DrawChar(8,  Y_center-300/2-2, '5');
+		
+		TFT_DrawChar(X_center+295/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+295/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+295/2-6+8,  Y_center+6, '5');
+}
+
+void GUI_Axes_Locus_LUV(uint16_t X_center, uint16_t Y_center, uint8_t direction)
+{
+		TFT_FillRectangle(X_center-2, Y_center-LUV_LOCUS_BMP_SIZEY, X_center, Y_center, TFT_White); //Yline
+		TFT_FillRectangle(X_center-2, Y_center+1, X_center+LUV_LOCUS_BMP_SIZEX, Y_center+3, TFT_White);//XLine
+		
+		TFT_DrawLine(X_center-5, Y_center-396/2, X_center+3, Y_center-396/2, TFT_White);
+		TFT_DrawLine(X_center+403/2, Y_center-3, X_center+403/2, Y_center+6, TFT_White);
+		
+		TFT_SetFont(&Font6EN_arch_big);
+		TFT_SetTextColor(TFT_White);
+		TFT_SetBackColor(TFT_Black_Bkgr);
+		
+		TFT_DrawChar(4,  Y_center-396/2-2, '.');
+		TFT_DrawChar(0,  Y_center-396/2-2, '0');
+		TFT_DrawChar(8,  Y_center-396/2-2, '5');
+		
+		TFT_DrawChar(X_center+403/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+403/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+403/2-6+8,  Y_center+6, '5');
+}
+
+void GUI_Axes_Locus_Lab(uint16_t X_center, uint16_t Y_center, uint8_t direction)
+{
+		TFT_FillRectangle(X_center-2-LAB_LOCUS_SIZEX/2, Y_center-1, X_center+LAB_LOCUS_SIZEX/2, Y_center+1, TFT_White); //
+		TFT_FillRectangle(X_center-2, Y_center-LAB_LOCUS_SIZEY/2, X_center, Y_center+LAB_LOCUS_SIZEY/2, TFT_White);//
+		
+
+		TFT_SetFont(&Font6EN_arch_big);
+		TFT_SetTextColor(TFT_White);
+		TFT_SetBackColor(TFT_Black_Bkgr);
+	
+		TFT_DrawChar(X_center-14+0,  Y_center-LAB_LOCUS_SIZEY/2-8, '-');
+		TFT_DrawChar(X_center-14+5,  Y_center-LAB_LOCUS_SIZEY/2-8, '1');
+		TFT_DrawChar(X_center-14+10,  Y_center-LAB_LOCUS_SIZEY/2-8, '2');
+		TFT_DrawChar(X_center-14+16,  Y_center-LAB_LOCUS_SIZEY/2-8, '8');
+		
+		TFT_DrawChar(X_center-14+0,  Y_center+LAB_LOCUS_SIZEY/2+6, '+');
+		TFT_DrawChar(X_center-14+5,  Y_center+LAB_LOCUS_SIZEY/2+6, '1');
+		TFT_DrawChar(X_center-14+10,  Y_center+LAB_LOCUS_SIZEY/2+6, '2');
+		TFT_DrawChar(X_center-14+16,  Y_center+LAB_LOCUS_SIZEY/2+6, '8');
+		
+		TFT_DrawChar(0,  Y_center-11, '-');
+		TFT_DrawChar(5,  Y_center-11, '1');
+		TFT_DrawChar(10,  Y_center-11, '2');
+		TFT_DrawChar(16,  Y_center-11, '8');
+		
+		TFT_DrawChar(260-15,  Y_center-11, '+');
+		TFT_DrawChar(260-10,  Y_center-11, '1');
+		TFT_DrawChar(260-5,  Y_center-11, '2');
+		TFT_DrawChar(260,  Y_center-11, '8');
+		
+		//		TFT_DrawLine(X_center-5, Y_center-LAB_LOCUS_SIZEY/4, X_center+3, Y_center-LAB_LOCUS_SIZEY/4, TFT_White);
+//		TFT_DrawLine(X_center-5, Y_center+LAB_LOCUS_SIZEY/4, X_center+3, Y_center+LAB_LOCUS_SIZEY/4, TFT_White);
+		
+		TFT_DrawLine(X_center-5, Y_center-LAB_LOCUS_SIZEY/2, X_center+3, Y_center-LAB_LOCUS_SIZEY/2, TFT_White);
+		TFT_DrawLine(X_center-5, Y_center+LAB_LOCUS_SIZEY/2, X_center+3, Y_center+LAB_LOCUS_SIZEY/2, TFT_White);
+	
+//		TFT_DrawLine(X_center-LAB_LOCUS_SIZEX/4, Y_center-3, X_center-LAB_LOCUS_SIZEX/4, Y_center+6, TFT_White);
+//		TFT_DrawLine(X_center+LAB_LOCUS_SIZEX/4, Y_center-3, X_center+LAB_LOCUS_SIZEX/4, Y_center+6, TFT_White);
+		
+		TFT_DrawLine(X_center-LAB_LOCUS_SIZEX/2+1, Y_center-3, X_center-LAB_LOCUS_SIZEX/2+1, Y_center+6, TFT_White);
+		TFT_DrawLine(X_center+LAB_LOCUS_SIZEX/2, Y_center-3, X_center+LAB_LOCUS_SIZEX/2, Y_center+6, TFT_White);
+}

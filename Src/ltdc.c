@@ -1,11 +1,14 @@
 #include "ltdc.h"
-#include "main.h"
+#include "Qspi_func.h"
 
+extern uint16_t coordX[1500], coordY[1500], i_coord;
+extern uint32_t graph_data_old[1500];
+extern uint8_t flag_spectral;
 
-extern volatile uint32_t RGB565_480x272[130560];
+extern volatile uint16_t RGB565_480x272[130560];
 extern LTDC_HandleTypeDef hltdc;
 extern DMA2D_HandleTypeDef hdma2d;
-extern volatile uint8_t TFT_direction=0;
+extern volatile uint8_t TFT_direction;
 LCD_DrawPropTypeDef lcdprop;
 uint16_t X_SIZE = 480;
 uint16_t Y_SIZE = 272;
@@ -258,7 +261,7 @@ void TFT_FillScreen_DMA(uint16_t color)
   hdma2d.Init.Mode = DMA2D_R2M;
   hdma2d.Init.OutputOffset = 0;
 	hdma2d.Init.ColorMode = DMA2D_OUTPUT_RGB565;
-
+	
   if(HAL_DMA2D_Init(&hdma2d) == HAL_OK)
   {
     if (HAL_DMA2D_Start(&hdma2d, color, hltdc.LayerCfg[0].FBStartAdress,
@@ -274,12 +277,13 @@ void TFT_FillScreen_DMA(uint16_t color)
 void TFT_DrawPixel(uint16_t Xpos, uint16_t Ypos, uint16_t color)
 {
 	uint16_t tmp;
-
+	
 //	tmp = Xpos;
 //	Xpos = Ypos;
 //	Ypos = X_SIZE - 1 - tmp;
 ////////////////////////////////////////////rotate -90
 	if(TFT_direction == 0x00){
+
 	tmp = Xpos;
 	Xpos = Ypos;
 	Ypos = Y_SIZE - 1 - tmp;
@@ -297,7 +301,7 @@ void TFT_DrawPixel(uint16_t Xpos, uint16_t Ypos, uint16_t color)
 //	|										|
 //	|-------------------|
 //		|Cable|		|Cable|
-}
+}			
 
 uint16_t TFT_GetPixelValue(uint16_t Xpos, uint16_t Ypos)
 {
@@ -321,9 +325,7 @@ uint16_t TFT_GetPixelValue(uint16_t Xpos, uint16_t Ypos)
 	}
 }		
 
-extern uint16_t coordX[1500], coordY[1500], i_coord;
-extern uint32_t graph_data_old[1500];
-extern uint8_t flag_spectral;
+
 int16_t prev_x=0, prev_y=0; 
 //----------------------------------------
 void TFT_DrawLine(uint16_t x0, uint16_t y0,	uint16_t x1, uint16_t y1, uint16_t color)
@@ -372,8 +374,6 @@ void TFT_DrawLineGraph(uint16_t x0, uint16_t y0,	uint16_t x1, uint16_t y1, uint1
 				coordY[i_coord] = y0;
 				graph_data_old[i_coord] = TFT_GetPixelValue(x0, y0);
 				i_coord++;
-//				prev_x = x0;
-//				prev_y = y0;
 			}
 		if(i_coord > 0){
 			if(flag_spectral && !(coordX[i_coord-1] == x0 && coordY[i_coord-1]== y0)){
@@ -381,8 +381,7 @@ void TFT_DrawLineGraph(uint16_t x0, uint16_t y0,	uint16_t x1, uint16_t y1, uint1
 				coordY[i_coord] = y0;
 				graph_data_old[i_coord] = TFT_GetPixelValue(x0, y0);
 				i_coord++;
-//				prev_x = x0;
-//				prev_y = y0;
+
 			}
 		}
 		TFT_DrawPixel(x0, y0, color); 
@@ -415,12 +414,27 @@ void TFT_DrawBitmap(uint16_t X1, uint16_t Y1, sImage pbmp)
 	}
 }
 
+void TFT_DrawBitmap_Flash(uint16_t X1, uint16_t Y1, sImageFlash pbmp)
+{
+	uint16_t Xpos, Ypos, buff_data[1];
+	uint32_t i = 0;
+	for(Ypos = Y1; Ypos < pbmp.Height+Y1; Ypos++){
+//		QSPI_Recieve_IO_16(buff_data, Ypos*2+pbmp.Address, 100);
+		for(Xpos=X1; Xpos < pbmp.Width+X1; Xpos++){
+			QSPI_Recieve_IO_16(buff_data, i*2, 1);
+			TFT_DrawPixel(Xpos, Ypos, (uint16_t)buff_data[0]);
+			i++;
+		}
+	}
+}
+
+
 void TFT_DrawBitmap_DMA(uint16_t Xpos, uint16_t Ypos, sImage bmp)
 {
 	uint32_t i = 0;
 	uint32_t address, index, index2;
 	address = hltdc.LayerCfg[0].FBStartAdress+(((X_SIZE*Ypos) + Xpos)*2);
-
+	
 	for(index=0; index < bmp.Height; index++){
 		for(index2 = 0; index2 < bmp.Width; index2++){
 			hdma2d.Init.Mode = DMA2D_R2M;
@@ -446,6 +460,47 @@ void TFT_DrawBitmap_DMA(uint16_t Xpos, uint16_t Ypos, sImage bmp)
 	}
 }
 
+
+void TFT_DrawBitmap_DMA_FLASH(uint16_t Xpos, uint16_t Ypos, sImageFlash bmp)
+{
+	
+	uint32_t i = 0;
+	uint32_t address, index, index2;
+	address = hltdc.LayerCfg[0].FBStartAdress+(((X_SIZE*Ypos) + Xpos)*2);
+	uint16_t buff[1400] = {0};
+		uint16_t q = 0;
+
+//	for (i = 0; i < 0xBEE6; i=i+0x578){
+//			memcpy(buff, &TKA_Logo[i], sizeof(buff));
+//			QSPI_Recieve_IO_16(buff, 0x0000+q*0x0B00, (sizeof(test16)/2));
+//			q = q+1;
+//	}
+	
+	
+	for(index=0; index < bmp.Height; index++){
+		for(index2 = 0; index2 < bmp.Width; index2++){
+			hdma2d.Init.Mode = DMA2D_R2M;
+			hdma2d.Init.ColorMode = DMA2D_RGB565;
+			hdma2d.Init.OutputOffset = 0;
+			hdma2d.LayerCfg[0].AlphaMode = DMA2D_NO_MODIF_ALPHA;
+			hdma2d.LayerCfg[0].InputAlpha = 0xFF;
+			hdma2d.LayerCfg[0].InputColorMode = DMA2D_INPUT_RGB565;
+			hdma2d.LayerCfg[0].InputOffset = 0;
+			if(HAL_DMA2D_Init(&hdma2d) == HAL_OK)
+			{
+				if(HAL_DMA2D_ConfigLayer(&hdma2d, 1) == HAL_OK)
+				{
+//					if(HAL_DMA2D_Start(&hdma2d, bmp.pData[i], address, 1, 1) == HAL_OK)
+//					{
+//						HAL_DMA2D_PollForTransfer(&hdma2d, 10);
+//						i++;
+//						address = hltdc.LayerCfg[0].FBStartAdress+(((X_SIZE*(Ypos+index) + (Xpos+index2))*2));
+//					}
+				}
+			}
+		}
+	}
+}
 
 
 void TFT_DrawGridAxes(uint16_t ZeroX, uint16_t ZeroY, uint16_t MaxX, uint16_t MaxY, uint16_t StepX, uint16_t StepY, uint16_t grid_color)
@@ -599,6 +654,29 @@ void TFT_DrawCharRus(uint16_t x, uint16_t y, const uint8_t c)
 		y++;
 	}
 }
+
+
+	uint16_t Xpos, Ypos;
+	uint32_t ip = 0;
+void TFT_DrawCutBMP(uint16_t x_pos, uint16_t y_pos, uint16_t xs, uint16_t ys, uint16_t size, sImage pbmp)
+{
+	uint16_t q = 1;
+	ip = pbmp.Width*ys+xs-1;
+	
+	for(Ypos = y_pos; Ypos < y_pos+size; Ypos++){
+		for(Xpos=x_pos; Xpos < x_pos+size; Xpos++){
+			TFT_DrawPixel(Xpos, Ypos, (uint16_t)pbmp.pData[ip]);
+			if(ip < ys*(pbmp.Width)+xs+size-2+(q-1)*pbmp.Width)
+				{	ip++;} 
+				else
+				{ip = ip + pbmp.Width-size+1; 
+					q++;}
+		}
+	}
+	
+}
+
+
 void TFT_DisplayStringRus(uint16_t Xpos, uint16_t Ypos, const uint16_t *Text,	Text_AlignModeTypdef Mode)
 {
 	uint16_t ref_column = 1, i = 0;
@@ -740,5 +818,122 @@ void TFT_DisplayString(uint16_t Xpos, uint16_t Ypos, const uint8_t *Text,	Text_A
 	}
 }
 
+void DrawLineX(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color){
+    uint8_t steep = abs(y2-y1)>abs(x2-x1);
+    if (steep){
+        swap(x1, y1);
+        swap(x2, y2);
+    }
+    if(x1>x2){
+        swap(x1, x2);
+        swap(y1, y2);
+    }
+    int dx,dy;
+    dx=x2-x1;
+    dy=abs(y2-y1);
+    int err=dx/2;
+    int ystep;
+    if(y1<y2) ystep = 1;
+    else  ystep = -1;
+    for ( ; x1<=x2; x1++){
+			
+        if (steep) {TFT_DrawPixel(y1, x1, color);
+//					if(flag_spectral && !(coordX[i_coord] == y1 && coordY[i_coord]== x1) && i_coord == 0){
+//                coordX[i_coord] = y1; 
+//                coordY[i_coord] = x1;
+//                graph_data_old[i_coord] = TFT_GetPixelValue(y1, x1);
+//                i_coord++;
+//            }
+//					if(i_coord > 0){
+//							if(flag_spectral && !(coordX[i_coord-1] == y1 && coordY[i_coord-1]== x1)){
+//									coordX[i_coord] = y1; 
+//									coordY[i_coord] = x1;
+//									graph_data_old[i_coord] = TFT_GetPixelValue(y1, x1);
+//									i_coord++;
+//							}
+//					}
+				}
+        else {TFT_DrawPixel(x1, y1, color);
+//					if(flag_spectral && !(coordX[i_coord] == x1 && coordY[i_coord]== y1) && i_coord == 0){
+//									coordX[i_coord] = x1; 
+//									coordY[i_coord] = y1;
+//									graph_data_old[i_coord] = TFT_GetPixelValue(x1, y1);
+//									i_coord++;
+//							}
+//					if(i_coord > 0){
+//							if(flag_spectral && !(coordX[i_coord-1] == x1 && coordY[i_coord-1]== y1)){
+//									coordX[i_coord] = x1; 
+//									coordY[i_coord] = y1;
+//									graph_data_old[i_coord] = TFT_GetPixelValue(x1, y1);
+//									i_coord++;
+//							}
+//						}
+					}
+        err-=dy;
+        if (err<0){
+            y1 += ystep;
+            err+=dx;
+        }
+    }
+}
 
+
+void GetLineX(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color){
+    uint8_t steep = abs(y2-y1)>abs(x2-x1);
+    if (steep){
+        swap(x1, y1);
+        swap(x2, y2);
+    }
+    if(x1>x2){
+        swap(x1, x2);
+        swap(y1, y2);
+    }
+    int dx,dy;
+    dx=x2-x1;
+    dy=abs(y2-y1);
+    int err=dx/2;
+    int ystep;
+    if(y1<y2) ystep = 1;
+    else  ystep = -1;
+    for ( ; x1<=x2; x1++){
+			
+        if (steep) {
+					if(flag_spectral && !(coordX[i_coord] == y1 && coordY[i_coord]== x1) && i_coord == 0){
+                coordX[i_coord] = y1; 
+                coordY[i_coord] = x1;
+                graph_data_old[i_coord] = TFT_GetPixelValue(y1, x1);
+                i_coord++;
+            }
+					if(i_coord > 0){
+							if(flag_spectral && !(coordX[i_coord-1] == y1 && coordY[i_coord-1]== x1)){
+									coordX[i_coord] = y1; 
+									coordY[i_coord] = x1;
+									graph_data_old[i_coord] = TFT_GetPixelValue(y1, x1);
+									i_coord++;
+							}
+					}
+				}
+        else {
+					if(flag_spectral && !(coordX[i_coord] == x1 && coordY[i_coord]== y1) && i_coord == 0){
+									coordX[i_coord] = x1; 
+									coordY[i_coord] = y1;
+									graph_data_old[i_coord] = TFT_GetPixelValue(x1, y1);
+									i_coord++;
+							}
+					if(i_coord > 0){
+							if(flag_spectral && !(coordX[i_coord-1] == x1 && coordY[i_coord-1]== y1)){
+									coordX[i_coord] = x1; 
+									coordY[i_coord] = y1;
+									graph_data_old[i_coord] = TFT_GetPixelValue(x1, y1);
+									i_coord++;
+							}
+						}
+					}
+        err-=dy;
+        if (err<0){
+            y1 += ystep;
+            err+=dx;
+        }
+    }
+}
 //----------------------------------------

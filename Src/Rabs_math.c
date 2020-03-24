@@ -47,10 +47,23 @@ float Rabs_calc_MAX(uint16_t Rdark, float Factor1, float Factor2)
 	return Factor3*Factor2;
 }
 
-float Rabs_find_MAX(float Rabs[])
+float Rabs_find_MAX(float Rabs[], uint8_t direction)
+{	
+	uint8_t    step = (direction == 0x00)? 4 :3;
+
+	float max = 0;
+
+	for (uint16_t i = 1023; i >= step; i-=step)
+	{
+		max = Rabs[i] > max ? Rabs[i] : max;
+	}
+	return max;
+}
+
+float Rabs_find_MAX_all(float Rabs[])
 {	
 	float max = 0;
-	
+
 	for (uint16_t i = 0; i < 1024; i++)
 	{
 		max = Rabs[i] > max ? Rabs[i] : max;

@@ -39,10 +39,10 @@
 #define	TFT_Blue_Off				0x1376			/*21, 113, 188*/
 #define TFT_Black_Bkgr      0x0063      /*  3,  15,  29 */
 #define TFT_Blue_action			0x1376//// del
-#define TFT_PAR_Blue				0xB6BC
+#define TFT_PAR_Blue				0x22B2
 #define TFT_PAR_Green				0xCF38
 #define TFT_PAR_Red					0xF5B9
-#define TFT_PAR_IRed				0xBCD8
+#define TFT_PAR_IRed				0x1B46
 
 ////CQS chart color///
 #define CQS_COLOR_Q1		0x7A2F
@@ -78,6 +78,25 @@
 #define CRI_COLOR_R14		0x1B46
 #define CRI_COLOR_R15		0xF611
 
+#define TKA_LOGO_BMP		0x0000
+#define TKA_LOGO_BMP_SIZEX	270
+#define TKA_LOGO_BMP_SIZEY	181
+
+#define LAB_LOCUS_BMP		0x18100
+#define LAB_LOCUS_SIZEX		250
+#define LAB_LOCUS_SIZEY		250
+
+#define XY2_LOCUS_BMP		0x37000 
+#define XY2_LOCUS_BMP_SIZEX		216
+#define XY2_LOCUS_BMP_SIZEY		250
+
+#define XY10_LOCUS_BMP	0x51D00
+#define XY10_LOCUS_BMP_SIZEX	216 
+#define XY10_LOCUS_BMP_SIZEY	250 
+
+#define LUV_LOCUS_BMP		0x6CA00 
+#define LUV_LOCUS_BMP_SIZEX		250 
+#define LUV_LOCUS_BMP_SIZEY	234 
 
 typedef struct
 {
@@ -126,4 +145,11 @@ void TFT_DrawCircleCorner(int16_t x0, int16_t y0, int16_t r, uint8_t corner, uin
 void TFT_DrawFilledCircleCorner(int16_t x0, int16_t y0, int16_t r, uint8_t corner, uint32_t color);
 void TFT_DrawFilledRoundedRectangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t r, uint32_t color);
 void TFT_DrawLineGraph(uint16_t x0, uint16_t y0,	uint16_t x1, uint16_t y1, uint16_t color);
+void TFT_DrawBitmap_Flash(uint16_t X1, uint16_t Y1, sImageFlash pbmp);
+void TFT_DrawBitmap_DMA_FLASH(uint16_t Xpos, uint16_t Ypos, sImageFlash bmp);
+
+void TFT_DrawCutBMP(uint16_t x_pos, uint16_t y_pos, uint16_t xs, uint16_t ys, uint16_t size, sImage pbmp);
+
+void DrawLineX(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
+void GetLineX(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 #endif /* __LTDC_H */
