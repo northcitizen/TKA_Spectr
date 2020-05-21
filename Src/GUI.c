@@ -838,6 +838,10 @@ void GUI_LaserOnOff(void)
 	}
 }
 
+void GUI_TouchError()
+{
+
+}
 
 void GUI_Display_Refresh()
 {
@@ -1767,3 +1771,4 @@ case Measure3_Screen:
 		default: preGUI_screen_state = Measure_Screen;
 			}
 }
+

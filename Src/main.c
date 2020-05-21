@@ -158,6 +158,12 @@ extern uint16_t i_old_color;
 uint16_t Cl, Cl_mass[350];
 ////////////////////////////////////////////////////////
 
+uint8_t mode = 0, state = 0, ac_mode = 0, chip_id = 0;
+volatile uint16_t xres = 0;
+volatile uint16_t yres = 0;
+uint8_t firm = 0;
+
+
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void); 
@@ -809,17 +815,14 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_OC_Start_IT(&htim4, TIM_CHANNEL_2);
 	HAL_Delay(1);
-	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, GPIO_PIN_SET);
-
-
-	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
-	HAL_Delay(1);
-
 //	HAL_UART_Receive_IT(&hlpuart1,(uint8_t*)str1,1);
+//	HAL_Delay(1);
 //	if(BluetoothStat == 0) {HAL_UART_MspDeInit(&hlpuart1);}
-
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, GPIO_PIN_SET);
 	MX_TIM6_Init();
 	HAL_Delay(1);
+	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim6);
 
@@ -828,8 +831,36 @@ int main(void)
 	HAL_Delay(1);
 	HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
 	HAL_Delay(1);
-	Touch_Ini();
 	
+
+
+	// ---------------------------------------------------------------------------------------
+
+//	TS_AutoCalib();
+//	mode = TS_IO_Read(TS_I2C_ADDRESS, 0);
+//	ac_mode = TS_IO_Read(TS_I2C_ADDRESS, ID_G_AUTO_CLB_MODE);
+//	state = TS_IO_Read(TS_I2C_ADDRESS, ID_G_STATE);
+//
+//
+//	xres = 0;
+//	yres = 0;
+//
+//	chip_id = TS_IO_Read(TS_I2C_ADDRESS, ID_G_CIPHER);
+//
+//	xres |= (TS_IO_Read(TS_I2C_ADDRESS, ID_G_MAX_X_HIGH) << 8);
+//	HAL_Delay(1);
+//	xres |=	TS_IO_Read(TS_I2C_ADDRESS, ID_G_MAX_X_LOW);
+//
+//	yres |= (TS_IO_Read(TS_I2C_ADDRESS, ID_G_MAX_Y_HIGH) << 8);
+//	HAL_Delay(1);
+//	yres |=	TS_IO_Read(TS_I2C_ADDRESS, ID_G_MAX_Y_LOW);
+//
+//	firm = TS_IO_Read(TS_I2C_ADDRESS, ID_G_FIRMID);
+
+	// ---------------------------------------------------------------------------------------
+
+//	Touch_Ini();
+
 	MX_SDMMC1_SD_Init();
 	MX_FATFS_Init();
 	
@@ -1024,9 +1055,7 @@ Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim7);
 
-	
-	
-	
+
  while (1)
  {        
             usb_receive_processing();
