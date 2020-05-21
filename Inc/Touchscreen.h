@@ -8,7 +8,6 @@
 //-------------------------------------------
 #define	TS_I2C_ADDRESS		0x70
 
-#define TS_DEVICE_MODE 		((uint8_t)	0x00)
 #define	GEST_ID				((uint8_t)	0x01)
 #define	TD_STATUS			((uint8_t)	0x02)
 
@@ -47,11 +46,6 @@
 #define	TOUCH5_WEIGHT	((uint8_t)	0x1F)
 #define	TOUCH5_MISC		((uint8_t)	0x20)
 
-#define	ID_G_MAX_X_HIGH		((uint8_t)	0x98)
-#define	ID_G_MAX_X_LOW		((uint8_t)	0x99)
-#define ID_G_MAX_Y_HIGH		((uint8_t)	0x9A)
-#define	ID_G_MAX_Y_LOW		((uint8_t)	0x9B)
-
 #define	ID_G_THGROUP	((uint8_t)	0x80)
 #define	ID_G_THPEAK		((uint8_t)	0x81)
 #define	ID_G_THCAL		((uint8_t)	0x82)
@@ -63,49 +57,20 @@
 #define	ID_G_PERIODACTIVE					((uint8_t)	0x88)
 #define	ID_G_PERIODMONITOR				((uint8_t)	0x89)
 
-
+#define	ID_G_CIPHER		((uint8_t)	0xA3)
+#define	ID_G_VENODRID	((uint8_t)	0xA8)
 
 #define	CHIP_ID				((uint8_t)	0x0A)
 #define	VENDOR_ID			((uint8_t)	0x79)
 
-
-#define ID_G_AUTO_CLB_MODE	((uint8_t)	0xA0)
-#define ID_G_LIB_VERSION_H	((uint8_t)	0xA1)
-#define ID_G_LIB_VERSION_L	((uint8_t)	0xA2)
-#define	ID_G_CIPHER			((uint8_t)	0xA3)
-#define ID_G_MODE			((uint8_t)	0xA4)
-#define ID_G_PMODE			((uint8_t)	0xA5)
-#define	ID_G_FIRMID			((uint8_t)	0xA6)
-
-#define ID_G_STATE			((uint8_t)	0xA7)
-#define CONFIGURE				0
-#define WORK					1
-#define CALIBRATION				2
-#define FACTORY					3
-#define AUTO_CALIBRATION		4
-
-
-#define	ID_G_VENODRID		((uint8_t)	0xA8)
-
-
-
-
-
 #define	TS_Callib			2.65
-
-//------------------------------------------
-
-#define TS_FACTORYMODE_VALUE
-
 //------------------------------------------
 void Touch_Ini(void);
 void Error(void);
 uint8_t TS_ReadID(uint8_t DeviceAddr);
 uint8_t TS_IO_Read(uint8_t DeviceAddr, uint8_t Reg);
-void TS_IO_Write(uint8_t DeviceAddr, uint8_t Reg, uint8_t Value);
-void TS_Get_XY1(uint16_t DeviceAddr, uint16_t *X, uint16_t *Y);
-void TS_Reg_Read();
-void TS_AutoCalib();
+void 		TS_IO_Write(uint8_t DeviceAddr, uint8_t Reg, uint8_t Value);
+void		TS_Get_XY1(uint16_t DeviceAddr, uint16_t *X, uint16_t *Y);
 
 //------------------------------------------
 

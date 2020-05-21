@@ -4,7 +4,7 @@
 void GUI_TitleString_Name(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(0x0084);
 	
 	TFT_SetFont(&Font16EN_arch_big);
 	TFT_DrawChar(X, 		Y, 'T');
@@ -18,23 +18,21 @@ void GUI_TitleString_Name(uint16_t X, uint16_t Y)
 	TFT_DrawChar(X+99, 	Y, 'c');
 	TFT_DrawChar(X+109, 	Y, 't');
 	TFT_DrawChar(X+120, 	Y, 'r');
-	TFT_SetFont(&Font16EN_arch_big);
-	TFT_DrawChar(X+135, 	Y, '(');
-	TFT_DrawChar(X+150, 	Y, 'M');
-	TFT_DrawChar(X+166, 	Y, ')');
 }
 
-void GUI_TitleString_Version(uint16_t X, uint16_t Y)
+void GUI_TitleString_Version(uint16_t X, uint16_t Y, float Version)
 {
+	char buffer[5] = {0};
+	
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(0x0084);
 	TFT_SetFont(&Font16EN_arch_small);
 	TFT_DrawChar(X, 		Y, 'v');
 	TFT_SetFont(&Font16EN_arch_big);
 	TFT_DrawChar(X+13, 		Y, '.');
-	TFT_DrawChar(X+24, 		Y, '1');
-	TFT_DrawChar(X+35, 		Y, '.');
-	TFT_DrawChar(X+45, 		Y, '0');
+	sprintf (buffer, "%.1f",  Version);
+	TFT_SetFont(&Font16);
+	TFT_DisplayString(X+24, Y, (uint8_t *)buffer, LEFT_MODE);
 }
 
 void GUI_TextRu_Language(uint16_t X, uint16_t Y)
@@ -469,4 +467,106 @@ void GUI_TextRu_Radiance(uint16_t X, uint16_t Y)
 	TFT_DrawCharRus(X+120, Y+5, 'т');
 	TFT_DrawCharRus(X+131, Y+5, 'ь');
 
+}
+
+void GUI_TextMsgRu_LowIrradiance(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	
+	TFT_SetFont(&Font16RU_arch_big);
+	TFT_DrawCharRus(X, Y, 'М');
+	TFT_SetFont(&Font16RU_arch_small);
+  TFT_DrawCharRus(X+16, Y+5, 'а');
+  TFT_DrawCharRus(X+28, Y+5, 'л');
+  TFT_DrawCharRus(X+40, Y+5, 'а');
+  TFT_DrawCharRus(X+52, Y+5, 'я');
+
+  TFT_DrawCharRus(X+73, Y+5, 'о');
+	TFT_DrawCharRus(X+87, Y+5, 'б');
+  TFT_DrawCharRus(X+98, Y+5, 'л');
+  TFT_DrawCharRus(X+110, Y+5, 'у');
+  TFT_DrawCharRus(X+122, Y+5, 'ч');
+  TFT_DrawCharRus(X+134, Y+5, 'е');
+  TFT_DrawCharRus(X+145, Y+5, 'н');
+  TFT_DrawCharRus(X+157, Y+5, 'н');
+  TFT_DrawCharRus(X+169, Y+5, 'о');
+  TFT_DrawCharRus(X+181, Y+5, 'с');
+  TFT_DrawCharRus(X+190, Y+5, 'т');
+  TFT_DrawCharRus(X+202, Y+5, 'ь');
+}
+
+void GUI_TextMsgRu_LowRadiance(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	
+	TFT_SetFont(&Font16RU_arch_big);
+	TFT_DrawCharRus(X, Y, 'М');
+	TFT_SetFont(&Font16RU_arch_small);
+  TFT_DrawCharRus(X+16, Y+5, 'а');
+  TFT_DrawCharRus(X+28, Y+5, 'л');
+  TFT_DrawCharRus(X+40, Y+5, 'а');
+  TFT_DrawCharRus(X+52, Y+5, 'я');
+
+  TFT_DrawCharRus(X+73, Y+5, 'я');
+  TFT_DrawCharRus(X+85, Y+5, 'р');
+  TFT_DrawCharRus(X+97, Y+5, 'к');
+  TFT_DrawCharRus(X+109, Y+5, 'о');
+  TFT_DrawCharRus(X+121, Y+5, 'с');
+  TFT_DrawCharRus(X+132, Y+5, 'т');
+  TFT_DrawCharRus(X+143, Y+5, 'ь');
+}
+
+void GUI_TextMsgRu_HighIrradiance(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	
+	TFT_SetFont(&Font16RU_arch_big);
+	TFT_DrawCharRus(X, Y, 'Б');
+	TFT_SetFont(&Font16RU_arch_small);
+  TFT_DrawCharRus(X+16, Y+5, 'о');
+  TFT_DrawCharRus(X+28, Y+5, 'л');
+  TFT_DrawCharRus(X+40, Y+5, 'ь');
+  TFT_DrawCharRus(X+54, Y+5, 'ш');
+  TFT_DrawCharRus(X+67, Y+5, 'а');
+  TFT_DrawCharRus(X+79, Y+5, 'я');
+	
+  TFT_DrawCharRus(X+102, Y+5, 'о');
+  TFT_DrawCharRus(X+116, Y+5, 'б');
+  TFT_DrawCharRus(X+127, Y+5, 'л');
+  TFT_DrawCharRus(X+139, Y+5, 'у');
+  TFT_DrawCharRus(X+151, Y+5, 'ч');
+  TFT_DrawCharRus(X+163, Y+5, 'е');
+  TFT_DrawCharRus(X+174, Y+5, 'н');
+  TFT_DrawCharRus(X+186, Y+5, 'н');
+  TFT_DrawCharRus(X+198, Y+5, 'о');
+  TFT_DrawCharRus(X+210, Y+5, 'с');
+  TFT_DrawCharRus(X+219, Y+5, 'т');
+  TFT_DrawCharRus(X+231, Y+5, 'ь');
+}
+
+void GUI_TextMsgRu_HighRadiance(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	
+	TFT_SetFont(&Font16RU_arch_big);
+	TFT_DrawCharRus(X, Y, 'Б');
+	TFT_SetFont(&Font16RU_arch_small);
+  TFT_DrawCharRus(X+16, Y+5, 'о');
+  TFT_DrawCharRus(X+28, Y+5, 'л');
+  TFT_DrawCharRus(X+40, Y+5, 'ь');
+  TFT_DrawCharRus(X+54, Y+5, 'ш');
+  TFT_DrawCharRus(X+67, Y+5, 'а');
+  TFT_DrawCharRus(X+79, Y+5, 'я');
+	
+  TFT_DrawCharRus(X+102, Y+5, 'я');
+  TFT_DrawCharRus(X+114, Y+5, 'р');
+  TFT_DrawCharRus(X+126, Y+5, 'к');
+  TFT_DrawCharRus(X+138, Y+5, 'о');
+  TFT_DrawCharRus(X+150, Y+5, 'с');
+  TFT_DrawCharRus(X+161, Y+5, 'т');
+  TFT_DrawCharRus(X+172, Y+5, 'ь');
 }

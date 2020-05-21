@@ -3,10 +3,10 @@ float sum;
 uint16_t iq;
 uint8_t	Calculate_deltaEab_Done = 0;
 extern uint8_t Measure_Color_xy, Source_Type;
-extern uint16_t colorimetry_XYZ[3], lambda_c_Measure, lambda_d_Measure, Measure_Field;
+extern uint16_t colorimetry_XYZ1964[3], lambda_c_Measure, lambda_d_Measure, Measure_Field, colorimetry_XYZ1931[3];
 extern int16_t colorimetry_LAB[3];
-extern float colorimetry_xy[2], colorimetry_uv[2], colorimetry_uv1976[2];
-extern float calibratre_x_1931[1024], calibratre_y_1931[1024], calibratre_z_1931[1024];
+extern float colorimetry_xy1964[2], colorimetry_uv[2], colorimetry_uv1976[2], colorimetry_xy1931[2];
+extern float calibratre_x_1931[1024], Spectral_day[1024], calibratre_z_1931[1024];
 	
 float Calculate_EL_Day(float R_data[], float Spectral_Day_const[])
 {
@@ -115,14 +115,16 @@ float Calculate_ELb(float R_data[], float Hazard_Blue[])
 }
 
 
-void Calculate_XYZ(float R_data[], float colorimetry_x[], float colorimetry_y[], float colorimetry_z[])
+
+
+void Calculate_XYZ1964(float R_data[], float colorimetry_x[], float colorimetry_y[], float colorimetry_z[])
 {
 
 	double k;
 	float X_sum = 0, Y_sum = 0, Z_sum = 0;
 	
-	colorimetry_XYZ[0] = 0;
-	colorimetry_XYZ[2] = 0;	
+	colorimetry_XYZ1964[0] = 0;
+	colorimetry_XYZ1964[2] = 0;	
 	
 	for (iq = 0; iq < 1024; iq++)
 	{
@@ -133,32 +135,60 @@ void Calculate_XYZ(float R_data[], float colorimetry_x[], float colorimetry_y[],
 	
 	k = 100/Y_sum;
 	
-	colorimetry_XYZ[0] = k*X_sum;
-	colorimetry_XYZ[1] = 100;
-	colorimetry_XYZ[2] = k*Z_sum;	
+	colorimetry_XYZ1964[0] = k*X_sum;
+	colorimetry_XYZ1964[1] = 100;
+	colorimetry_XYZ1964[2] = k*Z_sum;	
 }
+void Calculate_XYZ1931(float R_data[], float colorimetry_x[], float colorimetry_y[], float colorimetry_z[])
+{
 
-void Calculate_xy(uint16_t colorimetry_XYZ_calculate[])
+	double k;
+	float X_sum = 0, Y_sum = 0, Z_sum = 0;
+	
+	colorimetry_XYZ1931[0] = 0;
+	colorimetry_XYZ1931[2] = 0;	
+	
+	for (iq = 0; iq < 1024; iq++)
+	{
+		X_sum = X_sum + (R_data[iq]*colorimetry_x[iq]);
+		Y_sum = Y_sum + (R_data[iq]*colorimetry_y[iq]);
+		Z_sum = Z_sum + (R_data[iq]*colorimetry_z[iq]);
+	}
+	
+	k = 100/Y_sum;
+	
+	colorimetry_XYZ1931[0] = k*X_sum;
+	colorimetry_XYZ1931[1] = 100;
+	colorimetry_XYZ1931[2] = k*Z_sum;	
+}
+void Calculate_xy1964(uint16_t colorimetry_XYZ_calculate[])
 {
 	uint16_t sum = colorimetry_XYZ_calculate[0] + colorimetry_XYZ_calculate[1] + colorimetry_XYZ_calculate[2];
 	
-	colorimetry_xy[0] = fabs(((float)colorimetry_XYZ_calculate[0])/((float)sum));
-	colorimetry_xy[1] = fabs((float)colorimetry_XYZ_calculate[1])/((float)sum);
+	colorimetry_xy1964[0] = fabs(((float)colorimetry_XYZ_calculate[0])/((float)sum));
+	colorimetry_xy1964[1] = fabs((float)colorimetry_XYZ_calculate[1])/((float)sum);
+}
 
+void Calculate_xy1931(uint16_t colorimetry_XYZ_calculate[])
+{
+	uint16_t sum = colorimetry_XYZ_calculate[0] + colorimetry_XYZ_calculate[1] + colorimetry_XYZ_calculate[2];
+	
+	colorimetry_xy1931[0] = fabs(((float)colorimetry_XYZ_calculate[0])/((float)sum));
+	colorimetry_xy1931[1] = fabs((float)colorimetry_XYZ_calculate[1])/((float)sum);
 }
 
 void Calculate_uv(float colorimetry_xy_calculate[])
 {
 	float sum = -2*colorimetry_xy_calculate[0] + 12*colorimetry_xy_calculate[1] + 3;
-	colorimetry_uv[0] = 4*colorimetry_xy[0]/sum;
-	colorimetry_uv[1] = 6*colorimetry_xy[1]/sum;
+	colorimetry_uv[0] = 4*colorimetry_xy_calculate[0]/sum;
+	colorimetry_uv[1] = 6*colorimetry_xy_calculate[1]/sum;
 }
 
 void Calculate_uv1976(float colorimetry_xy_calculate[])
 {
 	float sum = -2*colorimetry_xy_calculate[0] + 12*colorimetry_xy_calculate[1] + 3;
-	colorimetry_uv1976[0] = 4*colorimetry_xy[0]/sum;
-	colorimetry_uv1976[1] = 9*colorimetry_xy[1]/sum;
+	colorimetry_uv1976[0] = 4*colorimetry_xy_calculate[0]/sum;
+	colorimetry_uv1976[1] = 9*colorimetry_xy_calculate[1]/sum;
 }
 
 double up = 0, vp = 0, factor_uvp = 0, result_tc, u_dop = 0, v_dop = 0, deltaC = 0;
@@ -170,13 +200,13 @@ float Calculate_Tc(float R_data[], uint8_t CIE_Type)
 	
 	if(CIE_Type == 0x00) //check CIE 1964
 	{
-		Calculate_XYZ(R_data, calibratre_x_1931, calibratre_y_1931, calibratre_z_1931);
+		Calculate_XYZ1931(R_data, calibratre_x_1931, Spectral_day, calibratre_z_1931);
 	}
 	
-	factor_uvp = (colorimetry_XYZ[0] + 15*colorimetry_XYZ[1] + 3*colorimetry_XYZ[2]);
+	factor_uvp = (colorimetry_XYZ1931[0] + 15*colorimetry_XYZ1931[1] + 3*colorimetry_XYZ1931[2]);
 	
-	up = (4.*colorimetry_XYZ[0])/factor_uvp;
-	vp = (6.*colorimetry_XYZ[1])/factor_uvp;
+	up = (4.*colorimetry_XYZ1931[0])/factor_uvp;
+	vp = (6.*colorimetry_XYZ1931[1])/factor_uvp;
 	
 	
 	for(uint8_t i = 0; i < 31; i++)
@@ -261,14 +291,8 @@ void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 	float Px, Py, x1 = 0.3333, y1 = 0.3333, x2, y2, divider;
 	int8_t triangle_p1, triangle_p2, triangle_p3, triangle_out, ld;
 	
-	if(CIE_Type == 0x00) //check CIE 1964
-	{
-		Calculate_XYZ(R_data, calibratre_x_1931, calibratre_y_1931, calibratre_z_1931);
-		Calculate_xy(colorimetry_XYZ);
-	}
-	
-	x2 = colorimetry_xy[0];
-	y2 = colorimetry_xy[1];
+	x2 = colorimetry_xy1931[0];
+	y2 = colorimetry_xy1931[1];
 	
 	triangle_p1 = (((x1-x2)*(y34_dominant[0]-y1) - (x34_dominant[0] - y1)*(y1 - y2)) > 0)? 1 : -1;
 	triangle_p2 = (((x34_dominant[0] - x2)*(y34_dominant[64]-y34_dominant[0]) - (x34_dominant[64]-x34_dominant[0])*(y34_dominant[0]-y2)) > 0)? 1 : -1;
@@ -290,7 +314,7 @@ void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 			{
 				lambda_d_Measure = lamda_dominant[i+1];
 			} else {
-				lambda_c_Measure = triangle_out < 0 ? 0 : lamda_dominant[i+1];
+				lambda_d_Measure = triangle_out < 0 ? 0 : lamda_dominant[i+1];
 			}
 		}
 	}
@@ -298,10 +322,10 @@ void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 
 extern int16_t colorimetry_LAB_mem[3];
 float result, res1, res2, res3;
-int16_t Calculate_deltaEab()
-{
+
+int16_t Calculate_deltaEab() {
 	if((Measure_Field&CIE_Lab) == 0){
-		Calculate_Lab(colorimetry_XYZ, Measure_Color_xy, Source_Type);
+		Calculate_Lab(Measure_Color_xy == 0x00 ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);
 	}
 	res1 = ((float)(colorimetry_LAB[0]) - (float)(colorimetry_LAB_mem[0]));
 	res2 = ((float)(colorimetry_LAB[1]) - (float)(colorimetry_LAB_mem[1]));

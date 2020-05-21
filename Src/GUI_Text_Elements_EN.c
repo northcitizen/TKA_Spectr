@@ -306,6 +306,34 @@ void GUI_TextEn_umol(uint16_t X, uint16_t Y, uint8_t deg)
 	TFT_DrawChar(X+19, Y+11, 's'-65);
 }
 
+void GUI_TextEn_umol_sr(uint16_t X, uint16_t Y, uint8_t deg)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetFont(&Font12EN_arch_small);
+	
+	if(deg){
+			TFT_DrawChar(X+9, Y, 'm'-65);
+	} else
+	{
+			TFT_DrawChar(X+9, Y, 'z'-64);
+	}
+	TFT_DrawChar(X+17, Y, 'm'-65);
+	TFT_DrawChar(X+25, Y, 'o'-65);
+	TFT_DrawChar(X+31, Y, 'l'-65);
+	
+	TFT_DrawLine(X+3, Y+10, X+46, Y+10, TFT_White);
+	
+	TFT_DrawChar(X+13, Y+11, 'z'-63);
+	TFT_DrawChar(X+5, Y+11, 'm'-65);
+	TFT_DrawRectangle(X+19, Y+14, X+20, Y+15, TFT_White);
+	TFT_DrawChar(X+22, Y+11, 's'-65);
+	TFT_DrawRectangle(X+30, Y+14, X+36, Y+15, TFT_White);
+	TFT_DrawChar(X+32, Y+11, 's'-65);
+	TFT_DrawChar(X+39, Y+11, 'r'-65);
+}
+
+
 void GUI_Text_On(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
@@ -428,6 +456,94 @@ void GUI_TextEn_Irradiance(uint16_t X, uint16_t Y)
 	TFT_DrawChar(X+87, Y+2, 'c');
 	TFT_DrawChar(X+99, Y+2, 'e');
 }
+
+void GUI_TextMsgEn_HighIrradiance(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetFont(&Font16EN_arch_big_A);
+	TFT_DrawChar(X, Y, 'H');
+	TFT_SetFont(&Font16EN_arch_small_A);
+  TFT_DrawChar(X+16, Y+2, 'i');
+  TFT_DrawChar(X+23, Y+2, 'g');
+  TFT_DrawChar(X+36, Y+2, 'h');
+  
+  TFT_DrawChar(X+59, Y+2, 'i');
+  TFT_DrawChar(X+67, Y+2, 'r');
+  TFT_DrawChar(X+79, Y+2, 'r');
+  TFT_DrawChar(X+90, Y+2, 'a');
+  TFT_DrawChar(X+102, Y+2, 'd');
+  TFT_DrawChar(X+115, Y+2, 'i');
+  TFT_DrawChar(X+120, Y+2, 'a');
+  TFT_DrawChar(X+132, Y+2, 'n');
+  TFT_DrawChar(X+145, Y+2, 'c');
+  TFT_DrawChar(X+157, Y+2, 'e');
+}
+
+void GUI_TextMsgEn_HighRadiance(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetFont(&Font16EN_arch_big_A);
+	TFT_DrawChar(X, Y, 'H');
+	TFT_SetFont(&Font16EN_arch_small_A);
+  TFT_DrawChar(X+16, Y+2, 'i');
+  TFT_DrawChar(X+23, Y+2, 'g');
+  TFT_DrawChar(X+36, Y+2, 'h');
+  
+  TFT_DrawChar(X+59, Y+2, 'r');
+  TFT_DrawChar(X+70, Y+2, 'a');
+  TFT_DrawChar(X+82, Y+2, 'd');
+  TFT_DrawChar(X+95, Y+2, 'i');
+  TFT_DrawChar(X+100, Y+2, 'a');
+  TFT_DrawChar(X+112, Y+2, 'n');
+  TFT_DrawChar(X+125, Y+2, 'c');
+  TFT_DrawChar(X+137, Y+2, 'e');
+}
+
+void GUI_TextMsgEn_LowRadiance(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetFont(&Font16EN_arch_big_A);
+	TFT_DrawChar(X, Y, 'L');
+	TFT_SetFont(&Font16EN_arch_small_A);
+  TFT_DrawChar(X+16, Y+2, 'o');
+  TFT_DrawChar(X+29, Y+2, 'w');
+  
+  TFT_DrawChar(X+54, Y+2, 'r');
+  TFT_DrawChar(X+65, Y+2, 'a');
+  TFT_DrawChar(X+77, Y+2, 'd');
+  TFT_DrawChar(X+90, Y+2, 'i');
+  TFT_DrawChar(X+95, Y+2, 'a');
+  TFT_DrawChar(X+107, Y+2, 'n');
+  TFT_DrawChar(X+120, Y+2, 'c');
+  TFT_DrawChar(X+132, Y+2, 'e');
+}
+
+void GUI_TextMsgEn_LowIrradiance(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetFont(&Font16EN_arch_big_A);
+	TFT_DrawChar(X, Y, 'L');
+	TFT_SetFont(&Font16EN_arch_small_A);
+  TFT_DrawChar(X+16, Y+2, 'o');
+  TFT_DrawChar(X+29, Y+2, 'w');
+	
+  TFT_DrawChar(X+55, Y+2, 'i');
+  TFT_DrawChar(X+63, Y+2, 'r');
+  TFT_DrawChar(X+75, Y+2, 'r');
+  TFT_DrawChar(X+86, Y+2, 'a');
+  TFT_DrawChar(X+98, Y+2, 'd');
+  TFT_DrawChar(X+111, Y+2, 'i');
+  TFT_DrawChar(X+116, Y+2, 'a');
+  TFT_DrawChar(X+128, Y+2, 'n');
+  TFT_DrawChar(X+141, Y+2, 'c');
+  TFT_DrawChar(X+153, Y+2, 'e');
+	
+	
+}
 void GUI_TextEn_Luminance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
@@ -474,25 +590,7 @@ void GUI_TextEn_Mode(uint16_t X, uint16_t Y)
 	TFT_DrawChar(X+30, Y+2, 'd');
 	TFT_DrawChar(X+43, Y+2, 'e');
 }
-/*void GUI_TextEn_BlueTooth(uint16_t X, uint16_t Y)
-{
-	TFT_SetTextColor(TFT_Blue);
-	TFT_SetBackColor(TFT_Black_Bkgr);
-	TFT_SetFont(&Font16EN_arch_big);
-	TFT_DrawChar(X, Y, 'B');
-	TFT_SetFont(&Font16EN_arch_small);
-	TFT_DrawChar(X+16, Y+2, 'l');
-	TFT_DrawChar(X+21, Y+2, 'u');
-	TFT_DrawChar(X+34, Y+2, 'e');
-		TFT_SetFont(&Font16EN_arch_big);
-	TFT_DrawChar(X+46, Y, 'T');
-	TFT_SetFont(&Font16EN_arch_small);
-	TFT_DrawChar(X+62, Y+2, 'o');
-	TFT_DrawChar(X+74, Y+2, 'o');
-	TFT_DrawChar(X+85, Y+2, 't');
-	TFT_DrawChar(X+92, Y+2, 'h');
-}
-*/
+
 void GUI_TextEn_PPFD(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);

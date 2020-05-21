@@ -1,13 +1,14 @@
 #include "CRI_Calculate.h"
 #include "GUI_Measure_Elements.h"
 
-double Ra_temp = 0, Rall_temp = 0, R9_temp = 0, Ri_temp[15];
+double Ri_temp[15];
 int8_t Ra = 0, Rall= 0, R9= 0, Ri[15]= {0};
+
 // float tc = 2782.69542;
 extern float WaveLenght[1024];
 double bar_CRI;
 float s_test_CRI[1024] = {0};
-extern float max_Rabs, calibratre_x_1931[1024],calibratre_y_1931[1024],calibratre_z_1931[1024];
+extern float max_Rabs, calibratre_x_1931[1024],Spectral_day[1024],calibratre_z_1931[1024];
 extern float S0_lambda[1024], S1_lambda[1024], S2_lambda[1024];
 extern float colorimetry_uv[2];
 double delta_E_CRI, delta_L, delta_u, delta_v;
@@ -57,7 +58,7 @@ float calcSref_CRI(int idx, uint16_t CCT_measure)
 
 void CRI_func(uint16_t CCT_measure, float *Rabs)
 {
-	
+	int16_t Ra_temp = 0, Rall_temp = 0, R9_temp = 0;
 	float s_ref_CRI[1024] = {0};
 	float CRI_R_temp[1024] = {0};
 
@@ -127,18 +128,18 @@ void CRI_func(uint16_t CCT_measure, float *Rabs)
 			if (i == 0)
 			{
 				s_ref_CRI[j] = calcSref_CRI(j, CCT_measure);
-				k_test += s_test_CRI[j] * calibratre_y_1931[j];
+				k_test += s_test_CRI[j] * Spectral_day[j];
 				x_ref += s_ref_CRI[j] * calibratre_x_1931[j];
-				y_ref += s_ref_CRI[j] * calibratre_y_1931[j];
+				y_ref += s_ref_CRI[j] * Spectral_day[j];
 				z_ref += s_ref_CRI[j] * calibratre_z_1931[j];
 			}
 
 			x_i_test += s_test_CRI[j] * CRI_R_temp[j] * calibratre_x_1931[j];
-			y_i_test += s_test_CRI[j] * CRI_R_temp[j] * calibratre_y_1931[j];
+			y_i_test += s_test_CRI[j] * CRI_R_temp[j] * Spectral_day[j];
 			z_i_test += s_test_CRI[j] * CRI_R_temp[j] * calibratre_z_1931[j];
 
 			x_i_ref += s_ref_CRI[j] * CRI_R_temp[j] * calibratre_x_1931[j];
-			y_i_ref += s_ref_CRI[j] * CRI_R_temp[j] * calibratre_y_1931[j];
+			y_i_ref += s_ref_CRI[j] * CRI_R_temp[j] * Spectral_day[j];
 			z_i_ref += s_ref_CRI[j] * CRI_R_temp[j] * calibratre_z_1931[j];
 		}
 		if (i == 0) 
@@ -181,12 +182,11 @@ void CRI_func(uint16_t CCT_measure, float *Rabs)
 		Ri[i] = (int8_t)Ri_temp[i];
 		
 		if (i < 8)
-			Ra_temp += Ri_temp[i];
+			Ra_temp += Ri[i];
 		if (i == 8)
-			R9_temp = (int8_t)Ri_temp[i];
-			R9 = (int8_t)R9_temp;
+			R9 = Ri[i];
 		if(i < 14)
-			Rall_temp += Ri_temp[i];
+			Rall_temp += Ri[i];
 		
 		memset(CRI_R_temp, 0, sizeof(CRI_R_temp));		
 	}

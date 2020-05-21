@@ -8,7 +8,7 @@ uint8_t GUI_screen_state = Title_Screen, Rotation_Screen_Spectral_Old, Rotation_
 pause = 0x00, Rotation_Screen_Color = 0x00;
 volatile uint8_t	preGUI_screen_state = 0xFF;
 extern uint8_t exp_num, VGain, LaserOnOff, MeasureFlag_display, Mode_EL, TFT_ON_OFF, Q_i[15], Qf, Qa, Qp;
-extern uint8_t  old_meas_type_E,old_meas_type_L, SD_Detect;
+extern uint8_t  old_meas_type_L, SD_Detect, highSignal, lowSignal, exp_start, exp_set;
 extern int8_t Ra, Rall, R9, Ri[14];
 int16_t colorimetry_LAB_mem[3];
 extern uint8_t SD_Detect, write_FileNum;
@@ -17,19 +17,20 @@ extern float E_day, E_day_Wt, E_Night, SP_Measure, PPFD_PPL_Measure, PPFD_PPL_Bl
 int16_t delta_Eab_Measure;
 extern uint16_t	Tc_Measure, lambda_d_Measure, lambda_c_Measure, Calibration_date, Calibration_month, Calibration_year;
 extern uint16_t bmp[108000];
-extern float Spectral_day[1024], Spectral_night[1024], WaveLenght[1024], Hazard_Blue[1024], Hazard_Retina[1024], calibratre_x_1931[1024], calibratre_y_1931[1024], calibratre_z_1931[1024],
+extern float Spectral_day[1024], Spectral_night[1024], WaveLenght[1024], Hazard_Blue[1024], Hazard_Retina[1024], calibratre_x_1931[1024], calibratre_z_1931[1024],
 							calibratre_x_1964[1024], calibratre_z_1964[1024], Spectral_Corection_Buff[1024];
-extern uint16_t colorimetry_XYZ[3], cnt_delay_bar, Serial_part_device, Serial_number_device;
+extern uint16_t colorimetry_XYZ1964[3],colorimetry_XYZ1931[3], cnt_delay_bar, Serial_part_device, Serial_number_device;
 extern int16_t colorimetry_LAB[3];
-extern float colorimetry_xy[2], colorimetry_uv[2], colorimetry_uv1976[2], max_Rabs;
+extern float colorimetry_xy1964[2], colorimetry_uv[2], colorimetry_uv1976[2], max_Rabs, colorimetry_xy1931[2];
 
 uint16_t Measure_Field = 0x0000, sdfile_cnt = 0x00, Memory_Data_satus = 0x01, graph_spectral_day[355], graph_spectral_night[355], graph_spectral_Retina[355], graph_spectral_Blue[355];
 uint8_t Language_status = Ru, Graph_Field = 0x00, Color_Field = 0x00, preColor_Field = 0x00, Measure_Color_xy = 0x00, Color_rend_Field = 0x00, Bluetooth, Source_Type, Prev_Inf_Screen,Prev_Inf_Screen2, Rotation_Screen = 0x00,
 Calc_ColorRend = 0x00, Calc_ColorRend_old = 0x00, current_state_Measure_Draw = 0;
 uint8_t Rotation_Screen_Spectral = 0x00, Rotation_Screen_Rend = 0x00, CRICQS_done = 0x00;
+uint8_t oldHighSignal = 0, oldLowSignal = 0;
 extern double percentage_charge, bar_CQS, bar_CRI, SDWr_Status_bar;
 extern uint16_t graph_data_old[340];
-extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim15;
 extern const uint16_t exposure_timer_period[10];
 extern float Exposure_Factor, EnergyFactor_E, EnergyFactor_L, Factor2, test_massive[1024], Line_Rabs_buff[1024];
 uint8_t screen_count = 0, screen_count_old = 0, state_Measure_Elements = 0;
@@ -89,8 +90,8 @@ void GUI_OptionMenuEn()
 void GUI_Title_Screen()
 {
 	TFT_FillScreen_DMA(0x0084);
-	GUI_TitleString_Name(50, 330);
-	GUI_TitleString_Version(180, 420);
+	GUI_TitleString_Name(80, 330);
+	GUI_TitleString_Version(180, 420, VERSION);
 	sImage bmTKA_logo_Flash = {
 			TKA_LOGO_BMP_SIZEX, // xSize
 			TKA_LOGO_BMP_SIZEY, // ySize
@@ -103,7 +104,7 @@ void GUI_Title_Screen()
 
 void GUI_DataSet1_Screen()
 {
-	old_meas_type_E = 2; old_meas_type_L = 2;
+ old_meas_type_L = 2;
 	if(preGUI_screen_state != GUI_screen_state || Mode_EL_Old != Mode_EL || Language_status_prev != Language_status){
 		Mode_EL_Old = Mode_EL;
 		Language_status_prev = Language_status;
@@ -157,7 +158,7 @@ void GUI_DataSet2_Screen()
 				GUI_CheckBox(200, 70, Measure_Field&Irradiance);
 				TFT_DrawLine(10, 120, 262, 120, TFT_White);
 
-				GUI_TextEn_PPFD(10, 147);
+				Mode_EL ?  GUI_TextEn_PPFD(10, 147) : GUI_TextEn_PPL(10, 147);
 				GUI_CheckBox(200, 133, Measure_Field&PPFD);
 				
 				GUI_TextEn_B_G_R_FR(10, 211);
@@ -243,13 +244,9 @@ void GUI_DataSet5_Screen()
 		GUI_CheckBox(200, 70, Measure_Field&lambda_d);
 		TFT_DrawLine(10, 120, 262, 120, TFT_White);
 
-		GUI_Text_lambda_c(35, 145);
-		GUI_CheckBox(200, 133, Measure_Field&lambda_c);
+		GUI_Text_SP(35, 145);
+		GUI_CheckBox(200, 133, Measure_Field&SP_measure);
 		TFT_DrawLine(10, 183, 262, 183, TFT_White);
-		
-		GUI_Text_SP(35, 209);
-		GUI_CheckBox(200, 198, Measure_Field&SP_measure);
-		TFT_DrawLine(10, 248, 262, 248, TFT_White);
 	}
 }
 
@@ -327,7 +324,7 @@ void GUI_ColorSet2_Screen()
 
 void GUI_ColorRendSet_Screen()
 {
-	old_meas_type_E = 2; old_meas_type_L = 2;
+ old_meas_type_L = 2;
 	if(preGUI_screen_state != GUI_screen_state || Language_status_prev != Language_status){
 		GUI_Panels();
 		Language_status_prev = Language_status;
@@ -359,23 +356,24 @@ void GUI_Measure_Screen(){
 	
 	if(preGUI_screen_state != GUI_screen_state){
 		TFT_FillScreen_DMA(TFT_Black_Bkgr);
-		
+		oldLowSignal = 0;
+		oldHighSignal = 0;
 		screen_count = 0;
 		Measure_Elements_Draw(0);
 		GUI_Up_Panel();
 		GUI_Down_Panel();
-		
-
 	} else
 	{
-			Measure_Elements_Draw(0);
+		GUI_SignalLevel();
+		Measure_Elements_Draw(0);
 	}
 		Prev_Inf_Screen = Measure_Screen;
+		preGUI_screen_state = Measure_Screen;
 }
 
 void Measure_Elements_Draw(uint8_t Measure_Number)
 {	
-	uint16_t Y = 50, limit = 410;
+	uint16_t Y = 70, limit = 410;
 	
 	for (uint8_t state_i = Measure_Number; state_i < 15; state_i++)
 	{
@@ -384,22 +382,21 @@ void Measure_Elements_Draw(uint8_t Measure_Number)
 		switch(state_i){
 					case 0: if(Measure_Field&Illuminance){
 					if(Y+35 <= limit){
-						Y+=35;
-					Mode_EL ?	 GUI_Text_E_Measure(20, Y, E_day, 0):GUI_Text_L_Measure(20, Y, E_day, 0); 
+									Mode_EL ?	 GUI_Text_E_Measure(20, Y, E_day, 0, exp_start, exp_set):GUI_Text_L_Measure(20, Y, E_day, 0, exp_start, exp_set); 
 									Y+=35;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							} else {screen_count++;}} break;
 				case 1: if(Measure_Field&Irradiance){
 					if(Y+35 <= limit){
-					Mode_EL ?	GUI_Text_E_Measure(20, Y, E_day_Wt, 1):GUI_Text_L_Measure(20, Y, E_day_Wt, 1); 
+					Mode_EL ?	GUI_Text_E_Measure(20, Y, E_day_Wt, 1, exp_start, exp_set):GUI_Text_L_Measure(20, Y, E_day_Wt, 1, exp_start, exp_set); 
 									Y+=35;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 					} else {screen_count++;}} break;
 				case 2: if(Measure_Field&PPFD){
 						if(Y+35 <= limit){
-									GUI_Text_PPF_Measure(20, Y, PPFD_PPL_Measure);
+									GUI_Text_PPF_Measure(20, Y, PPFD_PPL_Measure, exp_start, exp_set);
 									Y+=35;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
@@ -407,77 +404,70 @@ void Measure_Elements_Draw(uint8_t Measure_Number)
 				
 				case 3: if(Measure_Field&PPFD_BGR){
 						if(Y+95 <= limit){
-									GUI_Text_PPFRGB_Measure(20, Y, PPFD_PPL_Red_Measure, PPFD_PPL_Green_Measure, PPFD_PPL_Blue_Measure, PPFD_PPL_Far_Red_Measure);
+									GUI_Text_PPFRGB_Measure(20, Y, PPFD_PPL_Red_Measure, PPFD_PPL_Green_Measure, PPFD_PPL_Blue_Measure, PPFD_PPL_Far_Red_Measure, exp_start, exp_set);
 									Y+=95;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							}else {screen_count++;}} break;
 				case 4: if(Measure_Field&CCT){
 						if(Y+35 <= limit){
-							GUI_Text_CCT_Measure(20, Y,  Tc_Measure == 0xFFFF ? 0 : Tc_Measure); //
+							GUI_Text_CCT_Measure(20, Y,  Tc_Measure == 0xFFFF ? 0 : Tc_Measure, exp_start, exp_set); //
 									Y+=35;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							}else {screen_count++;}} break;
 				case 5: if(Measure_Field&delta_E){
 						if(Y+35 <= limit){
-									GUI_Text_deltaE_Measure(20, Y, delta_Eab_Measure);
+									GUI_Text_deltaE_Measure(20, Y, delta_Eab_Measure, exp_start, exp_set);
 									Y+=35;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							}else {screen_count++;}} break;
 				case 6: if(Measure_Field&CIE_XYZ){
 						if(Y+105 <= limit){
-									GUI_Text_XYZ_Measure(20, Y, colorimetry_XYZ[0], colorimetry_XYZ[1], colorimetry_XYZ[2]);
+							GUI_Text_XYZ_Measure(20, Y, (Measure_Color_xy == 0x00)?colorimetry_XYZ1964[0]:colorimetry_XYZ1931[0], (Measure_Color_xy == 0x00)?colorimetry_XYZ1964[1]:colorimetry_XYZ1931[1], (Measure_Color_xy == 0x00)?colorimetry_XYZ1964[2]:colorimetry_XYZ1931[2], exp_start, exp_set);
 									Y+=105;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							}else {screen_count++;}} break;
 				case 7: if(Measure_Field&CIE_xy){
 					if(Y+70 <= limit){
-									GUI_Text_xy_Measure(20, Y, colorimetry_xy[0], colorimetry_xy[1]);
+						GUI_Text_xy_Measure(20, Y, (Measure_Color_xy == 0x00)?colorimetry_xy1964[0]:colorimetry_xy1931[0], (Measure_Color_xy == 0x00)?colorimetry_xy1964[1]:colorimetry_xy1931[1], exp_start, exp_set);
 									Y+=70;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							}else {screen_count++;}} break;
 				case 8: if(Measure_Field&CIE_Luv){
 					if(Y+70 <= limit){
-									GUI_Text_uv_Measure(20, Y, colorimetry_uv1976[0], colorimetry_uv1976[1]);
+									GUI_Text_uv_Measure(20, Y, colorimetry_uv1976[0], colorimetry_uv1976[1], exp_start, exp_set);
 									Y+=70;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							}else {screen_count++;}} break;
 				case 9: if(Measure_Field&CIE_Lab){
 					if(Y+105 <= limit){
-									GUI_Text_LAB_Measure(20, Y, colorimetry_LAB[0],colorimetry_LAB[1], colorimetry_LAB[2]); 
+									GUI_Text_LAB_Measure(20, Y, colorimetry_LAB[0],colorimetry_LAB[1], colorimetry_LAB[2], exp_start, exp_set);
 									Y+=105;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							}else {screen_count++;}} break;
 				case 10: if(Measure_Field&lambda_d){
 					if(Y+35 <= limit){
-									GUI_Text_lambdaD_Measure(20, Y, lambda_d_Measure); 
+									GUI_Text_lambdaD_Measure(20, Y, lambda_d_Measure, exp_start, exp_set);
 									Y+=35;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							}else {screen_count++;}} break;
-				case 11: if(Measure_Field&lambda_c){
-					if(Y+35 <= limit){
-									GUI_Text_lambdaC_Measure(20, Y, lambda_c_Measure); 
-									Y+=35;
-									TFT_DrawLine(10, Y, 262, Y, TFT_White);
-									Y+=10;
-							}else {screen_count++;}} break;
-				case 12: if(Measure_Field&EbEr){
+				case 11: if(Measure_Field&EbEr){
 					if(Y+70 <= limit){
-						Mode_EL ?	 GUI_Text_EbEr_Measure(10, Y, ELb_Measure, ELr_Measure):GUI_Text_LbLr_Measure(20, Y, ELb_Measure, ELr_Measure); 
+						Mode_EL ?	 GUI_Text_EbEr_Measure(20, Y, ELb_Measure, ELr_Measure, exp_start, exp_set):GUI_Text_LbLr_Measure(20, Y, ELb_Measure, ELr_Measure, exp_start, exp_set); 
 									Y+=70;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
 							}else {screen_count++;}} break;
-				case 13: if(Measure_Field&SP_measure){
+				case 12: if(Measure_Field&SP_measure){
 					if(Y+35 <= limit){
-						GUI_Text_S_P_Measure(20, Y, SP_Measure); 
+						GUI_Text_S_P_Measure(20, Y, SP_Measure, exp_start, exp_set);
 									Y+=35;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
@@ -498,16 +488,19 @@ void Measure_Elements_Draw(uint8_t Measure_Number)
 
 void GUI_Measure2_Screen()
 {
-	old_meas_type_E = 2; old_meas_type_L = 2;
+ old_meas_type_L = 2;
 	if(preGUI_screen_state != Measure2_Screen){
 		TFT_FillScreen_DMA(TFT_Black_Bkgr);
 		current_state_Measure_Draw = state_Measure_Elements;
 		screen_count = 1;
+		oldLowSignal = 0;
+		oldHighSignal = 0;
 		Measure_Elements_Draw(current_state_Measure_Draw);
 		GUI_Up_Panel();
 		GUI_Down_Panel();
 	} else
 	{
+			GUI_SignalLevel();
 			Measure_Elements_Draw(current_state_Measure_Draw);
 	}
 	Prev_Inf_Screen = Measure_Screen;
@@ -515,16 +508,19 @@ void GUI_Measure2_Screen()
 
 void GUI_Measure3_Screen()
 {
-	old_meas_type_E = 2; old_meas_type_L = 2;
+ old_meas_type_L = 2;
 	if(preGUI_screen_state != Measure3_Screen){
 		TFT_FillScreen_DMA(TFT_Black_Bkgr);
 		current_state_Measure_Draw= state_Measure_Elements;
 		screen_count = 2;
+		oldLowSignal = 0;
+		oldHighSignal = 0;
 		Measure_Elements_Draw(current_state_Measure_Draw);
 		GUI_Up_Panel();
 		GUI_Down_Panel();
 	} else
 	{
+			GUI_SignalLevel();
 			Measure_Elements_Draw(current_state_Measure_Draw);
 	}
 	Prev_Inf_Screen = Measure_Screen;
@@ -537,6 +533,8 @@ void GUI_Graph_Screen(){
 
 	if((preGUI_screen_state != GUI_screen_state || Rotation_Screen_Spectral_Old != Rotation_Screen_Spectral)){
 		TFT_FillScreen_DMA(TFT_Black_Bkgr);
+		oldLowSignal = 0;
+		oldHighSignal = 0;
 		GUI_Panels();		
 		Rotation_Screen_Spectral_Old = Rotation_Screen_Spectral;
 		if(Graph_Field&PPF_Bands)
@@ -624,6 +622,8 @@ void GUI_Color_Screen(){
 		TFT_DrawBitmap(Color_Field&Color_CIE_xy? 18:
 		Color_Field&Color_CIE_Luv? 18 : 11, Color_Field&Color_CIE_Luv? 172 : 150, Locus); 
 		flag = 0;	
+		oldLowSignal = 0;
+		oldHighSignal = 0;
 		
 		if(Color_Field&Color_CIE_xy){GUI_Axes_Locus_XY(18, 150+XY2_LOCUS_BMP_SIZEY, 0);}
 		else if(Color_Field&Color_CIE_Luv){GUI_Axes_Locus_LUV(18, 172+LUV_LOCUS_BMP_SIZEY, 0);}
@@ -633,18 +633,23 @@ void GUI_Color_Screen(){
 	
 	Prev_Inf_Screen = Color_Screen;
 		
-		
-	if(Color_Field&Color_CIE_xy) {GUI_Text_xy_Measure(40, 50, colorimetry_xy[0], colorimetry_xy[1]); 
+	
+float colorimetry_xy_buff[2];
+colorimetry_xy_buff[0] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[0] : colorimetry_xy1931[0];
+colorimetry_xy_buff[1] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[1] : colorimetry_xy1931[1];
+
+	if(Color_Field&Color_CIE_xy) {GUI_Text_xy_Measure(20, 70, colorimetry_xy_buff[0], colorimetry_xy_buff[1], exp_start, exp_set); 
 		 scr_refresh++;
 		
    if(scr_refresh > 15 ){
-		 if(colorimetry_xy[0] < 0.74 & colorimetry_xy[1] < 0.84 ){
+		 if(colorimetry_xy_buff[0] < 0.74 & colorimetry_xy_buff[1] < 0.84 ){
 		
 			 if(flag){		TFT_DrawCutBMP(18-1+colorimetry_xy_old[0]*295-5, 150+XY2_LOCUS_BMP_SIZEY-1-colorimetry_xy_old[1]*300-5,
-					 colorimetry_xy_old[0]*295-5, XY2_LOCUS_BMP_SIZEY-1-colorimetry_xy_old[1]*300-5, 10, Locus);}
-		colorimetry_xy_old[0] = colorimetry_xy[0];
-		colorimetry_xy_old[1] = colorimetry_xy[1];
-		TFT_DrawFilledCircle( 18+colorimetry_xy[0]*295, 150+XY2_LOCUS_BMP_SIZEY-colorimetry_xy[1]*300, 2, TFT_Black);
+					 colorimetry_xy_old[0]*295-5, XY2_LOCUS_BMP_SIZEY-1-colorimetry_xy_old[1]*300-5, 15, Locus);}
+		colorimetry_xy_old[0] = colorimetry_xy_buff[0];
+		colorimetry_xy_old[1] = colorimetry_xy_buff[1];
+		TFT_DrawFilledCircle( 18+colorimetry_xy_buff[0]*295, 150+XY2_LOCUS_BMP_SIZEY-colorimetry_xy_buff[1]*300, 4, TFT_White);
+		TFT_DrawFilledCircle(18+colorimetry_xy_buff[0]*295, 150+XY2_LOCUS_BMP_SIZEY-colorimetry_xy_buff[1]*300, 2, TFT_Black);
 		GUI_Axes_Locus_XY(18, 150+XY2_LOCUS_BMP_SIZEY, 0);
 		flag = 1;
 		scr_refresh = 0;}
@@ -652,17 +657,18 @@ void GUI_Color_Screen(){
 
 	
 	} else
-	if(Color_Field&Color_CIE_Luv) {GUI_Text_uv_Measure(40, 50, colorimetry_uv1976[0], colorimetry_uv1976[1]);
+	if(Color_Field&Color_CIE_Luv) {GUI_Text_uv_Measure(20, 70, colorimetry_uv1976[0], colorimetry_uv1976[1], exp_start, exp_set);
 		scr_refresh++;
 		if(scr_refresh > 15 ){
 		if(colorimetry_uv1976[0] < 0.63 & colorimetry_uv1976[1] < 0.59 & colorimetry_uv1976[0] > 0.0 & colorimetry_uv1976[1] > 0.0){
 			
 			if(flag){	TFT_DrawCutBMP(18-1+colorimetry_uv1976_old[0]*403-5, 172+LUV_LOCUS_BMP_SIZEY-1-colorimetry_uv1976_old[1]*396-5,
-			colorimetry_uv1976_old[0]*403-5, LUV_LOCUS_BMP_SIZEY-1-colorimetry_uv1976_old[1]*396-5, 10, Locus);}
+			colorimetry_uv1976_old[0]*403-5, LUV_LOCUS_BMP_SIZEY-1-colorimetry_uv1976_old[1]*396-5, 12, Locus);}
 			
 			colorimetry_uv1976_old[0] = colorimetry_uv1976[0];
 			colorimetry_uv1976_old[1] = colorimetry_uv1976[1];
 
+			TFT_DrawFilledCircle(18 + colorimetry_uv1976[0]*403, 172+LUV_LOCUS_BMP_SIZEY-colorimetry_uv1976[1]*396, 4, TFT_White);
 			TFT_DrawFilledCircle(18 + colorimetry_uv1976[0]*403, 172+LUV_LOCUS_BMP_SIZEY-colorimetry_uv1976[1]*396, 2, TFT_Black);
 			GUI_Axes_Locus_LUV(18, 172+LUV_LOCUS_BMP_SIZEY, 0);
 			flag = 1;
@@ -671,13 +677,14 @@ void GUI_Color_Screen(){
 	}
 	}
 	else
-	if(Color_Field&Color_CIE_Lab) {GUI_Text_LAB_Measure(40, 45, colorimetry_LAB[0], colorimetry_LAB[1], colorimetry_LAB[2]);
+	if(Color_Field&Color_CIE_Lab) {GUI_Text_LAB_Measure(20, 54, colorimetry_LAB[0], colorimetry_LAB[1], colorimetry_LAB[2], exp_start, exp_set);
 		if(colorimetry_LAB[1] < 128 & colorimetry_LAB[1] > -128 & colorimetry_LAB[2]<128 & colorimetry_LAB[2] > -128){
 			if(flag){		TFT_DrawCutBMP(125+11-1+colorimetry_LAB_old[1]*0.976-5, 150+LAB_LOCUS_SIZEY-1-125-colorimetry_LAB_old[2]*0.976-5,
-				125+colorimetry_LAB_old[1]*0.976-5, LAB_LOCUS_SIZEY-1-125-colorimetry_LAB_old[2]*0.976-5, 10, Locus);}
+				125+colorimetry_LAB_old[1]*0.976-5, LAB_LOCUS_SIZEY-1-125-colorimetry_LAB_old[2]*0.976-5, 12, Locus);}
 				colorimetry_LAB_old[1] = colorimetry_LAB[1];
 				colorimetry_LAB_old[2] = colorimetry_LAB[2];
 			
+				TFT_DrawFilledCircle(125+11+(float)colorimetry_LAB[1]*0.976, LAB_LOCUS_SIZEY-125+150-(float)colorimetry_LAB[2]*0.976, 4, TFT_White);
 				TFT_DrawFilledCircle(125+11+(float)colorimetry_LAB[1]*0.976, LAB_LOCUS_SIZEY-125+150-(float)colorimetry_LAB[2]*0.976, 2, TFT_Black);
 				GUI_Axes_Locus_Lab(125+11, LAB_LOCUS_SIZEY-125+150, 0);
 				flag = 1;
@@ -685,16 +692,19 @@ void GUI_Color_Screen(){
 		}
 	}
 	TFT_direction = 0x00;
+	GUI_SignalLevel();
 }         
 
 
 void GUI_ColorRend_Screen(){
-	old_meas_type_E = 2; old_meas_type_L = 2;
+ old_meas_type_L = 2;
+	
 	if(preGUI_screen_state != GUI_screen_state || Rotation_Screen_Rend_Old != Rotation_Screen_Rend){
-		GUI_Panels();		
-
+	GUI_Panels();		
+	oldLowSignal = 0;
+	oldHighSignal = 0;
 	Rotation_Screen_Rend_Old = Rotation_Screen_Rend;
-		GUI_Bar_Measure(85, 13, Color_rend_Field? bar_CRI : bar_CQS);
+	GUI_Bar_Measure(85, 13, Color_rend_Field? bar_CRI : bar_CQS);
 	Prev_Inf_Screen = Color_Rendition_Screen;
 	if (Color_rend_Field&CRI_CQS){
 		CRI_Draw(Rotation_Screen_Rend, Ri, Ra, Rall, R9);
@@ -712,6 +722,7 @@ void GUI_ColorRend_Screen(){
 			CQS_Draw(Rotation_Screen_Rend, Q_i, Qa, Qp, Qf);
 		}
 	}
+	GUI_SignalLevel();
 }
 
 void GUI_Error_Screen()
@@ -778,10 +789,10 @@ void GUI_Up_Panel()
 {
 	GUI_Battery_Level(0, 0, percentage_charge);
 	if (Bluetooth == ON){
-		GUI_Bluetooth_Logo(240, 5);
+		GUI_Bluetooth_Logo(240, 2);
 	} else
 	{
-		TFT_FillRectangle(239, 4, 260, 35, TFT_Black_Bkgr);
+		TFT_FillRectangle(239, 1, 260, 35, TFT_Black_Bkgr);
 	}
 }
 
@@ -838,9 +849,29 @@ void GUI_LaserOnOff(void)
 	}
 }
 
-void GUI_TouchError()
-{
 
+
+void GUI_SignalLevel()
+{
+  if(oldHighSignal != highSignal)
+  {
+    if(highSignal)
+    {
+      (Language_status == Ru)? ( Mode_EL ? GUI_TextMsgRu_HighIrradiance(15, 30) : GUI_TextMsgRu_HighRadiance(50, 30)):
+      (Mode_EL ? GUI_TextMsgEn_HighIrradiance(55, 30) : GUI_TextMsgEn_HighRadiance(55, 30));
+    }else{TFT_FillRectangle(10, 32, 270, 56, TFT_Black_Bkgr);}
+  }
+  
+  if(oldLowSignal != lowSignal)
+  {
+    if(lowSignal)
+    {
+      (Language_status == Ru)? ( Mode_EL ? GUI_TextMsgRu_LowIrradiance(20, 30) : GUI_TextMsgRu_LowRadiance(55,30)):
+      (Mode_EL ? GUI_TextMsgEn_LowIrradiance(70, 30) : GUI_TextMsgEn_LowRadiance(70, 30));
+    }else{TFT_FillRectangle(10, 32, 270, 56, TFT_Black_Bkgr);}
+  }
+	oldHighSignal = highSignal;
+	oldLowSignal = lowSignal;
 }
 
 void GUI_Display_Refresh()
@@ -1041,9 +1072,9 @@ case Measure3_Screen:
 					if (Color_rend_Field & CRI_CQS){
 						CRICQS_done = 0x00;
 						max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-						Calculate_XYZ(Line_Rabs_buff, calibratre_x_1931, calibratre_y_1931, calibratre_z_1931);
-						Calculate_xy(colorimetry_XYZ);
-						Calculate_uv(colorimetry_xy);
+						Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+						Calculate_xy1931(colorimetry_XYZ1931);
+						Calculate_uv(colorimetry_xy1931);
 						Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
 						if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
 						else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
@@ -1051,15 +1082,13 @@ case Measure3_Screen:
 					}
 					else{
 						CRICQS_done = 0x00;
-						pause = 1;
-						Calculate_XYZ(Line_Rabs_buff, calibratre_x_1931, calibratre_y_1931, calibratre_z_1931);
-						Calculate_xy(colorimetry_XYZ);
+						Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+						Calculate_xy1931(colorimetry_XYZ1931);
 						Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
 						max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
 						if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
 						else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
 						CRICQS_done = 0x01;
-						pause = 0;
 					}
 					Calc_ColorRend = !Calc_ColorRend;
 					GUI_Display_Refresh();
@@ -1124,8 +1153,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}	else	
 				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
@@ -1169,7 +1197,7 @@ case Measure3_Screen:
 				{	
 					if(Measure_Field&delta_E)
 					{
-						Calculate_Lab(colorimetry_XYZ, Measure_Color_xy, Source_Type);
+						Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);
 						colorimetry_LAB_mem[0] = colorimetry_LAB[0];
 						colorimetry_LAB_mem[1] = colorimetry_LAB[1];
 						colorimetry_LAB_mem[2] = colorimetry_LAB[2];
@@ -1192,8 +1220,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}	else	
 				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
@@ -1243,8 +1270,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
 				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
@@ -1367,8 +1393,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
 				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
@@ -1399,11 +1424,11 @@ case Measure3_Screen:
 					Measure_Field ^= lambda_d;
 					GUI_CheckBox(200, 70, Measure_Field&lambda_d);
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=133*TS_Callib & Touch_y <=(133+54)*TS_Callib) //EbEr
-				{
-					Measure_Field ^= lambda_c;
-					GUI_CheckBox(200, 133, Measure_Field&lambda_c);
-				}else 
+//				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=133*TS_Callib & Touch_y <=(133+54)*TS_Callib) //EbEr
+//				{
+//					Measure_Field ^= lambda_c;
+//					GUI_CheckBox(200, 133, Measure_Field&lambda_c);
+//				}else 
 				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=198*TS_Callib & Touch_y <=(198+54)*TS_Callib) //EbEr
 				{
 					Measure_Field ^= SP_measure;
@@ -1412,8 +1437,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
 				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
@@ -1462,8 +1486,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
 				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
@@ -1514,8 +1537,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
 				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
@@ -1573,8 +1595,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
 				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
@@ -1642,8 +1663,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
 				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
@@ -1723,8 +1743,7 @@ case Measure3_Screen:
 				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
-					HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}	else
 				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
@@ -1771,4 +1790,3 @@ case Measure3_Screen:
 		default: preGUI_screen_state = Measure_Screen;
 			}
 }
-

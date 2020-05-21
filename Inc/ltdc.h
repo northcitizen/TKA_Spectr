@@ -34,6 +34,7 @@
 #define TFT_PINK            0xF81F
 #define	TFT_PETERRIVER			0x34BA			
 #define	TFT_GreyMain				0xDF1C			/*223, 227, 238*/
+#define TFT_Grey 						0x94D2			/*156, 156, 156*/
 #define	TFT_GreenBattery		0x8CB1			/*144, 153, 141*/
 #define	TFT_Blue_On					0x249B			/*33, 149, 224*/
 #define	TFT_Blue_Off				0x1376			/*21, 113, 188*/

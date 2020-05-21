@@ -21,16 +21,16 @@
 #include "CRI_Calculate.h"
 #include "Qspi_func.h"
 
-#define VERSION 1.2
+#define VERSION 1.0
 
 //Main Screen
 #define Title_Screen 						0x00
-#define	Measure_Screen					0x01
-#define	Measure2_Screen					0x02
-#define	Measure3_Screen					0x03
+#define	Measure_Screen						0x01
+#define	Measure2_Screen						0x02
+#define	Measure3_Screen						0x03
 #define Graph_Screen 						0x04
 #define Color_Screen 						0x05
-#define	Color_Rendition_Screen	0x06
+#define	Color_Rendition_Screen				0x06
 
 //Settings Screen
 #define DataSet1_Screen 				0x07
@@ -42,9 +42,9 @@
 #define GraphSet2_Screen 				0x0D
 #define ColorSet1_Screen 				0x0E
 #define ColorSet2_Screen 				0x0F
-#define ColorRendSet_Screen 		0x10
+#define ColorRendSet_Screen 			0x10
 
-#define Information_Screen 			0x11
+#define Information_Screen 				0x11
 #define SD_Write_Screen					0x12
 
 #define Ru									0x00
@@ -55,36 +55,36 @@
 
 #define Illuminance 				0x0001
 #define Irradiance 					0x0002
-#define PPFD								0x0004
-#define PPFD_BGR						0x0008
-#define CIE_XYZ							0x0010
-#define CIE_xy							0x0020
-#define CIE_Luv							0x0040
-#define CIE_Lab							0x0080
-#define CCT									0x0100
-#define lambda_d						0x0200
-#define lambda_c						0x0400
-#define delta_E							0x0800
-#define EbEr								0x1000
+#define PPFD						0x0004
+#define PPFD_BGR					0x0008
+#define CIE_XYZ						0x0010
+#define CIE_xy						0x0020
+#define CIE_Luv						0x0040
+#define CIE_Lab						0x0080
+#define CCT							0x0100
+#define lambda_d					0x0200
+#define lambda_c					0x0400
+#define delta_E						0x0800
+#define EbEr						0x1000
 #define SP_measure					0x2000
 
-#define Source_A		 				0x01
+#define Source_A		 			0x01
 #define Source_D65	 				0x02
-#define Source_C		 				0x04
+#define Source_C		 			0x04
 #define Source_D50	 				0x08
 #define Source_D55	 				0x10
 #define Source_D75	 				0x20
 
 #define PPF_Bands 					0x01
 #define EbEr_graph					0x02
-#define V_lambda						0x04
+#define V_lambda					0x04
 
 #define Color_CIE_xy 				0x01
 #define Color_CIE_Lab				0x02
 #define Color_CIE_Luv				0x04
 
-#define CRI_CQS							0x01
-#define CIE_xy_1931_1964		0x01
+#define CRI_CQS						0x01
+#define CIE_xy_1931_1964			0x01
 
 typedef enum{
 	Deact=0x00,
@@ -126,5 +126,6 @@ void GUI_OptionMenuEn();
 
 void GUI_SD_Write_Screen();
 	
-void  GUI_LaserOnOff(void);
+void GUI_LaserOnOff(void);
+void GUI_SignalLevel();
 #endif /* __GUI_H */

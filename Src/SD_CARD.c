@@ -77,12 +77,12 @@ uint8_t SD_Text_CQS_en[] = "\nColor Quality Scale (CQS): Qa, Qp, Qf, \nQ1, Q2, Q
 extern float E_day, E_day_Wt, E_Night, SP_Measure, PPFD_PPL_Measure, PPFD_PPL_Blue_Measure, PPFD_PPL_Green_Measure, PPFD_PPL_Red_Measure, PPFD_PPL_Far_Red_Measure,
 	ELr_Measure, ELb_Measure, CCT_Measure;
 extern uint16_t	Tc_Measure, lambda_d_Measure, lambda_c_Measure;
-extern uint16_t colorimetry_XYZ[3];
+extern uint16_t colorimetry_XYZ1931[3];
 extern int16_t colorimetry_LAB[3], delta_Eab_Measure;
-extern float colorimetry_xy[2], colorimetry_uv1976[2], Line_Rabs_buff[1024];
+extern float colorimetry_xy1931[2], colorimetry_uv1976[2], Line_Rabs_buff[1024];
 extern uint8_t Q_i[15], Qf, Qa, Qp, Source_Type;
-extern float WaveLenght[1024], calibratre_x_1931[1024],calibratre_y_1931[1024],calibratre_z_1931[1024];
-extern float colorimetry_xy[2], colorimetry_uv1976[2], Spectral_day[1024], Spectral_night[1024], Hazard_Retina[1024], Hazard_Blue[1024];
+extern float WaveLenght[1024], calibratre_x_1931[1024], calibratre_z_1931[1024];
+extern float colorimetry_xy1931[2], colorimetry_uv1976[2], Spectral_day[1024], Spectral_night[1024], Hazard_Retina[1024], Hazard_Blue[1024];
 extern uint8_t Measure_Color_xy;
 double SDWr_Status_bar = 0;
 
@@ -210,10 +210,10 @@ void Calculate_SD_Data()
 
 	SDWr_Status_bar = 0;
 	GUI_Bar_Measure(85, 280, SDWr_Status_bar);
-	Calculate_XYZ(Line_Rabs_buff, calibratre_x_1931, calibratre_y_1931, calibratre_z_1931);
-	Calculate_xy(colorimetry_XYZ);
-	Calculate_uv1976(colorimetry_xy);
-	Calculate_Lab(colorimetry_XYZ, Measure_Color_xy, Source_Type);
+	Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+	Calculate_xy1931(colorimetry_XYZ1931);
+	Calculate_uv1976(colorimetry_xy1931);
+	Calculate_Lab(colorimetry_XYZ1931, Measure_Color_xy, Source_Type);
 	Tc_Measure = Calculate_Tc(Line_Rabs_buff, 1);
 	
 	SDWr_Status_bar = 0.1;
@@ -279,24 +279,24 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 							memset(measure_buff, 0, 12);
 						
 							(Language_status==Ru)?(f_write(&MyFile, &SD_Text_ColorXYZ_ru, sizeof(SD_Text_ColorXYZ_ru), &byteswritten)) :(f_write(&MyFile, &SD_Text_ColorXYZ_en, sizeof(SD_Text_ColorXYZ_en), &byteswritten)); //XYZ
-							sprintf(measure_buff, "%d\t", colorimetry_XYZ[0]);//X
+							sprintf(measure_buff, "%d\t", colorimetry_XYZ1931[0]);//X
 							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 							memset(measure_buff, 0, 12);
 						
-							sprintf(measure_buff, "%d\t", colorimetry_XYZ[1]);//Y
+							sprintf(measure_buff, "%d\t", colorimetry_XYZ1931[1]);//Y
 							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 							memset(measure_buff, 0, 12);
 						
-							sprintf(measure_buff, "%d\t", colorimetry_XYZ[2]);//Z
+							sprintf(measure_buff, "%d\t", colorimetry_XYZ1931[2]);//Z
 							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 							memset(measure_buff, 0, 12);
 						
 							(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Colorxy_ru, sizeof(SD_Text_Colorxy_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Colorxy_en, sizeof(SD_Text_Colorxy_en), &byteswritten));//xy
-							sprintf(measure_buff, "%.4f\t", colorimetry_xy[0]); //x
+							sprintf(measure_buff, "%.4f\t", colorimetry_xy1931[0]); //x
 							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 							memset(measure_buff, 0, 12);
 						
-							sprintf(measure_buff, "%.4f", colorimetry_xy[1]);//y
+							sprintf(measure_buff, "%.4f", colorimetry_xy1931[1]);//y
 							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 							memset(measure_buff, 0, 12);
 							

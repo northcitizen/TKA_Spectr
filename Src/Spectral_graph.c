@@ -7,43 +7,43 @@ extern uint8_t Graph_Field;
 void Spectral_Axes(uint8_t direction){
 	if (direction == 0x00)
 	{
-		TFT_FillRectangle(18, 95, 20, 412, TFT_White); //Yline
-		TFT_FillRectangle(18, 412, 270, 414, TFT_White);//XLine
+		TFT_FillRectangle(18, 95, 20, 412, TFT_Grey); //Yline
+		TFT_FillRectangle(18, 412, 270, 414, TFT_Grey);//XLine
 		
-		TFT_DrawLine(18, 334, 268, 334, TFT_White); //25
-		TFT_DrawLine(18, 257, 268, 257, TFT_White); //50
-		TFT_DrawLine(18, 181, 268, 181, TFT_White); //75
-		TFT_DrawLine(18, 105, 268, 105, TFT_White); //100
+		TFT_DrawLine(18, 334, 268, 334, TFT_Grey); //25
+		TFT_DrawLine(18, 257, 268, 257, TFT_Grey); //50
+		TFT_DrawLine(18, 181, 268, 181, TFT_Grey); //75
+		TFT_DrawLine(18, 105, 268, 105, TFT_Grey); //100
 		
 		for(uint16_t i = 0; i < 210; i+=40){
-			TFT_FillRectangle(56+i, 95, 56+i, 412, TFT_White); 
+			TFT_FillRectangle(56+i, 95, 56+i, 412, TFT_Grey); 
 		}
 	} else if (direction == 0x01)
 	{
-		TFT_FillRectangle(253, 70, 255, 406, TFT_White); //XLine
-		TFT_FillRectangle(40, 404, 255, 406, TFT_White); //Yline
+		TFT_FillRectangle(253, 70, 255, 406, TFT_Grey); //XLine
+		TFT_FillRectangle(40, 404, 255, 406, TFT_Grey); //Yline
 		
-		TFT_DrawLine(204, 70, 204, 406, TFT_White); //25
-		TFT_DrawLine(151, 70, 151, 406, TFT_White); //50
-		TFT_DrawLine(98, 70, 98, 406, TFT_White); //75
-		TFT_DrawLine(45, 70, 45, 406, TFT_White); //100
+		TFT_DrawLine(204, 70, 204, 406, TFT_Grey); //25
+		TFT_DrawLine(151, 70, 151, 406, TFT_Grey); //50
+		TFT_DrawLine(98, 70, 98, 406, TFT_Grey); //75
+		TFT_DrawLine(45, 70, 45, 406, TFT_Grey); //100
 		
 		for(uint16_t i = 0; i < 260; i+=50){
-			TFT_FillRectangle(40, 354-i, 255, 354-i, TFT_White);
+			TFT_FillRectangle(40, 354-i, 255, 354-i, TFT_Grey);
 		}
 
 	} else if (direction == 0x02)
 	{
-		TFT_FillRectangle(18, 74, 16, 406, TFT_White); //XLine
-		TFT_FillRectangle(17, 74, 232, 76, TFT_White); //Yline
+		TFT_FillRectangle(18, 74, 16, 406, TFT_Grey); //XLine
+		TFT_FillRectangle(17, 74, 232, 76, TFT_Grey); //Yline
 		
-		TFT_DrawLine(68, 70, 68, 406, TFT_White); //25
-		TFT_DrawLine(121, 70, 121, 406, TFT_White); //50
-		TFT_DrawLine(174, 70, 174, 406, TFT_White); //75
-		TFT_DrawLine(227, 70, 227, 406, TFT_White); //100
+		TFT_DrawLine(68, 70, 68, 406, TFT_Grey); //25
+		TFT_DrawLine(121, 70, 121, 406, TFT_Grey); //50
+		TFT_DrawLine(174, 70, 174, 406, TFT_Grey); //75
+		TFT_DrawLine(227, 70, 227, 406, TFT_Grey); //100
 		
 		for(uint16_t i = 0; i < 260; i+=50){
-			TFT_FillRectangle(17, 374-i, 232, 374-i, TFT_White);
+			TFT_FillRectangle(17, 374-i, 232, 374-i, TFT_Grey);
 		}
 	}
 }

@@ -330,7 +330,7 @@ void CRI_chart(uint8_t direction, int8_t *GraphData)
 }
 
 void CRI_Draw(uint8_t direction, int8_t *GraphData, int8_t Ra, int8_t Rall, int8_t R9){
-	TFT_FillRectangle(5, 50, 270, 410, TFT_Black_Bkgr);
+	TFT_FillRectangle(5, 58, 270, 410, TFT_Black_Bkgr);
 	CRI_Axes(direction);
 	CRI_Axes_Text(direction);
 	CRI_chart(direction, GraphData);

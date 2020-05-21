@@ -20,26 +20,47 @@ float Rabs_calc_Factor1(uint16_t Rdark, float Lt, uint16_t R_data[])
 
 float Factor3 = 0;
 
+//void Rabs_calc_main(uint16_t R_data[], uint16_t Rdark, float Factor1, float Factor2, float Sn[], float Rabs[])
+//{	
+//	uint16_t r = 1023;
+//	
+//	for (uint16_t i = 0; i < 1024; i++)
+//	{
+//		Factor3 = R_data[i] - Rdark - Factor1;
+//		
+//		if(Factor3 <= 0)
+//		{	
+//			Rabs[1023-i] = 0;
+//		} else 
+//		{
+//			Rabs[1023-i] = Factor3*Factor2*(Sn[r]);
+//		}
+//		
+//		r--;
+//	}
+//}
 void Rabs_calc_main(uint16_t R_data[], uint16_t Rdark, float Factor1, float Factor2, float Sn[], float Rabs[])
 {	
 	uint16_t r = 1023;
 	
 	for (uint16_t i = 0; i < 1024; i++)
 	{
-		Factor3 = R_data[i] - Rdark - Factor1;
-		
-		if(Factor3 <= 0)
-		{	
-			Rabs[1023-i] = 0;
-		} else 
+		if(R_data[i] - Rdark <= Factor1)
 		{
-			Rabs[1023-i] = Factor3*Factor2*(Sn[r]);
+			Rabs[1023-i] = 0;
+		} else
+		{
+			Rabs[1023-i] = (R_data[i] - Rdark)*Factor2*(Sn[r]);
 		}
+		
+//		if(Factor3 <= 0)
+//		{	
+//			Rabs[1023-i] = 0;
+//		} 
 		
 		r--;
 	}
 }
-
 
 float Rabs_calc_MAX(uint16_t Rdark, float Factor1, float Factor2)
 {	

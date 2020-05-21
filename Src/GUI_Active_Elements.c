@@ -169,14 +169,6 @@ void GUI_Button_Measure_deltaE_Small(uint16_t X, uint16_t Y, uint16_t Active, ui
 	TFT_DrawLine(X+25, Y+17, X+25, Y+20, TFT_White);
 	TFT_DrawLine(X+26, Y+17, X+26, Y+19, TFT_White);
 	TFT_DrawLine(X+27, Y+18, X+27, Y+19, TFT_White);
-//	TFT_DrawLine(X+23, Y+22, X+23, Y+32, TFT_White);
-//	TFT_DrawLine(X+24, Y+23, X+24, Y+31, TFT_White);
-//	TFT_DrawLine(X+25, Y+24, X+25, Y+31, TFT_White);
-//	TFT_DrawLine(X+26, Y+24, X+26, Y+30, TFT_White);
-//	TFT_DrawLine(X+27, Y+25, X+27, Y+29, TFT_White);
-//	TFT_DrawLine(X+28, Y+25, X+28, Y+28, TFT_White);
-//	TFT_DrawLine(X+29, Y+26, X+29, Y+28, TFT_White);
-//	TFT_DrawLine(X+30, Y+27, X+30, Y+27, TFT_White);
 }
 
 void GUI_CheckBox(uint16_t X, uint16_t Y, uint16_t Check)

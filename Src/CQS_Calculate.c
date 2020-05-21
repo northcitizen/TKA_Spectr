@@ -14,7 +14,7 @@ float s_ref[1024] = {0};
 float norm_560;
 float M1=0, M2 = 0;
 double xD, yD, bar_CQS;
-extern float WaveLenght[1024], S0_lambda[1024], S1_lambda[1024], S2_lambda[1024], calibratre_x_1931[1024],calibratre_y_1931[1024],calibratre_z_1931[1024], max_Rabs;
+extern float WaveLenght[1024], S0_lambda[1024], S1_lambda[1024], S2_lambda[1024], calibratre_x_1931[1024],Spectral_day[1024],calibratre_z_1931[1024], max_Rabs;
 float CQS_R_temp[1024] = {0}, CQS_S_test[1024] = {0};
 
 double M[9] = { 0.7982, 0.3389, -0.1371,
@@ -50,8 +50,8 @@ void cqs_func(uint16_t CCT_measure, float *Rabs)
 {
 	
 	double Y_ic_test = 0;
-double X_ic_test = 0;
-double Z_ic_test = 0;
+	double X_ic_test = 0;
+	double Z_ic_test = 0;
 	
 	double k_ref = 0;
 	double k_test = 0;
@@ -62,13 +62,13 @@ double Z_ic_test = 0;
 	double yw_test = 0;
 	double zw_test = 0;
 					
-double R_ic_test = 0;
-double G_ic_test = 0;
-double B_ic_test = 0;
-	
-double x_test = 0;	
-double y_test = 0;		
-double z_test = 0;	
+	double R_ic_test = 0;
+	double G_ic_test = 0;
+	double B_ic_test = 0;
+		
+	double x_test = 0;	
+	double y_test = 0;		
+	double z_test = 0;	
 	
 	
 	memset(CQS_S_test, 0, sizeof(CQS_S_test));
@@ -109,8 +109,6 @@ double z_test = 0;
 	
 	bar_CQS = 0.2;
 	GUI_Bar_Measure(85, 13, bar_CQS);
-	
-
 
 	memset(x_ref, 0, sizeof(x_ref));
 	memset(y_ref, 0, sizeof(y_ref));
@@ -134,21 +132,21 @@ double z_test = 0;
 			if (i == 0)
 			{
 				s_ref[j] = calcSref(j, CCT_measure);
-				k_ref += s_ref[j] * calibratre_y_1931[j];
+				k_ref += s_ref[j] * Spectral_day[j];
 				xw_ref += s_ref[j] * calibratre_x_1931[j];
-				yw_ref += s_ref[j] * calibratre_y_1931[j];
+				yw_ref += s_ref[j] * Spectral_day[j];
 				zw_ref += s_ref[j] * calibratre_z_1931[j];
-				k_test += CQS_S_test[j] * calibratre_y_1931[j];
+				k_test += CQS_S_test[j] * Spectral_day[j];
 				xw_test += CQS_S_test[j] * calibratre_x_1931[j];
-				yw_test += CQS_S_test[j] * calibratre_y_1931[j];
+				yw_test += CQS_S_test[j] * Spectral_day[j];
 				zw_test += CQS_S_test[j] * calibratre_z_1931[j];
 			}
 
 			x_ref[i] += calibratre_x_1931[j] * CQS_R_temp[j] * s_ref[j];
-			y_ref[i] += calibratre_y_1931[j] * CQS_R_temp[j] * s_ref[j];
+			y_ref[i] += Spectral_day[j] * CQS_R_temp[j] * s_ref[j];
 			z_ref[i] += calibratre_z_1931[j] * CQS_R_temp[j] * s_ref[j];
 			x_test += calibratre_x_1931[j] * CQS_R_temp[j] * CQS_S_test[j];
-			y_test += calibratre_y_1931[j] * CQS_R_temp[j] * CQS_S_test[j];
+			y_test += Spectral_day[j] * CQS_R_temp[j] * CQS_S_test[j];
 			z_test += calibratre_z_1931[j] * CQS_R_temp[j] * CQS_S_test[j];
 		}
 		
@@ -191,13 +189,13 @@ double z_test = 0;
 
 	for (int i = 0; i < 15; i++)
 	{
-			R_ic_test =  R_i_test[i] * alpha * R_w_ref / R_w_test;
-			G_ic_test =  G_i_test[i] * alpha * G_w_ref / G_w_test;
-			B_ic_test =  B_i_test[i] * alpha * B_w_ref / B_w_test;
+		R_ic_test =  R_i_test[i] * alpha * R_w_ref / R_w_test;
+		G_ic_test =  G_i_test[i] * alpha * G_w_ref / G_w_test;
+		B_ic_test =  B_i_test[i] * alpha * B_w_ref / B_w_test;
 
-		 X_ic_test = R_ic_test * M_inv[0] + G_ic_test * M_inv[1] + B_ic_test * M_inv[2];
-		 Y_ic_test = R_ic_test * M_inv[3] + G_ic_test * M_inv[4] + B_ic_test * M_inv[5];
-		 Z_ic_test = R_ic_test * M_inv[6] + G_ic_test * M_inv[7] + B_ic_test * M_inv[8];
+		X_ic_test = R_ic_test * M_inv[0] + G_ic_test * M_inv[1] + B_ic_test * M_inv[2];
+		Y_ic_test = R_ic_test * M_inv[3] + G_ic_test * M_inv[4] + B_ic_test * M_inv[5];
+		Z_ic_test = R_ic_test * M_inv[6] + G_ic_test * M_inv[7] + B_ic_test * M_inv[8];
 
 		float y_tmp = cbrt(y_ref[i] / yw_ref);
 		float L_ref = 116* y_tmp - 16;

@@ -11,7 +11,7 @@
 
 
 void GUI_TitleString_Name(uint16_t X, uint16_t Y);
-void GUI_TitleString_Version(uint16_t X, uint16_t Y);
+void GUI_TitleString_Version(uint16_t X, uint16_t Y, float Version);
 void GUI_TextRu_Language(uint16_t X, uint16_t Y);
 void GUI_TextRu_Russian(uint16_t X, uint16_t Y);
 void GUI_TextRu_Info(uint16_t X, uint16_t Y);
@@ -34,4 +34,9 @@ void GUI_TextRu_Info_Ver(uint16_t X, uint16_t Y, float Version);
 void GUI_TextRu_Radiance(uint16_t X, uint16_t Y);
 void GUI_TextRu_Luminance(uint16_t X, uint16_t Y);
 void GUI_TextRu_WriteSD(uint16_t X, uint16_t Y);
+
+void GUI_TextMsgRu_LowIrradiance(uint16_t X, uint16_t Y);
+void GUI_TextMsgRu_LowRadiance(uint16_t X, uint16_t Y);
+void GUI_TextMsgRu_HighRadiance(uint16_t X, uint16_t Y);
+void GUI_TextMsgRu_HighIrradiance(uint16_t X, uint16_t Y);
 #endif

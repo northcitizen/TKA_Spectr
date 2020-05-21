@@ -60,10 +60,15 @@ void GUI_TextEn_W_m2(uint16_t X, uint16_t Y);
 void GUI_TextEn_W_m2_sr(uint16_t X, uint16_t Y);
 void GUI_TextEn_cd_m2(uint16_t X, uint16_t Y, uint8_t deg);
 void GUI_TextEn_mol_s_2(uint16_t X, uint16_t Y);
-
+void GUI_TextEn_umol_sr(uint16_t X, uint16_t Y, uint8_t deg);
 void GUI_TextEn_WriteSD(uint16_t X, uint16_t Y);
 
 void GUI_TextEn_Info_Callibration(uint16_t X, uint16_t Y, uint8_t date, uint8_t month, uint16_t year);
 void GUI_TextEn_Info_Serial(uint16_t X, uint16_t Y, uint16_t Part, uint16_t Number);
 void GUI_TextEn_Info_Ver(uint16_t X, uint16_t Y, float Version);
+
+void GUI_TextMsgEn_HighIrradiance(uint16_t X, uint16_t Y);
+void GUI_TextMsgEn_HighRadiance(uint16_t X, uint16_t Y);
+void GUI_TextMsgEn_LowRadiance(uint16_t X, uint16_t Y);
+void GUI_TextMsgEn_LowIrradiance(uint16_t X, uint16_t Y);
 #endif

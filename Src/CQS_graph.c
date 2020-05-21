@@ -326,7 +326,7 @@ void CQS_chart(uint8_t direction, uint8_t *GraphData)
 }
 
 void CQS_Draw(uint8_t direction, uint8_t *GraphData, uint8_t Qa, uint8_t Qp, uint8_t Qf){
-	TFT_FillRectangle(5, 50, 270, 410, TFT_Black_Bkgr);
+	TFT_FillRectangle(5, 58, 270, 410, TFT_Black_Bkgr);
 	CQS_Axes(direction);
 	CQS_Axes_Text(direction);
 	CQS_chart(direction, GraphData);

@@ -55,12 +55,12 @@
 #define 	SPECTRAL_RETINA					0x08105040 //uint16_t*1000
 
 //Colorimetry
-#define		X10_CIE1964							0x08105840 //float
-#define		Z10_CIE1964							0x08106840 //float
+#define		X2_CIE1931							0x08105840 //float
+#define		Z2_CIE1931							0x08106840 //float
 
-#define		X2_CIE1931							0x08107840 //float
-#define		Y2_CIE1931							0x08108840 //float
-#define		Z2_CIE1931							0x08109840 //float
+#define		X10_CIE1964							0x08107840 //float
+#define		Y10_CIE1964							0x08108840 //float
+#define		Z10_CIE1964							0x08109840 //float
 
 //CQS
 #define		SPECTRAL_S0							0x0810A840 //uint16_t*100+50000

@@ -16,42 +16,35 @@
 #include "CQS_Calculate.h"
 #include "CRI_Calculate.h"
 #include "Calculate_Measure.h"
-
-
 #include "Buttons.h"
 
-#define MEASURE 0x01
-
 //CMD DEFINITION
-#define CMD_DATA_TRANSMIT 				0x01
-#define CMD_RABS_DATA_TRANSMIT 		0x01
-#define CMD_CNFG 									0x02
-#define CMD_CAPTURE 							0x03
-#define CMD_CRC_LOAD_STATUS				0x66
+#define CMD_DATA_TRANSMIT 						0x01
+#define CMD_RABS_DATA_TRANSMIT 				0x01
+#define CMD_CNFG 											0x02
+#define CMD_CAPTURE 									0x03
+#define CMD_CRC_LOAD_STATUS						0x66
 #define CMD_CALCULATED_DATA_TRANSMIT	0x04
 
-#define CMD_FLASH_SET_WR_ADDR	 		0x0A
-#define CMD_FLASH_WR_DATA			 		0x0B
-#define CMD_FLASH_READ_DATA			 	0x0C
-#define CMD_FLASH_ERASE_DATA			0x0D
+#define CMD_FLASH_SET_WR_ADDR	 				0x0A
+#define CMD_FLASH_WR_DATA			 				0x0B
+#define CMD_FLASH_READ_DATA			 			0x0C
+#define CMD_FLASH_ERASE_DATA					0x0D
 
 //FLASH DATA ADDRESS
-#define FLASH_DATA_START 		0x08100000
-#define FLASH_DATA_SIZE			21514 //number of uint64_t data
-#define FLASH_CRC_ADDR 			0x0812A050 //addr for FLASH CRC check 
+#define FLASH_DATA_START 							0x08100000
+#define FLASH_DATA_SIZE								21514				//number of uint64_t data 
+#define FLASH_CRC_ADDR 								0x0812A050	//addr for FLASH CRC check 
 
-
-uint8_t dataToSend[64]= {0};
+//USB
+uint8_t dataToSend[64]= {0}; 
 uint8_t dataToReceive[12]= {0};
-uint8_t flag_EOS = 0;
 
 uint64_t	flash_data_write, flash_data_read;
 uint32_t	flash_address;
 uint8_t		flash_data_read_SND[8]= {0};
 
 uint16_t Calibration_year, Serial_part_device, Serial_number_device, Calibration_date, Calibration_month;
-
-extern FATFS SDFatFs;
 
 uint16_t PARGraph_B, PARGraph_G, PARGraph_R, PARGraph_IR;
 uint8_t BluetoothStat = 0;
@@ -63,20 +56,19 @@ TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
 TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim7;
-
+TIM_HandleTypeDef htim15;
 ADC_HandleTypeDef hadc1;
 I2C_HandleTypeDef hi2c1;
 LTDC_HandleTypeDef hltdc;
 DMA2D_HandleTypeDef hdma2d;
-
+DMA_HandleTypeDef hdma_lpuart1_tx;
 SD_HandleTypeDef hsd1;
+
 static void MX_SDMMC1_SD_Init(void);
 extern char SDPath[4];
+extern FATFS SDFatFs;
 
-uint8_t wtext[] = "TKA spectrometry SD CARD TEST"; /* File write buffer */
-uint8_t rtext[100];  
-
- const sImageFlash bmTKA_logo2 = {
+const sImageFlash bmTKA_logo2 = {
   270, // xSize
   181, // ySize
   0x0000  // Pointer to picture data
@@ -86,57 +78,61 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 FLASH_EraseInitTypeDef EraseInitStruct, EraseInitStruct2;
 CRC_Check_StatusTypeDef CRC_STATUS;
 
+uint8_t old_exp_num = 0, exp_set = 1;
+
 uint8_t RxBuf[2];
 extern uint8_t  GUI_screen_state, Graph_Field, Source_Type, Color_Field, Measure_Color_xy, pause, flag_spectral, direction, Language_status, Bluetooth;
 extern uint16_t Measure_Field, sdfile_cnt;
+
 //Line recieve data
-uint16_t Line[1024] = {0}, Line_buff[1024] = {0}; 
+uint16_t Line[1024] = {0}, Line_buff[1024] = {0}, buff_set2; 
 float Line_Rabs_buff[1024] = {0}, Line_Rabs_buff_graph_test[1024] = {0};
 float max_Rabs_graph, max_Rabs;
+
 //Calibration factors data
 float Spectral_Corection_Buff[1024] = {0}, WaveLenght[1024] = {0}, Scattering_Light = 0, Exposure_Factor = 0, Hazard_Blue[1024] = {0}, Hazard_Retina[1024] = {0};
 float Factor1 = 0, Factor2 = 0, EnergyFactor_E = 0, EnergyFactor_L = 0;
 float S0_lambda[1024] = {0}, S1_lambda[1024] = {0}, S2_lambda[1024] = {0};
 float E_day, E_day_Wt, E_Night, SP_Measure, PPFD_PPL_Measure, PPFD_PPL_Blue_Measure, PPFD_PPL_Green_Measure, PPFD_PPL_Red_Measure, PPFD_PPL_Far_Red_Measure,
-	ELr_Measure, ELb_Measure, CCT_Measure;
+ELr_Measure, ELb_Measure, CCT_Measure, SREF;
+uint8_t buff_set,block_graph = 0, exp_start = 1;
+uint8_t Rotation_Screen_Spectral_Old3 = 0xFF;
+extern uint16_t Line_Rabs_buff_graph2[355];
 
-float calibratre_x_1964[1024] = {0}, calibratre_z_1964[1024] = {0}, calibratre_x_1931[1024] = {0}, calibratre_y_1931[1024] = {0}, calibratre_z_1931[1024] = {0};
+float calibratre_x_1964[1024] = {0}, calibratre_y_1964[1024] = {0}, calibratre_z_1964[1024] = {0}, calibratre_x_1931[1024] = {0}, calibratre_z_1931[1024] = {0};
 uint16_t  WaveLenght_Graph[4] = {0},  DarkSignal = 0; 
-uint8_t Mode_EL = 1, SD_Detect, old_sd_detect = 10, write_FileNum = 0;
-uint16_t colorimetry_XYZ[3] = {0}, lambda_d_Measure, lambda_c_Measure, Tc_Measure = 0;
+uint16_t colorimetry_XYZ1964[3] = {0}, lambda_d_Measure, lambda_c_Measure, Tc_Measure = 0, colorimetry_XYZ1931[3] = {0};
+float colorimetry_xy1964[2] = {0}, colorimetry_uv[2] = {0}, colorimetry_uv1976[2] = {0}, colorimetry_xy1931[2] = {0};
 int16_t colorimetry_LAB[3] = {0};
 extern int16_t delta_Eab_Measure;
-float colorimetry_xy[2] = {0}, colorimetry_uv[2] = {0}, colorimetry_uv1976[2] = {0};
-uint16_t max_el = 0;
-uint16_t cnt_delay_bar = 0;
+uint16_t max_el = 0, cnt_delay_bar = 0;
 extern uint8_t Rotation_Screen_Spectral, Rotation_Screen_Spectral_Old, Calculate_deltaEab_Done, Color_rend_Field, preGUI_screen_state;
+uint8_t highSignal = 0, lowSignal = 0;
+uint8_t Mode_EL = 1, SD_Detect, old_sd_detect = 10, write_FileNum = 0;
 
 //Calibration table factors data
 float Spectral_day[1024] = {0}, Spectral_night[1024] = {0}, Spectral_B[1024] = {0}, Spectral_R[1024] = {0};
-
 //																					7.812ms	15.625ms	31.25ms	62.5ms	125ms	250ms	500ms	1s			2s			4s
 const uint16_t exposure_timer_period[10] = {93,			186,			372,		744,		1488,	2976,	5952,	11905,	23810,	47619}; //93 = 7.812ms
 	
 volatile uint16_t	i=0, j=0;
-volatile uint8_t	exp_num = 0, VGain = 0, LaserOnOff = 0, TFT_ON_OFF = 1, temp = 0, send_usb_block = 0, MeasureFlag_display = 0;
-double percentage_charge; //battry charge
+volatile uint8_t	exp_num = 0, VGain = 1, LaserOnOff = 0, TFT_ON_OFF = 1, temp = 0, send_usb_block = 0, MeasureFlag_display = 0;
+double percentage_charge; //battery charge
 volatile uint16_t RGB565_480x272[130560] = {0x00000000};
 
 uint16_t bmp[108000] = {0x0000}; //buffer for image max 270х400
 extern sImage Locus;
 
 uint8_t pause_button = 0;
-/*bluetooth variable*/
-const char ready[] = "TKA_SPECTROMETRY\r\n";
-const char format[] = "\r\n";
-char send[30];
 
+/*bluetooth variable*/
+char send[30];
+uint8_t str1[60]={0};
 
 uint8_t buff_i2c[3] = {0,0x0A,0x00};
 volatile uint32_t cnt_touch_delay =0;
 
 
-uint8_t str1[60]={0};
 typedef struct USART_prop{
 	uint8_t usart_buf[13];
 	uint8_t usart_cnt;
@@ -144,25 +140,11 @@ typedef struct USART_prop{
 	uint8_t is_text;
 } USART_prop_ptr;
 USART_prop_ptr usartprop;
-uint8_t ii=0;
 
 uint8_t adcResult = 0;
-
-uint8_t buff_i2c_b = 0;
 uint16_t Touch_x = 0, Touch_y = 0;
-double buf_pix;
-uint16_t button_pos_x = 155, button_pos_y = 165;
 
-uint32_t n;
-extern uint16_t i_old_color;
-uint16_t Cl, Cl_mass[350];
 ////////////////////////////////////////////////////////
-
-uint8_t mode = 0, state = 0, ac_mode = 0, chip_id = 0;
-volatile uint16_t xres = 0;
-volatile uint16_t yres = 0;
-uint8_t firm = 0;
-
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -170,6 +152,7 @@ static void MX_TIM2_Init(void);
 static void MX_TIM4_Init(void); 
 static void MX_TIM5_Init(void);
 static void MX_TIM6_Init(void);
+static void MX_TIM15_Init(void);
 static void MX_SPI1_Init(void);      
 static void MX_LPUART1_UART_Init(void);
 static void MX_LTDC_Init(void);
@@ -177,6 +160,7 @@ static void MX_ADC1_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_TIM7_Init(void);
+static void MX_DMA_Init(void);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void auto_exposure(void);
 void exposure_display(uint16_t X, uint16_t Y);
@@ -211,13 +195,19 @@ void DWT_Delay(uint32_t us) // useconds
 
 void Calculate_Data()
 {
-	Calculate_XYZ(Line_Rabs_buff, Measure_Color_xy ? calibratre_x_1931 : calibratre_x_1964, Measure_Color_xy ? calibratre_y_1931:Spectral_day, Measure_Color_xy ? calibratre_z_1931:calibratre_z_1964);
-	Calculate_xy(colorimetry_XYZ);
+	//1964
+	Calculate_XYZ1964(Line_Rabs_buff, calibratre_x_1964, calibratre_y_1964, calibratre_z_1964);
+	Calculate_xy1964(colorimetry_XYZ1964);
+	//1931
+	Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+	Calculate_xy1931(colorimetry_XYZ1931);
+	
 	Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+	
 	if(GUI_screen_state == Color_Screen)
 	{
-		if(Color_Field&Color_CIE_Luv) {Calculate_uv1976(colorimetry_xy);Calculate_uv(colorimetry_xy);} else 
-		if(Color_Field&Color_CIE_Lab){Calculate_Lab(colorimetry_XYZ, Measure_Color_xy, Source_Type);}
+		if(Color_Field&Color_CIE_Luv) {Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);} else 
+		if(Color_Field&Color_CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
 	}
 	if(GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen|| GUI_screen_state == Measure3_Screen)
 	{
@@ -235,14 +225,13 @@ void Calculate_Data()
 																	PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
 			}
 			if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
-			if(Measure_Field&CIE_Luv){Calculate_uv1976(colorimetry_xy);Calculate_uv(colorimetry_xy);}
-			if(Measure_Field&CIE_Lab){Calculate_Lab(colorimetry_XYZ, Measure_Color_xy, Source_Type);}
+			if(Measure_Field&CIE_Luv){Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);}
+			if(Measure_Field&CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
 			if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}	
 			if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}	
 			if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
 														 ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
 
-	
 	}
 }
 double Get_Battery_Level()
@@ -354,10 +343,8 @@ void packet_generator_Calculated_data_send(void) //send Calculated data
 			packet_number = 0;
 	
 			memset(dataToSend, 0, sizeof(dataToSend));
-	
-		//	Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-		//	Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, ((Mode_EL == 0)?Spectral_Corection_Buff_L:Spectral_Corection_Buff_E), Line_Rabs_buff);
-				
+			delta_Eab_Measure = Calculate_deltaEab();
+
 			dataToSend[0] = 0xAB;
 			dataToSend[1] = 0x12;
 			dataToSend[2] = 0x04;
@@ -369,7 +356,7 @@ void packet_generator_Calculated_data_send(void) //send Calculated data
 			
 			for (uint16_t cnt = 0; cnt < 1024; cnt++){
 				
-//				memcpy(&buff_float, &test_massive[cnt], sizeof(float));
+				memcpy(&buff_float, &Line_Rabs_buff[1023-cnt], sizeof(float));
 
 				dataToSend[q] = (buff_float >> 24) & 0x000000FF;
 				dataToSend[q+1] = (buff_float >> 16) & 0x000000FF;
@@ -396,37 +383,56 @@ void packet_generator_Calculated_data_send(void) //send Calculated data
 			
 			memset(dataToSend, 0, sizeof(dataToSend)); 
 			
-			colorimetry_xy[0] = 0.133;
-				colorimetry_xy[1] = 0.852;
-			//send xy color
-				memcpy(&buff_float, &colorimetry_xy[0], sizeof(float));
+			dataToSend[0] = 0xAB;
+			dataToSend[1] = 0x12;
+			dataToSend[2] = 0x04;
+	
+			dataToSend[5] = (Mode_EL == 0)? 0 : 1;
+			dataToSend[6] = 0;
+			//send xy1964 color
+				memcpy(&buff_float, &colorimetry_xy1964[0], sizeof(float));
 				dataToSend[q] = (buff_float >> 24) & 0x000000FF;
 				dataToSend[q+1] = (buff_float >> 16) & 0x000000FF;
 				dataToSend[q+2] = (buff_float >> 8) & 0x000000FF;
 				dataToSend[q+3] = (buff_float) & 0x000000FF;
 				
-				memcpy(&buff_float, &colorimetry_xy[1], sizeof(float));
+				memcpy(&buff_float, &colorimetry_xy1964[1], sizeof(float));
 				dataToSend[q+4] = (buff_float >> 24) & 0x000000FF;
 				dataToSend[q+5] = (buff_float >> 16) & 0x000000FF;
 				dataToSend[q+6] = (buff_float >> 8) & 0x000000FF;
 				dataToSend[q+7] = (buff_float) & 0x000000FF;
-								
-			Tc_Measure = 3555;
+
 				//send CCT
 				memcpy(&buff_float, &Tc_Measure, sizeof(uint16_t));
 				dataToSend[q+8]= (buff_float >> 8) & 0x000000FF;
 				dataToSend[q+9] = (buff_float) & 0x000000FF;
-						
-						//send delta_Eab 
-				Calculate_deltaEab_Done = 0x01;
-				delta_Eab_Measure = -79;
+				
+				//send SourceType
+				dataToSend[q+10]= Source_Type;
+				
+				//send delta_Eab 
 			if(Calculate_deltaEab_Done == 0x01)
 			{
 				memcpy(&buff_float, &delta_Eab_Measure, sizeof(int16_t));
-				dataToSend[q+10] = (buff_float >> 8) & 0x000000FF;
-				dataToSend[q+11] = (buff_float) & 0x000000FF;
+				dataToSend[q+11] = (buff_float >> 8) & 0x000000FF;
+				dataToSend[q+12] = (buff_float) & 0x000000FF;
+			} else {dataToSend[q+11] = 0;
+				dataToSend[q+12] = 0;
 			}
 				
+			//send xy1931 color
+				memcpy(&buff_float, &colorimetry_xy1931[0], sizeof(float));
+				dataToSend[q+13] = (buff_float >> 24) & 0x000000FF;
+				dataToSend[q+14] = (buff_float >> 16) & 0x000000FF;
+				dataToSend[q+15]= (buff_float >> 8) & 0x000000FF;
+				dataToSend[q+16] = (buff_float) & 0x000000FF;
+				
+				memcpy(&buff_float, &colorimetry_xy1931[1], sizeof(float));
+				dataToSend[q+17] = (buff_float >> 24) & 0x000000FF;
+				dataToSend[q+18] = (buff_float >> 16) & 0x000000FF;
+				dataToSend[q+19] = (buff_float >> 8) & 0x000000FF;
+				dataToSend[q+20] = (buff_float) & 0x000000FF;
+			
 					dataToSend[3] = (packet_number>> 8) & 0x00FF;
 					dataToSend[4] = packet_number & 0x00FF;
 					dataToSend[63] = (CRC_pack+dataToSend[0]+dataToSend[1]+dataToSend[2] + dataToSend[q]+dataToSend[q+1]+dataToSend[q+2] + dataToSend[q+3] + dataToSend[q+4]+
@@ -514,13 +520,11 @@ void usb_receive_processing(void)
 						if (TFT_ON_OFF != dataToReceive[6]){
 							TFT_ON_OFF = (dataToReceive[6] > 0) ? 1 : 0;
 							if(TFT_ON_OFF == 1){
-								HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_SET);//TFT_booster SHDN on
-								HAL_NVIC_EnableIRQ(TIM4_IRQn); //TFT_booster SHDN on
+								HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);//booster
 								HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_SET); //LTDC_En on
 							}else
 							{
-								HAL_NVIC_DisableIRQ(TIM4_IRQn);	//TFT_booster SHDN off
-								HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_RESET); //TFT_booster SHDN off
+								HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 								HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 							}
 						} else{
@@ -641,28 +645,17 @@ void usb_receive_processing(void)
 			__asm("nop");
 		}
 }
-	uint8_t num = 0;
+uint8_t num = 0;
 
-
+uint8_t txDoneFlag = 0;
 /*BLUETOOTH UART processing*/
-#define START_ADDR_USER_PAGE           ((uint32_t)0x0803F800)
-void send_bluetooth_float(uint32_t data)
-{
-		uint8_t data_bluetooth_send[4] = {0};
-		
-		data_bluetooth_send[0] = (data >> 24) & 0x000000FF;
-		data_bluetooth_send[1] = (data >> 16) & 0x000000FF;
-		data_bluetooth_send[2] = (data >> 8) & 0x000000FF;
-		data_bluetooth_send[3] = (data) & 0x000000FF;
-
-		HAL_UART_Transmit(&hlpuart1, (uint8_t*)&data_bluetooth_send, 4, 1);
-}
-
+uint8_t send_bluetooth = 0;
+uint8_t	data_bluetooth_send[4122] = {0};
 void string_parse(uint8_t* buf_str)
 {			
 	
 	uint32_t buff_float;
-	uint8_t	data_bluetooth_send[2] = {0};
+
 	
 	if(buf_str[0] == 0xAB)
 	{
@@ -670,52 +663,78 @@ void string_parse(uint8_t* buf_str)
 		{
 			if(buf_str[2] == 0x02)
 			{
-					/*Laser On/Off*/
-							LaserOnOff = (buf_str[4] > 0) ? 1 : 0;
-						if(LaserOnOff == 0){
-					 			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-							}else
-							{
-								HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-							}
+
+//					/*Laser On/Off*/
+//							LaserOnOff = (buf_str[4] > 0) ? 1 : 0;
+//						if(LaserOnOff == 0){
+//					 			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+//							}else
+//							{
+//								HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+//							}
 //							sprintf(send, "TKA battery level: %.1f%%", Get_Battery_Level());
-//							HAL_UART_Transmit(&hlpuart1, (uint8_t*)&send, 30, 5);
+//							HAL_UART_Transmit_DMA(&hlpuart1, (uint8_t*)&send, 30);
 							
 							//send absolute spectral
-							for(i = 0; i < 1024; i++){
-//								memcpy(&buff_float, &test_massive[i], sizeof(float));
-								send_bluetooth_float(buff_float);
+							data_bluetooth_send[0] = 0xAB;
+							data_bluetooth_send[1] = 0x12;
+							data_bluetooth_send[2] = 0x04;
+							data_bluetooth_send[3] = (Mode_EL == 0)? 0 : 1;
+							data_bluetooth_send[4] = 0;
+								
+							uint16_t qz = 5;
+							for(uint16_t i = 0; i < 1024; i++){
+								memcpy(&buff_float, &Line_Rabs_buff[1023-i], sizeof(float));
+								data_bluetooth_send[qz+0] =  (buff_float >> 24) & 0x000000FF;
+								data_bluetooth_send[qz+1] =  (buff_float >> 16) & 0x000000FF;
+								data_bluetooth_send[qz+2] =  (buff_float >> 8) & 0x000000FF;
+								data_bluetooth_send[qz+3] = (buff_float) & 0x000000FF;
+								qz = qz + 4;
+						}					
+							
+						memcpy(&buff_float, &colorimetry_xy1964[0], sizeof(float));
+						data_bluetooth_send[qz] =  (buff_float >> 24) & 0x000000FF;
+						data_bluetooth_send[qz+1] = (buff_float >> 16) & 0x000000FF;
+						data_bluetooth_send[qz+2] = (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+3] = (buff_float) & 0x000000FF;
+				
+						memcpy(&buff_float, &colorimetry_xy1964[1], sizeof(float));
+						data_bluetooth_send[qz+4] = (buff_float >> 24) & 0x000000FF;
+						data_bluetooth_send[qz+5] = (buff_float >> 16) & 0x000000FF;
+						data_bluetooth_send[qz+6] = (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+7] = (buff_float) & 0x000000FF;
+
+						//send CCT
+						memcpy(&buff_float, &Tc_Measure, sizeof(uint16_t));
+						data_bluetooth_send[qz+8]= (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+9] = (buff_float) & 0x000000FF;
+						
+						//send SourceType
+						data_bluetooth_send[qz+10]= Source_Type;
+						
+						if(Calculate_deltaEab_Done == 0x01)
+						{
+							memcpy(&buff_float, &delta_Eab_Measure, sizeof(int16_t));
+							data_bluetooth_send[qz+11] = (buff_float >> 8) & 0x000000FF;
+							data_bluetooth_send[qz+12] = (buff_float) & 0x000000FF;
+						} else {data_bluetooth_send[qz+11] = 0x00;
+							data_bluetooth_send[qz+12] = 0x00;
 						}
-							colorimetry_xy[0] = 0.133;
-							colorimetry_xy[1] = 0.852;
-							//send xy color
-								memcpy(&buff_float, &colorimetry_xy[0], sizeof(float));
-								send_bluetooth_float(buff_float);
 						
-								memcpy(&buff_float, &colorimetry_xy[1], sizeof(float));
-								send_bluetooth_float(buff_float);
-
-								//send CCT
-								memcpy(&buff_float, &Tc_Measure, sizeof(uint16_t));
-								data_bluetooth_send[0] = (buff_float >> 8) & 0x000000FF;
-								data_bluetooth_send[1] = (buff_float) & 0x000000FF;
-								HAL_UART_Transmit(&hlpuart1, (uint8_t*)&data_bluetooth_send, 2, 1);
+						//send xy1931 color
+						memcpy(&buff_float, &colorimetry_xy1931[0], sizeof(float));
+						data_bluetooth_send[qz+13] = (buff_float >> 24) & 0x000000FF;
+						data_bluetooth_send[qz+14] = (buff_float >> 16) & 0x000000FF;
+						data_bluetooth_send[qz+15]= (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+16] = (buff_float) & 0x000000FF;
 						
-								//send Source type
-								HAL_UART_Transmit(&hlpuart1, &Source_Type, 1, 1);
+						memcpy(&buff_float, &colorimetry_xy1931[1], sizeof(float));
+						data_bluetooth_send[qz+17] = (buff_float >> 24) & 0x000000FF;
+						data_bluetooth_send[qz+18] = (buff_float >> 16) & 0x000000FF;
+						data_bluetooth_send[qz+19] = (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+20] = (buff_float) & 0x000000FF;
 						
-								//send delta_Eab 
-						Calculate_deltaEab_Done = 0x01;
-						delta_Eab_Measure = -79;
-								if(Calculate_deltaEab_Done == 0x01)
-								{
-									memcpy(&buff_float, &delta_Eab_Measure, sizeof(int16_t));
-									data_bluetooth_send[0] = (buff_float >> 8) & 0x000000FF;
-									data_bluetooth_send[1] = (buff_float) & 0x000000FF;
-									HAL_UART_Transmit(&hlpuart1, (uint8_t*)&data_bluetooth_send, 2, 1);
-								}
-
-	
+						send_bluetooth = 1;		
 			}
 		}
 	}else
@@ -758,14 +777,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   }
 }
 
-float SREF;
-
-	uint8_t buff_set,block_graph = 0;
-	uint16_t buff_set2;	
-
-extern uint16_t Line_Rabs_buff_graph2[355];
-uint32_t array_recieve[10] = {0};
-uint8_t Rotation_Screen_Spectral_Old3 = 0xFF;
 
 int main(void)
 {
@@ -778,8 +789,8 @@ int main(void)
 	DWT_Init();
 	HAL_Delay(1);
 	MX_TIM2_Init();
+	MX_TIM15_Init();
 	HAL_Delay(1);
-	MX_TIM4_Init();
 	HAL_Delay(1);
 	MX_TIM5_Init();
 	HAL_Delay(1);
@@ -796,6 +807,7 @@ int main(void)
  	MX_LTDC_Init();
 	HAL_Delay(1);
 	MX_ADC1_Init();
+	MX_DMA_Init();
 	HAL_Delay(1);
 	HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 	HAL_Delay(1);
@@ -805,73 +817,33 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM4_IRQn, 1, 0);  //Booster
+	HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //
 	HAL_Delay(2);
-	HAL_NVIC_EnableIRQ(TIM4_IRQn);
-	HAL_Delay(1);
-	HAL_TIM_Base_Start(&htim4);
-	HAL_Delay(1);
-	HAL_TIM_OC_Start_IT(&htim4, TIM_CHANNEL_1);
-	HAL_Delay(1);
-	HAL_TIM_OC_Start_IT(&htim4, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);//booster
+	TIM15->CCR2 = 50;
 	HAL_Delay(1);
 //	HAL_UART_Receive_IT(&hlpuart1,(uint8_t*)str1,1);
 //	HAL_Delay(1);
-//	if(BluetoothStat == 0) {HAL_UART_MspDeInit(&hlpuart1);}
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, GPIO_PIN_SET);
 	MX_TIM6_Init();
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
-
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim6);
-
-	HAL_Delay(1);
-
+	HAL_NVIC_SetPriority(TIM2_IRQn, 1, 4);
 	HAL_Delay(1);
 	HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
 	HAL_Delay(1);
+	Touch_Ini();
 	
-
-
-	// ---------------------------------------------------------------------------------------
-
-//	TS_AutoCalib();
-//	mode = TS_IO_Read(TS_I2C_ADDRESS, 0);
-//	ac_mode = TS_IO_Read(TS_I2C_ADDRESS, ID_G_AUTO_CLB_MODE);
-//	state = TS_IO_Read(TS_I2C_ADDRESS, ID_G_STATE);
-//
-//
-//	xres = 0;
-//	yres = 0;
-//
-//	chip_id = TS_IO_Read(TS_I2C_ADDRESS, ID_G_CIPHER);
-//
-//	xres |= (TS_IO_Read(TS_I2C_ADDRESS, ID_G_MAX_X_HIGH) << 8);
-//	HAL_Delay(1);
-//	xres |=	TS_IO_Read(TS_I2C_ADDRESS, ID_G_MAX_X_LOW);
-//
-//	yres |= (TS_IO_Read(TS_I2C_ADDRESS, ID_G_MAX_Y_HIGH) << 8);
-//	HAL_Delay(1);
-//	yres |=	TS_IO_Read(TS_I2C_ADDRESS, ID_G_MAX_Y_LOW);
-//
-//	firm = TS_IO_Read(TS_I2C_ADDRESS, ID_G_FIRMID);
-
-	// ---------------------------------------------------------------------------------------
-
-//	Touch_Ini();
-
 	MX_SDMMC1_SD_Init();
 	MX_FATFS_Init();
 	
 	GPIO_QSPI_Init();
-	
-		Single_Mode();	
-		HAL_Delay(20);
+	Single_Mode();	
+	HAL_Delay(20);
 
-//Load calibrations data	
-#if MEASURE
-
+//Load screen data	
 	buff_set = Calibration_Load_1byte(SET_MODEEL, 3);
 	if(buff_set == 0xFF){Mode_EL = 0;} else{Mode_EL = buff_set;}		
 			
@@ -890,7 +862,7 @@ int main(void)
 	buff_set = Calibration_Load_1byte(SET_SOURCETYPE, 3);
 	if(buff_set == 0xFF){Source_Type |= Source_D55;} else{Source_Type = buff_set;}	
 	
-		buff_set = Calibration_Load_1byte(SET_BLUETOOTH, 3);
+	buff_set = Calibration_Load_1byte(SET_BLUETOOTH, 3);
 	if(buff_set == 0xFF){Bluetooth = 0x00;} else{Bluetooth = buff_set;}	
 	
 	buff_set2 = Calibration_Load_2byte(SET_MEASUREFIELD, 1);		
@@ -900,7 +872,7 @@ int main(void)
 	if(buff_set2 == 0xFFFF){sdfile_cnt = 0;} else{sdfile_cnt = buff_set2;}	
 	
 	
-	
+//Load calibration data	
 	Calibration_WaveLenght_Graph();
 	Calibration_Exposure_Change(exp_num);
 	Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
@@ -911,12 +883,12 @@ int main(void)
 	Calibration_Load_Pack(SPECTRAL_DAY, 0x400, Spectral_day);
 	Calibration_Load_Pack(SPECTRAL_NIGHT, 0x400, Spectral_night);
 	
-	Calibration_Load_Pack(X2_CIE1931, 0x400, calibratre_x_1931);
-	Calibration_Load_Pack(Y2_CIE1931, 0x400, calibratre_y_1931);
-	Calibration_Load_Pack(Z2_CIE1931, 0x400, calibratre_z_1931);
-	
 	Calibration_Load_Pack(X10_CIE1964, 0x400, calibratre_x_1964);
+	Calibration_Load_Pack(Y10_CIE1964, 0x400, calibratre_y_1964);
 	Calibration_Load_Pack(Z10_CIE1964, 0x400, calibratre_z_1964);
+	
+	Calibration_Load_Pack(X2_CIE1931, 0x400, calibratre_x_1931);
+	Calibration_Load_Pack(Z2_CIE1931, 0x400, calibratre_z_1931);
 
 	uint16_t wave_num = 0;
 	
@@ -960,8 +932,8 @@ int main(void)
 	Calibration_month =	Calibration_Load_2byte(CALIBRATION_DATE, 1);
 	Calibration_year =  Calibration_Load_2byte(CALIBRATION_YEAR, 0);
 	
-Serial_part_device =  Calibration_Load_2byte(SERIAL_DEVICE, 0);
-Serial_number_device =  Calibration_Load_2byte(SERIAL_DEVICE, 1);
+	Serial_part_device =  Calibration_Load_2byte(SERIAL_DEVICE, 0);
+	Serial_number_device =  Calibration_Load_2byte(SERIAL_DEVICE, 1);
 	
 	for(uint16_t i = 0; i < 1024; i++){
 		if(WaveLenght[i]<=400 && WaveLenght[i+1]>=400)
@@ -991,39 +963,29 @@ Serial_number_device =  Calibration_Load_2byte(SERIAL_DEVICE, 1);
 	{
 		Factor2 = Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E);
 	}
+	if(Bluetooth == 0) {HAL_UART_MspDeInit(&hlpuart1);} else{HAL_UART_MspInit(&hlpuart1);}
 	
-	CRC_STATUS = CRC_Check(FLASH_DATA_START, FLASH_DATA_SIZE, FLASH_CRC_ADDR);
 	GUI_screen_state = Calibration_Load_1byte(SCREENADDR, 3);
-#endif
-
-Calculate_Data();
-uint32_t cnt_delay = 0, scr_refresh = 0;
-uint32_t PAGEError = 0;
-HAL_StatusTypeDef	flash_ok = HAL_ERROR;
+	Calculate_Data();
 						
 	Get_Battery_Level();
 	HAL_Delay(1);
-
-Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 	
-//	if(CRC_STATUS == CRC_OK)
-//	{
+	//Load TKA Logo 
+	Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
+	
+	//CRC Check
+	CRC_STATUS = CRC_Check(FLASH_DATA_START, FLASH_DATA_SIZE, FLASH_CRC_ADDR);
+	if(CRC_STATUS == CRC_OK)
+	{
 		GUI_Title_Screen();
-		for (uint16_t p = 0; p < 65000; p++){
-		cnt_delay++;
-			if((cnt_delay > 150 && exp_num < 6) || (cnt_delay > 950 && (exp_num >=+ 6 && exp_num < 8))||(cnt_delay > 1550 && exp_num >= 8)){
-							auto_exposure();
-							max_el = 0;
-							cnt_delay = 0;
-			}
-		}
-		
-		
-		Calculate_Data();
-		HAL_Delay(2500);	
-		Calculate_Data();
+		uint8_t p = 0;
+	} else{TFT_FillScreen_DMA(TFT_Red);}
+	
+		HAL_Delay(2000);	
 		usb_receive_processing();
 		
+	//Load Locus Image
 		Image_load(Color_Field&Color_CIE_xy ? (Measure_Color_xy&CIE_xy_1931_1964 ? XY2_LOCUS_BMP : XY10_LOCUS_BMP):
 		Color_Field&Color_CIE_Luv ? LUV_LOCUS_BMP : LAB_LOCUS_BMP,
 		Color_Field&Color_CIE_xy ? (Measure_Color_xy&CIE_xy_1931_1964 ? XY2_LOCUS_BMP_SIZEX*XY2_LOCUS_BMP_SIZEY : XY10_LOCUS_BMP_SIZEX*XY10_LOCUS_BMP_SIZEY):
@@ -1034,7 +996,8 @@ Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 		Color_Field&Color_CIE_Luv ? LUV_LOCUS_BMP_SIZEX : LAB_LOCUS_SIZEX;
 		Locus.Height = Color_Field&Color_CIE_xy ? (Measure_Color_xy&CIE_xy_1931_1964 ? XY2_LOCUS_BMP_SIZEY : XY10_LOCUS_BMP_SIZEY):
 		Color_Field&Color_CIE_Luv ? LUV_LOCUS_BMP_SIZEY : LAB_LOCUS_SIZEY;
-		
+	
+	// Switch screen (dependency Flash load)
 		switch(GUI_screen_state){
 		case Measure_Screen: GUI_Measure_Screen();  break;
 		case Measure2_Screen: preGUI_screen_state = Measure_Screen; GUI_Measure2_Screen();  break;
@@ -1045,34 +1008,58 @@ Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 		case Color_Rendition_Screen: preGUI_screen_state = Measure_Screen; GUI_ColorRend_Screen();break;
 		default: GUI_screen_state =  Measure_Screen; GUI_Measure_Screen();  break;
 		}
-
+// Timer init
 	MX_TIM7_Init();
-	HAL_NVIC_SetPriority(TIM2_IRQn, 1, 4);  //
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM7_IRQn);
+	HAL_NVIC_EnableIRQ(LPUART1_IRQn);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start(&htim7);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim7);
-
-
+		
+	uint8_t exp_stable = 0, start = 1;
+	uint32_t cnt_delay = 0, scr_refresh = 0;
  while (1)
  {        
-            usb_receive_processing();
-#if MEASURE
-   Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-	 if(exp_num ==0 && max_el >53000)
-	{
-		exposure_display(100, 100);
-	}
+   usb_receive_processing();
+	 if(send_bluetooth) 
+		{	
+			HAL_UART_Transmit_DMA(&hlpuart1, (uint8_t*)&data_bluetooth_send, 4122);
+			send_bluetooth = 0;
+		};
+				
+		while(start)
+		{
+		Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
+
     Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
 		if(!block_graph) {memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));}
 		
+			cnt_delay++;
+			Calculate_Data();
+			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8)){
+								auto_exposure();
+								max_el = 0;
+								cnt_delay = 0;
+								exp_stable = exp_stable+1;
+								exp_start = 1;
+								if(exp_stable > 10) {
+									start = 0;
+								}
+				}
+		}
 		
+		if(!exp_set){
+		Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
+    Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);}
+		if(!block_graph) {memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));}
+		
+			exp_start = 0;
 		if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen) && !pause)
 		{	
 			cnt_delay++;
-			if(!pause){Calculate_Data();}
+			if(!pause & !exp_set){Calculate_Data();}
 			if((cnt_delay > 40 && exp_num < 6) || (cnt_delay > 70 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 70 && exp_num >= 8)){
 								auto_exposure();
 								max_el = 0;
@@ -1082,14 +1069,13 @@ Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 		else	if((GUI_screen_state == Color_Screen) && !pause)
 		{	
 			cnt_delay++;
-			if(!pause){Calculate_Data();}
+			if(!pause & !exp_set){Calculate_Data();}
 			if((cnt_delay > 40 && exp_num < 6) || (cnt_delay > 70 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 500 && exp_num >= 8)){
 								auto_exposure();
 								max_el = 0;
 								cnt_delay = 0;
 				}
 		} 
-		
 		else {
 				cnt_delay++;
 				if((cnt_delay > 250 && exp_num < 6) || (cnt_delay > 950 && (exp_num >=+ 6 && exp_num < 8))||(cnt_delay > 1450 && exp_num >= 8)){
@@ -1098,16 +1084,13 @@ Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 								cnt_delay = 0;
 				}
 		}
-		
-		
-
-
-#endif         
+     
         if(GUI_screen_state == Graph_Screen)
         {    
             scr_refresh++;
-            if(scr_refresh > 35 ){
+            if(scr_refresh > 40 ){
 							block_graph = 1;
+							
 								if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral){ Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);}
 								Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
 								max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
@@ -1116,6 +1099,7 @@ Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 								Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
                 scr_refresh = 0;
 								block_graph = 0;
+								GUI_SignalLevel();
 
             }
         } else{__asm("nop");}
@@ -1128,13 +1112,14 @@ Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 
 void auto_exposure(void)
 { 
-	//uint16_t max_el = 0;
 	for (uint16_t i = 5; i<1024; i++){
 		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;
 	}
 	
 	if(max_el < 20000 && exp_num != 9)
 	{
+		highSignal = 0;
+		lowSignal = 0;
 		send_usb_block =1;
 		exp_num++;
 		htim2.Init.Period = exposure_timer_period[exp_num];
@@ -1147,11 +1132,12 @@ void auto_exposure(void)
 		{
 			Factor2 = Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E);
 		}
-		
-//		exposure_display(100, 40);
+
 		send_usb_block =0;
-	} else if(max_el > 50000 && exp_num != 0)
+	} else if(max_el > 45000 && exp_num != 0)
 	{
+		highSignal = 0;
+		lowSignal = 0;
 		send_usb_block =1;
 		exp_num--;
 		htim2.Init.Period = exposure_timer_period[exp_num];
@@ -1165,31 +1151,27 @@ void auto_exposure(void)
 			Factor2 = Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E);
 		}
 		
-//		exposure_display(100, 40);
 		send_usb_block =0;
-
+	}	
+	if(old_exp_num!=exp_num ){exp_set = 1; }else{exp_set = 0;}
+		
+	old_exp_num = exp_num;
+	
+	if(exp_num ==0 && max_el >=50000)
+	{
+		highSignal = 1;
+	} else if((exp_num ==0 && max_el < 50000))
+	{
+			highSignal = 0;
+	} else if((exp_num ==9 && max_el < DarkSignal+2000)) //20000
+	{
+			lowSignal = 1;
+	}else if((exp_num ==9 && max_el > DarkSignal+2000))
+	{
+			lowSignal = 0;
 	}
 }
-void exposure_display(uint16_t X, uint16_t Y)
-{
-		char buffer[9] = {0};
-		float exposure_text;
-		
-		TFT_FillRectangle(X, Y, X+60, Y+8, TFT_Black_Bkgr);
-		
-		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
-		TFT_SetFont(&Font7EN_arch_big);
-		
-		exposure_text = (exp_num == 0) ? 7.812 : (exp_num == 1) ? 15.625 : (exp_num == 2) ? 31.25 : (exp_num == 3) ? 62.5 : (exp_num == 4) ? 125 :
-		(exp_num == 5) ? 250 :(exp_num == 6) ? 500 : (exp_num == 7) ? 1000 : (exp_num == 8) ? 2000 : 4000;
-		sprintf (buffer, "%.2f", exposure_text);
-		
-		TFT_DisplayString(X, Y, (uint8_t *)buffer, LEFT_MODE);
-		TFT_DrawChar(X+56, Y, 'm');
-		TFT_DrawChar(X+64, Y, 's');
-}
-																			
+																		
 
 /*ST signal generator*/
 void TIM2_IRQHandler(void)
@@ -1281,16 +1263,6 @@ void TIM7_IRQHandler(void)
 }
 
 
-/*Timer TFT_booster SHDN PWM mode*/
-void TIM4_IRQHandler(void) 
-{
-	
-	HAL_GPIO_TogglePin(GPIOG, GPIO_PIN_11);
-	
-	HAL_NVIC_ClearPendingIRQ(TIM4_IRQn);
-	HAL_TIM_IRQHandler(&htim4);
-}
-
 /*SDO_IRQ interrupt*/
 void EXTI9_5_IRQHandler(void)
 {
@@ -1314,7 +1286,6 @@ void EXTI9_5_IRQHandler(void)
 		if(send_usb_block == 0 && (!pause))
 			{
 				memcpy(Line_buff, Line, sizeof(Line));
-				
 			}
 			i = 0;
 			
@@ -1339,9 +1310,7 @@ void EXTI3_IRQHandler(void)
 	if((!TFT_ON_OFF) && (cnt_touch_delay >= 50))
 	{
 			TFT_ON_OFF = 0x01;
-			HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_SET);//TFT_booster SHDN on
-			HAL_NVIC_EnableIRQ(TIM4_IRQn); //TFT_booster SHDN on
-			HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_SET); //LTDC_En on
+			HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);//booster
 		}
 		else{
 		if(TFT_ON_OFF && (cnt_touch_delay >= 0x0B)){
@@ -1599,8 +1568,7 @@ static void MX_TIM2_Init(void)
   }
 
 }
-
-/*Timer TFT_booster SHDn PWM mode*/
+//Reserve timer
 static void MX_TIM4_Init(void)
 {
 
@@ -1672,13 +1640,13 @@ static void MX_TIM6_Init(void)
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
-	  _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
   {
-	  _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
 
 }
@@ -1709,7 +1677,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_5, GPIO_PIN_SET); //VIDEO_GAIN OFF
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_5, GPIO_PIN_RESET); //VIDEO_GAIN ON
 
   /*Configure GPIO pin : PC4 ST LASER*/
   GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_4;
@@ -1751,15 +1719,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_SET);
-	
-		/*Configure GPIO pin : PG11 TFT_BOOSTER*/
-	GPIO_InitStruct.Pin = GPIO_PIN_11;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_SET);
-	
+
 	/*Configure GPIO pin : PF3 Touch_Screen INT*/
 	GPIO_InitStruct.Pin = GPIO_PIN_3;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
@@ -1849,12 +1809,12 @@ static void MX_DMA2D_Init(void)
 
   if (HAL_DMA2D_Init(&hdma2d) != HAL_OK)
   {
-	  _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
 
   if (HAL_DMA2D_ConfigLayer(&hdma2d, 1) != HAL_OK)
   {
-	  _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
 
 }
@@ -1872,19 +1832,19 @@ static void MX_I2C1_Init(void)
   hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
   if (HAL_I2C_Init(&hi2c1) != HAL_OK)
   {
-	  _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
   /**Configure Analogue filter 
   */
   if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
   {
-	  _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
   /**Configure Digital filter 
   */
   if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
   {
-	  _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
   /* USER CODE BEGIN I2C1_Init 2 */
 
@@ -1905,6 +1865,75 @@ static void MX_SDMMC1_SD_Init(void)
   hsd1.Init.Transceiver = SDMMC_TRANSCEIVER_DISABLE;
 }
 
+static void MX_DMA_Init(void) 
+{
+  /* DMA controller clock enable */
+  __HAL_RCC_DMAMUX1_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+
+}
+
+//PWM Timer for booster
+static void MX_TIM15_Init(void)
+{
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+
+  /* USER CODE BEGIN TIM15_Init 1 */
+
+  /* USER CODE END TIM15_Init 1 */
+  htim15.Instance = TIM15;
+  htim15.Init.Prescaler = 1200;
+  htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim15.Init.Period = 100;
+  htim15.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim15.Init.RepetitionCounter = 0;
+  htim15.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_PWM_Init(&htim15) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim15, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+  if (HAL_TIM_PWM_ConfigChannel(&htim15, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+  sBreakDeadTimeConfig.BreakFilter = 0;
+  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+  if (HAL_TIMEx_ConfigBreakDeadTime(&htim15, &sBreakDeadTimeConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM15_Init 2 */
+
+  /* USER CODE END TIM15_Init 2 */
+  HAL_TIM_MspPostInit(&htim15);
+
+}
 
 /*timer for Measure Bar*/
 static void MX_TIM7_Init(void)
@@ -1926,13 +1955,13 @@ static void MX_TIM7_Init(void)
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
-	  _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim7, &sMasterConfig) != HAL_OK)
   {
-	  _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
   /* USER CODE BEGIN TIM7_Init 2 */
 
@@ -1970,6 +1999,8 @@ static void MX_LPUART1_UART_Init(void)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
+	
+	HAL_NVIC_SetPriority(LPUART1_IRQn, 1, 3); 
 }
 void _Error_Handler(char *file, int line)
 {
