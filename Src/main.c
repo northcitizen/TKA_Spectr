@@ -777,6 +777,32 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   }
 }
 
+void Test_GUI(void)
+{
+//	exp_start = 0;
+//	exp_set = 0;
+//	E_day = 1337;
+//	E_day_Wt = 1337;
+//	PPFD_PPL_Measure = 1488;
+
+	float hz = 1330.0;
+	uint16_t hhz = 1333;
+	char buf[9]={0};
+
+	sprintf(buf, "%d", hhz);
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetFont(&Font26EN_arch_digit);
+	TFT_FillScreen_DMA(TFT_Black_Bkgr);
+	TFT_DisplayString(100, 50, (uint8_t *)buf, LEFT_MODE);
+	sprintf(buf, "%f", hz);
+	TFT_DisplayString(100, 150, (uint8_t *)buf, LEFT_MODE);
+
+	while(1)
+	{
+		GUI_Measure_Screen();
+	}
+}
 
 int main(void)
 {
@@ -970,7 +996,9 @@ int main(void)
 						
 	Get_Battery_Level();
 	HAL_Delay(1);
-	
+///////////////////////////////////////////////////////////////////////////////
+//	Test_GUI();
+
 	//Load TKA Logo 
 	Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 	

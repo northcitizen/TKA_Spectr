@@ -1,4 +1,4 @@
-#include "stdio.h"
+#include <stdio.h>
 #include "GUI_Measure_Elements.h"
 #include <math.h>
 extern uint8_t Language_status, Mode_EL, preGUI_screen_state, GUI_screen_state;
@@ -13,7 +13,7 @@ void GUI_Bar_Measure(uint16_t X, uint16_t Y, float Value)
 
 uint8_t  old_num_e = 10, old_num_n = 10, old_deg_e = 0xFF;
 uint8_t old_meas_type_L = 2, old_numL_e = 10, old_numL_n = 10, old_rulx = 0, old_nan_Ee = 0, old_nan_El = 0; 
-void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_light, uint8_t nan, uint8_t grey)
+void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_light, uint8_t nope, uint8_t grey)
 {
 	if(preGUI_screen_state != GUI_screen_state){old_nan_Ee = 0; old_nan_El = 0; old_deg_e = 0xFF;}
 	
@@ -33,7 +33,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		deg = 1;
 		meas_type = 1;
 	}else {meas_type = 0;}
-	if(nan)
+	if(nope)
 		{	
 			if(energy_light & !old_nan_Ee){
 				TFT_SetTextColor(TFT_White);
@@ -157,7 +157,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 }
 
 uint8_t old_nan_Le = 0, old_nan_Ll = 0, old_deg_L = 0xFF;
-void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_light, uint8_t nan, uint8_t grey)
+void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_light, uint8_t nope, uint8_t grey)
 {
 	if(preGUI_screen_state != GUI_screen_state){old_nan_Le = 0; old_nan_Ll = 0; old_deg_L = 0xFF;}
 	char buffer[9] = {0};
@@ -177,7 +177,7 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		TFT_DrawChar(X+23, Y+13, 'z'+1);
 	}
 	
-	if(nan) 
+	if(nope) 
 		{	
 			if(energy_light & !old_nan_Le){
 			TFT_SetTextColor(TFT_White);
@@ -279,14 +279,14 @@ for (uint8_t i = 1; i <= 4; i++)
 	}
 }
 uint8_t old_numPPF = 10, old_nan_PPF = 0;
-void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, uint8_t grey)
+void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uint8_t grey)
 {	
 	if(preGUI_screen_state != GUI_screen_state){old_nan_PPF = 0;}
 	char buffer[9] = {0};
 	uint8_t	delta_pos = 122, deg = 0, number;
 	uint32_t dec = 10;
 	
-		if(nan) 
+		if(nope) 
 		{	
 			if(!old_nan_PPF){
 				TFT_SetTextColor(TFT_White);
@@ -367,14 +367,14 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, uint
 }
 uint8_t old_numPPFR = 10, old_numPPFG = 10, old_numPPFB = 10, old_numPPFFR = 10, test = 0, test2 = 0, delta_pos2 = 140, old_nan_PPFRGB = 0;
 float ValueB2 = 10;
-void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG, float ValueB, float ValueFR, uint8_t nan, uint8_t grey)
+void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG, float ValueB, float ValueFR, uint8_t nope, uint8_t grey)
 {
 	if(preGUI_screen_state != GUI_screen_state){old_nan_PPFRGB = 0;}
 	
 	char buffer[9] = {0};
 	uint8_t	delta_pos = 140, deg = 0, number=0;
 	uint32_t dec = 10;
-		if(nan) 
+		if(nope) 
 		{	
 			if(!old_nan_PPFRGB){
 				TFT_SetTextColor(TFT_White);
@@ -586,13 +586,13 @@ if (Language_status==Ru)
 }
 }
 uint8_t old_numX = 10, old_numY = 10, old_numZ = 10, old_nanXYZ = 0;
-void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t ValueY, uint16_t ValueZ, uint8_t nan, uint8_t grey)
+void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t ValueY, uint16_t ValueZ, uint8_t nope, uint8_t grey)
 {
 	char buffer[5] = {0};
 	uint8_t	delta_pos = 190, number = 0;
 	uint32_t dec = 10;
 	
-	if((ValueX ==0 && ValueY ==100 && ValueZ ==0)||nan)
+	if((ValueX ==0 && ValueY ==100 && ValueZ ==0)||nope)
 	{
 		if(!old_nanXYZ){TFT_FillRectangle(X+40, Y, X+250, Y+95, TFT_Black_Bkgr);}
 		TFT_SetTextColor(TFT_White);
@@ -684,7 +684,7 @@ void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t Valu
 			TFT_DrawChar(X, Y+70, 'Z'-34);
 }	
 uint8_t old_nanxy = 0;
-void GUI_Text_xy_Measure(uint16_t X, uint16_t Y, float Valuex, float Valuey, uint8_t nan, uint8_t grey)
+void GUI_Text_xy_Measure(uint16_t X, uint16_t Y, float Valuex, float Valuey, uint8_t nope, uint8_t grey)
 {
 	char buffer[5] = {0};
 	uint8_t	delta_pos = 70;
@@ -692,7 +692,7 @@ void GUI_Text_xy_Measure(uint16_t X, uint16_t Y, float Valuex, float Valuey, uin
 	TFT_SetTextColor(TFT_White);
 	TFT_SetBackColor(TFT_Black_Bkgr);
 
-	if((Valuex == 0 && Valuey ==1) || nan){
+	if((Valuex == 0 && Valuey ==1) || nope){
 		if(!old_nanxy){TFT_FillRectangle(X+40, Y, X+250, Y+60, TFT_Black_Bkgr);}
 		TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+135, Y, 'N'-33);TFT_DrawChar(X+160, Y, 'A'-33);TFT_DrawChar(X+185, Y, 'N'-33);
 		TFT_DrawChar(X+135, Y+35, 'N'-33);TFT_DrawChar(X+160, Y+35, 'A'-33);TFT_DrawChar(X+185, Y+35, 'N'-33);
@@ -715,7 +715,7 @@ void GUI_Text_xy_Measure(uint16_t X, uint16_t Y, float Valuex, float Valuey, uin
 	
 }	
 uint8_t old_nanuv = 0;
-void GUI_Text_uv_Measure(uint16_t X, uint16_t Y, float ValueU, float ValueV, uint8_t nan, uint8_t grey)
+void GUI_Text_uv_Measure(uint16_t X, uint16_t Y, float ValueU, float ValueV, uint8_t nope, uint8_t grey)
 {
 	char buffer[5] = {0};
 	uint8_t	delta_pos = 70;
@@ -723,7 +723,7 @@ void GUI_Text_uv_Measure(uint16_t X, uint16_t Y, float ValueU, float ValueV, uin
 	TFT_SetTextColor(TFT_White);
 	TFT_SetBackColor(TFT_Black_Bkgr);
 	
-	if((ValueU == 0 && (ValueV >0.6 && ValueV <0.6001)) || nan){
+	if((ValueU == 0 && (ValueV >0.6 && ValueV <0.6001)) || nope){
 		if(!old_nanuv){TFT_FillRectangle(X+40, Y, X+250, Y+60, TFT_Black_Bkgr);}
 		TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+135, Y, 'N'-33);TFT_DrawChar(X+160, Y, 'A'-33);TFT_DrawChar(X+185, Y, 'N'-33);
 		TFT_DrawChar(X+135, Y+35, 'N'-33);TFT_DrawChar(X+160, Y+35, 'A'-33);TFT_DrawChar(X+185, Y+35, 'N'-33);
@@ -746,7 +746,7 @@ void GUI_Text_uv_Measure(uint16_t X, uint16_t Y, float ValueU, float ValueV, uin
 }	
 
 uint8_t old_numCCT = 10, old_nan_CCT = 0;
-void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nan, uint8_t grey)
+void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, uint8_t grey)
 {	
 	if(preGUI_screen_state != GUI_screen_state){old_nan_CCT = 0; }
 	char buffer[9] = {0};
@@ -767,8 +767,8 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nan, u
 		}
 	}
 	
-	if((Value == 0 || nan) & !old_nan_CCT){old_nan_CCT = 1; TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);TFT_SetTextColor(TFT_White); TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+100, Y+4, 'N'-33);TFT_DrawChar(X+125, Y+4, 'A'-33);TFT_DrawChar(X+150, Y+4, 'N'-33);}
-	else if(!nan & Value != 0){
+	if((Value == 0 || nope) & !old_nan_CCT){old_nan_CCT = 1; TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);TFT_SetTextColor(TFT_White); TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+100, Y+4, 'N'-33);TFT_DrawChar(X+125, Y+4, 'A'-33);TFT_DrawChar(X+150, Y+4, 'N'-33);}
+	else if(!nope & Value != 0){
 	if(number < old_numCCT )
 	{
 		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);
@@ -795,7 +795,7 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nan, u
 		}	
 }
 uint8_t old_lambdaD = 10, old_nan_lambdaD = 0;
-void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, uint8_t grey)
+void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uint8_t grey)
 {	
 	if(preGUI_screen_state != GUI_screen_state){old_nan_lambdaD = 0;}
 	Value = floor(Value*10)/10.0;
@@ -803,7 +803,7 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, 
 	uint8_t	delta_pos = 122, number = 0;
 	uint32_t dec = 10;
 	
-	if(nan) 
+	if(nope) 
 		{	
 			if(!old_nan_lambdaD){
 				TFT_SetTextColor(TFT_White);
@@ -858,13 +858,13 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, 
 	}
 }
 uint8_t old_lambdaC = 10, old_nan_lambdaC = 0;
-void GUI_Text_lambdaC_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, uint8_t grey)
+void GUI_Text_lambdaC_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uint8_t grey)
 {	
 	if(preGUI_screen_state != GUI_screen_state){old_nan_lambdaC = 0;}
 	char buffer[9] = {0};
 	uint8_t	delta_pos = 122, number = 0;
 	uint32_t dec = 10;
-	if(nan) 
+	if(nope) 
 		{	
 			if(!old_nan_lambdaC){
 				TFT_SetTextColor(TFT_White);
@@ -923,14 +923,14 @@ if(preGUI_screen_state != GUI_screen_state){
 
 
 uint8_t old_deltaE = 10, old_nan_deltaE = 0;
-void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, uint8_t grey)
+void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uint8_t grey)
 {	
 	if(preGUI_screen_state != GUI_screen_state){old_nan_deltaE = 0;}
 	char buffer[9] = {0};
 	uint8_t	delta_pos = 140, sign = 0, number = 0;
 	uint32_t dec = 10;
 	
-	if(nan) 
+	if(nope) 
 		{	
 			if(!old_nan_deltaE){
 				TFT_SetTextColor(TFT_White);
@@ -984,14 +984,14 @@ void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, u
 
 }
 uint8_t old_num_EB = 10, old_num_ER = 10, old_nan_EBER = 0;
-void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER, uint8_t nan, uint8_t grey)
+void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER, uint8_t nope, uint8_t grey)
 {
 	if(preGUI_screen_state != GUI_screen_state){old_nan_EBER = 0;}
 	char buffer[9] = {0};
 	uint8_t	delta_pos = 150, number = 0;
 	uint32_t dec = 10;
 	
-	if(nan) 
+	if(nope) 
 		{	
 			if(!old_nan_EBER){
 				TFT_SetTextColor(TFT_White);
@@ -1065,13 +1065,13 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 	TFT_DrawChar(X, Y+37, 'E'-33);
 }
 uint8_t old_num_LB = 10, old_num_LR = 10, old_nan_LBLR = 0;
-void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR, uint8_t nan, uint8_t grey)
+void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR, uint8_t nope, uint8_t grey)
 {
 	if(preGUI_screen_state != GUI_screen_state){old_nan_LBLR = 0;}
 	char buffer[9] = {0};
 	uint8_t	delta_pos = 150, number = 0;
 	uint32_t dec = 10;
-	if(nan) 
+	if(nope) 
 		{	
 			if(!old_nan_LBLR){
 				TFT_SetTextColor(TFT_White);
@@ -1149,14 +1149,14 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 }
 
 uint8_t old_num_SP = 10, old_nan_SP = 0;
-void GUI_Text_S_P_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, uint8_t grey)
+void GUI_Text_S_P_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uint8_t grey)
 {
 		if(preGUI_screen_state != GUI_screen_state){old_nan_SP = 0;}
 	char buffer[9] = {0};
 	uint8_t	delta_pos = 100, number = 0;
 	uint32_t dec = 10;
 	
-		if(nan) 
+		if(nope) 
 		{	
 			if(!old_nan_SP){
 				TFT_SetTextColor(TFT_White);
@@ -1203,13 +1203,13 @@ void GUI_Text_S_P_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, uint
 }
 
 uint8_t old_num_L = 10, old_num_A = 10, old_num_B = 10, old_nan = 0;
-void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA, int16_t ValueB, uint8_t nan, uint8_t grey)
+void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA, int16_t ValueB, uint8_t nope, uint8_t grey)
 {
 	char buffer[5] = {0};
 	uint8_t	delta_pos = 180, sign = 0, number = 0;
 	uint32_t dec = 10;
 	
-	if(ValueA <= -431 || nan){
+	if(ValueA <= -431 || nope){
 		if(!old_nan){TFT_FillRectangle(X+40, Y, X+250, Y+95, TFT_Black_Bkgr);}
 		TFT_SetTextColor(TFT_White);
 		TFT_SetBackColor(TFT_Black_Bkgr);
