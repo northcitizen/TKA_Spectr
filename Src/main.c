@@ -143,7 +143,7 @@ USART_prop_ptr usartprop;
 
 uint8_t adcResult = 0;
 uint16_t Touch_x = 0, Touch_y = 0;
-
+uint16_t xt = 0, yt = 0;
 ////////////////////////////////////////////////////////
 
 void SystemClock_Config(void);
@@ -785,22 +785,52 @@ void Test_GUI(void)
 //	E_day_Wt = 1337;
 //	PPFD_PPL_Measure = 1488;
 
-	float hz = 1330.0;
-	uint16_t hhz = 1333;
-	char buf[9]={0};
 
-	sprintf(buf, "%d", hhz);
+	char buf[16]={0};
+	uint16_t xc = 10, yc = 10;
+//	uint16_t xt = 0, yt = 0;
+
+
+	TFT_FillScreen_DMA(TFT_Black_Bkgr);
+	TFT_FillRectangle(0, 400, 271, 479, TFT_Red);
 	TFT_SetTextColor(TFT_White);
 	TFT_SetBackColor(TFT_Black_Bkgr);
-	TFT_SetFont(&Font26EN_arch_digit);
-	TFT_FillScreen_DMA(TFT_Black_Bkgr);
-	TFT_DisplayString(100, 50, (uint8_t *)buf, LEFT_MODE);
-	sprintf(buf, "%f", hz);
-	TFT_DisplayString(100, 150, (uint8_t *)buf, LEFT_MODE);
+	TFT_SetFont(&Font16);
 
 	while(1)
 	{
-		GUI_Measure_Screen();
+		xc = 10, yc = 10;
+
+
+//		TFT_FillRectangle(0, 100, 100, 100, TFT_Red);
+
+		for (uint8_t i=0; i<12; i++)
+		{
+			sprintf(buf, "  %x", dataToReceive[i]);
+			TFT_DisplayString(xc, yc, (uint8_t *)buf, LEFT_MODE);
+			xc+=16*5;
+			if (xc>= (272 - 16*5))
+			{
+				xc = 10;
+				yc += 32;
+			}
+
+		}
+
+		if (xt >= 0*TS_Callib && yt >= 400)
+		{
+			memset(dataToReceive, 0, 12);
+			xt = 0;
+			yt = 0;
+			TFT_FillScreen_DMA(TFT_Black_Bkgr);
+			TFT_FillRectangle(0, 400, 271, 479, TFT_Red);
+		}
+
+//		HAL_Delay(500);
+
+	//	sprintf(buf, "%f", hz);
+//		TFT_DisplayString(100, 150, (uint8_t *)buf, LEFT_MODE);
+
 	}
 }
 
@@ -997,6 +1027,8 @@ int main(void)
 	Get_Battery_Level();
 	HAL_Delay(1);
 ///////////////////////////////////////////////////////////////////////////////
+//	CRC_STATUS = CRC_Check(FLASH_DATA_START, FLASH_DATA_SIZE, FLASH_CRC_ADDR);
+//	usb_receive_processing();
 //	Test_GUI();
 
 	//Load TKA Logo 
@@ -1036,6 +1068,9 @@ int main(void)
 		case Color_Rendition_Screen: preGUI_screen_state = Measure_Screen; GUI_ColorRend_Screen();break;
 		default: GUI_screen_state =  Measure_Screen; GUI_Measure_Screen();  break;
 		}
+
+
+
 // Timer init
 	MX_TIM7_Init();
 	HAL_Delay(1);
@@ -1048,6 +1083,9 @@ int main(void)
 		
 	uint8_t exp_stable = 0, start = 1;
 	uint32_t cnt_delay = 0, scr_refresh = 0;
+
+
+
  while (1)
  {        
    usb_receive_processing();
@@ -1354,9 +1392,11 @@ void EXTI3_IRQHandler(void)
 					pause_button = 0;
 				}
 				GUI_Touch_Processing();
+				xt = Touch_x; yt = Touch_y;
 				cnt_touch_delay = 0;
 			} else {
 				GUI_Touch_Processing();
+				xt = Touch_x; yt = Touch_y;
 				cnt_touch_delay = 0;
 			}
 		} 
