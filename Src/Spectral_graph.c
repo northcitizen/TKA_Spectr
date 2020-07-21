@@ -4,9 +4,58 @@ extern uint16_t WaveLenght_Graph[4];
 extern uint16_t PARGraph_B, PARGraph_G, PARGraph_R, PARGraph_IR;
 extern uint8_t Graph_Field;
 
+
+/* Color data for spectral distribution */
+/* Vertical */
+uint16_t	Vertical_color_dara[]	=	{	0x281f,
+0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,
+0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x201f,	0x201f,
+0x201f,	0x201f,	0x201f,	0x201f,	0x201f,	0x201f,	0x181f,	0x181f,	0x181f,	0x101f,	0x101f,	0x101f,	0x101f,	0x81f,	0x81f,
+0x81f,	0x1f,	0x1f,	0x1f,	0x1f,	0x1f,	0x1f,	0x1f,	0x3f,	0x7f,	0xbf,	0xff,	0x13f,	0x19f,	0x1ff,
+0x27f,	0x31f,	0x3bf,	0x47e,	0x55e,	0x67e,	0x7bd,	0x7fc,	0x7fc,	0x7fb,	0x7fa,	0x7f5,	0x7f1,	0x7ed,	0x7ea,
+0x7e8,	0x7e5,	0x7e4,	0x7e2,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,
+0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0xfe0,	0x1fe0,
+0x37e0,	0x4fe0,	0x67e0,	0x7fe0,	0x97e0,	0xb7e0,	0xcfe0,	0xefe0,	0xffe0,	0xffe0,	0xffe0,	0xffc0,	0xff60,	0xff00,	0xfe60,
+0xfdc0,	0xfd20,	0xfca0,	0xfc20,	0xfba0,	0xfb40,	0xfac0,	0xfa60,	0xfa00,	0xf9c0,	0xf960,	0xf900,	0xf8e0,	0xf880,	0xf840,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,		};
+
+/* Horizontal */
+uint16_t	Horizontal_color_dara[]	=	{	0x281f,
+0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,
+0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,
+0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x281f,	0x201f,	0x201f,	0x201f,	0x201f,	0x201f,	0x201f,
+0x201f,	0x201f,	0x201f,	0x201f,	0x201f,	0x181f,	0x181f,	0x181f,	0x181f,	0x101f,	0x101f,	0x101f,	0x101f,	0x101f,	0x81f,
+0x81f,	0x81f,	0x81f,	0x81f,	0x1f,	0x1f,	0x1f,	0x1f,	0x1f,	0x1f,	0x1f,	0x1f,	0x1f,	0x3f,	0x5f,
+0x7f,	0xbf,	0xdf,	0xff,	0x15f,	0x19f,	0x1df,	0x23f,	0x29f,	0x2ff,	0x35f,	0x3df,	0x47e,	0x53e,	0x5de,
+0x69e,	0x79d,	0x7fd,	0x7fc,	0x7fc,	0x7fb,	0x7fa,	0x7f8,	0x7f5,	0x7f2,	0x7ef,	0x7ed,	0x7eb,	0x7e9,	0x7e7,
+0x7e5,	0x7e4,	0x7e3,	0x7e1,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,
+0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,
+0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0x7e0,	0xfe0,	0x1fe0,	0x2fe0,	0x3fe0,	0x47e0,	0x5fe0,	0x6fe0,	0x7fe0,
+0x97e0,	0xa7e0,	0xb7e0,	0xcfe0,	0xdfe0,	0xf7e0,	0xffe0,	0xffe0,	0xffe0,	0xffe0,	0xffa0,	0xff60,	0xff20,	0xfec0,	0xfe60,
+0xfde0,	0xfd80,	0xfd20,	0xfcc0,	0xfc40,	0xfc00,	0xfba0,	0xfb40,	0xfb00,	0xfaa0,	0xfa60,	0xfa20,	0xf9e0,	0xf9a0,	0xf960,
+0xf920,	0xf900,	0xf8c0,	0xf8a0,	0xf860,	0xf840,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,
+0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,	0xf800,		};
+
+
 void Spectral_Axes(uint8_t direction){
 	if (direction == 0x00)
 	{
+//		TFT_FillRectangle(20, 95, 270, 412, TFT_Black_Bkgr);
+
 		TFT_FillRectangle(18, 95, 20, 412, TFT_Grey); //Yline
 		TFT_FillRectangle(18, 412, 270, 414, TFT_Grey);//XLine
 		
@@ -16,10 +65,12 @@ void Spectral_Axes(uint8_t direction){
 		TFT_DrawLine(18, 105, 268, 105, TFT_Grey); //100
 		
 		for(uint16_t i = 0; i < 210; i+=40){
-			TFT_FillRectangle(56+i, 95, 56+i, 412, TFT_Grey); 
+			TFT_DrawLine(56+i, 95, 56+i, 412, TFT_Grey);
 		}
 	} else if (direction == 0x01)
 	{
+//		TFT_FillRectangle(40, 75, 253, 404, TFT_Black_Bkgr);
+
 		TFT_FillRectangle(253, 70, 255, 406, TFT_Grey); //XLine
 		TFT_FillRectangle(40, 404, 255, 406, TFT_Grey); //Yline
 		
@@ -29,11 +80,13 @@ void Spectral_Axes(uint8_t direction){
 		TFT_DrawLine(45, 70, 45, 406, TFT_Grey); //100
 		
 		for(uint16_t i = 0; i < 260; i+=50){
-			TFT_FillRectangle(40, 354-i, 255, 354-i, TFT_Grey);
+			TFT_DrawLine(40, 354-i, 255, 354-i, TFT_Grey);
 		}
 
 	} else if (direction == 0x02)
 	{
+//		TFT_FillRectangle(18, 76, 232, 406, TFT_Black_Bkgr);
+
 		TFT_FillRectangle(18, 74, 16, 406, TFT_Grey); //XLine
 		TFT_FillRectangle(17, 74, 232, 76, TFT_Grey); //Yline
 		
@@ -43,7 +96,7 @@ void Spectral_Axes(uint8_t direction){
 		TFT_DrawLine(227, 70, 227, 406, TFT_Grey); //100
 		
 		for(uint16_t i = 0; i < 260; i+=50){
-			TFT_FillRectangle(17, 374-i, 232, 374-i, TFT_Grey);
+			TFT_DrawLine(17, 374-i, 232, 374-i, TFT_Grey);
 		}
 	}
 }
@@ -309,8 +362,9 @@ void Spectral_DrawGraph_Line(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData[
 void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData[], uint16_t color, uint8_t direction)
 {
     float buf_pix;
+//    static uint16_t
     uint16_t i, j = 0;
-    uint16_t graph_data[335];
+    static uint16_t GraphData_Prev[355];
     uint16_t graph_lenht = (direction == 0x00)? 240 : 330;
     uint16_t scale = (direction == 0x00)? 307 : 209; //307+200 : 209+200;
     uint8_t    step = (direction == 0x00)? 4 :3;
@@ -321,15 +375,16 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
     if( direction != Rotation_Screen_Spectral_Old2){
 			Rotation_Screen_Spectral_Old2 = direction;
 			TFT_FillRectangle(1, 55, 271, 421, TFT_Black_Bkgr);
+
         if(Graph_Field&PPF_Bands)
         {
             Spectral_PAR_Range(direction);
         }else{TFT_FillRectangle(5, 55, 270, 421, TFT_Black_Bkgr);
         }
 
-    Spectral_Axes(direction);
-    Spectral_Axes_Text(direction);
-						
+//    Spectral_Axes(direction);
+//    Spectral_Axes_Text(direction);
+	memset(GraphData_Prev, 0, sizeof(GraphData_Prev));
     screen_cnt = 0;
     }
     flag_refresh = 1;
@@ -337,23 +392,119 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
     
     i_coord = 0;
             
-    for(i = 0; i < graph_lenht; i++)
+    for(i = 1; i < graph_lenht; i++)
     {
         if(direction == 0x00){
             flag_spectral = 1;
-						DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i+1, 412-GraphData[i+1], color);
+
+            			if((i+4)%40 == 0) i++;
+
+            			if(412-GraphData[i] < 181)
+            			{
+            				DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 180, Vertical_color_dara[i]);
+            				DrawLineX(ZeroX+i, 182, ZeroX+i, 256, Vertical_color_dara[i]);
+            				DrawLineX(ZeroX+i, 258, ZeroX+i, 333, Vertical_color_dara[i]);
+            				DrawLineX(ZeroX+i, 335, ZeroX+i, 411, Vertical_color_dara[i]);
+
+            			}
+            			else if(412-GraphData[i] < 257)
+						{
+            				DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 256, Vertical_color_dara[i]);
+							DrawLineX(ZeroX+i, 258, ZeroX+i, 333, Vertical_color_dara[i]);
+							DrawLineX(ZeroX+i, 335, ZeroX+i, 411, Vertical_color_dara[i]);
+
+						}
+            			else if(412-GraphData[i] < 334)
+						{
+            				DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 333, Vertical_color_dara[i]);
+							DrawLineX(ZeroX+i, 335, ZeroX+i, 411, Vertical_color_dara[i]);
+						}
+            			else
+            			{
+            				DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 411, Vertical_color_dara[i]);
+            			}
+
+//						DrawLineX(ZeroX+i, 411-GraphData[i], ZeroX+i, 411, Vertical_color_dara[i]);
+
+
+						if(GraphData_Prev[i]>GraphData[i])	DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 412 - GraphData_Prev[i], TFT_Black_Bkgr);
+
+//						DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i+1, 412-GraphData[i+1], color);
             flag_spectral = 0;
         }
         else if(direction == 0x01)
         {
             flag_spectral = 1;
-           DrawLineX(253 - GraphData[graph_lenht-i], 72+i+1, 253 - GraphData[graph_lenht-i+1], 72+i, color);
+
+            if((i+18)%50 == 0) i++;
+
+            if(253 - GraphData[graph_lenht-i] < 98)
+            {
+            	DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 97, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            	DrawLineX(99, 72+i, 150, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            	DrawLineX(152, 72+i, 203, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            	DrawLineX(205, 72+i, 252, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            }
+            else if(253 - GraphData[graph_lenht-i] < 151)
+			{
+				DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 150, 72+i, Horizontal_color_dara[graph_lenht - i]);
+				DrawLineX(152, 72+i, 203, 72+i, Horizontal_color_dara[graph_lenht - i]);
+				DrawLineX(205, 72+i, 252, 72+i, Horizontal_color_dara[graph_lenht - i]);
+			}
+            else if(253 - GraphData[graph_lenht-i] < 204)
+			{
+				DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 203, 72+i, Horizontal_color_dara[graph_lenht - i]);
+				DrawLineX(205, 72+i, 252, 72+i, Horizontal_color_dara[graph_lenht - i]);
+			}
+            else
+            {
+            	DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 252, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            }
+
+            if(GraphData_Prev[graph_lenht-i] > GraphData[graph_lenht-i])	DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 253 - GraphData_Prev[graph_lenht-i], 72+i, TFT_Black_Bkgr);
+
+//          DrawLineX(253 - GraphData[graph_lenht-i], 72+i+1, 253 - GraphData[graph_lenht-i+1], 72+i, color);
             flag_spectral = 0;
         } else if(direction == 0x02)
 				{flag_spectral = 1; 
-						DrawLineX(GraphData[i]+18, 76+i, GraphData[i+1]+18, 76+i+1, color);
+
+
+				if((i+2)%50 == 0) i++;
+
+				if(GraphData[i]+18 > 174)
+				{
+					DrawLineX(GraphData[i]+18, 76+i, 175, 76+i, Horizontal_color_dara[i]);
+					DrawLineX(173, 76+i, 122, 76+i, Horizontal_color_dara[i]);
+					DrawLineX(120, 76+i, 69, 76+i, Horizontal_color_dara[i]);
+					DrawLineX(67, 76+i, 19, 76+i, Horizontal_color_dara[i]);
+				}
+				else if(GraphData[i]+18 > 121)
+				{
+					DrawLineX(GraphData[i]+18, 76+i, 122, 76+i, Horizontal_color_dara[i]);
+					DrawLineX(120, 76+i, 69, 76+i, Horizontal_color_dara[i]);
+					DrawLineX(67, 76+i, 19, 76+i, Horizontal_color_dara[i]);
+				}
+				else if(GraphData[i]+18 > 68)
+				{
+					DrawLineX(GraphData[i]+18, 76+i, 69, 76+i, Horizontal_color_dara[i]);
+					DrawLineX(67, 76+i, 19, 76+i, Horizontal_color_dara[i]);
+				}
+				else
+				{
+					DrawLineX(GraphData[i]+18, 76+i, 18, 76+i, Horizontal_color_dara[i]);
+				}
+
+//				DrawLineX(GraphData[i]+18, 76+i, 18, 76+i, Horizontal_color_dara[i]);
+
+
+				if(GraphData_Prev[i]>GraphData[i])	DrawLineX(GraphData[i]+18, 76+i, GraphData_Prev[i]+18, 76+i, TFT_Black_Bkgr);
+
+//				DrawLineX(GraphData[i]+18, 76+i, GraphData[i+1]+18, 76+i+1, color);
 				flag_spectral = 0;}
 					}
+    memcpy(GraphData_Prev, GraphData, sizeof(GraphData_Prev));
+    Spectral_Axes(direction);
+	Spectral_Axes_Text(direction);
 }
 
 
@@ -394,7 +545,7 @@ void Refresh_screen_Graph(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData[], 
 																			TFT_FillRectangle_DMA(76+PARGraph_R/3, 45, 79+PARGraph_R/3,253, TFT_PAR_Red);
 																			TFT_FillRectangle_DMA(76+PARGraph_IR/3,45, 79+PARGraph_IR/3,253, TFT_PAR_IRed);}
 				
-				DrawLineX(253 - GraphData[graph_lenht-i], 72+i+1, 253 - GraphData[graph_lenht-i+1], 72+i, 
+				DrawLineX(253 - GraphData[graph_lenht-i], 72+i+1, 253 - GraphData[graph_lenht-i+1], 72+i,
 					(Graph_Field&PPF_Bands) ? (72+i+1 < 403-1000/3 ? TFT_Black_Bkgr :
 											   72+i+1 < 403-PARGraph_IR/3 ? TFT_PAR_IRed:
 											   72+i+1 < 403-PARGraph_R/3 ? TFT_PAR_Red:
@@ -407,8 +558,8 @@ void Refresh_screen_Graph(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData[], 
 															TFT_FillRectangle_DMA(408-PARGraph_IR/3,19, 405-PARGraph_IR/3,227, TFT_PAR_IRed);}
 					
 					DrawLineX(GraphData[i]+18, 76+i, GraphData[i+1]+18, 76+i+1, (Graph_Field&PPF_Bands) ? ((76+i < PARGraph_B/3) ? TFT_Black_Bkgr :
-           	(76+i < 74+PARGraph_G/3) ? TFT_PAR_Blue : 
-           	(76+i < 74+PARGraph_R/3) ? TFT_PAR_Green : 
+           	(76+i < 74+PARGraph_G/3) ? TFT_PAR_Blue :
+           	(76+i < 74+PARGraph_R/3) ? TFT_PAR_Green :
 						(76+i < 74+PARGraph_IR/3) ? TFT_PAR_Red : TFT_PAR_IRed)
            	:TFT_Black_Bkgr);
 				}

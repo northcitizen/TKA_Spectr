@@ -6,6 +6,10 @@
 #include "fonts.h"
 #include "ltdc.h"
 #include "GUI.h"
+
+extern uint16_t Vertical_color_dara[];
+extern uint16_t Horizontal_color_dara[];
+
 void Spectral_Axes(uint8_t direction);
 void Spectral_Axes_Text(uint8_t direction);
 void Spectral_DrawGraph(uint16_t ZeroX, uint16_t ZeroY, float *GraphData, uint16_t color, uint8_t direction);

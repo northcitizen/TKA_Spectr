@@ -20,14 +20,14 @@
 
 //CMD DEFINITION
 #define CMD_DATA_TRANSMIT 						0x01
-#define CMD_RABS_DATA_TRANSMIT 				0x01
-#define CMD_CNFG 											0x02
-#define CMD_CAPTURE 									0x03
+#define CMD_RABS_DATA_TRANSMIT 					0x01
+#define CMD_CNFG 								0x02
+#define CMD_CAPTURE 							0x03
 #define CMD_CRC_LOAD_STATUS						0x66
-#define CMD_CALCULATED_DATA_TRANSMIT	0x04
+#define CMD_CALCULATED_DATA_TRANSMIT			0x04
 
 #define CMD_FLASH_SET_WR_ADDR	 				0x0A
-#define CMD_FLASH_WR_DATA			 				0x0B
+#define CMD_FLASH_WR_DATA			 			0x0B
 #define CMD_FLASH_READ_DATA			 			0x0C
 #define CMD_FLASH_ERASE_DATA					0x0D
 
@@ -276,7 +276,7 @@ void packet_generator_data_send(void) //send ADC data
 					packet_number = packet_number + 1;
 					
 					USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
-					HAL_Delay(2);
+					HAL_Delay(3);
 				}
 			}
 			memset(dataToReceive, 0, sizeof(dataToReceive));
@@ -287,6 +287,7 @@ void packet_generator_Rabs_data_send(void) //send Rabs data
 			uint8_t q = 0;
 			uint16_t CRC_pack = 0, packet_number = 0;
 			uint32_t buff_float;
+			uint8_t usb_status = 99;
 	
 			packet_number = 0;
 	
@@ -326,21 +327,25 @@ void packet_generator_Rabs_data_send(void) //send Rabs data
 					q = 7;
 					packet_number = packet_number + 1;
 					
-					USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
-					HAL_Delay(2);
+					while(usb_status!=USBD_OK)
+					{
+						usb_status = USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
+					}
+					usb_status = 99;
+//					HAL_Delay(3);
 				}
 			}
 			memset(dataToReceive, 0, sizeof(dataToReceive));
 }
-
 
 void packet_generator_Calculated_data_send(void) //send Calculated data
 {
 			uint8_t q = 0;
 			uint16_t CRC_pack = 0, packet_number = 0;
 			uint32_t buff_float;
+			uint8_t usb_status = 99;
 	
-			packet_number = 0;
+//			packet_number = 0;
 	
 			memset(dataToSend, 0, sizeof(dataToSend));
 			delta_Eab_Measure = Calculate_deltaEab();
@@ -375,13 +380,23 @@ void packet_generator_Calculated_data_send(void) //send Calculated data
 					q = 7;
 					packet_number = packet_number + 1;
 					
-					USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
-					HAL_Delay(2);
+//					usb_status = hhid->state;
+
+//					USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
+//					HAL_Delay(3);
+
+					usb_status = 99;
+					while(usb_status!=USBD_OK)
+					{
+						usb_status = USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
+					}
+					HAL_Delay(3);
+
 				}
 
 			}
 			
-			memset(dataToSend, 0, sizeof(dataToSend)); 
+			memset(dataToSend, 0, sizeof(dataToSend));
 			
 			dataToSend[0] = 0xAB;
 			dataToSend[1] = 0x12;
@@ -443,7 +458,7 @@ void packet_generator_Calculated_data_send(void) //send Calculated data
 					packet_number = packet_number + 1;
 					
 					USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
-					HAL_Delay(2);
+					HAL_Delay(3);
 			
 			memset(dataToReceive, 0, sizeof(dataToReceive));
 }
@@ -569,7 +584,7 @@ void usb_receive_processing(void)
 						dataToSend[1] = 0x12;
 						dataToSend[2] = 0x1A;
 						memset(dataToReceive, 0, sizeof(dataToReceive));
-						HAL_Delay(2);
+						HAL_Delay(3);
 					break;
 					
 					case CMD_FLASH_WR_DATA :
@@ -585,7 +600,7 @@ void usb_receive_processing(void)
 						}
 						HAL_FLASH_Lock();
 						memset(dataToReceive, 0, sizeof(dataToReceive));
-						HAL_Delay(2);
+						HAL_Delay(3);
 					break;
 					
 					case CMD_FLASH_READ_DATA :
@@ -609,7 +624,7 @@ void usb_receive_processing(void)
 					
 						USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
 						memset(dataToReceive, 0, sizeof(dataToReceive));
-						HAL_Delay(2);
+						HAL_Delay(3);
 					break;
 					case CMD_CRC_LOAD_STATUS:
 						dataToSend[0] = 0xAB;
@@ -623,7 +638,7 @@ void usb_receive_processing(void)
 						}
 						USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
 						memset(dataToReceive, 0, sizeof(dataToReceive));
-						HAL_Delay(2);
+						HAL_Delay(3);
 					break;	
 						
 				case CMD_CALCULATED_DATA_TRANSMIT : 
@@ -1031,6 +1046,22 @@ int main(void)
 //	usb_receive_processing();
 //	Test_GUI();
 
+
+//	while(1)
+//	{
+//		TFT_FillScreen_DMA(TFT_1_Test);
+//		HAL_Delay(2000);
+//		TFT_FillScreen_DMA(TFT_2_Test);
+//		HAL_Delay(2000);
+//		TFT_FillScreen_DMA(TFT_3_Test);
+//		HAL_Delay(2000);
+//		TFT_FillScreen_DMA(TFT_4_Test);
+//		HAL_Delay(2000);
+//		TFT_FillScreen_DMA(TFT_5_Test);
+//		HAL_Delay(2000);
+//
+//	}
+
 	//Load TKA Logo 
 	Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 	
@@ -1065,7 +1096,7 @@ int main(void)
 		
 		case Graph_Screen: preGUI_screen_state = Measure_Screen; GUI_Graph_Screen(); break;
 		case Color_Screen: preGUI_screen_state = ColorSet1_Screen; GUI_Color_Screen();  break; 
-		case Color_Rendition_Screen: preGUI_screen_state = Measure_Screen; GUI_ColorRend_Screen();break;
+		case Color_Rendition_Screen: preGUI_screen_state = Measure_Screen; GUI_ColorRend_Screen();	break;
 		default: GUI_screen_state =  Measure_Screen; GUI_Measure_Screen();  break;
 		}
 
@@ -1083,12 +1114,13 @@ int main(void)
 		
 	uint8_t exp_stable = 0, start = 1;
 	uint32_t cnt_delay = 0, scr_refresh = 0;
-
+	uint8_t usb_cnt = 0;
 
 
  while (1)
  {        
-   usb_receive_processing();
+	 usb_receive_processing();
+
 	 if(send_bluetooth) 
 		{	
 			HAL_UART_Transmit_DMA(&hlpuart1, (uint8_t*)&data_bluetooth_send, 4122);
@@ -1154,7 +1186,7 @@ int main(void)
         if(GUI_screen_state == Graph_Screen)
         {    
             scr_refresh++;
-            if(scr_refresh > 40 ){
+            if(scr_refresh == 40 ){
 							block_graph = 1;
 							
 								if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral){ Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);}
@@ -1163,6 +1195,7 @@ int main(void)
 								Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
 
 								Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
+//								Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_Black, Rotation_Screen_Spectral_Old3);
                 scr_refresh = 0;
 								block_graph = 0;
 								GUI_SignalLevel();

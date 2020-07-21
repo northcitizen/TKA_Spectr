@@ -40,10 +40,22 @@
 #define	TFT_Blue_Off				0x1376			/*21, 113, 188*/
 #define TFT_Black_Bkgr      0x0063      /*  3,  15,  29 */
 #define TFT_Blue_action			0x1376//// del
-#define TFT_PAR_Blue				0x22B2
-#define TFT_PAR_Green				0xCF38
-#define TFT_PAR_Red					0xF5B9
-#define TFT_PAR_IRed				0x1B46
+//#define TFT_PAR_Blue				0x22B2
+//#define TFT_PAR_Green				0x6EA1
+//#define TFT_PAR_Red					0xF822
+//#define TFT_PAR_IRed				0x9820
+
+#define TFT_PAR_Blue				0x4BD4
+#define TFT_PAR_Green				0x5CCC
+#define TFT_PAR_Red					0x9A8A
+#define TFT_PAR_IRed				0x6882
+
+#define TFT_1_Test					0x281F			// 0
+#define TFT_2_Test					0x201F			// 32
+#define TFT_3_Test					0x1FE0			// 105
+#define TFT_4_Test					0xFFE0			// 115
+#define TFT_5_Test					0xF800			// 148
+
 
 ////CQS chart color///
 #define CQS_COLOR_Q1		0x7A2F

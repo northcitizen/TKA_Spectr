@@ -46,8 +46,24 @@ float Calculate_SP(float EL_day_data, float EL_Night_data)
 
 float Calculate_PPFD_PPL(float R_data[], float Wavelenght[])
 {
+	uint16_t it = 0, beg = 0, end = 1024;
+
+	while(Wavelenght[it]<400)
+	{
+		it++;
+	}
+	beg = it+1;
+
+	it = 1024;
+	while(Wavelenght[it]>700)
+	{
+		it--;
+	}
+	end = it-1;
+
+
 	sum = 0;
-	for (iq = 0; iq < 1024; iq++)
+	for (iq = beg; iq < end; iq++)
 	{
 		sum = sum + (R_data[iq]*Wavelenght[iq]*0.00835936108917328);
 	}
