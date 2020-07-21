@@ -1403,8 +1403,9 @@ void EXTI3_IRQHandler(void)
 {	
 	cnt_touch_delay = cnt_touch_delay + 1;
 	
-	uint16_t Touch_x = 0, Touch_y = 0;
-	TS_Get_XY1(TS_I2C_ADDRESS, &Touch_x, &Touch_y);
+	Touch_x = 0, Touch_y = 0;
+
+//	TS_Get_XY1(TS_I2C_ADDRESS, &Touch_x, &Touch_y);
 	
 	if((!TFT_ON_OFF) && (cnt_touch_delay >= 50))
 	{
@@ -1412,9 +1413,11 @@ void EXTI3_IRQHandler(void)
 			HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);//booster
 		}
 		else{
-		if(TFT_ON_OFF && (cnt_touch_delay >= 0x0B)){
-			
-			if((Mode_EL == 0x00) && ((Touch_x >= 109*TS_Callib & Touch_x <= (109+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib)))
+
+		if(TFT_ON_OFF){
+			TS_Get_XY1(TS_I2C_ADDRESS, &Touch_x, &Touch_y);
+
+			if((Mode_EL == 0x00) && ((Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) )))
 			{
 				pause_button++;
 				if(pause_button > 3)
@@ -1425,11 +1428,9 @@ void EXTI3_IRQHandler(void)
 					pause_button = 0;
 				}
 				GUI_Touch_Processing();
-				xt = Touch_x; yt = Touch_y;
 				cnt_touch_delay = 0;
 			} else {
 				GUI_Touch_Processing();
-				xt = Touch_x; yt = Touch_y;
 				cnt_touch_delay = 0;
 			}
 		} 

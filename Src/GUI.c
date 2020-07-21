@@ -37,6 +37,9 @@ uint8_t screen_count = 0, screen_count_old = 0, state_Measure_Elements = 0;
 sImage Locus;
 extern volatile uint8_t TFT_direction;
 
+extern uint16_t Touch_x, Touch_y;
+uint16_t temp_x = 0, temp_y = 0;
+
 void GUI_OptionMenuRu()
 {	
 	GUI_TextRu_Language(10, 86);
@@ -905,33 +908,33 @@ void GUI_Display_Refresh()
 
 void GUI_Touch_Processing()
 {
-	uint16_t Touch_x = 0, Touch_y = 0;
-	TS_Get_XY1(TS_I2C_ADDRESS, &Touch_x, &Touch_y);
+//	uint16_t Touch_x = 0, Touch_y = 0;
+//	TS_Get_XY1(TS_I2C_ADDRESS, &temp_x, &temp_y);
 	switch(GUI_screen_state){
 		
 		case Measure_Screen:
 			preGUI_screen_state = GUI_screen_state;
 		
-			if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Settings
+			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54)) //Settings
 				{	
 					GUI_screen_state = DataSet1_Screen;
 				} 
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //down
+				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //down
 				{	
 					GUI_screen_state = (screen_count > 0) ? Measure2_Screen : Measure_Screen; 
 					WriteFLASH_Screen(GUI_screen_state);
 				}
 				else 
-			if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Next
+			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
 				{
 					WriteFLASH_Screen(Graph_Screen);
 					GUI_screen_state =  Graph_Screen;
 				}else
-			if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+			if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54)) //SD_Card
 				{
 					if(!SD_Detect){if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}}
 				}		else
-				if(Touch_x >= 109*TS_Callib & Touch_x <= (109+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Measure
+				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
 						pause = !pause;
 						GUI_Bar_Measure(85, 13, 0.0);
@@ -942,26 +945,26 @@ void GUI_Touch_Processing()
 	case Measure2_Screen:
 			preGUI_screen_state = GUI_screen_state;
 		
-			if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Settings
+			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54)) //Settings
 				{	
 					GUI_screen_state = DataSet1_Screen;
 				} 
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Settings
+				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //Settings
 				{	
 					GUI_screen_state = (screen_count > 1) ? Measure3_Screen : Measure_Screen; 
 					WriteFLASH_Screen(GUI_screen_state);
 				}
 				else 
-			if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Next
+			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
 				{
 					WriteFLASH_Screen(Graph_Screen);
 					GUI_screen_state = Graph_Screen;
 				}else
-			if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+			if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54)) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		else
-				if(Touch_x >= 109*TS_Callib & Touch_x <= (109+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Measure
+				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
 						pause = !pause;
 				}		
@@ -971,26 +974,26 @@ void GUI_Touch_Processing()
 case Measure3_Screen:
 			preGUI_screen_state = GUI_screen_state;
 		
-			if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Settings
+			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54)) //Settings
 				{	
 					GUI_screen_state = DataSet1_Screen;
 				} 
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Down
+				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //Down
 				{	
 					GUI_screen_state = Measure_Screen;
 					WriteFLASH_Screen(GUI_screen_state);
 				}
 				else 
-			if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Next
+			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
 				{
 					WriteFLASH_Screen(Graph_Screen);
 					GUI_screen_state = Graph_Screen;
 				}else
-			if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+			if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54)) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		else
-				if(Touch_x >= 109*TS_Callib & Touch_x <= (109+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Measure
+				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
 						pause = !pause;
 						GUI_Bar_Measure(85, 13, 0.0);
@@ -999,25 +1002,25 @@ case Measure3_Screen:
 				
 		case Graph_Screen:
 			preGUI_screen_state = GUI_screen_state;
-			if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Settings
+			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Settings
 				{	
 					GUI_screen_state = GraphSet1_Screen;
 				}  
-			if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Rotation_Screen
+			if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Rotation_Screen
 				{
 					if(Rotation_Screen_Spectral < 0x02) {Rotation_Screen_Spectral++;} else{Rotation_Screen_Spectral= 0x00;}
 				}else 
-			if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Next
+			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Next
 				{
 					WriteFLASH_Screen(Color_Screen);
 					GUI_screen_state = Color_Screen;
 				}else
-			if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+			if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 				{
 						if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}	
 				else 	 
-				if(Touch_x >= 109*TS_Callib & Touch_x <= (109+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Measure
+				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
 					pause = !pause;
 				}					
@@ -1026,24 +1029,24 @@ case Measure3_Screen:
 		case Color_Screen:
 			preGUI_screen_state = GUI_screen_state;
 		
-			if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Settings
+			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Settings
 				{	
 					preColor_Field = Color_Field;
 					GUI_screen_state = ColorSet1_Screen;
 				} else 
-			if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Next
+			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Next
 				{
 					WriteFLASH_Screen(Color_Rendition_Screen);
 					GUI_screen_state = Color_Rendition_Screen;
 				}	else 
-				if(Touch_x >= 109*TS_Callib & Touch_x <= (109+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Measure
+				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
 					pause = !pause;
 				}else 			
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 				{
 					if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
-				}		else	if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Rotation_Screen
+				}		else	if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Rotation_Screen
 				{
 //					if(Rotation_Screen_Color < 0x02) {Rotation_Screen_Color++;} else{Rotation_Screen_Color = 0x00;}
 				}		 							
@@ -1052,20 +1055,20 @@ case Measure3_Screen:
 		case Color_Rendition_Screen:
 			preGUI_screen_state = GUI_screen_state;
 		
-			if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Settings
+			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Settings
 				{	
 					GUI_screen_state = ColorRendSet_Screen;
 				} else 
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Next
+				if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Next
 				{
 					WriteFLASH_Screen(Measure_Screen);
 					GUI_screen_state = Measure_Screen;
 				}	else 			
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Rotation_Screen
+				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Rotation_Screen
 				{
 					if(Rotation_Screen_Rend < 0x02) {Rotation_Screen_Rend++;} else{Rotation_Screen_Rend = 0x00;}
 				}		else 
-				if(Touch_x >= 109*TS_Callib & Touch_x <= (109+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Measure
+				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
 
 				//	calculate if CRI or CQS
@@ -1093,7 +1096,7 @@ case Measure3_Screen:
 					Calc_ColorRend = !Calc_ColorRend;
 					GUI_Display_Refresh();
 				}	else 			
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 				{
 						pause = 1;
 						if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
@@ -1104,11 +1107,11 @@ case Measure3_Screen:
 		case DataSet1_Screen:
 			preGUI_screen_state = GUI_screen_state;
 		
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Down
+				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Down
 				{	
 					GUI_screen_state = DataSet2_Screen;
 				} else
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=202*TS_Callib & Touch_y <=(202+54)*TS_Callib) //Mode_EL
+				if(Touch_x >= 182 & Touch_x <= (182+54) & Touch_y >=202 & Touch_y <=(202+54) ) //Mode_EL
 				{
 					Mode_EL = !Mode_EL;
 					Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
@@ -1116,24 +1119,24 @@ case Measure3_Screen:
 					GUI_Switch_ButtonActive(182, 202, Mode_EL);
 				}				
 				else
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=268*TS_Callib & Touch_y <=(268+54)*TS_Callib) //Bluetooth
+				if(Touch_x >= 182 & Touch_x <= (182+54) & Touch_y >=268 & Touch_y <=(268+54) ) //Bluetooth
 				{	
 					Bluetooth = !Bluetooth;
 					GUI_Switch_Button(182, 268, Bluetooth);
 					GUI_Up_Panel();
 				}
 				else
-				if(Touch_x >= 8*TS_Callib & Touch_x <= (250)*TS_Callib & Touch_y >=124*TS_Callib & Touch_y <=(174)*TS_Callib) // Information
+				if(Touch_x >= 8 & Touch_x <= (250) & Touch_y >=124 & Touch_y <=(174) ) // Information
 				{
 					GUI_screen_state = Information_Screen;
 				}	else
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=327*TS_Callib & Touch_y <=(327+54)*TS_Callib) //Illuminance
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //Illuminance
 				{	
 					Measure_Field ^= Illuminance;
 					GUI_CheckBox(200, 327, Measure_Field&Illuminance);
 					
 				}else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Back
 				{	 
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Prev_Inf_Screen;
@@ -1145,55 +1148,55 @@ case Measure3_Screen:
 					}
 				} else
 				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				if(Touch_x >= 8*TS_Callib & Touch_x <= (250)*TS_Callib & Touch_y >=80*TS_Callib & Touch_y <=(120)*TS_Callib) // Language change
+				if(Touch_x >= 8 & Touch_x <= (250) & Touch_y >=80 & Touch_y <=(120) ) // Language change
 				{
 					if (Language_status == Ru) Language_status=En;
 					else if (Language_status == En) Language_status=Ru;
 				}	else
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}	else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}
 			break;
 		case DataSet2_Screen:
 				preGUI_screen_state = GUI_screen_state;
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib)////down
+				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) )////down
 				{	
 					GUI_screen_state = DataSet3_Screen;
 				} else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=70*TS_Callib & Touch_y <=(70+54)*TS_Callib) //Irradiance
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=70 & Touch_y <=(70+54) ) //Irradiance
 				{	
 					Measure_Field ^= Irradiance;
 					GUI_CheckBox(200, 70, Measure_Field&Irradiance);
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=133*TS_Callib & Touch_y <=(133+54)*TS_Callib) //PPFD
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=133 & Touch_y <=(133+54) ) //PPFD
 				{	
 					Measure_Field ^= PPFD;
 					GUI_CheckBox(200, 133, Measure_Field&PPFD);
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=198*TS_Callib & Touch_y <=(198+54)*TS_Callib) //PPFD_BGR
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=198 & Touch_y <=(198+54) ) //PPFD_BGR
 				{	
 					Measure_Field ^= PPFD_BGR;
 					GUI_CheckBox(200, 198, Measure_Field&PPFD_BGR);
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=263*TS_Callib & Touch_y <=(263+54)*TS_Callib) //CCT
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=263 & Touch_y <=(263+54) ) //CCT
 				{	
 					Measure_Field ^= CCT;
 					GUI_CheckBox(200, 263, Measure_Field&CCT);
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=327*TS_Callib & Touch_y <=(327+54)*TS_Callib) //delta_E
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //delta_E
 				{	
 					Measure_Field ^= delta_E;
 					GUI_CheckBox(200, 327, Measure_Field&delta_E);
 					GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
 				} 				
-				else	if(Touch_x >= 130*TS_Callib & Touch_x <= (200+38)*TS_Callib & Touch_y >=327*TS_Callib & Touch_y <=(327+54)*TS_Callib) //delta_E_measure_small
+				else	if(Touch_x >= 130 & Touch_x <= (200+38) & Touch_y >=327 & Touch_y <=(327+54) ) //delta_E_measure_small
 				{	
 					if(Measure_Field&delta_E)
 					{
@@ -1205,7 +1208,7 @@ case Measure3_Screen:
 					}
 				} 		
 				else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Back
 				{	
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Prev_Inf_Screen;
@@ -1217,41 +1220,41 @@ case Measure3_Screen:
 					}
 				} 
 				else	
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}	else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}				
 			break;
 		case DataSet3_Screen:
 					preGUI_screen_state = GUI_screen_state;
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib)// down
+				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) )// down
 				{	
 					GUI_screen_state = DataSet4_Screen;
 				} else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=70*TS_Callib & Touch_y <=(70+54)*TS_Callib) //CIE_XYZ
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=70 & Touch_y <=(70+54) ) //CIE_XYZ
 				{
 					Measure_Field ^= CIE_XYZ;
 					GUI_CheckBox(200, 70, Measure_Field&CIE_XYZ);
 				} else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=133*TS_Callib & Touch_y <=(133+54)*TS_Callib) //CIE_xy
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=133 & Touch_y <=(133+54) ) //CIE_xy
 				{
 					Measure_Field ^= CIE_xy;
 					GUI_CheckBox(200, 133, Measure_Field&CIE_xy);
 					GUI_RadioBox(200, 198, Measure_Color_xy&CIE_xy_1931_1964, Measure_Field&CIE_xy);
 					GUI_RadioBox(200, 263, !(Measure_Color_xy&CIE_xy_1931_1964), Measure_Field&CIE_xy);
 				}	else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=327*TS_Callib & Touch_y <=(327+54)*TS_Callib) //CIE_Luv
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //CIE_Luv
 				{
 					Measure_Field ^= CIE_Luv;
 					GUI_CheckBox(200, 327, Measure_Field&CIE_Luv);
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=198*TS_Callib & Touch_y <=(198+54)*TS_Callib && (Measure_Field&CIE_xy)) //CIE_xy_1931
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=198 & Touch_y <=(198+54) && (Measure_Field&CIE_xy)) //CIE_xy_1931
 				{
 					if(!(Measure_Color_xy&CIE_xy_1931_1964)){
 						Measure_Color_xy ^= CIE_xy_1931_1964;
@@ -1259,7 +1262,7 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 263, !(Measure_Color_xy&CIE_xy_1931_1964), 0x01);
 					}
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=263*TS_Callib & Touch_y <=(263+54)*TS_Callib && (Measure_Field&CIE_xy)) //CIE_xy_1964
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=263 & Touch_y <=(263+54) && (Measure_Field&CIE_xy)) //CIE_xy_1964
 				{
 					if((Measure_Color_xy&CIE_xy_1931_1964)){
 						Measure_Color_xy ^= CIE_xy_1931_1964;
@@ -1267,13 +1270,13 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 263, !(Measure_Color_xy&CIE_xy_1931_1964), 0x01);
 					}
 				}else	
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Back
 				{	
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Prev_Inf_Screen;
@@ -1284,7 +1287,7 @@ case Measure3_Screen:
 						case Color_Screen: GUI_screen_state = Color_Screen; break;
 					}
 				} else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		
@@ -1292,11 +1295,11 @@ case Measure3_Screen:
 				
 		case DataSet4_Screen:
 					preGUI_screen_state = GUI_screen_state;
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //down
+				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) ) //down
 				{	
 					GUI_screen_state = DataSet5_Screen;
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=65*TS_Callib & Touch_y <=(65+54)*TS_Callib) //CIE_Lab
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=65 & Touch_y <=(65+54) ) //CIE_Lab
 				{
 					Measure_Field ^= CIE_Lab;
 					GUI_CheckBox(200, 65, Measure_Field&CIE_Lab);
@@ -1307,12 +1310,12 @@ case Measure3_Screen:
 					GUI_RadioBox(200, 248, Source_Type&Source_D55, Measure_Field&CIE_Lab);
 					GUI_RadioBox(200, 283, Source_Type&Source_D75, Measure_Field&CIE_Lab);
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=345*TS_Callib & Touch_y <=(345+54)*TS_Callib) //EbEr
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=345 & Touch_y <=(345+54) ) //EbEr
 				{
 					Measure_Field ^= EbEr;
 					GUI_CheckBox(200, 345, Measure_Field&EbEr);
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=108*TS_Callib & Touch_y <=(108+54)*TS_Callib && (Measure_Field&CIE_Lab)) //Source_A
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=108 & Touch_y <=(108+54) && (Measure_Field&CIE_Lab)) //Source_A
 				{
 					if(!(Source_Type&Source_A))
 					{
@@ -1325,7 +1328,7 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
 					}
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=143*TS_Callib & Touch_y <=(143+54)*TS_Callib && (Measure_Field&CIE_Lab)) //Source_D65
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=143  & Touch_y <=(143+54)  && (Measure_Field&CIE_Lab)) //Source_D65
 				{
 					if(!(Source_Type&Source_D65))
 					{
@@ -1338,7 +1341,7 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
 					}
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=178*TS_Callib & Touch_y <=(178+54)*TS_Callib && (Measure_Field&CIE_Lab)) //Source_C
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=178  & Touch_y <=(178+54)  && (Measure_Field&CIE_Lab)) //Source_C
 				{
 					if(!(Source_Type&Source_C))
 					{
@@ -1351,7 +1354,7 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
 					}
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=213*TS_Callib & Touch_y <=(213+54)*TS_Callib && (Measure_Field&CIE_Lab)) //Source_D50
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=213  & Touch_y <=(213+54)  && (Measure_Field&CIE_Lab)) //Source_D50
 				{
 					if(!(Source_Type&Source_D50))
 					{
@@ -1364,7 +1367,7 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
 					}
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=248*TS_Callib & Touch_y <=(248+54)*TS_Callib && (Measure_Field&CIE_Lab)) //Source_D55
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=248  & Touch_y <=(248+54)  && (Measure_Field&CIE_Lab)) //Source_D55
 				{
 					if(!(Source_Type&Source_D55))
 					{
@@ -1377,7 +1380,7 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
 					}
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=283*TS_Callib & Touch_y <=(283+54)*TS_Callib && (Measure_Field&CIE_Lab)) //Source_D75
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=283  & Touch_y <=(283+54)  && (Measure_Field&CIE_Lab)) //Source_D75
 				{
 					if(!(Source_Type&Source_D75))
 					{
@@ -1390,13 +1393,13 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 283, Source_Type|=Source_D75, 0x01);
 					}
 				}else	
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1  & Touch_x <= (1+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Back
 				{
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Prev_Inf_Screen;
@@ -1407,7 +1410,7 @@ case Measure3_Screen:
 						case Color_Screen: GUI_screen_state = Color_Screen; break;
 					} 
 				} else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		
@@ -1415,32 +1418,32 @@ case Measure3_Screen:
 			break;
 		case DataSet5_Screen:
 					preGUI_screen_state = GUI_screen_state;
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Next
+				if(Touch_x >= 163  & Touch_x <= (163+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Next
 				{	
 					GUI_screen_state = DataSet1_Screen;
 				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=70*TS_Callib & Touch_y <=(70+54)*TS_Callib) //EbEr
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=70  & Touch_y <=(70+54) ) //EbEr
 				{
 					Measure_Field ^= lambda_d;
 					GUI_CheckBox(200, 70, Measure_Field&lambda_d);
 				}else 
-//				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=133*TS_Callib & Touch_y <=(133+54)*TS_Callib) //EbEr
+//				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=133  & Touch_y <=(133+54) ) //EbEr
 //				{
 //					Measure_Field ^= lambda_c;
 //					GUI_CheckBox(200, 133, Measure_Field&lambda_c);
 //				}else 
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=198*TS_Callib & Touch_y <=(198+54)*TS_Callib) //EbEr
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=198  & Touch_y <=(198+54) ) //EbEr
 				{
 					Measure_Field ^= SP_measure;
 					GUI_CheckBox(200, 198, Measure_Field&SP_measure);
 				}else	
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1  & Touch_x <= (1+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Back
 				{	
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Prev_Inf_Screen;
@@ -1451,7 +1454,7 @@ case Measure3_Screen:
 						case Color_Screen: GUI_screen_state = Color_Screen; break;
 					}
 				} else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		
@@ -1459,11 +1462,11 @@ case Measure3_Screen:
 				
 		case GraphSet1_Screen:
 					preGUI_screen_state = GUI_screen_state;
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //next
+				if(Touch_x >= 163  & Touch_x <= (163+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //next
 				{	
 					GUI_screen_state = GraphSet2_Screen;
 				}	else 
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=202*TS_Callib & Touch_y <=(202+54)*TS_Callib) //Mode_EL
+				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=202  & Touch_y <=(202+54) ) //Mode_EL
 				{
 					Mode_EL = !Mode_EL;
 					Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
@@ -1471,25 +1474,25 @@ case Measure3_Screen:
 					GUI_Switch_ButtonActive(182, 202, Mode_EL);
 				}				
 				else
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=268*TS_Callib & Touch_y <=(268+54)*TS_Callib) //Bluetooth
+				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=268  & Touch_y <=(268+54) ) //Bluetooth
 				{	
 					Bluetooth = !Bluetooth;
 					GUI_Switch_Button(182, 268, Bluetooth);
 					GUI_Up_Panel();
 				}
 				else
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=327*TS_Callib & Touch_y <=(327+54)*TS_Callib) //PPF_Bands
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=327  & Touch_y <=(327+54) ) //PPF_Bands
 				{	
 					Graph_Field ^= PPF_Bands;
 					GUI_CheckBox(200, 327, Graph_Field&PPF_Bands);
 				}else	
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1  & Touch_x <= (1+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Back
 				{	
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Prev_Inf_Screen;
@@ -1500,17 +1503,17 @@ case Measure3_Screen:
 						case Color_Screen: GUI_screen_state = Color_Screen; break;
 					}
 				}else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		
 				else
-				if(Touch_x >= 8*TS_Callib & Touch_x <= (250)*TS_Callib & Touch_y >=80*TS_Callib & Touch_y <=(120)*TS_Callib) // Language change
+				if(Touch_x >= 8  & Touch_x <= (250)  & Touch_y >=80  & Touch_y <=(120) ) // Language change
 				{
 					if (Language_status == Ru) Language_status=En;
 					else if (Language_status == En) Language_status=Ru;
 				}	 else
-				if(Touch_x >= 8*TS_Callib & Touch_x <= (250)*TS_Callib & Touch_y >=124*TS_Callib & Touch_y <=(174)*TS_Callib) // Information
+				if(Touch_x >= 8  & Touch_x <= (250)  & Touch_y >=124  & Touch_y <=(174) ) // Information
 				{
 					GUI_screen_state = Information_Screen;
 				}	
@@ -1518,29 +1521,29 @@ case Measure3_Screen:
 
 		case GraphSet2_Screen:
 					preGUI_screen_state = GUI_screen_state;
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //next
+				if(Touch_x >= 163  & Touch_x <= (163+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //next
 				{	
 					GUI_screen_state = GraphSet1_Screen;
 				}	
 				else
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=70*TS_Callib & Touch_y <=(70+54)*TS_Callib) //PPF_Bands
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=70  & Touch_y <=(70+54) ) //PPF_Bands
 				{	
 					Graph_Field ^= EbEr_graph;
 					GUI_CheckBox(200, 70, Graph_Field&EbEr_graph);
 				}	
 				else
-				if(Touch_x >= 200*TS_Callib & Touch_x <= (200+54)*TS_Callib & Touch_y >=133*TS_Callib & Touch_y <=(133+54)*TS_Callib) //PPF_Bands
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=133  & Touch_y <=(133+54) ) //PPF_Bands
 				{	
 					Graph_Field ^= V_lambda;
 					GUI_CheckBox(200, 133, Graph_Field&V_lambda);
 				}else	
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1  & Touch_x <= (1+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Back
 				{	
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Prev_Inf_Screen;
@@ -1551,7 +1554,7 @@ case Measure3_Screen:
 						case Color_Screen: GUI_screen_state = Color_Screen; break;
 					}
 				} else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		
@@ -1560,12 +1563,12 @@ case Measure3_Screen:
 			case ColorSet1_Screen:
 					preGUI_screen_state = GUI_screen_state;
 					
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //next
+				if(Touch_x >= 163  & Touch_x <= (163+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //next
 				{	
 					GUI_screen_state = ColorSet2_Screen;
 				}
 				else 
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=202*TS_Callib & Touch_y <=(202+54)*TS_Callib) //Mode_EL
+				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=202  & Touch_y <=(202+54) ) //Mode_EL
 				{
 					Mode_EL = !Mode_EL;
 					Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
@@ -1573,18 +1576,18 @@ case Measure3_Screen:
 					GUI_Switch_ButtonActive(182, 202, Mode_EL);
 				}				
 				else
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=268*TS_Callib & Touch_y <=(268+54)*TS_Callib) //Bluetooth
+				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=268  & Touch_y <=(268+54) ) //Bluetooth
 				{	
 					Bluetooth = !Bluetooth;
 					GUI_Switch_Button(182, 268, Bluetooth);
 					GUI_Up_Panel();
 				}
 				else 
-				if(Touch_x >= 8*TS_Callib & Touch_x <= (250)*TS_Callib & Touch_y >=124*TS_Callib & Touch_y <=(174)*TS_Callib) // Information
+				if(Touch_x >= 8  & Touch_x <= (250)  & Touch_y >=124  & Touch_y <=(174) ) // Information
 				{
 					GUI_screen_state = Information_Screen;
 				}	else
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=327*TS_Callib & Touch_y <=(327+54)*TS_Callib) //Color_CIE_xy
+				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=327  & Touch_y <=(327+54) ) //Color_CIE_xy
 				{	
 					if(!(Color_Field&Color_CIE_xy))
 					{
@@ -1592,13 +1595,13 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 327, Color_Field|=Color_CIE_xy, 0x01);
 					}
 				}else	
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1  & Touch_x <= (1+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Back
 				{	
 					if(preColor_Field != Color_Field)
 					{
@@ -1623,11 +1626,11 @@ case Measure3_Screen:
 						case Color_Screen: GUI_screen_state = Color_Screen; break;
 					}
 				}	else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		else
-				if(Touch_x >= 8*TS_Callib & Touch_x <= (250)*TS_Callib & Touch_y >=80*TS_Callib & Touch_y <=(120)*TS_Callib) // Language change
+				if(Touch_x >= 8  & Touch_x <= (250)  & Touch_y >=80  & Touch_y <=(120) ) // Language change
 				{
 					if (Language_status == Ru) Language_status=En;
 					else if (Language_status == En) Language_status=Ru;
@@ -1636,12 +1639,12 @@ case Measure3_Screen:
 			break;
 			case ColorSet2_Screen:
 					preGUI_screen_state = GUI_screen_state;
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //next
+				if(Touch_x >= 163  & Touch_x <= (163+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //next
 				{	
 					GUI_screen_state = ColorSet1_Screen;
 				}
 				else 
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=70*TS_Callib & Touch_y <=(70+54)*TS_Callib) //Color_CIE_Luv
+				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=70  & Touch_y <=(70+54) ) //Color_CIE_Luv
 				{	
 					if(!(Color_Field&Color_CIE_Luv))
 					{
@@ -1651,7 +1654,7 @@ case Measure3_Screen:
 					}
 				}
 				else 
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=133*TS_Callib & Touch_y <=(133+54)*TS_Callib) //Color_CIE_Lab
+				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=133  & Touch_y <=(133+54) ) //Color_CIE_Lab
 				{	
 					if(!(Color_Field&Color_CIE_Lab))
 					{
@@ -1660,13 +1663,13 @@ case Measure3_Screen:
 						GUI_RadioBox(200, 133, Color_Field|=Color_CIE_Lab, 0x01);
 					}
 				}else	
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}		else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1  & Touch_x <= (1+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Back
 				{	
 					if(preColor_Field != Color_Field)
 					{
@@ -1691,7 +1694,7 @@ case Measure3_Screen:
 						case Color_Screen: GUI_screen_state = Color_Screen; break;
 					}
 				} else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		
@@ -1700,13 +1703,13 @@ case Measure3_Screen:
 				
 		case ColorRendSet_Screen:
 					preGUI_screen_state = GUI_screen_state;
-				if(Touch_x >= 163*TS_Callib & Touch_x <= (163+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib)//next
+				if(Touch_x >= 163  & Touch_x <= (163+54)  & Touch_y >=426  & Touch_y <=(426+54) )//next
 				{	
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Color_Rendition_Screen;
 				}
 				else 
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=202*TS_Callib & Touch_y <=(202+54)*TS_Callib) //Mode_EL
+				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=202  & Touch_y <=(202+54) ) //Mode_EL
 				{
 					Mode_EL = !Mode_EL;
 					Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
@@ -1714,17 +1717,17 @@ case Measure3_Screen:
 					GUI_Switch_ButtonActive(182, 202, Mode_EL);
 				}				
 				else
-				if(Touch_x >= 182*TS_Callib & Touch_x <= (182+54)*TS_Callib & Touch_y >=268*TS_Callib & Touch_y <=(268+54)*TS_Callib) //Bluetooth
+				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=268  & Touch_y <=(268+54) ) //Bluetooth
 				{	
 					Bluetooth = !Bluetooth;
 					GUI_Switch_Button(182, 268, Bluetooth);
 					GUI_Up_Panel();
 				}else 
-				if(Touch_x >= 8*TS_Callib & Touch_x <= (250)*TS_Callib & Touch_y >=124*TS_Callib & Touch_y <=(174)*TS_Callib) // Information
+				if(Touch_x >= 8  & Touch_x <= (250)  & Touch_y >=124  & Touch_y <=(174) ) // Information
 				{
 					GUI_screen_state = Information_Screen;
 				}	else
-				if(Touch_x >= 185*TS_Callib & Touch_x <= (185+54)*TS_Callib & Touch_y >=318*TS_Callib & Touch_y <=(318+54)*TS_Callib) //CRI
+				if(Touch_x >= 185  & Touch_x <= (185+54)  & Touch_y >=318  & Touch_y <=(318+54) ) //CRI
 				{
 					if(!(Color_rend_Field & CRI_CQS)){
 						Color_rend_Field ^= CRI_CQS;
@@ -1732,7 +1735,7 @@ case Measure3_Screen:
 						GUI_RadioBox(185, 362, !(Color_rend_Field&CRI_CQS), 0x01);
 					}
 				}else 
-				if(Touch_x >= 185*TS_Callib & Touch_x <= (185+54)*TS_Callib & Touch_y >=362*TS_Callib & Touch_y <=(362+54)*TS_Callib) //CQS
+				if(Touch_x >= 185  & Touch_x <= (185+54)  & Touch_y >=362  & Touch_y <=(362+54) ) //CQS
 				{
 					if((Color_rend_Field&CRI_CQS)){
 						Color_rend_Field ^= CRI_CQS;
@@ -1740,13 +1743,13 @@ case Measure3_Screen:
 						GUI_RadioBox(185, 362, !(Color_rend_Field&CRI_CQS), 0x01);
 					}
 				}else	
-				if(Touch_x >= 217*TS_Callib & Touch_x <= (217+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Display_Off
+				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
 					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
 					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
 				}	else
-				if(Touch_x >= 1*TS_Callib & Touch_x <= (1+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //Back
+				if(Touch_x >= 1  & Touch_x <= (1+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Back
 				{	
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Prev_Inf_Screen;
@@ -1757,11 +1760,11 @@ case Measure3_Screen:
 						case Color_Screen: GUI_screen_state = Color_Screen; break;
 					}
 				}		else	
-				if(Touch_x >= 55*TS_Callib & Touch_x <= (55+54)*TS_Callib & Touch_y >=426*TS_Callib & Touch_y <=(426+54)*TS_Callib) //SD_Card
+				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}		else
-				if(Touch_x >= 8*TS_Callib & Touch_x <= (250)*TS_Callib & Touch_y >=80*TS_Callib & Touch_y <=(120)*TS_Callib) // Language change
+				if(Touch_x >= 8  & Touch_x <= (250)  & Touch_y >=80  & Touch_y <=(120) ) // Language change
 				{
 					if (Language_status == Ru) Language_status=En;
 					else if (Language_status == En) Language_status=Ru;
@@ -1770,7 +1773,7 @@ case Measure3_Screen:
 				
 			case Information_Screen:
 			
-			if(Touch_x >= 8*TS_Callib & Touch_x <= (270)*TS_Callib & Touch_y >=8*TS_Callib & Touch_y <=(470)*TS_Callib) // Information
+			if(Touch_x >= 8  & Touch_x <= (270)  & Touch_y >=8  & Touch_y <=(470) ) // Information
 				{
 					GUI_screen_state = preGUI_screen_state;
 					preGUI_screen_state = Information_Screen;
