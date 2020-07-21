@@ -1,5 +1,5 @@
-main.c:1957:13:MX_SDMMC1_SD_Init	0	static
-main.c:1641:13:MX_TIM2_Init	40	static
+main.c:1958:13:MX_SDMMC1_SD_Init	0	static
+main.c:1642:13:MX_TIM2_Init	40	static
 main.c:169:6:DWT_Init	0	static
 main.c:179:10:DWT_Get	0	static
 main.c:190:6:DWT_Delay	8	static
@@ -18,8 +18,8 @@ main.c:1276:6:TIM2_IRQHandler	16	static
 main.c:1290:6:TIM6_DAC_IRQHandler	8	static
 main.c:1303:6:TIM7_IRQHandler	24	static
 main.c:1366:6:EXTI9_5_IRQHandler	16	static
-main.c:1402:6:EXTI3_IRQHandler	48	static
-main.c:1443:6:SystemClock_Config	272	static
+main.c:1402:6:EXTI3_IRQHandler	24	static
+main.c:1444:6:SystemClock_Config	272	static
 main.c:852:5:main	200	static
-main.c:2106:6:_Error_Handler	0	static
-main.c:2115:6:assert_failed	0	static
+main.c:2107:6:_Error_Handler	0	static
+main.c:2116:6:assert_failed	0	static

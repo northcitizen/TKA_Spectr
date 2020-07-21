@@ -64,6 +64,8 @@
 #define	VENDOR_ID			((uint8_t)	0x79)
 
 #define	TS_Callib			2.65
+#define TS_Callib_x			1
+#define TS_Callib_y			1
 //------------------------------------------
 void Touch_Ini(void);
 void Error(void);

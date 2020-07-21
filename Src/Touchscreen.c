@@ -3,8 +3,10 @@
 extern I2C_HandleTypeDef hi2c1;
 #define Orientation90	0x01
 
-uint16_t X_SIZE_Touch = 480*TS_Callib;
-uint16_t Y_SIZE_Touch= 272*TS_Callib;
+uint16_t X_SIZE_Touch = 480;
+uint16_t Y_SIZE_Touch= 272;
+
+volatile uint16_t temporary_y = 0, temporary_x = 0;
 
 void Error(void)
 {
@@ -52,28 +54,32 @@ void Touch_Ini(void)
 void TS_Get_XY1(uint16_t DeviceAddr, uint16_t *X, uint16_t *Y)
 {
 	static uint16_t coord = 0x0000;
-	uint16_t temp;
-  coord = (TS_IO_Read(DeviceAddr, TOUCH1_XH) << 8) & 0x0F00;
+
+	coord = (TS_IO_Read(DeviceAddr, TOUCH1_XH) << 8) & 0xFF00;
 	coord |= TS_IO_Read(DeviceAddr, TOUCH1_XL);
 	
 	if (Orientation90)
 	{
-		temp = coord;
-		*Y = X_SIZE_Touch - coord;
+//		*Y = (uint16_t)((X_SIZE_Touch - coord) * TS_Callib_x);
+		*Y = (X_SIZE_Touch - coord) * TS_Callib_x;
 	}
 	else{
-		*X = coord;
+//		*X = (uint16_t)(coord * TS_Callib_x);
+		*X = coord * TS_Callib_x;
 	}
 	
-  coord = (TS_IO_Read(DeviceAddr, TOUCH1_YH) << 8) & 0x0F00;
+  coord = (TS_IO_Read(DeviceAddr, TOUCH1_YH) << 8) & 0xFF00;
 	coord |= TS_IO_Read(DeviceAddr, TOUCH1_YL);
 	
 		if (Orientation90)
 	{
-		*X = coord;
+//		*X = (uint16_t)(coord * TS_Callib_y);
+		*X = coord * TS_Callib_y;
+		temporary_x = coord;
 	}
 	else{
-		*Y = coord;
+//		*Y = (uint16_t)(coord * TS_Callib_y);
+		*Y = coord * TS_Callib_y;
 	}
 	
 }
