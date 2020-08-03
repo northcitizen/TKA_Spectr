@@ -14,7 +14,8 @@ extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim5;
 extern TIM_HandleTypeDef htim7;
 extern TIM_HandleTypeDef htim15;
-extern UART_HandleTypeDef hlpuart1;
+extern UART_HandleTypeDef huart3;
+//extern UART_HandleTypeDef hlpuart1;
 extern I2C_HandleTypeDef hi2c1;
 extern SD_HandleTypeDef hsd1;
 extern DMA_HandleTypeDef hdma_lpuart1_tx;
@@ -220,15 +221,9 @@ void TIM5_IRQHandler(void)
 
 
 
-void LPUART1_IRQHandler(void)
+void USART3_IRQHandler(void)
 {
-  /* USER CODE BEGIN LPUART1_IRQn 0 */
-
-  /* USER CODE END LPUART1_IRQn 0 */
-  HAL_UART_IRQHandler(&hlpuart1);
-  /* USER CODE BEGIN LPUART1_IRQn 1 */
-
-  /* USER CODE END LPUART1_IRQn 1 */
+	HAL_UART_IRQHandler(&huart3);
 }
 /**
 * @brief This function handles USB OTG FS global interrupt.
