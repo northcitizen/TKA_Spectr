@@ -283,7 +283,7 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 {	
 	if(preGUI_screen_state != GUI_screen_state){old_nan_PPF = 0;}
 	char buffer[9] = {0};
-	uint8_t	delta_pos = 122, deg = 0, number;
+	uint8_t	delta_pos = 122, deg = 0, number = 0;
 	uint32_t dec = 10;
 	
 		if(nope) 
@@ -316,7 +316,7 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 
 	for (uint8_t i = 1; i <= 4; i++)
 	{
-		if((Value/(dec)) >= 1.0)
+		if((Value/((float)dec)) >= 1.0)
 		{
 			dec *= 10;
 			delta_pos-=23;
@@ -765,7 +765,7 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 		}
 	}
 	
-	if((Value == 0 || nope) & !old_nan_CCT){old_nan_CCT = 1; TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);TFT_SetTextColor(TFT_White); TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+100, Y+4, 'N'-33);TFT_DrawChar(X+125, Y+4, 'A'-33);TFT_DrawChar(X+150, Y+4, 'N'-33);}
+	if((Value == 0 || nope) & !old_nan_CCT){old_nan_CCT = 1; TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black_Bkgr);TFT_SetTextColor(TFT_White); TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+125, Y+4, 'N'-33);TFT_DrawChar(X+150, Y+4, 'A'-33);TFT_DrawChar(X+175, Y+4, 'N'-33);}
 	else if(!nope & Value != 0){
 	if(number < old_numCCT )
 	{

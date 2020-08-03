@@ -1195,7 +1195,15 @@ int main(void)
 		if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen) && !pause)
 		{	
 			cnt_delay++;
-			if(!pause & !exp_set){Calculate_Data();}
+			if(!pause & !exp_set)
+			{
+				scr_refresh++;
+				if(scr_refresh == 28 )
+				{
+					Calculate_Data();
+					scr_refresh = 0;
+				}
+			}
 			if((cnt_delay > 40 && exp_num < 6) || (cnt_delay > 70 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 70 && exp_num >= 8)){
 								auto_exposure();
 								max_el = 0;
@@ -1205,7 +1213,15 @@ int main(void)
 		else	if((GUI_screen_state == Color_Screen) && !pause)
 		{	
 			cnt_delay++;
-			if(!pause & !exp_set){Calculate_Data();}
+			if(!pause & !exp_set)
+			{
+				scr_refresh++;
+				if(scr_refresh == 28 )
+				{
+					Calculate_Data();
+					scr_refresh = 0;
+				}
+			}
 			if((cnt_delay > 40 && exp_num < 6) || (cnt_delay > 70 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 500 && exp_num >= 8)){
 								auto_exposure();
 								max_el = 0;
