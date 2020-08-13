@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include <stdio.h>
+#include <string.h>
 #include "stm32l4xx_hal.h"
 #include "stm32l4xx_hal_flash.h"
 
@@ -11,7 +12,7 @@
 #define BT_PROG_PIN		GPIO_PIN_9
 #define BT_BAUD_RATE	115200
 
-extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef huart1;
 
 void BlueTooth_Test(void);
 void BlueTooth_Module_Init(void);

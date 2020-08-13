@@ -1964,15 +1964,15 @@ __weak void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart)
   * @param huart UART handle.
   * @retval None
   */
-__weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(huart);
-    
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_UART_RxCpltCallback can be implemented in the user file.
-   */
-}
+//__weak void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+//{
+//  /* Prevent unused argument(s) compilation warning */
+//  UNUSED(huart);
+//
+//  /* NOTE : This function should not be modified, when the callback is needed,
+//            the HAL_UART_RxCpltCallback can be implemented in the user file.
+//   */
+//}
 
 /**
   * @brief  Rx Half Transfer completed callback.

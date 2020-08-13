@@ -937,6 +937,7 @@ void GUI_Touch_Processing()
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
 						pause = !pause;
+						GUI_Button_Measure_Start_Pause(109, 426);
 						GUI_Bar_Measure(85, 13, 0.0);
 				}		
 
@@ -967,6 +968,8 @@ void GUI_Touch_Processing()
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
 						pause = !pause;
+						GUI_Button_Measure_Start_Pause(109, 426);
+						GUI_Down_Panel();
 				}		
 
 		break;
@@ -996,6 +999,7 @@ case Measure3_Screen:
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
 						pause = !pause;
+						GUI_Button_Measure_Start_Pause(109, 426);
 						GUI_Bar_Measure(85, 13, 0.0);
 				}		
 		break;
@@ -1023,6 +1027,7 @@ case Measure3_Screen:
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
 					pause = !pause;
+					GUI_Button_Measure_Start_Pause(109, 426);
 				}					
 		break;
 				
@@ -1042,6 +1047,7 @@ case Measure3_Screen:
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
 					pause = !pause;
+					GUI_Button_Measure_Start_Pause(109, 426);
 				}else 			
 				if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 				{
@@ -1432,10 +1438,10 @@ case Measure3_Screen:
 //					Measure_Field ^= lambda_c;
 //					GUI_CheckBox(200, 133, Measure_Field&lambda_c);
 //				}else 
-				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=198  & Touch_y <=(198+54) ) //EbEr
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=133  & Touch_y <=(198+54) ) //EbEr
 				{
 					Measure_Field ^= SP_measure;
-					GUI_CheckBox(200, 198, Measure_Field&SP_measure);
+					GUI_CheckBox(200, 133, Measure_Field&SP_measure);
 				}else	
 				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{

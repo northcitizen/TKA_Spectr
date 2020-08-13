@@ -11,7 +11,7 @@ void GUI_Bar_Measure(uint16_t X, uint16_t Y, float Value)
 
 
 
-uint8_t  old_num_e = 10, old_num_n = 10, old_deg_e = 0xFF;
+uint8_t  old_num_e = 10, old_num_n = 10, old_deg_e = 0xFF, old_deg_e_wt = 0xFF;
 uint8_t old_meas_type_L = 2, old_numL_e = 10, old_numL_n = 10, old_rulx = 0, old_nan_Ee = 0, old_nan_El = 0; 
 void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_light, uint8_t nope, uint8_t grey)
 {
@@ -27,12 +27,19 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	TFT_DrawChar(X, Y+2, 'E'-33);
 	
 
-		if((Value/1000.0) >= 1.0)
+	if((Value/1000.0) >= 1.0)
 	{
 		Value = Value/(1000.0);
 		deg = 1;
 		meas_type = 1;
-	}else {meas_type = 0;}
+	}
+	else if (energy_light && Value < 1.0)
+	{
+		Value = Value * 1000.0;
+		deg = 2;
+		meas_type = 0;
+	}
+
 	if(nope)
 		{	
 			if(energy_light & !old_nan_Ee){
@@ -56,9 +63,23 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		}
 	else{
 		old_nan_Ee = 0; old_nan_El = 0;
-			if(energy_light) {old_nan_Ee = 0;}
-	if(!energy_light) {old_nan_El = 0;}
-		Value = floor(Value*10)/10.0;
+		if(energy_light && deg == 2)
+		{
+			old_nan_Ee = 0;
+			Value = floor(Value*10)/10.0;
+		}
+		else if (energy_light && deg != 2)
+		{
+			old_nan_Ee = 0;
+			Value = floor(Value*100)/100.0;
+		}
+		if(!energy_light)
+		{
+			old_nan_El = 0;
+			Value = floor(Value*10)/10.0;
+		}
+
+
 
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black_Bkgr);
@@ -138,10 +159,36 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		old_deg_e = deg;
 	}else if (Language_status == Ru && energy_light)
 	{	
-		GUI_TextRu_W_m2(234, Y);
-	}else if (Language_status == En && energy_light)
+		if (deg != old_deg_e_wt)
+		{
+			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black_Bkgr);
+		}
+		if (deg == 2)
+		{
+			GUI_TextRu_mW_m2(234, Y);
+		}
+		else
+		{
+			GUI_TextRu_W_m2(234, Y);
+		}
+		old_deg_e_wt = deg;
+
+	}
+	else if (Language_status == En && energy_light)
 	{
-		GUI_TextEn_W_m2(234, Y);
+		if (deg != old_deg_e_wt)
+		{
+			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black_Bkgr);
+		}
+		if (deg == 2)
+		{
+			GUI_TextEn_mW_m2(234, Y);
+		}
+		else
+		{
+			GUI_TextEn_W_m2(234, Y);
+		}
+		old_deg_e_wt = deg;
 	}
 	
 		if(energy_light) {
@@ -156,7 +203,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 
 }
 
-uint8_t old_nan_Le = 0, old_nan_Ll = 0, old_deg_L = 0xFF;
+uint8_t old_nan_Le = 0, old_nan_Ll = 0, old_deg_L = 0xFF, old_deg_L_wt = 0xFF;
 void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_light, uint8_t nope, uint8_t grey)
 {
 	if(preGUI_screen_state != GUI_screen_state){old_nan_Le = 0; old_nan_Ll = 0; old_deg_L = 0xFF;}
@@ -164,6 +211,19 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	uint8_t	delta_pos = 117, deg = 0, number = 0, meas_type;
 	uint32_t dec = 10;
 	
+	if((Value/1000.0) >= 1.0)
+	{
+		Value = Value/(1000.0);
+		deg = 1;
+		meas_type = 1;
+	}
+	else if (energy_light && Value < 1.0)
+	{
+		Value = Value * 1000.0;
+		deg = 2;
+		meas_type = 0;
+	}
+
 	TFT_SetTextColor(TFT_White);
 	TFT_SetBackColor(TFT_Black_Bkgr);
 	TFT_SetFont(&Font26EN_arch_big);
@@ -198,16 +258,23 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 			old_nan_Ll = 1;}
 		}
 	else{
-	if(energy_light) {old_nan_Le = 0;}
-	if(!energy_light) {old_nan_Ll = 0;}
-	Value = floor(Value*10)/10.0;
-	
-	if((Value/1000.0) >= 1.0)
+	if(energy_light && deg == 2)
 	{
-		Value = Value/(1000.0);
-		deg = 1;
-		meas_type = 1;
-	}else {meas_type = 0;}
+		old_nan_Ee = 0;
+		Value = floor(Value*10)/10.0;
+	}
+	else if (energy_light && deg != 2)
+	{
+		old_nan_Ee = 0;
+		Value = floor(Value*100)/100.0;
+	}
+	if(!energy_light)
+	{
+		old_nan_El = 0;
+		Value = floor(Value*10)/10.0;
+	}
+
+	
 	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black_Bkgr);
@@ -270,14 +337,42 @@ for (uint8_t i = 1; i <= 4; i++)
 		}
 		
 	}
+
 	else if (Language_status == Ru && energy_light)
 	{	
-		GUI_TextRu_W_m2_sr(X+210, Y);
-	}else if (Language_status == En && energy_light)
+		if (deg != old_deg_L_wt)
+		{
+			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black_Bkgr);
+		}
+		if (deg == 2)
+		{
+			GUI_TextRu_mW_m2_sr(X+210, Y);
+		}
+		else
+		{
+			GUI_TextRu_W_m2_sr(X+210, Y);
+		}
+		old_deg_L_wt = deg;
+
+	}
+	else if (Language_status == En && energy_light)
 	{
-		GUI_TextEn_W_m2_sr(X+210, Y);
+		if (deg != old_deg_L_wt)
+		{
+			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black_Bkgr);
+		}
+		if (deg == 2)
+		{
+			GUI_TextEn_mW_m2_sr(X+210, Y);
+		}
+		else
+		{
+			GUI_TextEn_W_m2_sr(X+210, Y);
+		}
+		old_deg_L_wt = deg;
 	}
 }
+
 uint8_t old_numPPF = 10, old_nan_PPF = 0;
 void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uint8_t grey)
 {	
@@ -316,7 +411,7 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 
 	for (uint8_t i = 1; i <= 4; i++)
 	{
-		if((Value/((float)dec)) >= 1.0)
+		if((Value/(dec)) >= 1.0)
 		{
 			dec *= 10;
 			delta_pos-=23;
@@ -1347,6 +1442,7 @@ void GUI_Battery_Level(uint16_t X, uint16_t Y, double charge)
 		TFT_SetFont(&Font8);
 		TFT_SetTextColor(TFT_White);
 		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_FillRectangle(X+50, Y+10, X+80, Y+24, TFT_Black_Bkgr);
 		TFT_DisplayString(X+52, Y+14, (uint8_t *)buffer, LEFT_MODE);
 
 }

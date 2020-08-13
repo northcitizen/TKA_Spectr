@@ -1,10 +1,12 @@
 #include "stdio.h"
 #include "GUI_Active_Elements.h"
 #include "stm32l4xx_hal.h"
+#include "BlueTooth.h"
 
 //extern UART_HandleTypeDef hlpuart1;
-extern UART_HandleTypeDef huart3;
+extern UART_HandleTypeDef huart1;
 extern uint8_t BluetoothStat;
+extern uint8_t pause;
 
 void GUI_Bluetooth_Logo(uint16_t X, uint16_t Y)
 {
@@ -104,7 +106,9 @@ void GUI_Button_SD_Card(uint16_t X, uint16_t Y, uint8_t Active)
 
 void GUI_Button_Measure_Start_Pause(uint16_t X, uint16_t Y)
 {
-	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
+	if(!pause)	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
+	else  TFT_FillRectangle(X, Y, X+54, Y+54, TFT_PAR_IRed);
+
 	
 	TFT_FillRectangle(X+35, Y+11, X+37, Y+43, TFT_White); //Pause
 	TFT_FillRectangle(X+48, Y+11, X+50, Y+43, TFT_White);
@@ -213,7 +217,7 @@ void GUI_Switch_Button(uint16_t X, uint16_t Y, uint8_t Check)
 			TFT_DrawFilledRoundedRectangle(X, Y+10, X+35, Y+24, 10, TFT_Blue_On);
 			TFT_DrawFilledCircle(X+25, Y+17, 10, TFT_Blue_Off);
 			if(BluetoothStat == 0x00){
-				HAL_UART_MspInit(&huart3); //Enable Bluetooth
+				BlueTooth_On; //Enable Bluetooth
 				BluetoothStat = 0x01;
 			}
 		} else
@@ -221,7 +225,7 @@ void GUI_Switch_Button(uint16_t X, uint16_t Y, uint8_t Check)
 			TFT_DrawFilledRoundedRectangle(X, Y+10, X+35, Y+24, 10, TFT_LightGrey);
 			TFT_DrawFilledCircle(X+10, Y+17, 10, TFT_White);
 			if(BluetoothStat == 0x01){
-				HAL_UART_MspDeInit(&huart3); //Disable Bluetooth
+				BlueTooth_Off; //Disable Bluetooth
 				BluetoothStat = 0x00;
 			}
 		}
