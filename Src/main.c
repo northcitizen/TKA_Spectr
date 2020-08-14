@@ -917,7 +917,11 @@ int main(void)
 	Single_Mode();	
 	HAL_Delay(20);
 
-//	BlueTooth_GPIO_Init();
+	BlueTooth_GPIO_Init();
+
+
+////////////////////////////////////////////////
+
 ////	BlueTooth_Test();
 //
 //	BlueTooth_Module_Init();
@@ -1094,14 +1098,17 @@ int main(void)
 		
 		if(Bluetooth == 0)
 		{
-			BlueTooth_On();
+			BlueTooth_Off();
 			HAL_Delay(200);
 		}
 		else
 		{
-			BlueTooth_Off();
+			BlueTooth_On();
 			HAL_Delay(200);
 		}
+
+//		BlueTooth_On();
+//		HAL_Delay(200);
 
 
 
@@ -1137,6 +1144,8 @@ int main(void)
 	HAL_NVIC_EnableIRQ(TIM7_IRQn);
 	// HAL_NVIC_EnableIRQ(LPUART1_IRQn);
 	HAL_NVIC_EnableIRQ(USART1_IRQn);
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+
 	HAL_Delay(1);
 	HAL_TIM_Base_Start(&htim7);
 	HAL_Delay(1);
@@ -1153,7 +1162,7 @@ int main(void)
 
 	 if(send_bluetooth) 
 		{	
-			HAL_UART_Transmit_DMA(&huart1, (uint8_t*)&data_bluetooth_send, 4122);
+		 	 HAL_UART_Transmit(&huart1, (uint8_t*)&data_bluetooth_send, 4122, 3);
 			send_bluetooth = 0;
 		};
 				
@@ -1499,6 +1508,13 @@ void EXTI3_IRQHandler(void)
 	}
 }
 
+//void USART1_IRQHandler(void)
+//{
+//	HAL_UART_Receive(&huart1, (uint8_t *) &uart7_rx_buffer[buf_i_7], 1, 1);
+//
+//	HAL_UART_IRQHandler(&huart1);
+//
+//}
 
 void SystemClock_Config(void)
 {

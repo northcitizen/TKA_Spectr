@@ -221,10 +221,10 @@ void TIM5_IRQHandler(void)
 
 
 
-void USART1_IRQHandler(void)
-{
-	HAL_UART_IRQHandler(&huart1);
-}
+//void USART1_IRQHandler(void)
+//{
+//	HAL_UART_IRQHandler(&huart1);
+//}
 /**
 * @brief This function handles USB OTG FS global interrupt.
 */

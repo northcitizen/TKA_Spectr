@@ -217,7 +217,7 @@ void GUI_Switch_Button(uint16_t X, uint16_t Y, uint8_t Check)
 			TFT_DrawFilledRoundedRectangle(X, Y+10, X+35, Y+24, 10, TFT_Blue_On);
 			TFT_DrawFilledCircle(X+25, Y+17, 10, TFT_Blue_Off);
 			if(BluetoothStat == 0x00){
-				BlueTooth_On; //Enable Bluetooth
+				BlueTooth_On(); //Enable Bluetooth
 				BluetoothStat = 0x01;
 			}
 		} else
@@ -225,7 +225,7 @@ void GUI_Switch_Button(uint16_t X, uint16_t Y, uint8_t Check)
 			TFT_DrawFilledRoundedRectangle(X, Y+10, X+35, Y+24, 10, TFT_LightGrey);
 			TFT_DrawFilledCircle(X+10, Y+17, 10, TFT_White);
 			if(BluetoothStat == 0x01){
-				BlueTooth_Off; //Disable Bluetooth
+				BlueTooth_Off(); //Disable Bluetooth
 				BluetoothStat = 0x00;
 			}
 		}
