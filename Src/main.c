@@ -18,6 +18,7 @@
 #include "Calculate_Measure.h"
 #include "Buttons.h"
 #include "BlueTooth.h"
+#include "tmp144.h"
 
 //CMD DEFINITION
 #define CMD_DATA_TRANSMIT 						0x01
@@ -51,6 +52,7 @@ uint16_t PARGraph_B, PARGraph_G, PARGraph_R, PARGraph_IR;
 uint8_t BluetoothStat = 0;
 
 UART_HandleTypeDef huart1;
+UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim4;
@@ -62,7 +64,7 @@ ADC_HandleTypeDef hadc1;
 I2C_HandleTypeDef hi2c1;
 LTDC_HandleTypeDef hltdc;
 DMA2D_HandleTypeDef hdma2d;
-DMA_HandleTypeDef hdma_lpuart1_tx;
+DMA_HandleTypeDef hdma_usart1_tx;
 SD_HandleTypeDef hsd1;
 
 static void MX_SDMMC1_SD_Init(void);
@@ -117,7 +119,7 @@ float Spectral_day[1024] = {0}, Spectral_night[1024] = {0}, Spectral_B[1024] = {
 const uint16_t exposure_timer_period[10] = {93,			186,			372,		744,		1488,	2976,	5952,	11905,	23810,	47619}; //93 = 7.812ms
 	
 volatile uint16_t	i=0, j=0;
-volatile uint8_t	exp_num = 0, VGain = 1, LaserOnOff = 0, TFT_ON_OFF = 1, temp = 0, send_usb_block = 0, MeasureFlag_display = 0;
+volatile uint8_t	exp_num = 0, VGain = 0, LaserOnOff = 0, TFT_ON_OFF = 1, temp = 0, send_usb_block = 0, MeasureFlag_display = 0;
 double percentage_charge = 0, percentage_charge_prev = 101.0; //battery charge
 volatile uint16_t RGB565_480x272[130560] = {0x00000000};
 
@@ -162,6 +164,7 @@ static void MX_DMA2D_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_USART2_UART_Init(void);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void auto_exposure(void);
 void exposure_display(uint16_t X, uint16_t Y);
@@ -761,6 +764,98 @@ void string_parse(uint8_t* buf_str)
 	}
 }
 
+void string_parse_no_check(void)
+{
+
+	uint32_t buff_float;
+
+
+//	if(buf_str[0] == 0xAB)
+//	{
+//		if(buf_str[1] == 0x12)
+//		{
+//			if(buf_str[2] == 0x02)
+//			{
+
+//					/*Laser On/Off*/
+//							LaserOnOff = (buf_str[4] > 0) ? 1 : 0;
+//						if(LaserOnOff == 0){
+//					 			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+//							}else
+//							{
+//								HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+//							}
+//							sprintf(send, "TKA battery level: %.1f%%", Get_Battery_Level());
+//							HAL_UART_Transmit_DMA(&huart1, (uint8_t*)&send, 30);
+
+							//send absolute spectral
+							data_bluetooth_send[0] = 0xAB;
+							data_bluetooth_send[1] = 0x12;
+							data_bluetooth_send[2] = 0x04;
+							data_bluetooth_send[3] = (Mode_EL == 0)? 0 : 1;
+							data_bluetooth_send[4] = 0;
+
+							uint16_t qz = 5;
+							for(uint16_t i = 0; i < 1024; i++){
+								memcpy(&buff_float, &Line_Rabs_buff[1023-i], sizeof(float));
+								data_bluetooth_send[qz+0] =  (buff_float >> 24) & 0x000000FF;
+								data_bluetooth_send[qz+1] =  (buff_float >> 16) & 0x000000FF;
+								data_bluetooth_send[qz+2] =  (buff_float >> 8) & 0x000000FF;
+								data_bluetooth_send[qz+3] = (buff_float) & 0x000000FF;
+								qz = qz + 4;
+						}
+
+						memcpy(&buff_float, &colorimetry_xy1964[0], sizeof(float));
+						data_bluetooth_send[qz] =  (buff_float >> 24) & 0x000000FF;
+						data_bluetooth_send[qz+1] = (buff_float >> 16) & 0x000000FF;
+						data_bluetooth_send[qz+2] = (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+3] = (buff_float) & 0x000000FF;
+
+						memcpy(&buff_float, &colorimetry_xy1964[1], sizeof(float));
+						data_bluetooth_send[qz+4] = (buff_float >> 24) & 0x000000FF;
+						data_bluetooth_send[qz+5] = (buff_float >> 16) & 0x000000FF;
+						data_bluetooth_send[qz+6] = (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+7] = (buff_float) & 0x000000FF;
+
+						//send CCT
+						memcpy(&buff_float, &Tc_Measure, sizeof(uint16_t));
+						data_bluetooth_send[qz+8]= (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+9] = (buff_float) & 0x000000FF;
+
+						//send SourceType
+						data_bluetooth_send[qz+10]= Source_Type;
+
+						if(Calculate_deltaEab_Done == 0x01)
+						{
+							memcpy(&buff_float, &delta_Eab_Measure, sizeof(int16_t));
+							data_bluetooth_send[qz+11] = (buff_float >> 8) & 0x000000FF;
+							data_bluetooth_send[qz+12] = (buff_float) & 0x000000FF;
+						} else {data_bluetooth_send[qz+11] = 0x00;
+							data_bluetooth_send[qz+12] = 0x00;
+						}
+
+						//send xy1931 color
+						memcpy(&buff_float, &colorimetry_xy1931[0], sizeof(float));
+						data_bluetooth_send[qz+13] = (buff_float >> 24) & 0x000000FF;
+						data_bluetooth_send[qz+14] = (buff_float >> 16) & 0x000000FF;
+						data_bluetooth_send[qz+15]= (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+16] = (buff_float) & 0x000000FF;
+
+						memcpy(&buff_float, &colorimetry_xy1931[1], sizeof(float));
+						data_bluetooth_send[qz+17] = (buff_float >> 24) & 0x000000FF;
+						data_bluetooth_send[qz+18] = (buff_float >> 16) & 0x000000FF;
+						data_bluetooth_send[qz+19] = (buff_float >> 8) & 0x000000FF;
+						data_bluetooth_send[qz+20] = (buff_float) & 0x000000FF;
+
+						send_bluetooth = 1;
+//			}
+//		}
+//	}else
+//	{
+//		__asm("nop");
+//	}
+}
+
 
 void UART2_RxCpltCallback(void)
 {
@@ -789,10 +884,10 @@ void UART2_RxCpltCallback(void)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  if(huart==&huart1)
-  {
-    UART2_RxCpltCallback();
-  }
+//  if(huart==&huart1)
+//  {
+//    UART2_RxCpltCallback();
+//  }
 }
 
 void Test_GUI(void)
@@ -878,6 +973,13 @@ int main(void)
 	HAL_Delay(1);
 	MX_USART1_UART_Init();
 	HAL_Delay(1);
+//  	MX_USART2_UART_Init();
+//  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);
+//    HAL_NVIC_EnableIRQ(USART2_IRQn);
+//    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+
+
+	HAL_Delay(1);
  	MX_LTDC_Init();
 	HAL_Delay(1);
 	MX_ADC1_Init();
@@ -886,6 +988,7 @@ int main(void)
 	HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 	HAL_Delay(1);
 	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //ST Signal
+//	HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
 	HAL_Delay(2);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 	HAL_Delay(1);
@@ -904,7 +1007,7 @@ int main(void)
 	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim6);
-	HAL_NVIC_SetPriority(TIM2_IRQn, 1, 4);
+	HAL_NVIC_SetPriority(TIM6_IRQn, 1, 4);
 	HAL_Delay(1);
 	HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
 	HAL_Delay(1);
@@ -940,7 +1043,6 @@ int main(void)
 //		HAL_Delay(1000);
 //
 //	}
-
 
 //Load screen data	
 	buff_set = Calibration_Load_1byte(SET_MODEEL, 3);
@@ -1143,8 +1245,9 @@ int main(void)
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM7_IRQn);
 	// HAL_NVIC_EnableIRQ(LPUART1_IRQn);
-	HAL_NVIC_EnableIRQ(USART1_IRQn);
+//	HAL_NVIC_EnableIRQ(USART1_IRQn);
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+
 
 	HAL_Delay(1);
 	HAL_TIM_Base_Start(&htim7);
@@ -1156,13 +1259,22 @@ int main(void)
 	uint8_t usb_cnt = 0;
 
 
+//	while(1)
+//	{
+//		Temperature_Measure_Func();
+//		HAL_Delay(100);
+//	}
+
+
  while (1)
  {        
 	 usb_receive_processing();
 
+
+
 	 if(send_bluetooth) 
 		{	
-		 	 HAL_UART_Transmit(&huart1, (uint8_t*)&data_bluetooth_send, 4122, 3);
+		 	HAL_UART_Transmit_DMA(&huart1, (uint8_t*)&data_bluetooth_send, 4122);
 			send_bluetooth = 0;
 		};
 				
@@ -1260,6 +1372,15 @@ int main(void)
   		
         GUI_Display_Refresh();
 
+        if (pause && !Mode_EL)
+        {
+        	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+        }
+        else
+        {
+        	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+        }
+
         bat_refresh++;
         if (bat_refresh == 1000)
         {
@@ -1272,6 +1393,7 @@ int main(void)
 
         	bat_refresh = 0;
         }
+        __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
     }
 }
 
@@ -1344,6 +1466,8 @@ void auto_exposure(void)
 void TIM2_IRQHandler(void)
 {
 	
+//	Temperature_Measure_Func();
+
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_RESET);
 	DWT_Delay(10);
 	i = 0;
@@ -1508,13 +1632,65 @@ void EXTI3_IRQHandler(void)
 	}
 }
 
-//void USART1_IRQHandler(void)
+//void UART2_RxCpltCallback(void)
 //{
-//	HAL_UART_Receive(&huart1, (uint8_t *) &uart7_rx_buffer[buf_i_7], 1, 1);
 //
-//	HAL_UART_IRQHandler(&huart1);
+//	uint8_t b;
+//  b = str1[0];
+// if (usartprop.usart_cnt>12)
+//  {
+//    usartprop.usart_cnt = 0;
+//    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+//    return;
+//  }
+//  usartprop.usart_buf[usartprop.usart_cnt] = b;
+//  if(b==0x0A)
+//  {
+//    usartprop.usart_buf[usartprop.usart_cnt+1]=0;
+//    string_parse((uint8_t*)usartprop.usart_buf);
+//    usartprop.usart_cnt=0;
+//    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
 //
+//    return;
+//  }
+//  usartprop.usart_cnt++;
+//  HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
 //}
+
+void USART1_IRQHandler(void)
+{
+	uint8_t str[12]={0};
+//	b = str1[0];
+
+	if(BT_BAUD_RATE < 115200)
+	{
+		HAL_UART_Receive(&huart1,&str,12,10);
+	}
+	else if (BT_BAUD_RATE >= 115200)
+	{
+		HAL_UART_Receive(&huart1,&str,12,1);
+	}
+
+
+	if (str[0] == 0x0A)
+	{
+		if (str[1] == 0xAB)
+		{
+			if (str[2] == 0x12)
+			{
+				if (str[3] == 0x02)
+				{
+					string_parse_no_check();
+				}
+			}
+		}
+	}
+
+	HAL_UART_IRQHandler(&huart1);
+
+}
+
+
 
 void SystemClock_Config(void)
 {
@@ -1593,16 +1769,17 @@ void SystemClock_Config(void)
 
     /**Configure the Systick interrupt time 
     */
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+//  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
     /**Configure the Systick 
     */
-  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+//  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 
 }
+
 
 /* ADC1 init function */
 static void MX_ADC1_Init(void)
@@ -1909,8 +2086,8 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 		
-	HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 2); //SDO IRQ
-	HAL_NVIC_SetPriority(EXTI3_IRQn, 2, 0); //Touchscreen IRQ
+	HAL_NVIC_SetPriority(EXTI9_5_IRQn, 2, 4); //SDO IRQ
+	HAL_NVIC_SetPriority(EXTI3_IRQn, 4, 2); //Touchscreen IRQ
 	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 	HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
@@ -2185,7 +2362,48 @@ static void MX_USART1_UART_Init(void)
     Error_Handler();
   }
 
-  HAL_NVIC_SetPriority(USART1_IRQn, 1, 3);
+  HAL_NVIC_SetPriority(USART1_IRQn, 1, 3);			// ������ ���������� 1, 3
+}
+
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART1_Init 0 */
+
+  /* USER CODE END USART1_Init 0 */
+
+  /* USER CODE BEGIN USART1_Init 1 */
+
+  /* USER CODE END USART1_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 115200;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart2, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart2, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_UARTEx_DisableFifoMode(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+//   HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
 
 }
 

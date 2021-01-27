@@ -18,7 +18,7 @@ extern UART_HandleTypeDef huart1;
 //extern UART_HandleTypeDef hlpuart1;
 extern I2C_HandleTypeDef hi2c1;
 extern SD_HandleTypeDef hsd1;
-extern DMA_HandleTypeDef hdma_lpuart1_tx;
+extern DMA_HandleTypeDef hdma_usart1_tx;
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
@@ -30,7 +30,7 @@ extern DMA_HandleTypeDef hdma_lpuart1_tx;
 void DMA1_Channel1_IRQHandler(void)
 {
 
-  HAL_DMA_IRQHandler(&hdma_lpuart1_tx);
+  HAL_DMA_IRQHandler(&hdma_usart1_tx);
   /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
 }
 

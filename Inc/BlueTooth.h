@@ -10,7 +10,7 @@
 
 #define BT_VCC_PIN		GPIO_PIN_8
 #define BT_PROG_PIN		GPIO_PIN_9
-#define BT_BAUD_RATE	115200
+#define BT_BAUD_RATE	9600
 
 extern UART_HandleTypeDef huart1;
 
