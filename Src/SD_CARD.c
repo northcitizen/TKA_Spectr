@@ -112,7 +112,7 @@ HAL_StatusTypeDef	flash_ok = HAL_ERROR;
 		HAL_Delay(100);
 		EraseInitStruct3.TypeErase = FLASH_TYPEERASE_PAGES;
 		EraseInitStruct3.Banks = FLASH_BANK_2; 
-		EraseInitStruct3.Page = (uint32_t)43;
+		EraseInitStruct3.Page = (uint32_t)48;
 		EraseInitStruct3.NbPages = (uint32_t)0x1; 
 
 	 HAL_FLASHEx_Erase(&EraseInitStruct3, &PAGEError);
@@ -186,7 +186,7 @@ HAL_StatusTypeDef	flash_ok = HAL_ERROR;
 		HAL_Delay(100);
 		EraseInitStruct3.TypeErase = FLASH_TYPEERASE_PAGES;
 		EraseInitStruct3.Banks = FLASH_BANK_2; 
-		EraseInitStruct3.Page = (uint32_t)44;
+		EraseInitStruct3.Page = (uint32_t)49;
 		EraseInitStruct3.NbPages = (uint32_t)0x1; 
 
 	 HAL_FLASHEx_Erase(&EraseInitStruct3, &PAGEError);

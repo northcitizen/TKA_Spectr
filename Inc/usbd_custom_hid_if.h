@@ -56,6 +56,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+#include "main.h"
 #include "usbd_customhid.h"
 
 /* USER CODE BEGIN INCLUDE */

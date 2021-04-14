@@ -838,20 +838,6 @@ void GUI_Panels()
 		TFT_FillRectangle(0, 40, 271, 425, TFT_Black_Bkgr);
 	}
 }
-void GUI_LaserOnOff(void)
-{
-		if(Mode_EL == 0x00)
-	{
-		LaserOnOff = !LaserOnOff;
-		if(LaserOnOff == 0){
-			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-		}else
-		{
-			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-		}
-	}
-}
-
 
 
 void GUI_SignalLevel()

@@ -19,6 +19,7 @@
 #include "Buttons.h"
 #include "BlueTooth.h"
 #include "tmp144.h"
+#include "stm32_hal_legacy.h"
 
 //CMD DEFINITION
 #define CMD_DATA_TRANSMIT 						0x01
@@ -38,6 +39,18 @@
 #define FLASH_DATA_SIZE								21514				//number of uint64_t data 
 #define FLASH_CRC_ADDR 								0x0812A050	//addr for FLASH CRC check 
 
+
+
+///////////////////////////////
+
+//#define SERVICE
+#define BT
+
+
+
+///////////////////
+
+
 //USB
 uint8_t dataToSend[64]= {0}; 
 uint8_t dataToReceive[12]= {0};
@@ -55,7 +68,6 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 TIM_HandleTypeDef htim2;
-TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
 TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim7;
@@ -103,7 +115,10 @@ uint8_t Rotation_Screen_Spectral_Old3 = 0xFF;
 extern uint16_t Line_Rabs_buff_graph2[355];
 
 float calibratre_x_1964[1024] = {0}, calibratre_y_1964[1024] = {0}, calibratre_z_1964[1024] = {0}, calibratre_x_1931[1024] = {0}, calibratre_z_1931[1024] = {0};
-uint16_t  WaveLenght_Graph[4] = {0},  DarkSignal = 0; 
+uint16_t  WaveLenght_Graph[4] = {0};
+//uint16_t  DarkSignal = 0;
+uint16_t  DarkSignal[1024] = {0};
+
 uint16_t colorimetry_XYZ1964[3] = {0}, lambda_d_Measure, lambda_c_Measure, Tc_Measure = 0, colorimetry_XYZ1931[3] = {0};
 float colorimetry_xy1964[2] = {0}, colorimetry_uv[2] = {0}, colorimetry_uv1976[2] = {0}, colorimetry_xy1931[2] = {0};
 int16_t colorimetry_LAB[3] = {0};
@@ -147,12 +162,18 @@ USART_prop_ptr usartprop;
 uint16_t adcResult = 0;
 uint16_t Touch_x = 0, Touch_y = 0;
 uint16_t xt = 0, yt = 0;
+
+float temperature_a = 0, temperature_b = 0, temperature_c = 0, temperature_d = 0;
 ////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void); 
-static void MX_TIM4_Init(void); 
+
 static void MX_TIM5_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM15_Init(void);
@@ -169,6 +190,43 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void auto_exposure(void);
 void exposure_display(uint16_t X, uint16_t Y);
 void Rabs_graph_to_int(void);
+
+
+void Test_T_coef_write(void)
+{
+	float a_array[10] = {0.0, 0.0, 0.0, 0.000000444444, 0.00000133333, 0.00000211111, 0.00000411111, 0.0000068889, 0.0000157778, 0.000020556};
+	float b_array[10] = {0.0, 0.0, 0.0000154762, -0.00000214286, -0.0000409524, -0.000037381, -0.0000754762, -0.000086905, -0.000425238, -0.00041524 };
+	float c_array[10] = {0.0000857142857, 0.000228571429, -0.000327381, 0.000135317, 0.00119286, 0.0012627, 0.00256746, 0.0036552, 0.0118675, 0.013948};
+	float d_array[10] = {0.998071429, 0.996071429, 0.99825, 0.990893, 0.975179, 0.958786, 0.918964, 0.85504, 0.714179, 0.5845};
+
+	uint64_t buf = 0;
+	int32_t buf32 = 0;
+
+	HAL_FLASH_Unlock();
+
+	for(uint8_t i = 0; i < 10; i++)
+	{
+		buf32 = (int32_t)(b_array[i] * 100000000);
+		buf |= buf32 & 0x00000000FFFFFFFF;
+		buf = buf << 32;
+		buf32 = (int32_t)(a_array[i] * 100000000);
+		buf |= buf32 & 0x00000000FFFFFFFF;
+		HAL_FLASH_Program(TYPEPROGRAM_DOUBLEWORD, address_temp_array[i], buf);
+		buf = 0;
+
+		buf32 = (int32_t)(d_array[i] * 100000000);
+		buf |= buf32 & 0x00000000FFFFFFFF;
+		buf = buf << 32;
+		buf32 = (int32_t)(c_array[i] * 100000000);
+		buf |= buf32 & 0x00000000FFFFFFFF;
+		HAL_FLASH_Program(TYPEPROGRAM_DOUBLEWORD, address_temp_array[i] + 8, buf);
+		buf = 0;
+
+	}
+
+	HAL_FLASH_Lock();
+}
+
 
 void DWT_Init(void) 
 {
@@ -272,11 +330,19 @@ void packet_generator_data_send(void) //send ADC data
 				CRC_pack = CRC_pack + byte_high + byte_low;
 				q = q + 2;
 				
+				if(cnt == 1023)
+				{
+					dataToSend[q] = (temperature_measure >> 8) & 0x00FF;
+					dataToSend[q+1] = temperature_measure & 0x00FF;
+				}
+
 				if(q >= 62 || cnt == 1023){
 					dataToSend[3] = (packet_number>> 8) & 0x00FF;
 					dataToSend[4] = packet_number & 0x00FF;
 					dataToSend[63] = (CRC_pack+dataToSend[0]+dataToSend[1]+dataToSend[2] + packet_number);
 					
+
+
 					CRC_pack = 0;
 					q = 5;
 					packet_number = packet_number + 1;
@@ -488,7 +554,9 @@ void usb_receive_processing(void)
 					{
 						packet_generator_Rabs_data_send();
 					}else{
+						Temperature_Measure_Func();
 						packet_generator_data_send();
+//						__HAL_UART_DISABLE_IT(&huart2, UART_IT_RXNE);
 					}
 						memset(dataToReceive, 0, sizeof(dataToReceive));
 						send_usb_block = 0;
@@ -572,7 +640,7 @@ void usb_receive_processing(void)
 						
 					case	 CMD_FLASH_ERASE_DATA :
 						EraseInitStruct.TypeErase = FLASH_TYPEERASE_PAGES;
-						EraseInitStruct.NbPages = 44; 
+						EraseInitStruct.NbPages = 49;
 						EraseInitStruct.Page = 0;
 						EraseInitStruct.Banks = FLASH_BANK_2; 
 						HAL_FLASH_Unlock(); 
@@ -971,12 +1039,14 @@ int main(void)
 	HAL_Delay(1);
 	MX_I2C1_Init();
 	HAL_Delay(1);
+#ifdef BT
 	MX_USART1_UART_Init();
 	HAL_Delay(1);
-//  	MX_USART2_UART_Init();
-//  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);
-//    HAL_NVIC_EnableIRQ(USART2_IRQn);
-//    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+#endif
+  	MX_USART2_UART_Init();
+  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);
+    HAL_NVIC_EnableIRQ(USART2_IRQn);
+    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
 
 
 	HAL_Delay(1);
@@ -996,7 +1066,7 @@ int main(void)
 	HAL_Delay(1);
 	HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //
 	HAL_Delay(2);
-	HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);//booster
+	HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);	//booster
 	TIM15->CCR2 = 50;
 	HAL_Delay(1);
 	HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
@@ -1025,16 +1095,17 @@ int main(void)
 
 ////////////////////////////////////////////////
 
+
 ////	BlueTooth_Test();
 //
 //	BlueTooth_Module_Init();
 //	HAL_Delay(2000);
 //	BlueTooth_On();
 //	HAL_Delay(1000);
-
+//
 //	HAL_GPIO_WritePin(GPIOB, BT_VCC_PIN, GPIO_PIN_SET);
 //	HAL_GPIO_WritePin(GPIOB, BT_PROG_PIN, GPIO_PIN_SET);
-
+//
 //	char TestStr[]="THIS_IS_NOT_A_TEST!";
 //
 //	while(1)
@@ -1090,6 +1161,8 @@ int main(void)
 	
 	Calibration_Load_Pack(X2_CIE1931, 0x400, calibratre_x_1931);
 	Calibration_Load_Pack(Z2_CIE1931, 0x400, calibratre_z_1931);
+
+
 
 	uint16_t wave_num = 0;
 	
@@ -1178,26 +1251,34 @@ int main(void)
 //	usb_receive_processing();
 //	Test_GUI();
 
+//	Test_T_coef_write();
+//
+//	while(1)
+//	{
+//
+//		Calibration_Exposure_Change(exp_num);
+//		HAL_Delay(100);
+//	}
 
 	//Load TKA Logo 
 	Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 	
 	//CRC Check
-	CRC_STATUS = CRC_Check(FLASH_DATA_START, FLASH_DATA_SIZE, FLASH_CRC_ADDR);
+//	CRC_STATUS = CRC_Check(FLASH_DATA_START, FLASH_DATA_SIZE, FLASH_CRC_ADDR);
 //	if(CRC_STATUS == CRC_OK)
 //	{
 //		GUI_Title_Screen();
 //		uint8_t p = 0;
 //	} else{TFT_FillScreen_DMA(TFT_Red);}
 
-
+#ifdef BT
 		BlueTooth_Module_Init();
-
+#endif
 		GUI_Title_Screen();
 		uint8_t p = 0;
 		HAL_Delay(2000);	
 		usb_receive_processing();
-		
+#ifdef BT
 		if(Bluetooth == 0)
 		{
 			BlueTooth_Off();
@@ -1208,7 +1289,7 @@ int main(void)
 			BlueTooth_On();
 			HAL_Delay(200);
 		}
-
+#endif
 //		BlueTooth_On();
 //		HAL_Delay(200);
 
@@ -1245,8 +1326,10 @@ int main(void)
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM7_IRQn);
 	// HAL_NVIC_EnableIRQ(LPUART1_IRQn);
-//	HAL_NVIC_EnableIRQ(USART1_IRQn);
+#ifdef BT
+	HAL_NVIC_EnableIRQ(USART1_IRQn);
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+#endif
 
 
 	HAL_Delay(1);
@@ -1258,19 +1341,15 @@ int main(void)
 	uint32_t cnt_delay = 0, scr_refresh = 0, scr_refresh_measure = 0, bat_refresh = 0;
 	uint8_t usb_cnt = 0;
 
-
-//	while(1)
-//	{
-//		Temperature_Measure_Func();
-//		HAL_Delay(100);
-//	}
-
+//	// LASER ON!
+//	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
  while (1)
  {        
 	 usb_receive_processing();
 
 
+#ifndef SERVICE
 
 	 if(send_bluetooth) 
 		{	
@@ -1394,6 +1473,9 @@ int main(void)
         	bat_refresh = 0;
         }
         __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+
+#endif
+
     }
 }
 
@@ -1401,8 +1483,16 @@ int main(void)
 
 void auto_exposure(void)
 { 
+	uint16_t i_max = 0;
+
 	for (uint16_t i = 5; i<1024; i++){
-		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;
+
+		if(Line_buff[i] > max_el)
+		{
+			max_el = Line_buff[i];
+			i_max = i;
+		}
+//		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;
 	}
 	
 	if(max_el < 20000 && exp_num != 9)
@@ -1452,10 +1542,10 @@ void auto_exposure(void)
 	} else if((exp_num ==0 && max_el < 50000))
 	{
 			highSignal = 0;
-	} else if((exp_num ==9 && max_el < DarkSignal+2000)) //20000
+	} else if((exp_num ==9 && max_el < DarkSignal[i_max]+2000)) //20000
 	{
 			lowSignal = 1;
-	}else if((exp_num ==9 && max_el > DarkSignal+2000))
+	}else if((exp_num ==9 && max_el > DarkSignal[i_max]+2000))
 	{
 			lowSignal = 0;
 	}
@@ -1495,6 +1585,7 @@ void TIM6_DAC_IRQHandler(void)
 void TIM7_IRQHandler(void)
 {
 	
+	if(!usart2_wait) usart2_wait = true;
 			
 	if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen||
 			GUI_screen_state == Graph_Screen || GUI_screen_state == Color_Screen) && !pause &&  !flag_spectral) 
@@ -1921,63 +2012,6 @@ static void MX_TIM2_Init(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-}
-//Reserve timer
-static void MX_TIM4_Init(void)
-{
-
-  TIM_ClockConfigTypeDef sClockSourceConfig;
-  TIM_MasterConfigTypeDef sMasterConfig;
-  TIM_OC_InitTypeDef sConfigOC;
-	
-  htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 50;
-  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 2000;
-  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-	
-	 if (HAL_TIM_OC_Init(&htim4) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-	
-	sConfigOC.OCMode = TIM_OCMODE_TIMING;
-  sConfigOC.Pulse = 1000; //more cnt - zero; 1000 - 50%
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_OC_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-	
-	sConfigOC.OCMode = TIM_OCMODE_TIMING;
-  sConfigOC.Pulse = 2000;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-
-  if (HAL_TIM_OC_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
 }
 
 static void MX_TIM6_Init(void)
