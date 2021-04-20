@@ -1344,10 +1344,9 @@ int main(void)
 //	// LASER ON!
 //	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
- while (1)
- {        
+ while(1)
+ {
 	 usb_receive_processing();
-
 
 #ifndef SERVICE
 
@@ -1359,6 +1358,7 @@ int main(void)
 				
 		while(start)
 		{
+	  Temperature_Measure_Func();
 		Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
 
     Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
@@ -1442,7 +1442,7 @@ int main(void)
 
 								Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
 //								Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_Black, Rotation_Screen_Spectral_Old3);
-                scr_refresh = 0;
+								scr_refresh = 0;
 								block_graph = 0;
 								GUI_SignalLevel();
 
@@ -1556,7 +1556,7 @@ void auto_exposure(void)
 void TIM2_IRQHandler(void)
 {
 	
-//	Temperature_Measure_Func();
+	//Temperature_Measure_Func();
 
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_RESET);
 	DWT_Delay(10);
@@ -2437,7 +2437,7 @@ static void MX_USART2_UART_Init(void)
     Error_Handler();
   }
 
-//   HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
+   //HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
 
 }
 
