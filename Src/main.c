@@ -1044,7 +1044,7 @@ int main(void)
 	HAL_Delay(1);
 #endif
   	MX_USART2_UART_Init();
-  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);
+  	HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);//1 3  01not bad
     HAL_NVIC_EnableIRQ(USART2_IRQn);
     __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
 
@@ -1057,14 +1057,14 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //ST Signal
+	HAL_NVIC_SetPriority(TIM2_IRQn, 1, 2);  //ST Signal 01   now 02 not bad  12 11
 //	HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
 	HAL_Delay(2);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //
+	HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //13   01
 	HAL_Delay(2);
 	HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);	//booster
 	TIM15->CCR2 = 50;
@@ -1077,7 +1077,7 @@ int main(void)
 	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim6);
-	HAL_NVIC_SetPriority(TIM6_IRQn, 1, 4);
+	HAL_NVIC_SetPriority(TIM6_IRQn, 2, 4);//
 	HAL_Delay(1);
 	HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
 	HAL_Delay(1);

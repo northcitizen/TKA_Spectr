@@ -1100,7 +1100,7 @@ case Measure3_Screen:
 			preGUI_screen_state = GUI_screen_state;
 		
 				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Down
-				{	
+				{
 					GUI_screen_state = DataSet2_Screen;
 				} else
 				if(Touch_x >= 182 & Touch_x <= (182+54) & Touch_y >=202 & Touch_y <=(202+54) ) //Mode_EL
@@ -1123,7 +1123,7 @@ case Measure3_Screen:
 					GUI_screen_state = Information_Screen;
 				}	else
 				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //Illuminance
-				{	
+				{
 					Measure_Field ^= Illuminance;
 					GUI_CheckBox(200, 327, Measure_Field&Illuminance);
 					
