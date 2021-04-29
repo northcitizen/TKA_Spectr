@@ -1044,7 +1044,7 @@ int main(void)
 	HAL_Delay(1);
 #endif
   	MX_USART2_UART_Init();
-  	HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);//1 3  01not bad
+  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);//1 3  01
     HAL_NVIC_EnableIRQ(USART2_IRQn);
     __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
 
@@ -1057,7 +1057,7 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM2_IRQn, 1, 2);  //ST Signal 01   now 02 not bad  12 11
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //ST Signal 01   now 02 not bad  12 11 -> 12
 //	HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
 	HAL_Delay(2);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
@@ -1358,10 +1358,10 @@ int main(void)
 				
 		while(start)
 		{
-	  Temperature_Measure_Func();
+	    Temperature_Measure_Func();
 		Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
 
-    Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
+		Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
 		if(!block_graph) {memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));}
 		
 			cnt_delay++;
@@ -1380,7 +1380,7 @@ int main(void)
 		
 		if(!exp_set){
 		Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-    Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);}
+		Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);}
 		if(!block_graph) {memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));}
 		
 			exp_start = 0;

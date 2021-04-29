@@ -12,6 +12,7 @@ __ALIGN_BEGIN static uint8_t CUSTOM_HID_ReportDesc_FS[USBD_CUSTOM_HID_REPORT_DES
   0x06, 0x00, 0xFF,      // Usage Page = 0xFF00 (Vendor Defined Page 1)
   0x09, 0x01,             // Usage (Vendor Usage 1)
   0xA1, 0x01,             // Collection (Application)
+
   // Input report
   0x19, 0x01,             // Usage Minimum
   0x29, 0x40,             // Usage Maximum
@@ -20,6 +21,7 @@ __ALIGN_BEGIN static uint8_t CUSTOM_HID_ReportDesc_FS[USBD_CUSTOM_HID_REPORT_DES
   0x75, 0x08,             // Report Size: 8-bit field size
   0x95, CUSTOM_HID_EPIN_SIZE,// Report Count
   0x81, 0x02,             // Input (Data, Array, Abs)
+
   // Output report
   0x19, 0x01,             // Usage Minimum
   0x29, 0x40,             // Usage Maximum
@@ -27,7 +29,7 @@ __ALIGN_BEGIN static uint8_t CUSTOM_HID_ReportDesc_FS[USBD_CUSTOM_HID_REPORT_DES
   0x95, CUSTOM_HID_EPOUT_SIZE,// Report Count
   0x91, 0x02,             // Output (Data, Array, Abs)
    /* USER CODE END 0 */
-    0xc0                           //         END_COLLECTION
+  0xc0                           //         END_COLLECTION
 };
 
 /* USER CODE BEGIN PRIVATE_VARIABLES */

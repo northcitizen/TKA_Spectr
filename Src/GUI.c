@@ -113,14 +113,14 @@ void GUI_DataSet1_Screen()
 		Language_status_prev = Language_status;
 		GUI_Panels();
 		Prev_Inf_Screen2 = DataSet1_Screen;
-		
+
 		if(Language_status == Ru){
-			
+
 			GUI_OptionMenuRu();
 			Mode_EL ? GUI_TextRu_Illuminance(10, 337):GUI_TextRu_Luminance(10, 337);
 		}
 		else if (Language_status == En) {
-			
+
 			GUI_OptionMenuEn();
 			Mode_EL ? GUI_TextEn_Illuminance(10, 339):GUI_TextEn_Luminance(10, 339);
 		}
@@ -392,7 +392,7 @@ void Measure_Elements_Draw(uint8_t Measure_Number)
 							} else {screen_count++;}} break;
 				case 1: if(Measure_Field&Irradiance){
 					if(Y+35 <= limit){
-					Mode_EL ?	GUI_Text_E_Measure(20, Y, E_day_Wt, 1, exp_start, exp_set):GUI_Text_L_Measure(20, Y, E_day_Wt, 1, exp_start, exp_set); 
+					Mode_EL ?	GUI_Text_E_Measure(20, Y, E_day_Wt, 1, exp_start, exp_set):GUI_Text_L_Measure(20, Y, E_day_Wt, 1, exp_start, exp_set);
 									Y+=35;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
@@ -964,15 +964,15 @@ case Measure3_Screen:
 			preGUI_screen_state = GUI_screen_state;
 		
 			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54)) //Settings
-				{	
-					GUI_screen_state = DataSet1_Screen;
-				} 
-				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //Down
-				{	
-					GUI_screen_state = Measure_Screen;
-					WriteFLASH_Screen(GUI_screen_state);
-				}
-				else 
+			{
+				GUI_screen_state = DataSet1_Screen;
+			}
+			if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //Down
+			{
+				GUI_screen_state = Measure_Screen;
+				WriteFLASH_Screen(GUI_screen_state);
+			}
+			else
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
 				{
 					WriteFLASH_Screen(Graph_Screen);
@@ -1117,17 +1117,15 @@ case Measure3_Screen:
 					GUI_Switch_Button(182, 268, Bluetooth);
 					GUI_Up_Panel();
 				}
-				else
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //Illuminance
+				{
+					Measure_Field ^= Illuminance;
+				     GUI_CheckBox(200, 327, Measure_Field&Illuminance);
+				}else
 				if(Touch_x >= 8 & Touch_x <= (250) & Touch_y >=124 & Touch_y <=(174) ) // Information
 				{
 					GUI_screen_state = Information_Screen;
 				}	else
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //Illuminance
-				{
-					Measure_Field ^= Illuminance;
-					GUI_CheckBox(200, 327, Measure_Field&Illuminance);
-					
-				}else
 				if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Back
 				{	 
 					WriteSDFLASH_t(sdfile_cnt);
@@ -1424,11 +1422,12 @@ case Measure3_Screen:
 //					Measure_Field ^= lambda_c;
 //					GUI_CheckBox(200, 133, Measure_Field&lambda_c);
 //				}else 
-				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=133  & Touch_y <=(198+54) ) //EbEr
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=133  & Touch_y <=(133+54) ) //SP
 				{
 					Measure_Field ^= SP_measure;
 					GUI_CheckBox(200, 133, Measure_Field&SP_measure);
 				}else	
+
 				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
