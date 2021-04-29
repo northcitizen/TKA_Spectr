@@ -117,15 +117,15 @@ void GUI_DataSet1_Screen()
 		if(Language_status == Ru){
 
 			GUI_OptionMenuRu();
-			Mode_EL ? GUI_TextRu_Illuminance(10, 337):GUI_TextRu_Luminance(10, 337);
+			//Mode_EL ? GUI_TextRu_Illuminance(10, 337):GUI_TextRu_Luminance(10, 337);
 		}
 		else if (Language_status == En) {
 
 			GUI_OptionMenuEn();
-			Mode_EL ? GUI_TextEn_Illuminance(10, 339):GUI_TextEn_Luminance(10, 339);
+			//Mode_EL ? GUI_TextEn_Illuminance(10, 339):GUI_TextEn_Luminance(10, 339);
 		}
-		GUI_CheckBox(200, 327, Measure_Field&Illuminance);
-		TFT_DrawLine(10, 377, 262, 377, TFT_White);
+		//GUI_CheckBox(200, 327, Measure_Field&Illuminance);
+		//TFT_DrawLine(10, 377, 262, 377, TFT_White);
 	}
 }
 
@@ -136,46 +136,58 @@ void GUI_DataSet2_Screen()
 			GUI_Panels();
 			
 			if(Language_status == Ru){
-				Mode_EL ? 	GUI_TextRu_Irradiance(18, 82):GUI_TextRu_Radiance(18, 82);
-				GUI_CheckBox(200, 70, Measure_Field&Irradiance);
-				TFT_DrawLine(10, 120, 262, 120, TFT_White);
 
-				GUI_TextRu_PPF(10, 145);
-				GUI_CheckBox(200, 133, Measure_Field&PPFD);
-				
-				GUI_TextRu_PPF_RGB(10, 209);
-				GUI_CheckBox(200, 198, Measure_Field&PPFD_BGR);
+				Mode_EL ? GUI_TextRu_Illuminance(18, 84):GUI_TextRu_Luminance(18, 84);
+				GUI_CheckBox(200, 70, Measure_Field&Illuminance);
+
+				TFT_DrawLine(10, 183, 262, 183, TFT_White);
+
+				Mode_EL ? 	GUI_TextRu_Irradiance(18, 209):GUI_TextRu_Radiance(18, 209);
+				GUI_CheckBox(200, 198, Measure_Field&Irradiance);
 				TFT_DrawLine(10, 248, 262, 248, TFT_White);
+
+				GUI_TextRu_PPF(10, 275);
+				GUI_CheckBox(200, 263, Measure_Field&PPFD);
 				
-				GUI_TextRu_CCT(20, 275);
-				GUI_CheckBox(200, 263, Measure_Field&CCT);
-				TFT_DrawLine(10, 313, 262, 313, TFT_White);
-				
-				GUI_Text_deltaE(20, 337);
-				GUI_CheckBox(200, 327, Measure_Field&delta_E);
+				GUI_TextRu_PPF_RGB(10, 337);
+				GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
 				TFT_DrawLine(10, 377, 262, 377, TFT_White);
-				GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
+				
+				//GUI_TextRu_CCT(20, 275);
+				//GUI_CheckBox(200, 263, Measure_Field&CCT);
+				//TFT_DrawLine(10, 313, 262, 313, TFT_White);
+				
+				//GUI_Text_deltaE(20, 337);
+				//GUI_CheckBox(200, 327, Measure_Field&delta_E);
+				//TFT_DrawLine(10, 377, 262, 377, TFT_White);
+				//GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
 			}
 			else if(Language_status == En){
-				Mode_EL ? 	GUI_TextEn_Irradiance(18, 84) : GUI_TextEn_Radiance(18, 84);
-				GUI_CheckBox(200, 70, Measure_Field&Irradiance);
-				TFT_DrawLine(10, 120, 262, 120, TFT_White);
 
-				Mode_EL ?  GUI_TextEn_PPFD(10, 147) : GUI_TextEn_PPL(10, 147);
-				GUI_CheckBox(200, 133, Measure_Field&PPFD);
-				
-				GUI_TextEn_B_G_R_FR(10, 211);
-				GUI_CheckBox(200, 198, Measure_Field&PPFD_BGR);
+				Mode_EL ? GUI_TextEn_Illuminance(18, 84):GUI_TextEn_Luminance(18, 84);
+				GUI_CheckBox(200, 70, Measure_Field&Illuminance);
+
+				TFT_DrawLine(10, 183, 262, 183, TFT_White);
+
+				Mode_EL ? 	GUI_TextEn_Irradiance(18, 211) : GUI_TextEn_Radiance(18, 211);
+				GUI_CheckBox(200, 198, Measure_Field&Irradiance);
 				TFT_DrawLine(10, 248, 262, 248, TFT_White);
+
+				Mode_EL ?  GUI_TextEn_PPFD(10, 277) : GUI_TextEn_PPL(10, 277);
+				GUI_CheckBox(200, 263, Measure_Field&PPFD);
 				
-				GUI_TextEn_CCT(20, 277);
-				GUI_CheckBox(200, 263, Measure_Field&CCT);
-				TFT_DrawLine(10, 313, 262, 313, TFT_White);
-				
-				GUI_Text_deltaE(20, 337);
-				GUI_CheckBox(200, 327, Measure_Field&delta_E);
+				GUI_TextEn_B_G_R_FR(10, 337);
+				GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
 				TFT_DrawLine(10, 377, 262, 377, TFT_White);
-				GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
+				
+				//GUI_TextEn_CCT(20, 277);
+				//GUI_CheckBox(200, 263, Measure_Field&CCT);
+				//TFT_DrawLine(10, 313, 262, 313, TFT_White);
+				
+				//GUI_Text_deltaE(20, 337);
+				//GUI_CheckBox(200, 327, Measure_Field&delta_E);
+				//TFT_DrawLine(10, 377, 262, 377, TFT_White);
+				//GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
 			}
 		}
 }
