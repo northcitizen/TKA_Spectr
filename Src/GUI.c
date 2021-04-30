@@ -137,8 +137,16 @@ void GUI_DataSet2_Screen()
 			
 			if(Language_status == Ru){
 
-				Mode_EL ? GUI_TextRu_Illuminance(18, 84):GUI_TextRu_Luminance(18, 84);
+				Mode_EL ? GUI_TextRu_Illuminance(10, 84):GUI_TextRu_Luminance(10, 84);
 				GUI_CheckBox(200, 70, Measure_Field&Illuminance);
+
+				GUI_TextRu_LxFl(10, 145);
+				GUI_Switch_ButtonActive(182, 136, Mode_EL);
+				TFT_SetTextColor(TFT_White);
+				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetFont(&Font16EN_arch_big);
+				TFT_DrawChar(225, 144, 'f' );
+				TFT_DrawChar(155, 144, 'L');
 
 				TFT_DrawLine(10, 183, 262, 183, TFT_White);
 
@@ -164,8 +172,16 @@ void GUI_DataSet2_Screen()
 			}
 			else if(Language_status == En){
 
-				Mode_EL ? GUI_TextEn_Illuminance(18, 84):GUI_TextEn_Luminance(18, 84);
+				Mode_EL ? GUI_TextEn_Illuminance(10, 84):GUI_TextEn_Luminance(10, 84);
 				GUI_CheckBox(200, 70, Measure_Field&Illuminance);
+
+				GUI_TextEN_LxFl(10, 145);
+				GUI_Switch_ButtonActive(182, 136, Mode_EL);
+				TFT_SetTextColor(TFT_White);
+				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetFont(&Font16EN_arch_big);
+				TFT_DrawChar(225, 144, 'f' );
+				TFT_DrawChar(155, 144, 'L');
 
 				TFT_DrawLine(10, 183, 262, 183, TFT_White);
 
@@ -1128,11 +1144,6 @@ case Measure3_Screen:
 					Bluetooth = !Bluetooth;
 					GUI_Switch_Button(182, 268, Bluetooth);
 					GUI_Up_Panel();
-				}
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //Illuminance
-				{
-					Measure_Field ^= Illuminance;
-				     GUI_CheckBox(200, 327, Measure_Field&Illuminance);
 				}else
 				if(Touch_x >= 8 & Touch_x <= (250) & Touch_y >=124 & Touch_y <=(174) ) // Information
 				{
@@ -1163,7 +1174,7 @@ case Measure3_Screen:
 				}	else	
 				if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 				{
-							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
+					if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 				}
 			break;
 		case DataSet2_Screen:
@@ -1172,43 +1183,54 @@ case Measure3_Screen:
 				{	
 					GUI_screen_state = DataSet3_Screen;
 				} else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=70 & Touch_y <=(70+54) ) //Irradiance
-				{	
-					Measure_Field ^= Irradiance;
-					GUI_CheckBox(200, 70, Measure_Field&Irradiance);
-				}else 
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=70 & Touch_y <=(70+54)) //Illuminance был э яркость
+				{
+					Measure_Field ^= Illuminance;
+					GUI_CheckBox(200, 70, Measure_Field&Illuminance);
+				}else
+				//if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=70 & Touch_y <=(70+54) ) //Irradiance
+				//{
+				//	Measure_Field ^= Irradiance;
+				//	GUI_CheckBox(200, 70, Measure_Field&Irradiance);
+				//}else
 				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=133 & Touch_y <=(133+54) ) //PPFD
 				{	
-					Measure_Field ^= PPFD;
-					GUI_CheckBox(200, 133, Measure_Field&PPFD);
+					//ПЕРЕКЛЮЧАТЕЛЬ лк-фЛ
+
 				}else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=198 & Touch_y <=(198+54) ) //PPFD_BGR
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=198 & Touch_y <=(198+54) ) //Irradiance был бгр
+				{	
+					Measure_Field ^= Irradiance;
+					GUI_CheckBox(200, 198, Measure_Field&Irradiance);
+					//Measure_Field ^= PPFD_BGR;
+					//GUI_CheckBox(200, 198, Measure_Field&PPFD_BGR);
+				}else 
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=263 & Touch_y <=(263+54) ) //PPFD был сст
+				{	
+					Measure_Field ^= PPFD;
+					GUI_CheckBox(200, 263, Measure_Field&PPFD);
+					//Measure_Field ^= CCT;
+					//GUI_CheckBox(200, 263, Measure_Field&CCT);
+				}else 
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //BGR был delta_E
 				{	
 					Measure_Field ^= PPFD_BGR;
-					GUI_CheckBox(200, 198, Measure_Field&PPFD_BGR);
-				}else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=263 & Touch_y <=(263+54) ) //CCT
-				{	
-					Measure_Field ^= CCT;
-					GUI_CheckBox(200, 263, Measure_Field&CCT);
-				}else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //delta_E
-				{	
-					Measure_Field ^= delta_E;
-					GUI_CheckBox(200, 327, Measure_Field&delta_E);
-					GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
+					GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
+					//Measure_Field ^= delta_E;
+					//GUI_CheckBox(200, 327, Measure_Field&delta_E);
+					//GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
 				} 				
-				else	if(Touch_x >= 130 & Touch_x <= (200+38) & Touch_y >=327 & Touch_y <=(327+54) ) //delta_E_measure_small
-				{	
-					if(Measure_Field&delta_E)
-					{
-						Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);
-						colorimetry_LAB_mem[0] = colorimetry_LAB[0];
-						colorimetry_LAB_mem[1] = colorimetry_LAB[1];
-						colorimetry_LAB_mem[2] = colorimetry_LAB[2];
-						GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 1);
-					}
-				} 		
+				//else	if(Touch_x >= 130 & Touch_x <= (200+38) & Touch_y >=327 & Touch_y <=(327+54) ) //delta_E_measure_small
+				//{
+				//	if(Measure_Field&delta_E)
+				//	{
+				//		Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);
+				//		colorimetry_LAB_mem[0] = colorimetry_LAB[0];
+				//		colorimetry_LAB_mem[1] = colorimetry_LAB[1];
+				//		colorimetry_LAB_mem[2] = colorimetry_LAB[2];
+				//		GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 1);
+				//	}
+				//}
 				else
 				if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Back
 				{	
@@ -1262,7 +1284,7 @@ case Measure3_Screen:
 						Measure_Color_xy ^= CIE_xy_1931_1964;
 						GUI_RadioBox(200, 198, Measure_Color_xy&CIE_xy_1931_1964, 0x01);
 						GUI_RadioBox(200, 263, !(Measure_Color_xy&CIE_xy_1931_1964), 0x01);
-					}
+				}
 				}else 
 				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=263 & Touch_y <=(263+54) && (Measure_Field&CIE_xy)) //CIE_xy_1964
 				{

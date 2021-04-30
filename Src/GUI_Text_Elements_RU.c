@@ -105,6 +105,28 @@ void GUI_TextRu_Mode(uint16_t X, uint16_t Y)
 	TFT_DrawCharRus(X+54, Y+5, 'м');
 }
 
+void GUI_TextRu_LxFl(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetFont(&Font16RU_arch_big);
+	TFT_DrawCharRus(X, Y, 'Л');
+	TFT_SetFont(&Font16RU_arch_small);
+	TFT_DrawCharRus(X+15, Y+5, 'к');
+	TFT_SetFont(&Font16EN_arch_big);
+	TFT_DrawChar(X+28, Y+5, '/');
+	TFT_SetFont(&Font16RU_arch_small);
+	TFT_DrawCharRus(X+46, Y+5, 'ф');
+	TFT_DrawCharRus(X+59, Y+5, 'у');
+	TFT_DrawCharRus(X+73, Y+5, 'т');
+	TFT_SetFont(&Font16EN_arch_big);
+	TFT_DrawChar(X+87, Y, '-');
+	TFT_SetFont(&Font16RU_arch_big);
+	TFT_DrawCharRus(X+104, Y, 'Л');
+	TFT_SetFont(&Font16RU_arch_small);
+	TFT_DrawCharRus(X+118, Y+5, 'б');
+}
+
 void GUI_TextRu_Illuminance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);

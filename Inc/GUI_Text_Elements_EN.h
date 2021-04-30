@@ -44,6 +44,7 @@ void GUI_TextEn_Irradiance(uint16_t X, uint16_t Y);
 void GUI_TextEn_Luminance(uint16_t X, uint16_t Y);
 void GUI_TextEn_Illuminance(uint16_t X, uint16_t Y);
 void GUI_TextEn_Mode(uint16_t X, uint16_t Y);
+void GUI_TextEN_LxFl(uint16_t X, uint16_t Y);
 void GUI_TextEn_Green(uint16_t X, uint16_t Y);
 void GUI_TextEn_Blue(uint16_t X, uint16_t Y);
 void GUI_TextEn_Red(uint16_t X, uint16_t Y);

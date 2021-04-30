@@ -16,6 +16,7 @@ void GUI_TextRu_Language(uint16_t X, uint16_t Y);
 void GUI_TextRu_Russian(uint16_t X, uint16_t Y);
 void GUI_TextRu_Info(uint16_t X, uint16_t Y);
 void GUI_TextRu_Mode(uint16_t X, uint16_t Y);
+void GUI_TextRu_LxFl(uint16_t X, uint16_t Y);
 void GUI_TextRu_Illuminance(uint16_t X, uint16_t Y);
 void GUI_TextRu_PPF(uint16_t X, uint16_t Y);
 void GUI_TextRu_PPF_RGB(uint16_t X, uint16_t Y);

@@ -591,6 +591,22 @@ void GUI_TextEn_Mode(uint16_t X, uint16_t Y)
 	TFT_DrawChar(X+43, Y+2, 'e');
 }
 
+void GUI_TextEN_LxFl(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetFont(&Font16EN_arch_big_A);
+	TFT_DrawChar(X, Y+5, 'L');
+	TFT_SetFont(&Font16EN_arch_small_A);
+	TFT_DrawChar(X+15, Y+7, 'x');
+	TFT_SetFont(&Font16EN_arch_big_A);
+	TFT_DrawChar(X+28, Y+5, '/');
+	TFT_SetFont(&Font16EN_arch_small_A);
+	TFT_DrawChar(X+46, Y+7, 'f');
+	TFT_SetFont(&Font16EN_arch_big_A);
+	TFT_DrawChar(X+59, Y+5, 'L');
+}
+
 void GUI_TextEn_PPFD(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
@@ -703,7 +719,7 @@ void GUI_TextEn_mW_m2(uint16_t X, uint16_t Y)
 	TFT_DrawChar(X+1, Y+17, 'm');
 	TFT_SetFont(&Font6EN_arch_big);
 	TFT_DrawChar(X+11, Y+16, '2');
-  TFT_DrawLine(X, Y+14, X+17, Y+14, TFT_White);
+	TFT_DrawLine(X, Y+14, X+17, Y+14, TFT_White);
 }
 
 void GUI_TextEn_W_m2_sr(uint16_t X, uint16_t Y)
