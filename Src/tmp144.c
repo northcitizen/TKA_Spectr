@@ -1,7 +1,7 @@
 /*
  * tmp144.c
  *
- *  Created on: 25 ÿíâ. 2021 ã.
+ *  Created on: 25 ï¿½ï¿½ï¿½. 2021 ï¿½.
  *      Author: Lab-prog
  */
 
@@ -21,8 +21,9 @@ void Temperature_Measure_Func(void)
 
 
 	__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
-
- 	//HAL_Delay(1);
+#ifdef SERVICE
+ 	HAL_Delay(1);
+#endif
 	HAL_UART_Transmit(&huart2, (uint8_t *) &command, 2, 1);
 
 

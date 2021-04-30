@@ -554,7 +554,9 @@ void usb_receive_processing(void)
 					{
 						packet_generator_Rabs_data_send();
 					}else{
+						#ifndef SERVICE
 						Temperature_Measure_Func();
+						#endif
 						packet_generator_data_send();
 //						__HAL_UART_DISABLE_IT(&huart2, UART_IT_RXNE);
 					}
@@ -717,7 +719,6 @@ void usb_receive_processing(void)
 						
 				case CMD_CALCULATED_DATA_TRANSMIT : 
 						send_usb_block = 1;
-						
 						packet_generator_Calculated_data_send();
 
 						memset(dataToReceive, 0, sizeof(dataToReceive));
@@ -1346,6 +1347,9 @@ int main(void)
 
  while(1)
  {
+#ifdef SERVICE
+	 Temperature_Measure_Func();
+#endif
 	 usb_receive_processing();
 
 #ifndef SERVICE
@@ -1651,16 +1655,17 @@ void EXTI9_5_IRQHandler(void)
 	DWT_Delay(1);
   HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)&RxBuf, (uint8_t*)&RxBuf, 2, 0);
 
-	if((RxBuf[0] << 8 | RxBuf[1])>=0xCFFF)
-	{
-		Line[i] = Line[i-1]; 
-	} else if((RxBuf[0] << 8 | RxBuf[1])<=0x0EFF)
-	{
-		Line[i] = Line[i-1]; 
-	} else	
-	{
+  //30
+	//if((RxBuf[0] << 8 | RxBuf[1])>=0xCFFF)
+	//{
+	//	Line[i] = Line[i-1];
+	//} else if((RxBuf[0] << 8 | RxBuf[1])<=0x0EFF)
+	//{
+	//	Line[i] = Line[i-1];
+	//} else
+	//{
 		Line[i] = RxBuf[0] << 8 | RxBuf[1];
-	}
+	//}
 	
 	
 	if(i >= 1023)
