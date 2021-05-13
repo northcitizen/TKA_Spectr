@@ -126,7 +126,7 @@ extern int16_t delta_Eab_Measure;
 uint16_t max_el = 0, cnt_delay_bar = 0;
 extern uint8_t Rotation_Screen_Spectral, Rotation_Screen_Spectral_Old, Calculate_deltaEab_Done, Color_rend_Field, preGUI_screen_state;
 uint8_t highSignal = 0, lowSignal = 0;
-uint8_t Mode_EL = 1, SD_Detect, old_sd_detect = 10, write_FileNum = 0;
+uint8_t Mode_EL = 1, SD_Detect, old_sd_detect = 10, write_FileNum = 0, Mode_Lx_Fl = 0;
 
 //Calibration table factors data
 float Spectral_day[1024] = {0}, Spectral_night[1024] = {0}, Spectral_B[1024] = {0}, Spectral_R[1024] = {0};

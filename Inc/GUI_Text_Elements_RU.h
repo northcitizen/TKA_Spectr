@@ -30,6 +30,7 @@ void GUI_TextRu_mW_m2(uint16_t X, uint16_t Y);
 void GUI_TextRu_mW_m2_sr(uint16_t X, uint16_t Y);
 void GUI_TextRu_umol_sr(uint16_t X, uint16_t Y);
 void GUI_TextRu_Cd_m2(uint16_t X, uint16_t Y, uint8_t deg);
+void GUI_TextRu_Cd_m2_Big(uint16_t X, uint16_t Y, uint8_t deg);
 void GUI_TextRu_Info_Callibration(uint16_t X, uint16_t Y, uint8_t date, uint8_t month, uint16_t year);
 void GUI_TextRu_Info_Serial(uint16_t X, uint16_t Y, uint16_t Part, uint16_t Number);
 void GUI_TextRu_Info_Ver(uint16_t X, uint16_t Y, float Version);

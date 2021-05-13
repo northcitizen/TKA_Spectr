@@ -7,7 +7,7 @@
 uint8_t GUI_screen_state = Title_Screen, Rotation_Screen_Spectral_Old, Rotation_Screen_Rend_Old, Language_status_prev, Mode_EL_Old,
 pause = 0x00, Rotation_Screen_Color = 0x00;
 volatile uint8_t	preGUI_screen_state = 0xFF;
-extern uint8_t exp_num, VGain, LaserOnOff, MeasureFlag_display, Mode_EL, TFT_ON_OFF, Q_i[15], Qf, Qa, Qp;
+extern uint8_t exp_num, VGain, LaserOnOff, MeasureFlag_display, Mode_EL, TFT_ON_OFF, Q_i[15], Qf, Qa, Qp, Mode_Lx_Fl;
 extern uint8_t  old_meas_type_L, SD_Detect, highSignal, lowSignal, exp_start, exp_set;
 extern int8_t Ra, Rall, R9, Ri[14];
 int16_t colorimetry_LAB_mem[3];
@@ -140,13 +140,38 @@ void GUI_DataSet2_Screen()
 				Mode_EL ? GUI_TextRu_Illuminance(10, 84):GUI_TextRu_Luminance(10, 84);
 				GUI_CheckBox(200, 70, Measure_Field&Illuminance);
 
-				GUI_TextRu_LxFl(10, 145);
-				GUI_Switch_ButtonActive(182, 136, Mode_EL);
+				if(!Mode_EL)
+				{
+					TFT_SetTextColor(TFT_White);
+					TFT_SetBackColor(TFT_Black_Bkgr);
+					GUI_TextRu_Cd_m2_Big(10, 130, 0);
+					TFT_SetFont(&Font16EN_arch_big);
+				    TFT_DrawChar(50, 141, '-');
+					TFT_DrawChar(60, 142, '>');
+				    TFT_SetFont(&Font16EN_arch_small_A);
+					TFT_DrawChar(74, 145, 'f');
+					TFT_SetFont(&Font16EN_arch_big_A);
+					TFT_DrawChar(86, 143, 'L');
+				}else
+				{
+					TFT_SetTextColor(TFT_White);
+					TFT_SetBackColor(TFT_Black_Bkgr);
+					TFT_SetFont(&Font16RU_arch_small);
+					TFT_DrawCharRus(10, 145, 'л');
+					TFT_DrawCharRus(23, 145, 'к');
+					TFT_SetFont(&Font16EN_arch_big);
+					TFT_DrawChar(40, 141, '-');
+					TFT_DrawChar(50, 142, '>');
+					TFT_SetFont(&Font16EN_arch_small_A);
+					TFT_DrawChar(65, 144, 'f');
+					TFT_DrawChar(75, 144, 'c');
+				}
+
+
+				GUI_Switch_Button_Lx_Fl(200, 133, Mode_Lx_Fl);
 				TFT_SetTextColor(TFT_White);
 				TFT_SetBackColor(TFT_Black_Bkgr);
 				TFT_SetFont(&Font16EN_arch_big);
-				TFT_DrawChar(225, 144, 'f' );
-				TFT_DrawChar(155, 144, 'L');
 
 				TFT_DrawLine(10, 183, 262, 183, TFT_White);
 
@@ -161,27 +186,56 @@ void GUI_DataSet2_Screen()
 				GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
 				TFT_DrawLine(10, 377, 262, 377, TFT_White);
 				
-				//GUI_TextRu_CCT(20, 275);
-				//GUI_CheckBox(200, 263, Measure_Field&CCT);
-				//TFT_DrawLine(10, 313, 262, 313, TFT_White);
-				
-				//GUI_Text_deltaE(20, 337);
-				//GUI_CheckBox(200, 327, Measure_Field&delta_E);
-				//TFT_DrawLine(10, 377, 262, 377, TFT_White);
-				//GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
+//				GUI_TextRu_CCT(20, 275);
+//				GUI_CheckBox(200, 263, Measure_Field&CCT);
+//				TFT_DrawLine(10, 313, 262, 313, TFT_White);
+//
+//				GUI_Text_deltaE(20, 337);
+//				GUI_CheckBox(200, 327, Measure_Field&delta_E);
+//				TFT_DrawLine(10, 377, 262, 377, TFT_White);
+//				GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
 			}
 			else if(Language_status == En){
 
 				Mode_EL ? GUI_TextEn_Illuminance(10, 84):GUI_TextEn_Luminance(10, 84);
 				GUI_CheckBox(200, 70, Measure_Field&Illuminance);
 
-				GUI_TextEN_LxFl(10, 145);
-				GUI_Switch_ButtonActive(182, 136, Mode_EL);
+				if(!Mode_EL)
+				{
+					TFT_SetFont(&Font16EN_arch_big);
+					TFT_DrawChar(10+2, 140-5, 'c');
+					TFT_DrawChar(15+9, 135, 'd');
+					TFT_DrawChar(15+2, 145+17, 'm');
+					TFT_SetFont(&Font9EN_arch_big);
+					TFT_DrawChar(20+12, 145+16, '2');
+					TFT_DrawLine(10, 145+14, 10+39, 145+14, TFT_White);
+					TFT_SetFont(&Font16EN_arch_big);
+					TFT_DrawChar(48, 150, '-');
+					TFT_DrawChar(60, 151, '>');
+					TFT_SetFont(&Font16EN_arch_small_A);
+					TFT_DrawChar(74, 150, 'f');
+					TFT_SetFont(&Font16EN_arch_big_A);
+					TFT_DrawChar(86, 150, 'L');
+				}else
+				{
+					TFT_SetTextColor(TFT_White);
+					TFT_SetBackColor(TFT_Black_Bkgr);
+					TFT_SetFont(&Font16EN_arch_small_A);
+					TFT_DrawChar(10, 145, 'l');
+					TFT_DrawChar(15, 145, 'x');
+					TFT_SetFont(&Font16EN_arch_big);
+					TFT_DrawChar(35, 141, '-');
+					TFT_DrawChar(45, 142, '>');
+					TFT_SetFont(&Font16EN_arch_small_A);
+					TFT_DrawChar(65, 145, 'f');
+					TFT_DrawChar(75, 145, 'c');
+				}
+
+
+				GUI_Switch_Button_Lx_Fl(200, 133, Mode_Lx_Fl);
 				TFT_SetTextColor(TFT_White);
 				TFT_SetBackColor(TFT_Black_Bkgr);
 				TFT_SetFont(&Font16EN_arch_big);
-				TFT_DrawChar(225, 144, 'f' );
-				TFT_DrawChar(155, 144, 'L');
 
 				TFT_DrawLine(10, 183, 262, 183, TFT_White);
 
@@ -196,14 +250,14 @@ void GUI_DataSet2_Screen()
 				GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
 				TFT_DrawLine(10, 377, 262, 377, TFT_White);
 				
-				//GUI_TextEn_CCT(20, 277);
-				//GUI_CheckBox(200, 263, Measure_Field&CCT);
-				//TFT_DrawLine(10, 313, 262, 313, TFT_White);
-				
-				//GUI_Text_deltaE(20, 337);
-				//GUI_CheckBox(200, 327, Measure_Field&delta_E);
-				//TFT_DrawLine(10, 377, 262, 377, TFT_White);
-				//GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
+//				GUI_TextEn_CCT(20, 277);
+//				GUI_CheckBox(200, 263, Measure_Field&CCT);
+//				TFT_DrawLine(10, 313, 262, 313, TFT_White);
+//
+//				GUI_Text_deltaE(20, 337);
+//				GUI_CheckBox(200, 327, Measure_Field&delta_E);
+//				TFT_DrawLine(10, 377, 262, 377, TFT_White);
+//				GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
 			}
 		}
 }
@@ -1195,6 +1249,8 @@ case Measure3_Screen:
 				//}else
 				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=133 & Touch_y <=(133+54) ) //PPFD
 				{	
+					Mode_Lx_Fl = !Mode_Lx_Fl;
+					GUI_Switch_Button_Lx_Fl(200, 133, Mode_Lx_Fl);
 					//ПЕРЕКЛЮЧАТЕЛЬ лк-фЛ
 
 				}else 

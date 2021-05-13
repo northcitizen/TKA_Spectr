@@ -26,6 +26,7 @@ void GUI_Switch_Button(uint16_t X, uint16_t Y, uint8_t Check);
 void GUI_Flag_Ru(uint16_t X, uint16_t Y);
 void GUI_Flag_En(uint16_t X, uint16_t Y);
 void GUI_Switch_ButtonActive(uint16_t X, uint16_t Y, uint8_t Check);
+void GUI_Switch_Button_Lx_Fl(uint16_t X, uint16_t Y, uint8_t Check);
 void GUI_Button_Down_Active(uint16_t X, uint16_t Y, uint8_t Active);
 
 void GUI_Button_Measure_deltaE_Small(uint16_t X, uint16_t Y, uint16_t Active, uint8_t color);
