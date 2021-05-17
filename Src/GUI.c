@@ -185,15 +185,6 @@ void GUI_DataSet2_Screen()
 				GUI_TextRu_PPF_RGB(10, 337);
 				GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
 				TFT_DrawLine(10, 377, 262, 377, TFT_White);
-				
-//				GUI_TextRu_CCT(20, 275);
-//				GUI_CheckBox(200, 263, Measure_Field&CCT);
-//				TFT_DrawLine(10, 313, 262, 313, TFT_White);
-//
-//				GUI_Text_deltaE(20, 337);
-//				GUI_CheckBox(200, 327, Measure_Field&delta_E);
-//				TFT_DrawLine(10, 377, 262, 377, TFT_White);
-//				GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
 			}
 			else if(Language_status == En){
 
@@ -249,15 +240,6 @@ void GUI_DataSet2_Screen()
 				GUI_TextEn_B_G_R_FR(10, 337);
 				GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
 				TFT_DrawLine(10, 377, 262, 377, TFT_White);
-				
-//				GUI_TextEn_CCT(20, 277);
-//				GUI_CheckBox(200, 263, Measure_Field&CCT);
-//				TFT_DrawLine(10, 313, 262, 313, TFT_White);
-//
-//				GUI_Text_deltaE(20, 337);
-//				GUI_CheckBox(200, 327, Measure_Field&delta_E);
-//				TFT_DrawLine(10, 377, 262, 377, TFT_White);
-//				GUI_Button_Measure_deltaE_Small(130, 327, Measure_Field&delta_E, 0);
 			}
 		}
 }
@@ -267,23 +249,22 @@ void GUI_DataSet3_Screen()
 	if(preGUI_screen_state != GUI_screen_state){
 		GUI_Panels();
 
-		GUI_Text_CIE_XYZ(20, 82);
-		GUI_CheckBox(200, 70, Measure_Field&CIE_XYZ);
+		GUI_TextEn_CCT(20, 82);//был GUI_Text_CIE_XYZ стал CCT
+		GUI_CheckBox(200, 70, Measure_Field&CCT);
 		TFT_DrawLine(10, 120, 262, 120, TFT_White);
 
-		GUI_Text_CIE_xy(20, 145);
-		GUI_CheckBox(200, 133, Measure_Field&CIE_xy);
-		
-		GUI_Text_CIE_xy_1931(35, 209);
-		GUI_RadioBox(200, 198, Measure_Color_xy&CIE_xy_1931_1964, Measure_Field&CIE_xy);
-		GUI_Text_CIE_xy_1964(35, 275);
-		GUI_RadioBox(200, 263, !(Measure_Color_xy&CIE_xy_1931_1964), Measure_Field&CIE_xy);
-		
-		TFT_DrawLine(10, 313, 262, 313, TFT_White);
-		
-		GUI_Text_CIE_Luv(20, 337);
-		GUI_CheckBox(200, 327, Measure_Field&CIE_Luv);
-		TFT_DrawLine(10, 377, 262, 377, TFT_White);
+
+		GUI_Text_CIE_XYZ(20, 145);
+		GUI_CheckBox(200, 133, Measure_Field&CIE_XYZ);
+		TFT_DrawLine(10, 183, 262, 183, TFT_White);
+
+		GUI_Text_CIE_xy(20, 209);
+		GUI_CheckBox(200, 198, Measure_Field&CIE_xy);
+		GUI_Text_CIE_xy_1931(35, 275);
+		GUI_RadioBox(200, 263, Measure_Color_xy&CIE_xy_1931_1964, Measure_Field&CIE_xy);
+		GUI_Text_CIE_xy_1964(35, 341);
+		GUI_RadioBox(200, 327, !(Measure_Color_xy&CIE_xy_1931_1964), Measure_Field&CIE_xy);
+		TFT_DrawLine(10, 379, 262, 379, TFT_White);
 	}
 }
 
@@ -292,31 +273,31 @@ void GUI_DataSet4_Screen()
 	if(preGUI_screen_state != GUI_screen_state){
 		GUI_Panels();
 		
-		GUI_Text_CIE_Lab(20, 80);
-		GUI_CheckBox(200, 65, Measure_Field&CIE_Lab);
+		GUI_Text_CIE_Luv(20, 75);
+		GUI_CheckBox(200, 65, Measure_Field&CIE_Luv);
+		TFT_DrawLine(10, 120, 262, 120, TFT_White);
 
-		GUI_Text_A(40, 115);
-		GUI_RadioBox(200, 108, Source_Type&Source_A, Measure_Field&CIE_Lab);
+		GUI_Text_CIE_Lab(20, 140);
+		GUI_CheckBox(200, 130, Measure_Field&CIE_Lab);
+
+		GUI_Text_A(40, 185);
+		GUI_RadioBox(200, 170, Source_Type&Source_A, Measure_Field&CIE_Lab);
 		
-		GUI_Text_D65(40, 150);
-		GUI_RadioBox(200, 143, Source_Type&Source_D65, Measure_Field&CIE_Lab);
+		GUI_Text_D65(40, 220);
+		GUI_RadioBox(200, 205, Source_Type&Source_D65, Measure_Field&CIE_Lab);
 		
-		GUI_Text_C(40, 185);
-		GUI_RadioBox(200, 178, Source_Type&Source_C, Measure_Field&CIE_Lab);
+		GUI_Text_C(40, 255);
+		GUI_RadioBox(200, 240, Source_Type&Source_C, Measure_Field&CIE_Lab);
 		
-		GUI_Text_D50(40, 220);
-		GUI_RadioBox(200, 213, Source_Type&Source_D50, Measure_Field&CIE_Lab);
+		GUI_Text_D50(40, 290);
+		GUI_RadioBox(200, 275, Source_Type&Source_D50, Measure_Field&CIE_Lab);
 		
-		GUI_Text_D55(40, 255);
-		GUI_RadioBox(200, 248, Source_Type&Source_D55, Measure_Field&CIE_Lab);
+		GUI_Text_D55(40, 325);
+		GUI_RadioBox(200, 310, Source_Type&Source_D55, Measure_Field&CIE_Lab);
 		
-		GUI_Text_D75(40, 290);
-		GUI_RadioBox(200, 283, Source_Type&Source_D75, Measure_Field&CIE_Lab);
-		TFT_DrawLine(10, 330, 262, 330, TFT_White);
-		
-		Mode_EL ? GUI_Text_EbEr(20, 360) : GUI_Text_LbLr(20, 360);
-		GUI_CheckBox(200, 345, Measure_Field&EbEr);
-		TFT_DrawLine(10, 390, 262, 390, TFT_White);
+		GUI_Text_D75(40, 360);
+		GUI_RadioBox(200, 345, Source_Type&Source_D75, Measure_Field&CIE_Lab);
+		TFT_DrawLine(10, 387, 262, 387, TFT_White);
 	}
 }
 
@@ -332,6 +313,16 @@ void GUI_DataSet5_Screen()
 		GUI_Text_SP(35, 145);
 		GUI_CheckBox(200, 133, Measure_Field&SP_measure);
 		TFT_DrawLine(10, 183, 262, 183, TFT_White);
+
+		Mode_EL ? GUI_Text_EbEr(35, 210) : GUI_Text_LbLr(35, 210);
+		GUI_CheckBox(200, 195, Measure_Field&EbEr);
+		TFT_DrawLine(10, 245, 262, 245, TFT_White);
+
+
+		GUI_Text_deltaE(35, 275);//337
+		GUI_CheckBox(200, 265, Measure_Field&delta_E);//327
+		TFT_DrawLine(10, 315, 262, 315, TFT_White);//377
+		GUI_Button_Measure_deltaE_Small(130, 265, Measure_Field&delta_E, 0);//327
 	}
 }
 
@@ -1237,7 +1228,7 @@ case Measure3_Screen:
 				{	
 					GUI_screen_state = DataSet3_Screen;
 				} else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=70 & Touch_y <=(70+54)) //Illuminance был э яркость
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=70 & Touch_y <=(70+54)) //Illuminance былa яркость
 				{
 					Measure_Field ^= Illuminance;
 					GUI_CheckBox(200, 70, Measure_Field&Illuminance);
@@ -1261,12 +1252,10 @@ case Measure3_Screen:
 					//Measure_Field ^= PPFD_BGR;
 					//GUI_CheckBox(200, 198, Measure_Field&PPFD_BGR);
 				}else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=263 & Touch_y <=(263+54) ) //PPFD был сст
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=263 & Touch_y <=(263+54) ) //PPFD
 				{	
 					Measure_Field ^= PPFD;
 					GUI_CheckBox(200, 263, Measure_Field&PPFD);
-					//Measure_Field ^= CCT;
-					//GUI_CheckBox(200, 263, Measure_Field&CCT);
 				}else 
 				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //BGR был delta_E
 				{	
@@ -1317,38 +1306,63 @@ case Measure3_Screen:
 				{	
 					GUI_screen_state = DataSet4_Screen;
 				} else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=70 & Touch_y <=(70+54) ) //CIE_XYZ
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=70 & Touch_y <=(70+54) ) //CIE_XYZ //CCT
 				{
-					Measure_Field ^= CIE_XYZ;
-					GUI_CheckBox(200, 70, Measure_Field&CIE_XYZ);
+					//Measure_Field ^= CIE_XYZ;
+					//GUI_CheckBox(200, 70, Measure_Field&CIE_XYZ);
+					Measure_Field ^= CCT;
+					GUI_CheckBox(200, 70, Measure_Field&CCT);
 				} else 
 				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=133 & Touch_y <=(133+54) ) //CIE_xy
 				{
+					Measure_Field ^= CIE_XYZ;
+					GUI_CheckBox(200, 133, Measure_Field&CIE_XYZ);
+
+
+					//Measure_Field ^= delta_E;
+					//GUI_CheckBox(200, 133, Measure_Field&delta_E);
+					//GUI_Button_Measure_deltaE_Small(130, 133, Measure_Field&delta_E, 0);
+
+
+					//Measure_Field ^= CIE_xy;
+					//GUI_CheckBox(200, 133, Measure_Field&CIE_xy);
+					//GUI_RadioBox(200, 198, Measure_Color_xy&CIE_xy_1931_1964, Measure_Field&CIE_xy);
+					//GUI_RadioBox(200, 263, !(Measure_Color_xy&CIE_xy_1931_1964), Measure_Field&CIE_xy);
+				}	else
+				//if(Touch_x >= 130 & Touch_x <= (200+38) & Touch_y >=133 & Touch_y <=(133+54)) //delta_E_measure_small
+				//{
+					//if(Measure_Field&delta_E)
+					//{
+					//	Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);
+					//	colorimetry_LAB_mem[0] = colorimetry_LAB[0];
+					//	colorimetry_LAB_mem[1] = colorimetry_LAB[1];
+					//	colorimetry_LAB_mem[2] = colorimetry_LAB[2];
+					//	GUI_Button_Measure_deltaE_Small(130, 133, Measure_Field&delta_E, 1);
+					//}
+				//}else
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=198 & Touch_y <=(198+54))// && (Measure_Field&CIE_xy)) //CIE_xy_1931
+				{
 					Measure_Field ^= CIE_xy;
-					GUI_CheckBox(200, 133, Measure_Field&CIE_xy);
-					GUI_RadioBox(200, 198, Measure_Color_xy&CIE_xy_1931_1964, Measure_Field&CIE_xy);
-					GUI_RadioBox(200, 263, !(Measure_Color_xy&CIE_xy_1931_1964), Measure_Field&CIE_xy);
-				}	else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //CIE_Luv
-				{
-					Measure_Field ^= CIE_Luv;
-					GUI_CheckBox(200, 327, Measure_Field&CIE_Luv);
-				}else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=198 & Touch_y <=(198+54) && (Measure_Field&CIE_xy)) //CIE_xy_1931
-				{
-					if(!(Measure_Color_xy&CIE_xy_1931_1964)){
-						Measure_Color_xy ^= CIE_xy_1931_1964;
-						GUI_RadioBox(200, 198, Measure_Color_xy&CIE_xy_1931_1964, 0x01);
-						GUI_RadioBox(200, 263, !(Measure_Color_xy&CIE_xy_1931_1964), 0x01);
-				}
+					GUI_CheckBox(200, 198, Measure_Field&CIE_xy);
+					GUI_RadioBox(200, 263, Measure_Color_xy&CIE_xy_1931_1964, Measure_Field&CIE_xy);
+					GUI_RadioBox(200, 327, !(Measure_Color_xy&CIE_xy_1931_1964), Measure_Field&CIE_xy);
 				}else 
 				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=263 & Touch_y <=(263+54) && (Measure_Field&CIE_xy)) //CIE_xy_1964
 				{
+
+					if(!(Measure_Color_xy&CIE_xy_1931_1964)){
+						Measure_Color_xy ^= CIE_xy_1931_1964;
+						GUI_RadioBox(200, 263, Measure_Color_xy&CIE_xy_1931_1964, 0x01);
+						GUI_RadioBox(200, 327, !(Measure_Color_xy&CIE_xy_1931_1964), 0x01);
+						}
+				}else
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) && (Measure_Field&CIE_xy)) //CIE_xy_1964
+				{
 					if((Measure_Color_xy&CIE_xy_1931_1964)){
 						Measure_Color_xy ^= CIE_xy_1931_1964;
-						GUI_RadioBox(200, 198, Measure_Color_xy&CIE_xy_1931_1964, 0x01);
-						GUI_RadioBox(200, 263, !(Measure_Color_xy&CIE_xy_1931_1964), 0x01);
-					}
+						GUI_RadioBox(200, 263, Measure_Color_xy&CIE_xy_1931_1964, 0x01);
+						GUI_RadioBox(200, 327, !(Measure_Color_xy&CIE_xy_1931_1964), 0x01);
+						}
 				}else	
 				if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Display_Off
 				{
@@ -1381,98 +1395,99 @@ case Measure3_Screen:
 				}else 
 				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=65 & Touch_y <=(65+54) ) //CIE_Lab
 				{
-					Measure_Field ^= CIE_Lab;
-					GUI_CheckBox(200, 65, Measure_Field&CIE_Lab);
-					GUI_RadioBox(200, 108, Source_Type&Source_A, Measure_Field&CIE_Lab);
-					GUI_RadioBox(200, 143, Source_Type&Source_D65, Measure_Field&CIE_Lab);
-					GUI_RadioBox(200, 178, Source_Type&Source_C, Measure_Field&CIE_Lab);
-					GUI_RadioBox(200, 213, Source_Type&Source_D50, Measure_Field&CIE_Lab);
-					GUI_RadioBox(200, 248, Source_Type&Source_D55, Measure_Field&CIE_Lab);
-					GUI_RadioBox(200, 283, Source_Type&Source_D75, Measure_Field&CIE_Lab);
+
+					Measure_Field ^= CIE_Luv;
+					GUI_CheckBox(200, 65, Measure_Field&CIE_Luv);
 				}else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=345 & Touch_y <=(345+54) ) //EbEr
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=115 & Touch_y <=(115+54) ) //CIE_Lab
 				{
-					Measure_Field ^= EbEr;
-					GUI_CheckBox(200, 345, Measure_Field&EbEr);
-				}else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=108 & Touch_y <=(108+54) && (Measure_Field&CIE_Lab)) //Source_A
+					Measure_Field ^= CIE_Lab;
+					GUI_CheckBox(200, 130, Measure_Field&CIE_Lab);
+					GUI_RadioBox(200, 170, Source_Type&Source_A, Measure_Field&CIE_Lab);
+					GUI_RadioBox(200, 205, Source_Type&Source_D65, Measure_Field&CIE_Lab);
+					GUI_RadioBox(200, 240, Source_Type&Source_C, Measure_Field&CIE_Lab);
+					GUI_RadioBox(200, 275, Source_Type&Source_D50, Measure_Field&CIE_Lab);
+					GUI_RadioBox(200, 310, Source_Type&Source_D55, Measure_Field&CIE_Lab);
+					GUI_RadioBox(200, 345, Source_Type&Source_D75, Measure_Field&CIE_Lab);
+				}else
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=150 & Touch_y <=(150+54) && (Measure_Field&CIE_Lab)) //Source_A
 				{
 					if(!(Source_Type&Source_A))
 					{
 						Source_Type = 0;
-						GUI_RadioBox(200, 108, Source_Type|=Source_A, 0x01);
-						GUI_RadioBox(200, 143, Source_Type&Source_D65, 0x01);
-						GUI_RadioBox(200, 178, Source_Type&Source_C, 0x01);
-						GUI_RadioBox(200, 213, Source_Type&Source_D50, 0x01);
-						GUI_RadioBox(200, 248, Source_Type&Source_D55, 0x01);
-						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
+						GUI_RadioBox(200, 170, Source_Type|=Source_A, 0x01);
+						GUI_RadioBox(200, 205, Source_Type&Source_D65, 0x01);
+						GUI_RadioBox(200, 240, Source_Type&Source_C, 0x01);
+						GUI_RadioBox(200, 275, Source_Type&Source_D50, 0x01);
+						GUI_RadioBox(200, 310, Source_Type&Source_D55, 0x01);
+						GUI_RadioBox(200, 345, Source_Type&Source_D75, 0x01);
 					}
-				}else 
-				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=143  & Touch_y <=(143+54)  && (Measure_Field&CIE_Lab)) //Source_D65
+				}else
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=185  & Touch_y <=(185+54)  && (Measure_Field&CIE_Lab)) //Source_D65
 				{
 					if(!(Source_Type&Source_D65))
 					{
 						Source_Type = 0;
-						GUI_RadioBox(200, 108, Source_Type&Source_A, 0x01);
-						GUI_RadioBox(200, 143, Source_Type|=Source_D65, 0x01);
-						GUI_RadioBox(200, 178, Source_Type&Source_C, 0x01);
-						GUI_RadioBox(200, 213, Source_Type&Source_D50, 0x01);
-						GUI_RadioBox(200, 248, Source_Type&Source_D55, 0x01);
-						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
+						GUI_RadioBox(200, 170, Source_Type&Source_A, 0x01);
+						GUI_RadioBox(200, 205, Source_Type|=Source_D65, 0x01);
+				     	GUI_RadioBox(200, 240, Source_Type&Source_C, 0x01);
+						GUI_RadioBox(200, 275, Source_Type&Source_D50, 0x01);
+					    GUI_RadioBox(200, 310, Source_Type&Source_D55, 0x01);
+						GUI_RadioBox(200, 345, Source_Type&Source_D75, 0x01);
 					}
-				}else 
-				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=178  & Touch_y <=(178+54)  && (Measure_Field&CIE_Lab)) //Source_C
+				}else
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=220  & Touch_y <=(220+54)  && (Measure_Field&CIE_Lab)) //Source_C
 				{
 					if(!(Source_Type&Source_C))
 					{
 						Source_Type = 0;
-						GUI_RadioBox(200, 108, Source_Type&Source_A, 0x01);
-						GUI_RadioBox(200, 143, Source_Type&Source_D65, 0x01);
-						GUI_RadioBox(200, 178, Source_Type|=Source_C, 0x01);
-						GUI_RadioBox(200, 213, Source_Type&Source_D50, 0x01);
-						GUI_RadioBox(200, 248, Source_Type&Source_D55, 0x01);
-						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
+						GUI_RadioBox(200, 170, Source_Type&Source_A, 0x01);
+						GUI_RadioBox(200, 205, Source_Type&Source_D65, 0x01);
+						GUI_RadioBox(200, 240, Source_Type|=Source_C, 0x01);
+				     	GUI_RadioBox(200, 275, Source_Type&Source_D50, 0x01);
+						GUI_RadioBox(200, 310, Source_Type&Source_D55, 0x01);
+						GUI_RadioBox(200, 345, Source_Type&Source_D75, 0x01);
 					}
-				}else 
-				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=213  & Touch_y <=(213+54)  && (Measure_Field&CIE_Lab)) //Source_D50
+				}else
+				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=255  & Touch_y <=(255+54)  && (Measure_Field&CIE_Lab)) //Source_D50
 				{
 					if(!(Source_Type&Source_D50))
 					{
 						Source_Type = 0;
-						GUI_RadioBox(200, 108, Source_Type&Source_A, 0x01);
-						GUI_RadioBox(200, 143, Source_Type&Source_D65, 0x01);
-						GUI_RadioBox(200, 178, Source_Type&Source_C, 0x01);
-						GUI_RadioBox(200, 213, Source_Type|=Source_D50, 0x01);
-						GUI_RadioBox(200, 248, Source_Type&Source_D55, 0x01);
-						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
+						GUI_RadioBox(200, 170, Source_Type&Source_A, 0x01);
+						GUI_RadioBox(200, 205, Source_Type&Source_D65, 0x01);
+						GUI_RadioBox(200, 240, Source_Type&Source_C, 0x01);
+						GUI_RadioBox(200, 275, Source_Type|=Source_D50, 0x01);
+						GUI_RadioBox(200, 310, Source_Type&Source_D55, 0x01);
+						GUI_RadioBox(200, 345, Source_Type&Source_D75, 0x01);
 					}
-				}else 
-				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=248  & Touch_y <=(248+54)  && (Measure_Field&CIE_Lab)) //Source_D55
-				{
-					if(!(Source_Type&Source_D55))
+				}else
+					if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=290  & Touch_y <=(290+54)  && (Measure_Field&CIE_Lab)) //Source_D55
 					{
+						if(!(Source_Type&Source_D55))
+						{
+							Source_Type = 0;
+							GUI_RadioBox(200, 170, Source_Type&Source_A, 0x01);
+							GUI_RadioBox(200, 205, Source_Type&Source_D65, 0x01);
+							GUI_RadioBox(200, 240, Source_Type&Source_C, 0x01);
+							GUI_RadioBox(200, 275, Source_Type&Source_D50, 0x01);
+							GUI_RadioBox(200, 310, Source_Type |= Source_D55, 0x01);
+							GUI_RadioBox(200, 345, Source_Type&Source_D75, 0x01);
+						}
+				}else
+				 if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=325  & Touch_y <=(325+54)  && (Measure_Field&CIE_Lab)) //Source_D75
+				 {
+					 if(!(Source_Type&Source_D75))
+					 {
 						Source_Type = 0;
-						GUI_RadioBox(200, 108, Source_Type&Source_A, 0x01);
-						GUI_RadioBox(200, 143, Source_Type&Source_D65, 0x01);
-						GUI_RadioBox(200, 178, Source_Type&Source_C, 0x01);
-						GUI_RadioBox(200, 213, Source_Type&Source_D50, 0x01);
-						GUI_RadioBox(200, 248, Source_Type |= Source_D55, 0x01);
-						GUI_RadioBox(200, 283, Source_Type&Source_D75, 0x01);
-					}
-				}else 
-				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=283  & Touch_y <=(283+54)  && (Measure_Field&CIE_Lab)) //Source_D75
-				{
-					if(!(Source_Type&Source_D75))
-					{
-						Source_Type = 0;
-						GUI_RadioBox(200, 108, Source_Type&Source_A, 0x01);
-						GUI_RadioBox(200, 143, Source_Type&Source_D65, 0x01);
-						GUI_RadioBox(200, 178, Source_Type&Source_C, 0x01);
-						GUI_RadioBox(200, 213, Source_Type&Source_D50, 0x01);
-						GUI_RadioBox(200, 248, Source_Type&Source_D55, 0x01);
-						GUI_RadioBox(200, 283, Source_Type|=Source_D75, 0x01);
-					}
-				}else	
+						GUI_RadioBox(200, 170, Source_Type&Source_A, 0x01);
+						GUI_RadioBox(200, 205, Source_Type&Source_D65, 0x01);
+						GUI_RadioBox(200, 240, Source_Type&Source_C, 0x01);
+						GUI_RadioBox(200, 275, Source_Type&Source_D50, 0x01);
+						GUI_RadioBox(200, 310, Source_Type&Source_D55, 0x01);
+						GUI_RadioBox(200, 345, Source_Type|=Source_D75, 0x01);
+					 }
+				 }else
 				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
 				{
 					TFT_ON_OFF = 0x00;
@@ -1497,50 +1512,67 @@ case Measure3_Screen:
 				
 			break;
 		case DataSet5_Screen:
-					preGUI_screen_state = GUI_screen_state;
-				if(Touch_x >= 163  & Touch_x <= (163+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Next
-				{	
-					GUI_screen_state = DataSet1_Screen;
-				}else 
-				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=70  & Touch_y <=(70+54) ) //EbEr
-				{
-					Measure_Field ^= lambda_d;
-					GUI_CheckBox(200, 70, Measure_Field&lambda_d);
-				}else 
-//				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=133  & Touch_y <=(133+54) ) //EbEr
-//				{
-//					Measure_Field ^= lambda_c;
-//					GUI_CheckBox(200, 133, Measure_Field&lambda_c);
-//				}else 
-				if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=133  & Touch_y <=(133+54) ) //SP
-				{
-					Measure_Field ^= SP_measure;
-					GUI_CheckBox(200, 133, Measure_Field&SP_measure);
-				}else	
+							preGUI_screen_state = GUI_screen_state;
+						if(Touch_x >= 163  & Touch_x <= (163+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Next
+						{
+							GUI_screen_state = DataSet1_Screen;
+						}else
+						if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=70  & Touch_y <=(70+54) ) //lambda
+						{
+							Measure_Field ^= lambda_d;
+							GUI_CheckBox(200, 70, Measure_Field&lambda_d);
+						}else
+						if(Touch_x >= 200  & Touch_x <= (200+54)  & Touch_y >=133  & Touch_y <=(133+54) ) //SP
+						{
+							Measure_Field ^= SP_measure;
+							GUI_CheckBox(200, 133, Measure_Field&SP_measure);
+						}else
+						if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=195 & Touch_y <=(195+54) ) //EbEr
+						{
+							Measure_Field ^= EbEr;
+							GUI_CheckBox(200, 195, Measure_Field&EbEr);
+						}
+						else//
+						if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=265 & Touch_y <=(265+54) ) //E
+						{
+							Measure_Field ^= delta_E;
+							GUI_CheckBox(200, 265, Measure_Field&delta_E);
+							GUI_Button_Measure_deltaE_Small(130, 265, Measure_Field&delta_E, 0);
+						}else	//
+						if(Touch_x >= 130 & Touch_x <= (200+38) & Touch_y >=265 & Touch_y <=(265+54)) //delta_E_measure_small
+						{
+							if(Measure_Field&delta_E)
+							{
+								Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);
+								colorimetry_LAB_mem[0] = colorimetry_LAB[0];
+								colorimetry_LAB_mem[1] = colorimetry_LAB[1];
+								colorimetry_LAB_mem[2] = colorimetry_LAB[2];
+								GUI_Button_Measure_deltaE_Small(130, 265, Measure_Field&delta_E, 1);
+							}
+						}else
+						if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
+						{
+							TFT_ON_OFF = 0x00;
+							HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
+							HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
+						}else
 
-				if(Touch_x >= 217  & Touch_x <= (217+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Display_Off
-				{
-					TFT_ON_OFF = 0x00;
-					HAL_TIM_PWM_Stop(&htim15, TIM_CHANNEL_2);	//TFT_booster SHDN off
-					HAL_GPIO_WritePin(GPIOF, GPIO_PIN_11, GPIO_PIN_RESET); //LTDC_En off
-				}		else
-				if(Touch_x >= 1  & Touch_x <= (1+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Back
-				{	
-					WriteSDFLASH_t(sdfile_cnt);
-					GUI_screen_state = Prev_Inf_Screen;
-					switch (Prev_Inf_Screen){
-						case Measure_Screen: GUI_screen_state = Measure_Screen; 		break;
-						case Graph_Screen:  GUI_screen_state = Graph_Screen; 		break;
-						case Color_Rendition_Screen: GUI_screen_state = Color_Rendition_Screen; break;
-						case Color_Screen: GUI_screen_state = Color_Screen; break;
-					}
-				} else	
-				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
-				{
+						if(Touch_x >= 1  & Touch_x <= (1+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //Back
+						{
+							WriteSDFLASH_t(sdfile_cnt);
+							GUI_screen_state = Prev_Inf_Screen;
+							switch (Prev_Inf_Screen){
+								case Measure_Screen: GUI_screen_state = Measure_Screen; 		break;
+								case Graph_Screen:  GUI_screen_state = Graph_Screen; 		break;
+								case Color_Rendition_Screen: GUI_screen_state = Color_Rendition_Screen; break;
+								case Color_Screen: GUI_screen_state = Color_Screen; break;
+							}
+						} else
+						if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
+						{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
-				}		
-			break;
-				
+						}
+					break;
 		case GraphSet1_Screen:
 					preGUI_screen_state = GUI_screen_state;
 				if(Touch_x >= 163  & Touch_x <= (163+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //next

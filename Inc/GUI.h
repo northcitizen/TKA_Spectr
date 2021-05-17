@@ -38,6 +38,7 @@
 #define DataSet3_Screen 				0x09
 #define DataSet4_Screen 				0x0A
 #define DataSet5_Screen 				0x0B
+#define DataSet6_Screen 				0x1D
 #define GraphSet1_Screen 				0x0C
 #define GraphSet2_Screen 				0x0D
 #define ColorSet1_Screen 				0x0E
@@ -102,6 +103,7 @@ void GUI_DataSet2_Screen();
 void GUI_DataSet3_Screen();
 void GUI_DataSet4_Screen();
 void GUI_DataSet5_Screen();
+void GUI_DataSet6_Screen();
 void GUI_GraphSet1_Screen();
 void GUI_GraphSet2_Screen();
 void GUI_ColorSet1_Screen();

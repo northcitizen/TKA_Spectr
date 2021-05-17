@@ -76,7 +76,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		{
 			old_nan_El = 0;
 			if(Mode_Lx_Fl)
-				Value = floor(Value*10)/10.0*10.76;//convert to foot-candle
+				Value = floor(Value*10)/10.0/10.76;//convert to foot-candle
 			else
 			Value = floor(Value*10)/10.0;
 		}
@@ -306,7 +306,7 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	{
 		old_nan_El = 0;
 		if(Mode_Lx_Fl)
-			Value = (floor(Value*10)/10.0)*3.426;//convert to foot-lambert
+			Value = (floor(Value*10)/10.0)/3.426;//convert to foot-lambert
 		else
 			Value = floor(Value*10)/10.0;
 	}
