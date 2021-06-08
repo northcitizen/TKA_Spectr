@@ -130,12 +130,8 @@ float Calculate_ELb(float R_data[], float Hazard_Blue[])
 	return sum;
 }
 
-
-
-
 void Calculate_XYZ1964(float R_data[], float colorimetry_x[], float colorimetry_y[], float colorimetry_z[])
 {
-
 	double k;
 	float X_sum = 0, Y_sum = 0, Z_sum = 0;
 	
@@ -155,6 +151,7 @@ void Calculate_XYZ1964(float R_data[], float colorimetry_x[], float colorimetry_
 	colorimetry_XYZ1964[1] = 100;
 	colorimetry_XYZ1964[2] = k*Z_sum;	
 }
+
 void Calculate_XYZ1931(float R_data[], float colorimetry_x[], float colorimetry_y[], float colorimetry_z[])
 {
 

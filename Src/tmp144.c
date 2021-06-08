@@ -4,7 +4,7 @@
  *  Created on: 25 ���. 2021 �.
  *      Author: Lab-prog
  */
-
+//#define SERVICE
 #include "tmp144.h"
 extern UART_HandleTypeDef huart2;
 volatile uint16_t temperature_measure = 0;
@@ -22,10 +22,9 @@ void Temperature_Measure_Func(void)
 
 	__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
 #ifdef SERVICE
- 	HAL_Delay(1);
+ 	//HAL_Delay(1);
 #endif
 	HAL_UART_Transmit(&huart2, (uint8_t *) &command, 2, 1);
-
 
 	usart2_wait = false;
 	while(!usart2_ready)
@@ -35,12 +34,6 @@ void Temperature_Measure_Func(void)
 	}
 
 	usart2_ready = false;
-//	usart2_wait = false;
-
-	//temperature_degree = temperature_measure * 0.0625;
-
-
-
 }
 
 void USART2_IRQHandler(void)
@@ -53,9 +46,9 @@ void USART2_IRQHandler(void)
 			{
 				usart2_ready = true;
 				u2 = 0;
-				if((u2_receive[0] == 0x55) & (u2_receive[1] == 0xF1))
+				if((u2_receive[0] == 0x55) && (u2_receive[1] == 0xF1))
 				{
-					temperature_measure = (*(int16_t*)(&u2_receive[2])) >> 4;
+					temperature_measure = *((int16_t*)(&u2_receive[2])) >> 4;
 				    temperature_degree = temperature_measure * 0.0625;
 				}
 
@@ -68,4 +61,5 @@ void USART2_IRQHandler(void)
 	  /* USER CODE END USART2_IRQn 0 */
 	  HAL_UART_IRQHandler(&huart2);
 }
+
 

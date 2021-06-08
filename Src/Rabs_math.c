@@ -72,7 +72,11 @@ void Rabs_calc_main(uint16_t R_data[], uint16_t Rdark[], float Factor1, float Fa
 		{
 //			temp = 0;
 			Factor3 = 0;
-			Rabs[1023-i] = (Rabs_prev[1023-i][0] + Rabs_prev[1023-i][1] + Rabs_prev[1023-i][2] + Rabs_prev[1023-i][3]) / 5;
+			//Rabs[1023-i] = (Rabs_prev[1023-i][0] + Rabs_prev[1023-i][1] + Rabs_prev[1023-i][2] + Rabs_prev[1023-i][3]) / 5;
+			Rabs[1023-i] = (Rabs_prev[1023-i][0] + Rabs_prev[1023-i][1] + Rabs_prev[1023-i][2] +
+								Rabs_prev[1023-i][3]+ Rabs_prev[1023-i][4]+ Rabs_prev[1023-i][5]+ Rabs_prev[1023-i][6]+
+								Rabs_prev[1023-i][7]+ Rabs_prev[1023-i][8]+ Rabs_prev[1023-i][9]+ Rabs_prev[1023-i][10]+
+								Rabs_prev[1023-i][11]+ Rabs_prev[1023-i][12]+ Rabs_prev[1023-i][13])/15;
 		} else
 		{
 //			Rabs[1023-i] = (R_data[i] - Rdark - Factor1)*Factor2*(Sn[r]);
@@ -80,7 +84,10 @@ void Rabs_calc_main(uint16_t R_data[], uint16_t Rdark[], float Factor1, float Fa
 //			temp = Rabs[1023-i];
 //			Rabs[1023-i] = (Rabs[1023-i] + Rabs_prev[1023-i][0] + Rabs_prev[1023-i][1] + Rabs_prev[1023-i][2] + Rabs_prev[1023-i][3])/5;
 			Factor3 = Factor3*Factor2*(Sn[r]);
-			Rabs[1023-i] = (Factor3 + Rabs_prev[1023-i][0] + Rabs_prev[1023-i][1] + Rabs_prev[1023-i][2] + Rabs_prev[1023-i][3])/5;
+			Rabs[1023-i] = (Factor3 + Rabs_prev[1023-i][0] + Rabs_prev[1023-i][1] + Rabs_prev[1023-i][2] +
+					Rabs_prev[1023-i][3]+ Rabs_prev[1023-i][4]+ Rabs_prev[1023-i][5]+ Rabs_prev[1023-i][6]+
+					Rabs_prev[1023-i][7]+ Rabs_prev[1023-i][8]+ Rabs_prev[1023-i][9]+ Rabs_prev[1023-i][10]+
+					Rabs_prev[1023-i][11]+ Rabs_prev[1023-i][12]+ Rabs_prev[1023-i][13])/15;
 		}
 
 		Rabs_prev[1023-i][n] = Factor3;

@@ -292,7 +292,7 @@ void Calculate_Data()
 			if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}	
 			if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}	
 			if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
-														 ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
+			ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
 
 	}
 }
@@ -453,7 +453,6 @@ void packet_generator_Calculated_data_send(void) //send Calculated data
 					packet_number = packet_number + 1;
 					
 //					usb_status = hhid->state;
-
 //					USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
 //					HAL_Delay(3);
 
@@ -552,13 +551,12 @@ void usb_receive_processing(void)
 						send_usb_block = 1;
 					if(dataToReceive[3] == CMD_RABS_DATA_TRANSMIT)
 					{
+						//Temperature_Measure_Func();
 						packet_generator_Rabs_data_send();
 					}else{
-						#ifndef SERVICE
 						Temperature_Measure_Func();
-						#endif
+						__HAL_UART_DISABLE_IT(&huart2, UART_IT_RXNE);
 						packet_generator_data_send();
-//						__HAL_UART_DISABLE_IT(&huart2, UART_IT_RXNE);
 					}
 						memset(dataToReceive, 0, sizeof(dataToReceive));
 						send_usb_block = 0;
@@ -696,7 +694,7 @@ void usb_receive_processing(void)
 						dataToSend[3] = flash_data_read_SND[3];
 						dataToSend[4] = flash_data_read_SND[2];
 						dataToSend[5] = flash_data_read_SND[1];
-						dataToSend[6]	= flash_data_read_SND[0];
+						dataToSend[6] = flash_data_read_SND[0];
 					
 						USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
 						memset(dataToReceive, 0, sizeof(dataToReceive));
@@ -925,38 +923,38 @@ void string_parse_no_check(void)
 //	}
 }
 
-
 void UART2_RxCpltCallback(void)
 {
-
 	uint8_t b;
-  b = str1[0];
- if (usartprop.usart_cnt>12)
-  {
-    usartprop.usart_cnt = 0;
-    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
-    return;
-  }
-  usartprop.usart_buf[usartprop.usart_cnt] = b;
-  if(b==0x0A)
-  {
-    usartprop.usart_buf[usartprop.usart_cnt+1]=0;
-    string_parse((uint8_t*)usartprop.usart_buf);
-    usartprop.usart_cnt=0;
-    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
-		
-    return;
-  }
-  usartprop.usart_cnt++;
-  HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+	  b = str1[0];
+	 if (usartprop.usart_cnt>12)
+	  {
+	    usartprop.usart_cnt = 0;
+	    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+	    return;
+	  }
+	  usartprop.usart_buf[usartprop.usart_cnt] = b;
+	  if(b==0x0A)
+	  {
+	    usartprop.usart_buf[usartprop.usart_cnt+1]=0;
+	    string_parse((uint8_t*)usartprop.usart_buf);
+	    usartprop.usart_cnt=0;
+	    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+
+	    return;
+	  }
+	  usartprop.usart_cnt++;
+	  HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+
+
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-//  if(huart==&huart1)
-//  {
-//    UART2_RxCpltCallback();
-//  }
+	//  if(huart==&huart2)
+		//  {
+		//
+		//  }
 }
 
 void Test_GUI(void)
@@ -1045,7 +1043,7 @@ int main(void)
 	HAL_Delay(1);
 #endif
   	MX_USART2_UART_Init();
-  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);//1 3  01
+  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
     __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
 
@@ -1058,7 +1056,7 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //ST Signal 01   now 02 not bad  12 11 -> 12
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //ST Signal
 //	HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
 	HAL_Delay(2);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
@@ -1078,7 +1076,7 @@ int main(void)
 	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim6);
-	HAL_NVIC_SetPriority(TIM6_IRQn, 2, 4);//
+	HAL_NVIC_SetPriority(TIM6_IRQn, 2, 4);
 	HAL_Delay(1);
 	HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
 	HAL_Delay(1);
@@ -1088,7 +1086,7 @@ int main(void)
 	MX_FATFS_Init();
 	
 	GPIO_QSPI_Init();
-	Single_Mode();	
+	Single_Mode();
 	HAL_Delay(20);
 
 	BlueTooth_GPIO_Init();
@@ -1326,6 +1324,7 @@ int main(void)
 	MX_TIM7_Init();
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM7_IRQn);
+
 	// HAL_NVIC_EnableIRQ(LPUART1_IRQn);
 #ifdef BT
 	HAL_NVIC_EnableIRQ(USART1_IRQn);
@@ -1337,7 +1336,7 @@ int main(void)
 	HAL_TIM_Base_Start(&htim7);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim7);
-		
+
 	uint8_t exp_stable = 0, start = 1;
 	uint32_t cnt_delay = 0, scr_refresh = 0, scr_refresh_measure = 0, bat_refresh = 0;
 	uint8_t usb_cnt = 0;
@@ -1347,99 +1346,119 @@ int main(void)
 
  while(1)
  {
-#ifdef SERVICE
-	 Temperature_Measure_Func();
-#endif
 	 usb_receive_processing();
 
 #ifndef SERVICE
 
-	 if(send_bluetooth) 
-		{	
+	 if(send_bluetooth)
+		{
 		 	HAL_UART_Transmit_DMA(&huart1, (uint8_t*)&data_bluetooth_send, 4122);
 			send_bluetooth = 0;
 		};
-				
+
 		while(start)
 		{
-	    Temperature_Measure_Func();
-		Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
 
-		Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-		if(!block_graph) {memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));}
-		
+			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
+			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
+
+		if(!block_graph)
+		{
+			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
+		}
+
 			cnt_delay++;
-			Calculate_Data();
-			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8)){
+			Temperature_Measure_Func();
+			Calculate_Data();								//50													//400
+			if((cnt_delay > 10 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
+			{
 								auto_exposure();
 								max_el = 0;
 								cnt_delay = 0;
 								exp_stable = exp_stable+1;
 								exp_start = 1;
-								if(exp_stable > 10) {
+								if(exp_stable > 10)
+								{
 									start = 0;
 								}
-				}
+			}
 		}
-		
-		if(!exp_set){
-		Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-		Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);}
-		if(!block_graph) {memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));}
-		
-			exp_start = 0;
+
+
+		if(!exp_set)
+		{
+			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
+			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
+		}
+
+		if(!block_graph)
+		{
+			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
+		}
+
+		exp_start = 0;
 		if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen) && !pause)
-		{	
+		{
 			cnt_delay++;
 			if(!pause & !exp_set)
 			{
 				scr_refresh_measure++;
 				if(scr_refresh_measure == 28 )
 				{
+					Temperature_Measure_Func();
 					Calculate_Data();
 					scr_refresh_measure = 0;
 				}
+			}				//70								//70											//70
+			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 150 && exp_num >= 4))
+			{
+				auto_exposure();
+				max_el = 0;
+				cnt_delay = 0;
 			}
-			if((cnt_delay > 40 && exp_num < 6) || (cnt_delay > 70 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 70 && exp_num >= 8)){
-								auto_exposure();
-								max_el = 0;
-								cnt_delay = 0;
-				}
-		} 	
-		else	if((GUI_screen_state == Color_Screen) && !pause)
-		{	
+		}
+		else
+		if((GUI_screen_state == Color_Screen) && !pause)
+		{
 			cnt_delay++;
 			if(!pause & !exp_set)
 			{
 				scr_refresh_measure++;
-				if(scr_refresh_measure == 28 )
+				if(scr_refresh_measure == 28 )//14
 				{
+					Temperature_Measure_Func();
 					Calculate_Data();
 					scr_refresh_measure = 0;
 				}
+			}				//40							//70												//500
+			if((cnt_delay > 60 && exp_num < 3) || (cnt_delay > 100 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 750 && exp_num >= 4))//6-3 8 -4
+			{
+				auto_exposure();
+				max_el = 0;
+				cnt_delay = 0;
 			}
-			if((cnt_delay > 40 && exp_num < 6) || (cnt_delay > 70 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 500 && exp_num >= 8)){
-								auto_exposure();
-								max_el = 0;
-								cnt_delay = 0;
-				}
-		} 
+		}
 		else {
 				cnt_delay++;
-				if((cnt_delay > 250 && exp_num < 6) || (cnt_delay > 950 && (exp_num >=+ 6 && exp_num < 8))||(cnt_delay > 1450 && exp_num >= 8)){
-								auto_exposure();
-								max_el = 0;
-								cnt_delay = 0;
+							//250									//950												//1450
+				if((cnt_delay > 350 && exp_num < 3) || (cnt_delay > 1200 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1800 && exp_num >= 4))
+				{
+					auto_exposure();
+					max_el = 0;
+					cnt_delay = 0;
 				}
 		}
-     
+
         if(GUI_screen_state == Graph_Screen)
-        {    
+        {
             scr_refresh++;
             if(scr_refresh == 40 ){
 							block_graph = 1;
-							
-								if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral){ Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);}
+
+								if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
+								{
+									Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
+								}
 								Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
 								max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
 								Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
@@ -1452,7 +1471,7 @@ int main(void)
 
             }
         } else{__asm("nop");}
-  		
+
         GUI_Display_Refresh();
 
         if (pause && !Mode_EL)
@@ -1499,7 +1518,7 @@ void auto_exposure(void)
 //		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;
 	}
 	
-	if(max_el < 20000 && exp_num != 9)
+	if(max_el < 15000 && exp_num != 9)//20000
 	{
 		highSignal = 0;
 		lowSignal = 0;
@@ -1516,12 +1535,12 @@ void auto_exposure(void)
 			Factor2 = Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E);
 		}
 
-		send_usb_block =0;
-	} else if(max_el > 45000 && exp_num != 0)
+		send_usb_block = 0;
+	} else if(max_el > /*40000*/35000 && exp_num != 0)//45000
 	{
 		highSignal = 0;
 		lowSignal = 0;
-		send_usb_block =1;
+		send_usb_block = 1;
 		exp_num--;
 		htim2.Init.Period = exposure_timer_period[exp_num];
 		MX_TIM2_Init();
@@ -1540,16 +1559,16 @@ void auto_exposure(void)
 		
 	old_exp_num = exp_num;
 	
-	if(exp_num ==0 && max_el >=50000)
+	if(exp_num == 0 && max_el >=/*40000*/45000)//50000
 	{
 		highSignal = 1;
-	} else if((exp_num ==0 && max_el < 50000))
+	} else if((exp_num ==0 && max_el < /*40000*/45000))//50000
 	{
 			highSignal = 0;
-	} else if((exp_num ==9 && max_el < DarkSignal[i_max]+2000)) //20000
+	} else if((exp_num ==9 && max_el < DarkSignal[i_max]+/*2000*/5000)) //20000
 	{
 			lowSignal = 1;
-	}else if((exp_num ==9 && max_el > DarkSignal[i_max]+2000))
+	}else if((exp_num ==9 && max_el > DarkSignal[i_max]+/*2000*/5000))
 	{
 			lowSignal = 0;
 	}
@@ -1764,7 +1783,7 @@ void USART1_IRQHandler(void)
 	}
 	else if (BT_BAUD_RATE >= 115200)
 	{
-		HAL_UART_Receive(&huart1,&str,12,1);
+		HAL_UART_Receive(&huart1,&str, 12, 1);
 	}
 
 
@@ -1836,22 +1855,22 @@ void SystemClock_Config(void)
 
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_LPUART1|RCC_PERIPHCLK_USB|RCC_PERIPHCLK_LTDC|RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_I2C1|RCC_PERIPHCLK_SDMMC1;
   PeriphClkInit.Lpuart1ClockSelection = RCC_LPUART1CLKSOURCE_HSI;
-	PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
+  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
   PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLLSAI1;
-	PeriphClkInit.LtdcClockSelection = RCC_LTDCCLKSOURCE_PLLSAI2_DIV4;
-	PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_SYSCLK;
-	PeriphClkInit.Sdmmc1ClockSelection = RCC_SDMMC1CLKSOURCE_PLLP;
+  PeriphClkInit.LtdcClockSelection = RCC_LTDCCLKSOURCE_PLLSAI2_DIV4;
+  PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_SYSCLK;
+  PeriphClkInit.Sdmmc1ClockSelection = RCC_SDMMC1CLKSOURCE_PLLP;
 
 	
   PeriphClkInit.PLLSAI2.PLLSAI2Source = RCC_PLLSOURCE_HSE;
-	PeriphClkInit.PLLSAI2.PLLSAI2M = 2;
+  PeriphClkInit.PLLSAI2.PLLSAI2M = 2;
   PeriphClkInit.PLLSAI2.PLLSAI2N = 9;
   PeriphClkInit.PLLSAI2.PLLSAI2P = RCC_PLLP_DIV2;
   PeriphClkInit.PLLSAI2.PLLSAI2R = RCC_PLLR_DIV2;
   PeriphClkInit.PLLSAI2.PLLSAI2Q = RCC_PLLQ_DIV2;
   PeriphClkInit.PLLSAI2.PLLSAI2ClockOut = RCC_PLLSAI2_LTDCCLK;
 	 
-	PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_HSE;
+  PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_HSE;
   PeriphClkInit.PLLSAI1.PLLSAI1M = 2;
   PeriphClkInit.PLLSAI1.PLLSAI1N = 12;
   PeriphClkInit.PLLSAI1.PLLSAI1P = RCC_PLLP_DIV2;
@@ -2400,7 +2419,7 @@ static void MX_USART1_UART_Init(void)
     Error_Handler();
   }
 
-  HAL_NVIC_SetPriority(USART1_IRQn, 1, 3);			// ������ ���������� 1, 3
+  HAL_NVIC_SetPriority(USART1_IRQn, 1, 3);
 }
 
 static void MX_USART2_UART_Init(void)
@@ -2445,16 +2464,5 @@ static void MX_USART2_UART_Init(void)
 
 }
 
-void _Error_Handler(char *file, int line)
-{
-  while(1)
-  {
-  }
-
-}
-
-
-void assert_failed(uint8_t* file, uint32_t line)
-{ 
-
-}
+void _Error_Handler(char *file, int line){while(1){}}
+void assert_failed(uint8_t* file, uint32_t line){}

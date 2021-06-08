@@ -191,7 +191,8 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		}
 		
 		old_deg_e = deg;
-	}else if (Language_status == Ru && energy_light)
+	}else
+	if (Language_status == Ru && energy_light)
 	{	
 		if (deg != old_deg_e_wt)
 		{
@@ -208,7 +209,8 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		old_deg_e_wt = deg;
 
 	}
-	else if (Language_status == En && energy_light)
+	else
+	if (Language_status == En && energy_light)
 	{
 		if (deg != old_deg_e_wt)
 		{
@@ -409,7 +411,8 @@ for (uint8_t i = 1; i <= 4; i++)
 		
 	}
 
-	else if (Language_status == Ru && energy_light)
+	else
+	if (Language_status == Ru && energy_light)
 	{	
 		if (deg != old_deg_L_wt)
 		{
@@ -1161,8 +1164,8 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 				TFT_SetTextColor(TFT_White);
 				TFT_SetBackColor(TFT_Black_Bkgr);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+40, Y, X+250, Y+26, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+40, Y+35, X+250, Y+59, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black_Bkgr);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				TFT_DisplayString(X+117, Y+35, (uint8_t *)buffer, LEFT_MODE);
@@ -1170,8 +1173,9 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 			}
 		}
 	else{
-		if(old_nan_EBER){TFT_FillRectangle(X+40, Y, X+250, Y+26, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+40, Y+35, X+250, Y+59, TFT_Black_Bkgr);}
+		if(old_nan_EBER){
+			 TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black_Bkgr);}
 	old_nan_EBER = 0;
 	ValueEB = floor(ValueEB*100)/100.0;
 	ValueER = floor(ValueER*100)/100.0;
@@ -1192,12 +1196,12 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 	
 	if(number < old_num_EB )
 	{
-		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40-50, Y, X+197-50, Y+25, TFT_Black_Bkgr);
 	} 
 	old_num_EB = number;
 	number = 0;
 
-	TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
+	TFT_DisplayString(X+delta_pos-50, Y, (uint8_t *)buffer, LEFT_MODE);
 	
 	sprintf (buffer, "%.2f", ValueER);
 		for (uint8_t i = 1; i <= 4; i++)
@@ -1212,12 +1216,12 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 	
 	if(number < old_num_ER )
 	{
-		TFT_FillRectangle(X+40, Y+33, X+197, Y+59, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40-50, Y+33, X+197-50, Y+59, TFT_Black_Bkgr);
 	} 
 	old_num_ER = number;
 	number = 0;
 
-	TFT_DisplayString(X+delta_pos, Y+35, (uint8_t *)buffer, LEFT_MODE);
+	TFT_DisplayString(X+delta_pos-50, Y+35, (uint8_t *)buffer, LEFT_MODE);
 }
 	TFT_SetTextColor(TFT_White);
 	TFT_SetFont(&Font16EN_arch_big);
@@ -1227,7 +1231,21 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 	TFT_SetFont(&Font26EN_arch_big);
 	TFT_DrawChar(X, Y+2, 'E'-33);
 	TFT_DrawChar(X, Y+37, 'E'-33);
+
+	if (Language_status == Ru)
+		{
+			GUI_TextRu_W_m2(235, Y);
+			GUI_TextRu_W_m2(235, Y+34);
+		}
+		else
+		if (Language_status == En)
+		{
+			GUI_TextEn_W_m2(235, Y);
+			GUI_TextEn_W_m2(235, Y+34);
+		}
 }
+
+
 uint8_t old_num_LB = 10, old_num_LR = 10, old_nan_LBLR = 0;
 void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR, uint8_t nope, uint8_t grey)
 {
@@ -1241,8 +1259,8 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 				TFT_SetTextColor(TFT_White);
 				TFT_SetBackColor(TFT_Black_Bkgr);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+40, Y, X+250, Y+26, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+40, Y+35, X+250, Y+59, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black_Bkgr);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				TFT_DisplayString(X+117, Y+35, (uint8_t *)buffer, LEFT_MODE);
@@ -1250,8 +1268,9 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 			}
 		}
 	else{
-				if(old_nan_LBLR){TFT_FillRectangle(X+40, Y, X+250, Y+26, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+40, Y+35, X+250, Y+59, TFT_Black_Bkgr);}
+				if(old_nan_LBLR){
+					TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black_Bkgr);}
 		
 	old_nan_LBLR = 0;
 	ValueLB = floor(ValueLB*100)/100.0;
@@ -1273,12 +1292,12 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 	
 	if(number < old_num_LB )
 	{
-		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40-50, Y, X+197-50, Y+25, TFT_Black_Bkgr);
 	} 
 	old_num_LB = number;
 	number = 0;
 
-	TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
+	TFT_DisplayString(X+delta_pos-50, Y, (uint8_t *)buffer, LEFT_MODE);
 	
 	sprintf (buffer, "%.2f", ValueLR);
 	for (uint8_t i = 1; i <= 4; i++)
@@ -1293,12 +1312,12 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 	
 	if(number < old_num_LR )
 	{
-		TFT_FillRectangle(X+40, Y+33, X+197, Y+59, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40-50, Y+33, X+197-50, Y+59, TFT_Black_Bkgr);
 	} 
 	old_num_LR = number;
 	number = 0;
 
-	TFT_DisplayString(X+delta_pos, Y+35, (uint8_t *)buffer, LEFT_MODE);
+	TFT_DisplayString(X+delta_pos-50, Y+35, (uint8_t *)buffer, LEFT_MODE);
 }
 	TFT_SetFont(&Font26EN_arch_digit);
 
@@ -1310,6 +1329,18 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 	TFT_SetFont(&Font26EN_arch_big);
 	TFT_DrawChar(X, Y+2, 'L'-33);
 	TFT_DrawChar(X, Y+37, 'L'-33);
+
+	if (Language_status == Ru)
+	{
+		GUI_TextRu_W_m2_sr(X+210, Y);
+		GUI_TextRu_W_m2_sr(X+210, Y+34);
+	}
+	else
+	if (Language_status == En)
+	{
+		GUI_TextEn_W_m2_sr(X+210, Y);
+		GUI_TextEn_W_m2_sr(X+210, Y+34);
+	}
 }
 
 uint8_t old_num_SP = 10, old_nan_SP = 0;

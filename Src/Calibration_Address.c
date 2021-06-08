@@ -142,18 +142,19 @@ void Calibration_Exposure_Change(uint8_t Exp)
 {
 	Scattering_Light = ((float)Calibration_Load_1byte((SCATTERING_LIGHT_7_812+8*(Exp/8)), Exp)) /10.0;
 
-
- 	//DarkSignal = Calibration_Load_2byte(DARK_SIGNAL_7_812+8*(Exp/4), Exp);//
+	//Scattering_Light = (float)Calibration_Load_2byte(SCATTERING_LIGHT_7_812+8*(Exp/4), Exp)/10.0;
+ 	//DarkSignal = Calibration_Load_2byte(DARK_SIGNAL_7_812+8*(Exp/4), Exp);
 
 	 Calibration_Load_16bit_Pack(address_array[Exp], 1024, DarkSignal);
 	 Calibration_Load_Temperature_Coef(address_temp_array[Exp]);
 
-	Exposure_Factor = ((float)Calibration_Load_2byte(EXPOSURE_FACTOR_7_812+8*(Exp/4), Exp))/100.0;
+	 Exposure_Factor = ((float)Calibration_Load_2byte(EXPOSURE_FACTOR_7_812+8*(Exp/4), Exp))/100.0;
 }
 
 void Calibration_WaveLenght_Graph()
 {
-	for (uint8_t i = 0; i <= 7; i++){
+	for (uint8_t i = 0; i <= 7; i++)
+	{
 		WaveLenght_Graph[i] = Calibration_Load_2byte(WAVELENGHT+i*292, 0); //step*2
 		Unit_nm[i] = ((float)WaveLenght_Graph[i])/100.0+300.0;
 	}
