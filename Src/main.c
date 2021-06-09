@@ -1369,8 +1369,8 @@ int main(void)
 
 			cnt_delay++;
 			Temperature_Measure_Func();
-			Calculate_Data();								//50													//400
-			if((cnt_delay > 10 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
+			Calculate_Data();
+			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
 			{
 								auto_exposure();
 								max_el = 0;
@@ -1409,8 +1409,8 @@ int main(void)
 					Calculate_Data();
 					scr_refresh_measure = 0;
 				}
-			}				//70								//70											//70
-			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 150 && exp_num >= 4))
+			}
+			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 70 && exp_num >= 4))
 			{
 				auto_exposure();
 				max_el = 0;
@@ -1430,8 +1430,8 @@ int main(void)
 					Calculate_Data();
 					scr_refresh_measure = 0;
 				}
-			}				//40							//70												//500
-			if((cnt_delay > 60 && exp_num < 3) || (cnt_delay > 100 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 750 && exp_num >= 4))//6-3 8 -4
+			}
+			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 500 && exp_num >= 4))//6-3 8 -4
 			{
 				auto_exposure();
 				max_el = 0;
@@ -1440,8 +1440,8 @@ int main(void)
 		}
 		else {
 				cnt_delay++;
-							//250									//950												//1450
-				if((cnt_delay > 350 && exp_num < 3) || (cnt_delay > 1200 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1800 && exp_num >= 4))
+
+				if((cnt_delay > 250 && exp_num < 3) || (cnt_delay > 950 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1450 && exp_num >= 4))
 				{
 					auto_exposure();
 					max_el = 0;
@@ -1464,7 +1464,6 @@ int main(void)
 								Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
 
 								Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-//								Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_Black, Rotation_Screen_Spectral_Old3);
 								scr_refresh = 0;
 								block_graph = 0;
 								GUI_SignalLevel();
@@ -1518,7 +1517,7 @@ void auto_exposure(void)
 //		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;
 	}
 	
-	if(max_el < 15000 && exp_num != 9)//20000
+	if(max_el < 20000 && exp_num != 9)//20000
 	{
 		highSignal = 0;
 		lowSignal = 0;
@@ -1536,7 +1535,7 @@ void auto_exposure(void)
 		}
 
 		send_usb_block = 0;
-	} else if(max_el > /*40000*/35000 && exp_num != 0)//45000
+	} else if(max_el > 45000 && exp_num != 0)
 	{
 		highSignal = 0;
 		lowSignal = 0;
@@ -1559,16 +1558,16 @@ void auto_exposure(void)
 		
 	old_exp_num = exp_num;
 	
-	if(exp_num == 0 && max_el >=/*40000*/45000)//50000
+	if(exp_num == 0 && max_el >= 50000)
 	{
 		highSignal = 1;
-	} else if((exp_num ==0 && max_el < /*40000*/45000))//50000
+	} else if((exp_num ==0 && max_el < 50000))
 	{
 			highSignal = 0;
-	} else if((exp_num ==9 && max_el < DarkSignal[i_max]+/*2000*/5000)) //20000
+	} else if((exp_num ==9 && max_el < DarkSignal[i_max]+2000))
 	{
 			lowSignal = 1;
-	}else if((exp_num ==9 && max_el > DarkSignal[i_max]+/*2000*/5000))
+	}else if((exp_num ==9 && max_el > DarkSignal[i_max]+ 2000))
 	{
 			lowSignal = 0;
 	}
@@ -1590,8 +1589,8 @@ void TIM2_IRQHandler(void)
 	
 	HAL_NVIC_ClearPendingIRQ(TIM2_IRQn);
 	HAL_TIM_IRQHandler(&htim2);
-}																					//	7.812ms	15.625ms	31.25ms	62.5ms	125ms	250ms	500ms	1s			2s			4s
-//const uint16_t exposure_timer_period[10] = {93,			186,			372,		744,		1488,	2976,	5952,	11905,	23810,	47619}; //93 = 7.812ms
+}											//7.812ms 15.625ms 31.25ms	62.5ms 125ms 250ms 500ms 1s 2s 4s
+//const uint16_t exposure_timer_period[10] = {93, 186, 372,	744, 1488, 2976, 5952, 11905, 23810, 47619}; //93 = 7.812ms
 void TIM6_DAC_IRQHandler(void)
 {
 	pause_button = 0;
@@ -1635,7 +1634,6 @@ void TIM7_IRQHandler(void)
 					 }
 					else if (cnt_delay_bar == 5*((exposure_timer_period[exp_num]/12)/500))
 					{
-
 						GUI_Bar_Measure(85, 13, 1);
 					}
 				} else if(exp_num > 2)

@@ -140,9 +140,9 @@ void Calibration_Load_Temperature_Coef(uint32_t Address)
 
 void Calibration_Exposure_Change(uint8_t Exp)
 {
-	Scattering_Light = ((float)Calibration_Load_1byte((SCATTERING_LIGHT_7_812+8*(Exp/8)), Exp)) /10.0;
+	//Scattering_Light = ((float)Calibration_Load_1byte((SCATTERING_LIGHT_7_812+8*(Exp/8)), Exp)) /10.0;
 
-	//Scattering_Light = (float)Calibration_Load_2byte(SCATTERING_LIGHT_7_812+8*(Exp/4), Exp)/10.0;
+	Scattering_Light = (float)Calibration_Load_2byte(SCATTERING_LIGHT_7_812+8*(Exp/4), Exp)/10.0;
  	//DarkSignal = Calibration_Load_2byte(DARK_SIGNAL_7_812+8*(Exp/4), Exp);
 
 	 Calibration_Load_16bit_Pack(address_array[Exp], 1024, DarkSignal);
