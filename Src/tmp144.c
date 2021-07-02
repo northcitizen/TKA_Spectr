@@ -14,6 +14,7 @@ float temperature_degree = 0;	//2021.03.26
 volatile uint8_t u2_receive[4] = {};
 uint8_t u2 = 0;
 
+
 void Temperature_Measure_Func(void)
 {
 	uint8_t command[2] = {0x55, 0xF1};
@@ -21,9 +22,7 @@ void Temperature_Measure_Func(void)
 
 
 	__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
-#ifdef SERVICE
- 	//HAL_Delay(1);
-#endif
+
 	HAL_UART_Transmit(&huart2, (uint8_t *) &command, 2, 1);
 
 	usart2_wait = false;
@@ -31,7 +30,10 @@ void Temperature_Measure_Func(void)
 	{
 		if(usart2_wait) break;
 		__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+
 	}
+
+
 
 	usart2_ready = false;
 }
@@ -49,7 +51,7 @@ void USART2_IRQHandler(void)
 				if((u2_receive[0] == 0x55) && (u2_receive[1] == 0xF1))
 				{
 					temperature_measure = *((int16_t*)(&u2_receive[2])) >> 4;
-				    temperature_degree = temperature_measure * 0.0625;
+					temperature_degree = temperature_measure * 0.0625;
 				}
 
 			}else
@@ -59,6 +61,7 @@ void USART2_IRQHandler(void)
 
 
 	  /* USER CODE END USART2_IRQn 0 */
+	  HAL_NVIC_ClearPendingIRQ(USART2_IRQn);
 	  HAL_UART_IRQHandler(&huart2);
 }
 

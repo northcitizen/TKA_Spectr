@@ -1,5 +1,8 @@
 #include "Calibration_Address.h"
 
+extern uint16_t Range_Value_MAX;
+extern uint16_t Range_Value_MID;
+extern uint16_t Range_Value_MIN;
 extern uint16_t WaveLenght_Graph[7], DarkSignal[1024];
 extern float Unit_nm[7], Spectral_Corection_Buff[1024], Scattering_Light, Exposure_Factor;
 extern float Spectral_day[1024], Spectral_night[1024], Spectral_B[1024], Spectral_R[1024];
@@ -129,8 +132,6 @@ int32_t Flash_Read_int32(uint32_t Address)
 
 void Calibration_Load_Temperature_Coef(uint32_t Address)
 {
-//	uint32_t buf = 0;
-
 	temperature_a = ((float)Flash_Read_int32(Address)) / 100000000.0;
 	temperature_b = ((float)Flash_Read_int32(Address + 4)) / 100000000.0;
 	temperature_c = ((float)Flash_Read_int32(Address + 8)) / 100000000.0;
@@ -142,7 +143,7 @@ void Calibration_Exposure_Change(uint8_t Exp)
 {
 	//Scattering_Light = ((float)Calibration_Load_1byte((SCATTERING_LIGHT_7_812+8*(Exp/8)), Exp)) /10.0;
 
-	Scattering_Light = (float)Calibration_Load_2byte(SCATTERING_LIGHT_7_812+8*(Exp/4), Exp)/10.0;
+	Scattering_Light = ((float)Calibration_Load_2byte(SCATTERING_LIGHT_7_812+8*(Exp/4), Exp))/10.0;
  	//DarkSignal = Calibration_Load_2byte(DARK_SIGNAL_7_812+8*(Exp/4), Exp);
 
 	 Calibration_Load_16bit_Pack(address_array[Exp], 1024, DarkSignal);
@@ -161,3 +162,9 @@ void Calibration_WaveLenght_Graph()
 }
 
 
+void Calibration_Ranges_Values()
+{
+	Range_Value_MAX = Calibration_Load_2byte(0x0812F0F0, 0);
+	Range_Value_MID = Calibration_Load_2byte(0x0812F110, 0);
+	Range_Value_MIN = Calibration_Load_2byte(0x0812F114, 1);
+}

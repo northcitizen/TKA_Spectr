@@ -20,6 +20,7 @@ void GUI_Button_TFT_On_Off(uint16_t X, uint16_t Y);
 void GUI_Button_TFT_Rotate(uint16_t X, uint16_t Y);
 void GUI_Button_SD_Card(uint16_t X, uint16_t Y, uint8_t Active);
 void GUI_Button_Measure_Start_Pause(uint16_t X, uint16_t Y);
+void GUI_Button_Measure_Start_Pause_For_Button(uint16_t X, uint16_t Y, uint8_t type);
 void GUI_CheckBox(uint16_t X, uint16_t Y, uint16_t Check);
 void GUI_RadioBox(uint16_t X, uint16_t Y, uint16_t Check, uint16_t Active);
 void GUI_Switch_Button(uint16_t X, uint16_t Y, uint8_t Check);

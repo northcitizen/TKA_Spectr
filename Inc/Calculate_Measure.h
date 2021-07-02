@@ -9,7 +9,7 @@
 
 #define BLUE_RANGE						0x00
 #define GREEN_RANGE						0x01
-#define RED_RANGE							0x02
+#define RED_RANGE						0x02
 #define FAR_RED_RANGE					0x03
 
 //L*a*b

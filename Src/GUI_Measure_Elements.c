@@ -468,7 +468,10 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 			}
 		}
 	else{
-		if(old_nan_PPF){TFT_FillRectangle(X+70, Y, X+197, Y+26, TFT_Black_Bkgr);}
+		if(old_nan_PPF)
+		{
+			TFT_FillRectangle(X+70, Y, X+197, Y+26, TFT_Black_Bkgr);
+		}
 	old_nan_PPF = 0;
 	Value = floor(Value*10)/10.0;
 	
@@ -503,33 +506,33 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 	buffer[8] = 0;
 	TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
 }
-	
+
 {
 	TFT_SetTextColor(TFT_White);
 	TFT_SetBackColor(TFT_Black_Bkgr);
 	if(Language_status == Ru ){
 			TFT_SetFont(&Font26RU_arch_big);
-			if(preGUI_screen_state != GUI_screen_state){
+			//if(preGUI_screen_state != GUI_screen_state){
 				TFT_DrawCharRus(X, Y, 'Ф'-17);
 				TFT_DrawCharRus(X+24, Y, 'А'-17);
-				TFT_DrawCharRus(X+48, Y, 'Р'-17);}
+				TFT_DrawCharRus(X+48, Y, 'Р'-17);//}
 		(Mode_EL) ? GUI_TextRu_umol(X+200, Y+2, deg) : GUI_TextRu_umol_sr(X+200, Y+2);
 		} else
 		{
 			TFT_SetFont(&Font16EN_arch_big);
 			if(Mode_EL){
-				if(preGUI_screen_state != GUI_screen_state){
+				//if(preGUI_screen_state != GUI_screen_state){
 				TFT_DrawChar(X-10, Y+2, 'P');
 				TFT_DrawChar(X+5, Y+2, 'P');
 				TFT_DrawChar(X+20, Y+2, 'F');
-				TFT_DrawChar(X+35, Y+2, 'D');}
+				TFT_DrawChar(X+35, Y+2, 'D');//}
 				GUI_TextEn_umol(X+200, Y+2, deg);
 			} else
 			{
-				if(preGUI_screen_state != GUI_screen_state){
+				//if(preGUI_screen_state != GUI_screen_state){
 				TFT_DrawChar(X-10, Y+2, 'P');
 				TFT_DrawChar(X+5, Y+2, 'P');
-				TFT_DrawChar(X+20, Y+2, 'L');}
+				TFT_DrawChar(X+20, Y+2, 'L');//}
 				GUI_TextEn_umol_sr(X+200, Y+2, deg);
 			}
 		}	}
@@ -699,7 +702,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 	buffer[8] = 0;
 	TFT_DisplayString(X+delta_pos, Y+66, (uint8_t *)buffer, LEFT_MODE);
 }
-	if(preGUI_screen_state != GUI_screen_state){
+	//if(preGUI_screen_state != GUI_screen_state){
 if (Language_status==Ru)
 	{	TFT_SetTextColor(TFT_White);
 		TFT_SetFont(&Font16RU_arch_big);
@@ -750,7 +753,7 @@ if (Language_status==Ru)
 	TFT_DrawChar(X+53, Y+66, 'R');
 	if (Language_status==Ru) (Mode_EL) ? GUI_TextRu_umol(X+202, Y+66, deg) : GUI_TextRu_umol_sr(X+202, Y+66) ;	
 	else if (Language_status==En) (Mode_EL) ? GUI_TextEn_umol(X+200, Y+66, deg) : GUI_TextEn_umol_sr(X+200, Y+66, deg);	;
-}
+//}
 }
 uint8_t old_numX = 10, old_numY = 10, old_numZ = 10, old_nanXYZ = 0;
 void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t ValueY, uint16_t ValueZ, uint8_t nope, uint8_t grey)
@@ -964,6 +967,54 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 uint8_t old_lambdaD = 10, old_nan_lambdaD = 0;
 void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uint8_t grey)
 {	
+
+	TFT_SetTextColor(TFT_White);
+			TFT_SetBackColor(TFT_Black_Bkgr);
+			//GUI_Text_lambda_d(X, Y+5);
+
+			TFT_SetTextColor(TFT_White);
+				TFT_SetBackColor(TFT_Black_Bkgr);
+
+				TFT_SetFont(&Font16EN_arch_big);
+				TFT_DrawChar(X, Y+5, '~'+1);
+				TFT_SetFont(&Font16EN_arch_small);
+				TFT_DrawChar(X+15, Y+7+5, 'd');
+
+			if(Language_status == Ru ){
+					TFT_SetFont(&Font26RU_arch_small);
+					TFT_DrawCharRus(X+200, Y+5, 'н');
+					TFT_DrawCharRus(X+216, Y+5, 'м');
+				} else
+				{
+					TFT_SetFont(&Font16EN_arch_small);
+					TFT_DrawChar(X+200, Y+10, 'n');
+					TFT_DrawChar(X+216, Y+10, 'm');
+				}
+	if(preGUI_screen_state != GUI_screen_state){
+		TFT_SetTextColor(TFT_White);
+		TFT_SetBackColor(TFT_Black_Bkgr);
+		//GUI_Text_lambda_d(X, Y+5);
+
+		TFT_SetTextColor(TFT_White);
+			TFT_SetBackColor(TFT_Black_Bkgr);
+
+			TFT_SetFont(&Font16EN_arch_big);
+			TFT_DrawChar(X, Y+5, '~'+1);
+			TFT_SetFont(&Font16EN_arch_small);
+			TFT_DrawChar(X+15, Y+7+5, 'd');
+
+		if(Language_status == Ru ){
+				TFT_SetFont(&Font26RU_arch_small);
+				TFT_DrawCharRus(X+200, Y+5, 'н');
+				TFT_DrawCharRus(X+216, Y+5, 'м');
+			} else
+			{
+				TFT_SetFont(&Font16EN_arch_small);
+				TFT_DrawChar(X+200, Y+10, 'n');
+				TFT_DrawChar(X+216, Y+10, 'm');
+			}
+		}
+
 	if(preGUI_screen_state != GUI_screen_state){old_nan_lambdaD = 0;}
 	Value = floor(Value*10)/10.0;
 	char buffer[9] = {0};
@@ -1008,21 +1059,7 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 	
 	TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
 }
-	if(preGUI_screen_state != GUI_screen_state){
-	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
-	GUI_Text_lambda_d(X, Y+5);
-	if(Language_status == Ru ){
-			TFT_SetFont(&Font26RU_arch_small);
-			TFT_DrawCharRus(X+200, Y+5, 'н');
-			TFT_DrawCharRus(X+216, Y+5, 'м');
-		} else
-		{
-			TFT_SetFont(&Font16EN_arch_small);
-			TFT_DrawChar(X+200, Y+10, 'n');
-			TFT_DrawChar(X+216, Y+10, 'm');
-		}	
-	}
+
 }
 uint8_t old_lambdaC = 10, old_nan_lambdaC = 0;
 void GUI_Text_lambdaC_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uint8_t grey)
@@ -1404,6 +1441,19 @@ void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA
 	uint8_t	delta_pos = 180, sign = 0, number = 0;
 	uint32_t dec = 10;
 	
+
+	//if(preGUI_screen_state != GUI_screen_state || GUI_screen_state == Color_Screen){
+				TFT_SetTextColor(TFT_White);
+				TFT_SetFont(&Font26EN_arch_digit);
+				TFT_DrawChar(X+17, Y, '*');
+				TFT_DrawChar(X+17, Y+35, '*');
+				TFT_DrawChar(X+17, Y+70, '*');
+				TFT_SetFont(&Font26EN_arch_big);
+				TFT_DrawChar(X, Y, 'L'-33);
+				TFT_SetFont(&Font26EN_arch_small);
+				TFT_DrawChar(X, Y+35, 'a'-65);
+				TFT_DrawChar(X, Y+70, 'b'-65);//}
+
 	if(ValueA <= -431 || nope){
 		if(!old_nan){TFT_FillRectangle(X+40, Y, X+250, Y+95, TFT_Black_Bkgr);}
 		TFT_SetTextColor(TFT_White);
@@ -1494,18 +1544,6 @@ void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA
 			TFT_DisplayString(X+delta_pos, Y+70, (uint8_t *)buffer, LEFT_MODE);
 		old_nan = 0;
 	} 
-	
-	if(preGUI_screen_state != GUI_screen_state || GUI_screen_state == Color_Screen){
-			TFT_SetTextColor(TFT_White);
-			TFT_SetFont(&Font26EN_arch_digit);
-			TFT_DrawChar(X+17, Y, '*');
-			TFT_DrawChar(X+17, Y+35, '*');
-			TFT_DrawChar(X+17, Y+70, '*');
-			TFT_SetFont(&Font26EN_arch_big);
-			TFT_DrawChar(X, Y, 'L'-33);
-			TFT_SetFont(&Font26EN_arch_small);
-			TFT_DrawChar(X, Y+35, 'a'-65);
-			TFT_DrawChar(X, Y+70, 'b'-65);}
 }	
 			
 

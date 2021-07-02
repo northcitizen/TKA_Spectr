@@ -142,4 +142,5 @@ float Calibration_Load_float(uint32_t Address);
 void Calibration_Load_16bit_Pack(uint32_t Address, uint16_t size, uint16_t* data);
 void Calibration_Load_Temperature_Coef(uint32_t Address);
 //void Calibration_Load_Table1024();
+void Calibration_Ranges_Values();
 #endif

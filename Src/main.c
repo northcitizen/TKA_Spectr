@@ -20,7 +20,7 @@
 #include "BlueTooth.h"
 #include "tmp144.h"
 #include "stm32_hal_legacy.h"
-
+uint16_t graph_spectral_day[355], graph_spectral_night[355];
 //CMD DEFINITION
 #define CMD_DATA_TRANSMIT 						0x01
 #define CMD_RABS_DATA_TRANSMIT 					0x01
@@ -40,16 +40,17 @@
 #define FLASH_CRC_ADDR 								0x0812A050	//addr for FLASH CRC check 
 
 
-
 ///////////////////////////////
 
 //#define SERVICE
 #define BT
 
-
-
+extern uint8_t measure_number;
+extern volatile uint8_t GRAPH_FLAG = 0;
+ volatile uint8_t exp_stable;
 ///////////////////
-
+ extern volatile uint32_t cnt_delay;
+ volatile  uint8_t start;
 
 //USB
 uint8_t dataToSend[64]= {0}; 
@@ -93,40 +94,47 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 FLASH_EraseInitTypeDef EraseInitStruct, EraseInitStruct2;
 CRC_Check_StatusTypeDef CRC_STATUS;
 
-uint8_t old_exp_num = 0, exp_set = 1;
+extern volatile uint8_t old_exp_num = 0, exp_set = 1;
+volatile uint8_t pause;
+extern uint8_t MEASURE_FLAG;
 
 uint8_t RxBuf[2];
-extern uint8_t  GUI_screen_state, Graph_Field, Source_Type, Color_Field, Measure_Color_xy, pause, flag_spectral, direction, Language_status, Bluetooth;
+volatile extern uint8_t  GUI_screen_state, Graph_Field, Source_Type, Color_Field, Measure_Color_xy, flag_spectral, direction, Language_status, Bluetooth;
 extern uint16_t Measure_Field, sdfile_cnt;
 
 //Line recieve data
-uint16_t Line[1024] = {0}, Line_buff[1024] = {0}, buff_set2; 
-float Line_Rabs_buff[1024] = {0}, Line_Rabs_buff_graph_test[1024] = {0};
-float max_Rabs_graph, max_Rabs;
+extern uint16_t Line[1024] = {0}, Line_buff[1024] = {0}, buff_set2;
+extern float Line_Rabs_buff[1024] = {0}, Line_Rabs_buff_graph_test[1024] = {0};
+extern float max_Rabs_graph, max_Rabs;
 
 //Calibration factors data
-float Spectral_Corection_Buff[1024] = {0}, WaveLenght[1024] = {0}, Scattering_Light = 0, Exposure_Factor = 0, Hazard_Blue[1024] = {0}, Hazard_Retina[1024] = {0};
-float Factor1 = 0, Factor2 = 0, EnergyFactor_E = 0, EnergyFactor_L = 0;
+extern float Spectral_Corection_Buff[1024] = {0}, WaveLenght[1024] = {0}, Scattering_Light = 0, Exposure_Factor = 0, Hazard_Blue[1024] = {0}, Hazard_Retina[1024] = {0};
+extern float Factor1 = 0, Factor2 = 0, EnergyFactor_E = 0, EnergyFactor_L = 0;
 float S0_lambda[1024] = {0}, S1_lambda[1024] = {0}, S2_lambda[1024] = {0};
 float E_day, E_day_Wt, E_Night, SP_Measure, PPFD_PPL_Measure, PPFD_PPL_Blue_Measure, PPFD_PPL_Green_Measure, PPFD_PPL_Red_Measure, PPFD_PPL_Far_Red_Measure,
 ELr_Measure, ELb_Measure, CCT_Measure, SREF;
-uint8_t buff_set,block_graph = 0, exp_start = 1;
-uint8_t Rotation_Screen_Spectral_Old3 = 0xFF;
+extern uint8_t buff_set,block_graph = 0, exp_start = 1;
+extern uint8_t Rotation_Screen_Spectral_Old3 = 0xFF;
 extern uint16_t Line_Rabs_buff_graph2[355];
 
 float calibratre_x_1964[1024] = {0}, calibratre_y_1964[1024] = {0}, calibratre_z_1964[1024] = {0}, calibratre_x_1931[1024] = {0}, calibratre_z_1931[1024] = {0};
 uint16_t  WaveLenght_Graph[4] = {0};
 //uint16_t  DarkSignal = 0;
-uint16_t  DarkSignal[1024] = {0};
+extern uint16_t  DarkSignal[1024] = {0};
 
 uint16_t colorimetry_XYZ1964[3] = {0}, lambda_d_Measure, lambda_c_Measure, Tc_Measure = 0, colorimetry_XYZ1931[3] = {0};
 float colorimetry_xy1964[2] = {0}, colorimetry_uv[2] = {0}, colorimetry_uv1976[2] = {0}, colorimetry_xy1931[2] = {0};
 int16_t colorimetry_LAB[3] = {0};
 extern int16_t delta_Eab_Measure;
-uint16_t max_el = 0, cnt_delay_bar = 0;
+volatile extern uint16_t max_el = 0, cnt_delay_bar = 0;
 extern uint8_t Rotation_Screen_Spectral, Rotation_Screen_Spectral_Old, Calculate_deltaEab_Done, Color_rend_Field, preGUI_screen_state;
-uint8_t highSignal = 0, lowSignal = 0;
+extern volatile uint8_t highSignal = 0, lowSignal = 0;
 uint8_t Mode_EL = 1, SD_Detect, old_sd_detect = 10, write_FileNum = 0, Mode_Lx_Fl = 0;
+
+//Calibration Ranges Values
+uint16_t Range_Value_MAX = 0;
+uint16_t Range_Value_MID = 0;
+uint16_t Range_Value_MIN = 0;
 
 //Calibration table factors data
 float Spectral_day[1024] = {0}, Spectral_night[1024] = {0}, Spectral_B[1024] = {0}, Spectral_R[1024] = {0};
@@ -134,7 +142,8 @@ float Spectral_day[1024] = {0}, Spectral_night[1024] = {0}, Spectral_B[1024] = {
 const uint16_t exposure_timer_period[10] = {93,			186,			372,		744,		1488,	2976,	5952,	11905,	23810,	47619}; //93 = 7.812ms
 	
 volatile uint16_t	i=0, j=0;
-volatile uint8_t	exp_num = 0, VGain = 0, LaserOnOff = 0, TFT_ON_OFF = 1, temp = 0, send_usb_block = 0, MeasureFlag_display = 0;
+extern volatile uint8_t	exp_num = 0;
+volatile uint8_t VGain = 0, LaserOnOff = 0, TFT_ON_OFF = 1, temp = 0, send_usb_block = 0, MeasureFlag_display = 0;
 double percentage_charge = 0, percentage_charge_prev = 101.0; //battery charge
 volatile uint16_t RGB565_480x272[130560] = {0x00000000};
 
@@ -551,11 +560,10 @@ void usb_receive_processing(void)
 						send_usb_block = 1;
 					if(dataToReceive[3] == CMD_RABS_DATA_TRANSMIT)
 					{
-						//Temperature_Measure_Func();
+						Temperature_Measure_Func();
 						packet_generator_Rabs_data_send();
 					}else{
 						Temperature_Measure_Func();
-						__HAL_UART_DISABLE_IT(&huart2, UART_IT_RXNE);
 						packet_generator_data_send();
 					}
 						memset(dataToReceive, 0, sizeof(dataToReceive));
@@ -1043,9 +1051,9 @@ int main(void)
 	HAL_Delay(1);
 #endif
   	MX_USART2_UART_Init();
-  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);
-    HAL_NVIC_EnableIRQ(USART2_IRQn);
-    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);////////////////////////////////////////////////////////////////////
+    HAL_NVIC_EnableIRQ(USART2_IRQn);//////////////////////////////////////////////////////////////////////////////
+    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);//////////////////////////////////////////////////////////////////////////
 
 
 	HAL_Delay(1);
@@ -1056,14 +1064,14 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //ST Signal
-//	HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
-	HAL_Delay(2);
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //01ST Signal////////////////////////////////////////////////////////////////////////////////////
+   	HAL_Delay(2);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //13   01
+    HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //13   01//////////////////////////////////////////////////////////////////////////////////////
+	HAL_NVIC_EnableIRQ(LTDC_IRQn);
 	HAL_Delay(2);
 	HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);	//booster
 	TIM15->CCR2 = 50;
@@ -1075,8 +1083,8 @@ int main(void)
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 	HAL_Delay(1);
-	HAL_TIM_Base_Start_IT(&htim6);
-	HAL_NVIC_SetPriority(TIM6_IRQn, 2, 4);
+	HAL_NVIC_SetPriority(TIM6_IRQn, 2, 4);///////////////////////////////////////////////////
+	HAL_TIM_Base_Start_IT(&htim6);/////////////////////////////////////////////////////////////////
 	HAL_Delay(1);
 	HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
 	HAL_Delay(1);
@@ -1162,6 +1170,8 @@ int main(void)
 	Calibration_Load_Pack(Z2_CIE1931, 0x400, calibratre_z_1931);
 
 
+	Calibration_Ranges_Values();
+
 
 	uint16_t wave_num = 0;
 	
@@ -1237,8 +1247,9 @@ int main(void)
 		Factor2 = Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E);
 	}
 	
-
+	//WriteFLASH_Screen(Title_Screen);/////////////////////////////////////////////////////////////////
 	GUI_screen_state = Calibration_Load_1byte(SCREENADDR, 3);
+
 	Calculate_Data();
 
 
@@ -1324,7 +1335,6 @@ int main(void)
 	MX_TIM7_Init();
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM7_IRQn);
-
 	// HAL_NVIC_EnableIRQ(LPUART1_IRQn);
 #ifdef BT
 	HAL_NVIC_EnableIRQ(USART1_IRQn);
@@ -1337,13 +1347,18 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim7);
 
-	uint8_t exp_stable = 0, start = 1;
-	uint32_t cnt_delay = 0, scr_refresh = 0, scr_refresh_measure = 0, bat_refresh = 0;
+
+
+
+
+	uint32_t scr_refresh = 0, scr_refresh_measure = 0, bat_refresh = 0;
 	uint8_t usb_cnt = 0;
 
 //	// LASER ON!
 //	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
+pause = 1;
+GUI_Button_Measure_Start_Pause_For_Button(109, 426, 1);
  while(1)
  {
 	 usb_receive_processing();
@@ -1356,122 +1371,193 @@ int main(void)
 			send_bluetooth = 0;
 		};
 
-		while(start)
-		{
 
-			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
+	 if(GRAPH_FLAG)
+	 {
+		 HAL_NVIC_DisableIRQ(EXTI3_IRQn);
 
-		if(!block_graph)
-		{
-			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-		}
+		 while(measure_number != 0)
+		 {
+	 	 	while(start)
+	 		{
+	 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
+	 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
 
-			cnt_delay++;
-			Temperature_Measure_Func();
-			Calculate_Data();
-			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
-			{
-								auto_exposure();
-								max_el = 0;
-								cnt_delay = 0;
-								exp_stable = exp_stable+1;
-								exp_start = 1;
-								if(exp_stable > 10)
-								{
-									start = 0;
-								}
-			}
-		}
+	 			if(!block_graph)
+	 			{
+	 				memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
+	 			}
+	 			cnt_delay++;
+	 			Temperature_Measure_Func();
+	 			Calculate_Data();
+	 			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
+	 			{
+	 				auto_exposure();
+	 				max_el = 0;
+	 				cnt_delay = 0;
+	 				exp_stable = exp_stable+1;
+	 				exp_start = 1;
+	 				if(exp_stable > 10)
+	 				{
+	 					start = 0;
+	 				}
+	 			}
+	 		}
+
+	 		if(!exp_set)
+	 		{
+	 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
+	 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
+	 		}
+
+	 		if(!block_graph)
+	 		{
+	 			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
+	 		}
+
+	 		exp_start = 0;
 
 
-		if(!exp_set)
-		{
-			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-		}
+	 		if((GUI_screen_state == Color_Screen) && !pause)
+	 		{
+	 			cnt_delay++;
+	 			if(!pause & !exp_set)
+	 			{
+	 				scr_refresh_measure++;
+	 				if(scr_refresh_measure == 14 )///*28*/14
+	 				{
+	 					Temperature_Measure_Func();
+	 					Calculate_Data();
+	 					scr_refresh_measure = 0;
+	 				}
+	 			}
+	 			if((cnt_delay > 40 && exp_num < 6) || (cnt_delay > 70 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 500 && exp_num >= 8))//6-3 8 -4
+	 			{
+	 				auto_exposure();
+	 				max_el = 0;
+	 				cnt_delay = 0;
+	 			}
+	 		}
+	 		else {
+	 				cnt_delay++;
 
-		if(!block_graph)
-		{
-			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-		}
+	  				if((cnt_delay > 250 && exp_num < 6) || (cnt_delay > 950 && (exp_num >=+ 6 && exp_num < 8))||(cnt_delay > 1450 && exp_num >= 8))
+	 				{
+	 					auto_exposure();
+	 					max_el = 0;
+	 					cnt_delay = 0;
+	 				}
+	 		}
 
-		exp_start = 0;
-		if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen) && !pause)
-		{
-			cnt_delay++;
-			if(!pause & !exp_set)
-			{
-				scr_refresh_measure++;
-				if(scr_refresh_measure == 28 )
-				{
-					Temperature_Measure_Func();
-					Calculate_Data();
-					scr_refresh_measure = 0;
-				}
-			}
-			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 70 && exp_num >= 4))
-			{
-				auto_exposure();
-				max_el = 0;
-				cnt_delay = 0;
-			}
-		}
-		else
-		if((GUI_screen_state == Color_Screen) && !pause)
-		{
-			cnt_delay++;
-			if(!pause & !exp_set)
-			{
-				scr_refresh_measure++;
-				if(scr_refresh_measure == 28 )//14
-				{
-					Temperature_Measure_Func();
-					Calculate_Data();
-					scr_refresh_measure = 0;
-				}
-			}
-			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 500 && exp_num >= 4))//6-3 8 -4
-			{
-				auto_exposure();
-				max_el = 0;
-				cnt_delay = 0;
-			}
-		}
-		else {
-				cnt_delay++;
 
-				if((cnt_delay > 250 && exp_num < 3) || (cnt_delay > 950 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1450 && exp_num >= 4))
-				{
-					auto_exposure();
-					max_el = 0;
-					cnt_delay = 0;
-				}
-		}
+//это находится в тач процессинге
 
-        if(GUI_screen_state == Graph_Screen)
+
+if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
+{
+//GUI_Display_Refresh();
+scr_refresh++;
+if(scr_refresh == 40 )
+{
+	//GUI_Display_Refresh();
+block_graph = 1;
+
+if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
+{
+		//GUI_Display_Refresh();
+	Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
+}
+Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
+Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
+
+Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
+scr_refresh = 0;
+block_graph = 0;
+GUI_SignalLevel();
+
+
+}
+} else{__asm("nop");}
+//GUI_Display_Refresh();
+measure_number--;
+
+	 }
+		// GUI_Display_Refresh();30.06
+		 GRAPH_FLAG = 0;
+		 pause = 0x01;
+		//GUI_Display_Refresh();///16:08
+		 HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+	 	}
+//GUI_Display_Refresh();
+///////////////////////////////////////++++++++++++++++++++++++++++++++это будет работать в цикле++++++++++++++++++++++++++++++++++++////////////////////////////////////////////////
+//
+//
+//
+
+        //30.06.2021---------------------GRAPH-------------------------------------------------------------------------------------
+        if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
         {
-            scr_refresh++;
-            if(scr_refresh == 40 ){
-							block_graph = 1;
+        	if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
+        	        {
 
-								if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-								{
-									Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-								}
-								Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-								max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-								Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
+        	        //GUI_Display_Refresh();
+        	        scr_refresh++;
+        	        if(scr_refresh == 40 )
+        	        {
+        	        	//GUI_Display_Refresh();
+        	        block_graph = 1;
 
-								Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-								scr_refresh = 0;
-								block_graph = 0;
-								GUI_SignalLevel();
+        	        if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
+        	        {
+        	        		//GUI_Display_Refresh();
+        	        	 if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
+        	        	Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
+        	        }
+        	        Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+        	        max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
+        	        if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
+        	        Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
+        	        if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
+        	        Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
+        	        scr_refresh = 0;
+        	        block_graph = 0;
+        	        GUI_SignalLevel();
 
-            }
-        } else{__asm("nop");}
 
-        GUI_Display_Refresh();
+        	        }
+        	        } else{__asm("nop");}
+        }
+
+        //**************************************************************MEASUER***********************************************
+//        if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen) && pause)
+//       	 	 		{
+//       	 	 			cnt_delay++;
+//       	 	 			if(pause & !exp_set)
+//       	 	 			{
+//       	 	 				scr_refresh_measure++;
+//       	 	 				if(scr_refresh_measure == 28)
+//       	 	 				{
+//       	 	 					Temperature_Measure_Func();
+//       	 	 					Calculate_Data();
+//       	 	 					scr_refresh_measure = 0;
+//       	 	 					//GUI_Display_Refresh();////////////////////?????????????
+//       	 	 				}
+//       	 	 			}
+//       	 	 			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 70 && exp_num >= 4))
+//       	 	 			{
+//       	 	 				auto_exposure();
+//       	 	 				max_el = 0;
+//       	 	 				cnt_delay = 0;
+//       	 	 			}
+//       	 	 		}
+        //********************************************************************************************************************
+
+        //30.06.2021-------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
         if (pause && !Mode_EL)
         {
@@ -1497,11 +1583,10 @@ int main(void)
         __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
 
 #endif
-
-    }
+        GUI_Display_Refresh();
+	// GUI_Display_Refresh();30.06
+ }
 }
-
-
 
 void auto_exposure(void)
 { 
@@ -1517,7 +1602,7 @@ void auto_exposure(void)
 //		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;
 	}
 	
-	if(max_el < 20000 && exp_num != 9)//20000
+	if(max_el < Range_Value_MIN && exp_num != 9)//20000
 	{
 		highSignal = 0;
 		lowSignal = 0;
@@ -1535,7 +1620,7 @@ void auto_exposure(void)
 		}
 
 		send_usb_block = 0;
-	} else if(max_el > 45000 && exp_num != 0)
+	} else if(max_el > 45000 && exp_num != 0)//45000
 	{
 		highSignal = 0;
 		lowSignal = 0;
@@ -1558,18 +1643,18 @@ void auto_exposure(void)
 		
 	old_exp_num = exp_num;
 	
-	if(exp_num == 0 && max_el >= 50000)
+	if(exp_num == 0 && max_el >= 50000)//50000
 	{
 		highSignal = 1;
-	} else if((exp_num ==0 && max_el < 50000))
+	} else if((exp_num ==0 && max_el < 50000))//50000
 	{
-			highSignal = 0;
+		highSignal = 0;
 	} else if((exp_num ==9 && max_el < DarkSignal[i_max]+2000))
 	{
-			lowSignal = 1;
+		lowSignal = 1;
 	}else if((exp_num ==9 && max_el > DarkSignal[i_max]+ 2000))
 	{
-			lowSignal = 0;
+		lowSignal = 0;
 	}
 }
 																		
@@ -1577,8 +1662,6 @@ void auto_exposure(void)
 /*ST signal generator*/
 void TIM2_IRQHandler(void)
 {
-	
-	//Temperature_Measure_Func();
 
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_RESET);
 	DWT_Delay(10);
@@ -1589,10 +1672,14 @@ void TIM2_IRQHandler(void)
 	
 	HAL_NVIC_ClearPendingIRQ(TIM2_IRQn);
 	HAL_TIM_IRQHandler(&htim2);
-}											//7.812ms 15.625ms 31.25ms	62.5ms 125ms 250ms 500ms 1s 2s 4s
+}
+											//7.812ms 15.625ms 31.25ms	62.5ms 125ms 250ms 500ms 1s 2s 4s
 //const uint16_t exposure_timer_period[10] = {93, 186, 372,	744, 1488, 2976, 5952, 11905, 23810, 47619}; //93 = 7.812ms
+
+
 void TIM6_DAC_IRQHandler(void)
 {
+
 	pause_button = 0;
   /* USER CODE BEGIN TIM6_IRQn 0 */
 	Get_Battery_Level();
@@ -1607,7 +1694,7 @@ void TIM6_DAC_IRQHandler(void)
 void TIM7_IRQHandler(void)
 {
 	
-	if(!usart2_wait) usart2_wait = true;
+	if(!usart2_wait) usart2_wait = true;//1.07
 			
 	if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen||
 			GUI_screen_state == Graph_Screen || GUI_screen_state == Color_Screen) && !pause &&  !flag_spectral) 
@@ -1663,6 +1750,7 @@ void TIM7_IRQHandler(void)
 			
 	HAL_NVIC_ClearPendingIRQ(TIM7_IRQn);
 	HAL_TIM_IRQHandler(&htim7);
+
 }
 
 
@@ -1705,7 +1793,8 @@ void EXTI9_5_IRQHandler(void)
 
 /*Touch_screen interrupt*/
 void EXTI3_IRQHandler(void)
-{	
+{
+
 	cnt_touch_delay = cnt_touch_delay + 1;
 	
 	Touch_x = 0, Touch_y = 0;
@@ -1716,8 +1805,7 @@ void EXTI3_IRQHandler(void)
 	{
 			TFT_ON_OFF = 0x01;
 			HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);//booster
-		}
-		else{
+	}else{
 
 		if(TFT_ON_OFF){
 			TS_Get_XY1(TS_I2C_ADDRESS, &Touch_x, &Touch_y);
@@ -1739,7 +1827,7 @@ void EXTI3_IRQHandler(void)
 				cnt_touch_delay = 0;
 			}
 		} 
-		
+
 		HAL_NVIC_ClearPendingIRQ(EXTI3_IRQn);
 		HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
 	}
@@ -1799,6 +1887,7 @@ void USART1_IRQHandler(void)
 		}
 	}
 
+	HAL_NVIC_ClearPendingIRQ(USART1_IRQn);
 	HAL_UART_IRQHandler(&huart1);
 
 }
@@ -2142,8 +2231,8 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 		
-	HAL_NVIC_SetPriority(EXTI9_5_IRQn, 2, 4); //SDO IRQ
-	HAL_NVIC_SetPriority(EXTI3_IRQn, 4, 2); //Touchscreen IRQ
+	HAL_NVIC_SetPriority(EXTI9_5_IRQn, 2, 4); //SDO IRQ//24
+	HAL_NVIC_SetPriority(EXTI3_IRQn, 4, 2); //Touchscreen IRQ//42
 	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 	HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 

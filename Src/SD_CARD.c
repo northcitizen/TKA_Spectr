@@ -6,72 +6,72 @@
 FLASH_EraseInitTypeDef EraseInitStruct_SDNum;
 
 uint8_t SD_Text_SP_en[] = "\nS/P Photopic/Scotopic Ratio\n"; 
-uint8_t SD_Text_SP_ru[] = "\nS/P Дневное/Ночное отношение\n"; 
-uint8_t SD_Text_ColorXYZ_ru[] = "\nКоординаты цвета XYZ\n"; 
+uint8_t SD_Text_SP_ru[] = "\nS/P Дневное/Ночное отношение\n";
+uint8_t SD_Text_ColorXYZ_ru[] = "\nКоординаты цвета XYZ\n";
 uint8_t SD_Text_ColorXYZ_en[] = "\nXYZ color space\n";
 
-uint8_t SD_Text_Colorxy_ru[] = "\nКоординаты цветности x,y\n"; 
+uint8_t SD_Text_Colorxy_ru[] = "\nКоординаты цветности x,y\n";
 uint8_t SD_Text_Colorxy_en[] = "\nx,y color space\n";
 
-uint8_t SD_Text_Coloruv_ru[] = "\nКоординаты цветности u',v'\n"; 
+uint8_t SD_Text_Coloruv_ru[] = "\nКоординаты цветности u',v'\n";
 uint8_t SD_Text_Coloruv_en[] = "\nu',v' color space\n";
 
-uint8_t SD_Text_CCT_ru[] = "\nКЦТ, К'\n"; 
+uint8_t SD_Text_CCT_ru[] = "\nКЦТ, К'\n";
 uint8_t SD_Text_CCT_en[] = "\nCCT, K\n";
 
-uint8_t SD_Text_LAB_ru[] = "\nКоординаты цветового пространства L*a*b*\n"; 
-uint8_t SD_Text_RefSource_ru[] = "\nРеференсный источник\n"; 
+uint8_t SD_Text_LAB_ru[] = "\nКоординаты цветового пространства L*a*b*\n";
+uint8_t SD_Text_RefSource_ru[] = "\nРеференсный источник\n";
 uint8_t SD_Text_LAB_en[] = "\nL*a*b* color space\n";
 uint8_t SD_Text_RefSource_en[] = "\nReference source\n"; 
 
-uint8_t SD_Text_lambdaD_ru[] = "\nДоминантная длина волны, нм\n"; 
+uint8_t SD_Text_lambdaD_ru[] = "\nДоминантная длина волны, нм\n";
 uint8_t SD_Text_lambdaD_en[] = "\nDominant wavelenght, nm\n"; 
-uint8_t SD_Text_lambdaC_ru[] = "\nДополнительная длина волны, нм\n"; 
+uint8_t SD_Text_lambdaC_ru[] = "\nДополнительная длина волны, нм\n";
 uint8_t SD_Text_lambdaC_en[] = "\nComplementary wavelenght, nm\n"; 
 
-uint8_t SD_Text_deltaE_ru[] = "\nЦветовое различие\n"; 
+uint8_t SD_Text_deltaE_ru[] = "\nЦветовое различие\n";
 uint8_t SD_Text_deltaE_en[] = "\nColor difference\n"; 
 
-uint8_t SD_Text_Elambda_ru[] = "\nСпектральная плотность облученности\tДлина волны, нм\n"; 
+uint8_t SD_Text_Elambda_ru[] = "\nСпектральная плотность облученности\tДлина волны, нм\n";
 uint8_t SD_Text_Elambda_en[] = "\nSpectral irradiance\tWavelength, nm\n"; 
 
-uint8_t SD_Text_Llambda_ru[] = "\nСпектральная плотность энергетической яркости\tДлина волны, нм\n"; 
+uint8_t SD_Text_Llambda_ru[] = "\nСпектральная плотность энергетической яркости\tДлина волны, нм\n";
 uint8_t SD_Text_Llambda_en[] = "\nSpectral radiance\tWavelength, nm\n"; 
 
-uint8_t SD_Text_Le_ru[] = "\nЭнергетическая яркость, Вт/(м2*ср)\n"; 
+uint8_t SD_Text_Le_ru[] = "\nЭнергетическая яркость, Вт/(м2*ср)\n";
 uint8_t SD_Text_Le_en[] = "\nRadiance, W/(m2*sr)\n"; 
 
-uint8_t SD_Text_Lu_ru[] = "\nЯркость, кд/м2\n"; 
+uint8_t SD_Text_Lu_ru[] = "\nЯркость, кд/м2\n";
 uint8_t SD_Text_Lu_en[] = "\nLuminance, cd/m2\n"; 
 
-uint8_t SD_Text_Ee_ru[] = "Облученность, Вт/м2\n"; 
+uint8_t SD_Text_Ee_ru[] = "Облученность, Вт/м2\n";
 uint8_t SD_Text_Ee_en[] = "Irradiance, W/m2\n"; 
 
-uint8_t SD_Text_Eu_ru[] = "\nОсвещенность, лк\n"; 
+uint8_t SD_Text_Eu_ru[] = "\nОсвещенность, лк\n";
 uint8_t SD_Text_Eu_en[] = "\nIlluminance, lx\n"; 
 
-uint8_t SD_Text_PPFD_ru[] = "\nФАР (PPFD), моль/(с*м2)\n"; 
+uint8_t SD_Text_PPFD_ru[] = "\nФАР (PPFD), моль/(с*м2)\n";
 uint8_t SD_Text_PPFD_en[] = "\nPPFD, mol/(s*m2)\n"; 
 
-uint8_t SD_Text_PPFDRGB_ru[] = "\nФАР(PPFD) Cин-Кр-Зел-FR, [моль/(с*м2)]\n"; 
+uint8_t SD_Text_PPFDRGB_ru[] = "\nФАР(PPFD) Cин-Кр-Зел-FR, [моль/(с*м2)]\n";
 uint8_t SD_Text_PPFDRGB_en[] = "\nPPFD, B-G-R-FR [mol/(s*m2)]\n"; 
 
-uint8_t SD_Text_PPL_ru[] = "\nФАР (PPL), моль/(с*м2*ср)\n"; 
+uint8_t SD_Text_PPL_ru[] = "\nФАР (PPL), моль/(с*м2*ср)\n";
 uint8_t SD_Text_PPL_en[] = "\nPPL, mol/(s*m2*sr)\n"; 
 
-uint8_t SD_Text_PPLRGB_ru[] = "\nФАР(PPL) Cин-Кр-Зел-FR, [моль/(с*м2*ср)]\n"; 
+uint8_t SD_Text_PPLRGB_ru[] = "\nФАР(PPL) Cин-Кр-Зел-FR, [моль/(с*м2*ср)]\n";
 uint8_t SD_Text_PPLRGB_en[] = "\nPPL, B-G-R-FR [mol/(s*m2*sr)]\n"; 
 
-uint8_t SD_Text_Eb_Er_ru[] = "\nEb, Er, Вт/м2\n"; 
+uint8_t SD_Text_Eb_Er_ru[] = "\nEb, Er, Вт/м2\n";
 uint8_t SD_Text_Eb_Er_en[] = "\nEb, Er, W/m2\n"; 
 
-uint8_t SD_Text_Lb_Lr_ru[] = "\nLb, Lr, Вт/(м2*ср)\n"; 
+uint8_t SD_Text_Lb_Lr_ru[] = "\nLb, Lr, Вт/(м2*ср)\n";
 uint8_t SD_Text_Lb_Lr_en[] = "\nLb, Lr, W/(m2*sr)\n"; 
 
-uint8_t SD_Text_CRI_ru[] = "\nИндекс цветопередачи (CRI): Ra, Rall, \nR1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15\n"; 
+uint8_t SD_Text_CRI_ru[] = "\nИндекс цветопередачи (CRI): Ra, Rall, \nR1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15\n";
 uint8_t SD_Text_CRI_en[] = "\nColour rendering index (CRI): Ra, Rall,\nR1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15\n"; 
 
-uint8_t SD_Text_CQS_ru[] = "\nИндекс цветопередачи (CQS): Qa, Qp, Qf, \nQ1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15\n"; 
+uint8_t SD_Text_CQS_ru[] = "\nИндекс цветопередачи (CQS): Qa, Qp, Qf, \nQ1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15\n";
 uint8_t SD_Text_CQS_en[] = "\nColor Quality Scale (CQS): Qa, Qp, Qf, \nQ1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15\n"; 
 
 extern float E_day, E_day_Wt, E_Night, SP_Measure, PPFD_PPL_Measure, PPFD_PPL_Blue_Measure, PPFD_PPL_Green_Measure, PPFD_PPL_Red_Measure, PPFD_PPL_Far_Red_Measure,
@@ -179,25 +179,25 @@ void WriteFLASH_Screen(uint8_t Screen)
 uint32_t PAGEError = 0;
 HAL_StatusTypeDef	flash_ok = HAL_ERROR;
 
-	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR); 
+	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
 		HAL_FLASH_Unlock();
 		HAL_FLASH_Unlock();
-	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR); 
+	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
 		HAL_Delay(100);
 		EraseInitStruct3.TypeErase = FLASH_TYPEERASE_PAGES;
-		EraseInitStruct3.Banks = FLASH_BANK_2; 
+		EraseInitStruct3.Banks = FLASH_BANK_2;
 		EraseInitStruct3.Page = (uint32_t)49;
-		EraseInitStruct3.NbPages = (uint32_t)0x1; 
+		EraseInitStruct3.NbPages = (uint32_t)0x1;
 
 	 HAL_FLASHEx_Erase(&EraseInitStruct3, &PAGEError);
 
 	HAL_Delay(50);
 
-	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR); 
+	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
 		HAL_FLASH_Lock();
 			flash_ok = HAL_ERROR;
 						HAL_FLASH_Unlock();
-						__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR); 
+						__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
 						while(flash_ok != HAL_OK){
 							flash_ok = HAL_FLASH_Program(TYPEPROGRAM_DOUBLEWORD, (uint32_t)SCREENADDR, Screen);
 					}

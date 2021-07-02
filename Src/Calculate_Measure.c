@@ -301,16 +301,19 @@ void Calculate_Lab(uint16_t colorimetry_XYZ_calculate[], uint8_t CIE_Type, uint8
 
 void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 {	
-	float Px, Py, x1 = 0.3333, y1 = 0.3333, x2, y2, divider;
+	float Px, Py, x1 = 0.3333, y1 = 0.3333, x2, y2, divider;//x1 = 0.3333, y1 = 0.3333 - triangle peak
 	int8_t triangle_p1, triangle_p2, triangle_p3, triangle_out, ld;
 	
 	x2 = colorimetry_xy1931[0];
 	y2 = colorimetry_xy1931[1];
 	
 	triangle_p1 = (((x1-x2)*(y34_dominant[0]-y1) - (x34_dominant[0] - y1)*(y1 - y2)) > 0)? 1 : -1;
+
 	triangle_p2 = (((x34_dominant[0] - x2)*(y34_dominant[64]-y34_dominant[0]) - (x34_dominant[64]-x34_dominant[0])*(y34_dominant[0]-y2)) > 0)? 1 : -1;
+
 	triangle_p3 = (((x34_dominant[64] - x2)*(y1 - y34_dominant[64]) - (x1 - x34_dominant[64])*(y34_dominant[64] - y2)) > 0)? 1 : -1;
-		
+
+
 	triangle_out = (triangle_p1 == triangle_p2 && triangle_p2 == triangle_p3) ? -1 : 1;
 	
 	for(uint8_t i = 0; i < 65; i++)

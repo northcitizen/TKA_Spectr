@@ -3,7 +3,7 @@ extern uint8_t TFT_direction;
 extern uint16_t WaveLenght_Graph[4];
 extern uint16_t PARGraph_B, PARGraph_G, PARGraph_R, PARGraph_IR;
 extern uint8_t Graph_Field;
-
+extern uint8_t GUI_screen_state;
 
 /* Color data for spectral distribution */
 /* Vertical */
@@ -401,33 +401,43 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
 
             			if(412-GraphData[i] < 181)
             			{
+            				if(GUI_screen_state == Graph_Screen)
             				DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 180, Vertical_color_dara[i]);
+            				if(GUI_screen_state == Graph_Screen)
             				DrawLineX(ZeroX+i, 182, ZeroX+i, 256, Vertical_color_dara[i]);
+            				if(GUI_screen_state == Graph_Screen)
             				DrawLineX(ZeroX+i, 258, ZeroX+i, 333, Vertical_color_dara[i]);
+            				if(GUI_screen_state == Graph_Screen)
             				DrawLineX(ZeroX+i, 335, ZeroX+i, 411, Vertical_color_dara[i]);
 
             			}
             			else if(412-GraphData[i] < 257)
 						{
+            				if(GUI_screen_state == Graph_Screen)
             				DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 256, Vertical_color_dara[i]);
+            				if(GUI_screen_state == Graph_Screen)
 							DrawLineX(ZeroX+i, 258, ZeroX+i, 333, Vertical_color_dara[i]);
+            				if(GUI_screen_state == Graph_Screen)
 							DrawLineX(ZeroX+i, 335, ZeroX+i, 411, Vertical_color_dara[i]);
 
 						}
             			else if(412-GraphData[i] < 334)
 						{
+            				if(GUI_screen_state == Graph_Screen)
             				DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 333, Vertical_color_dara[i]);
+            				if(GUI_screen_state == Graph_Screen)
 							DrawLineX(ZeroX+i, 335, ZeroX+i, 411, Vertical_color_dara[i]);
 						}
             			else
             			{
+            				if(GUI_screen_state == Graph_Screen)
             				DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 411, Vertical_color_dara[i]);
             			}
 
 //						DrawLineX(ZeroX+i, 411-GraphData[i], ZeroX+i, 411, Vertical_color_dara[i]);
 
 
-						if(GraphData_Prev[i]>GraphData[i])	DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 412 - GraphData_Prev[i], TFT_Black_Bkgr);
+						if(GraphData_Prev[i]>GraphData[i]) if(GUI_screen_state == Graph_Screen)	DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 412 - GraphData_Prev[i], TFT_Black_Bkgr);
 
 //						DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i+1, 412-GraphData[i+1], color);
             flag_spectral = 0;
@@ -440,28 +450,38 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
 
             if(253 - GraphData[graph_lenht-i] < 98)
             {
+            	 if(GUI_screen_state == Graph_Screen)
             	DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 97, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            	 if(GUI_screen_state == Graph_Screen)
             	DrawLineX(99, 72+i, 150, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            	 if(GUI_screen_state == Graph_Screen)
             	DrawLineX(152, 72+i, 203, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            	 if(GUI_screen_state == Graph_Screen)
             	DrawLineX(205, 72+i, 252, 72+i, Horizontal_color_dara[graph_lenht - i]);
             }
             else if(253 - GraphData[graph_lenht-i] < 151)
 			{
+            	if(GUI_screen_state == Graph_Screen)
 				DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 150, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            	if(GUI_screen_state == Graph_Screen)
 				DrawLineX(152, 72+i, 203, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            	if(GUI_screen_state == Graph_Screen)
 				DrawLineX(205, 72+i, 252, 72+i, Horizontal_color_dara[graph_lenht - i]);
 			}
             else if(253 - GraphData[graph_lenht-i] < 204)
 			{
+            	if(GUI_screen_state == Graph_Screen)
 				DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 203, 72+i, Horizontal_color_dara[graph_lenht - i]);
+            	if(GUI_screen_state == Graph_Screen)
 				DrawLineX(205, 72+i, 252, 72+i, Horizontal_color_dara[graph_lenht - i]);
 			}
             else
             {
+            	if(GUI_screen_state == Graph_Screen)
             	DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 252, 72+i, Horizontal_color_dara[graph_lenht - i]);
             }
 
-            if(GraphData_Prev[graph_lenht-i] > GraphData[graph_lenht-i])	DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 253 - GraphData_Prev[graph_lenht-i], 72+i, TFT_Black_Bkgr);
+            if(GraphData_Prev[graph_lenht-i] > GraphData[graph_lenht-i])	 DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 253 - GraphData_Prev[graph_lenht-i], 72+i, TFT_Black_Bkgr);
 
 //          DrawLineX(253 - GraphData[graph_lenht-i], 72+i+1, 253 - GraphData[graph_lenht-i+1], 72+i, color);
             flag_spectral = 0;
@@ -473,24 +493,34 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
 
 				if(GraphData[i]+18 > 174)
 				{
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(GraphData[i]+18, 76+i, 175, 76+i, Horizontal_color_dara[i]);
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(173, 76+i, 122, 76+i, Horizontal_color_dara[i]);
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(120, 76+i, 69, 76+i, Horizontal_color_dara[i]);
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(67, 76+i, 19, 76+i, Horizontal_color_dara[i]);
 				}
 				else if(GraphData[i]+18 > 121)
 				{
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(GraphData[i]+18, 76+i, 122, 76+i, Horizontal_color_dara[i]);
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(120, 76+i, 69, 76+i, Horizontal_color_dara[i]);
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(67, 76+i, 19, 76+i, Horizontal_color_dara[i]);
 				}
 				else if(GraphData[i]+18 > 68)
 				{
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(GraphData[i]+18, 76+i, 69, 76+i, Horizontal_color_dara[i]);
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(67, 76+i, 19, 76+i, Horizontal_color_dara[i]);
 				}
 				else
 				{
+					if(GUI_screen_state == Graph_Screen)
 					DrawLineX(GraphData[i]+18, 76+i, 18, 76+i, Horizontal_color_dara[i]);
 				}
 
@@ -503,13 +533,15 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
 				flag_spectral = 0;}
 					}
     memcpy(GraphData_Prev, GraphData, sizeof(GraphData_Prev));
+    if(GUI_screen_state == Graph_Screen)
     Spectral_Axes(direction);
+    if(GUI_screen_state == Graph_Screen)
 	Spectral_Axes_Text(direction);
 }
 
 
 
-uint16_t Line_Rabs_buff_graph2[355] = {0};
+extern uint16_t Line_Rabs_buff_graph2[355] = {0};
 void Rabs_graph_to_display(uint8_t direction, float Line_Rabs_buff[])
 {    
 	uint8_t    step = (direction == 0x00)? 4 :3;
@@ -519,6 +551,7 @@ void Rabs_graph_to_display(uint8_t direction, float Line_Rabs_buff[])
 
 	for(uint16_t ic = 0; ic <= 1023; ic+=step){
 		res = (uint16_t)((Line_Rabs_buff[ic]/max_Rabs_graph)*scale);
+		if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
 		Line_Rabs_buff_graph2[q] = (res > scale) ? scale : res;
 		q++;
 	}

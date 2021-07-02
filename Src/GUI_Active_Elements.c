@@ -144,6 +144,46 @@ void GUI_Button_Measure_Start_Pause(uint16_t X, uint16_t Y)
 	TFT_DrawLine(X+30, Y+27, X+30, Y+27, TFT_White);
 }
 
+void GUI_Button_Measure_Start_Pause_For_Button(uint16_t X, uint16_t Y, uint8_t type)
+{
+	if(!type)	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
+	else  TFT_FillRectangle(X, Y, X+54, Y+54, TFT_PAR_IRed);
+
+
+	TFT_FillRectangle(X+35, Y+11, X+37, Y+43, TFT_White); //Pause
+	TFT_FillRectangle(X+48, Y+11, X+50, Y+43, TFT_White);
+
+	TFT_DrawLine(X+6, Y+11, X+6, Y+44, TFT_White); //Play
+	TFT_DrawLine(X+6, Y+11, X+30, Y+27, TFT_White);
+	TFT_DrawLine(X+6, Y+44, X+30, Y+27, TFT_White);
+
+	//paint white
+	TFT_DrawLine(X+7, Y+12, X+7, Y+43, TFT_White);
+	TFT_DrawLine(X+8, Y+12, X+8, Y+43, TFT_White);
+	TFT_DrawLine(X+9, Y+13, X+9, Y+42, TFT_White);
+	TFT_DrawLine(X+10, Y+14, X+10, Y+41, TFT_White);
+	TFT_DrawLine(X+11, Y+14, X+11, Y+40, TFT_White);
+	TFT_DrawLine(X+12, Y+15, X+12, Y+40, TFT_White);
+	TFT_DrawLine(X+13, Y+16, X+13, Y+39, TFT_White);
+	TFT_DrawLine(X+14, Y+16, X+14, Y+38, TFT_White);
+	TFT_DrawLine(X+15, Y+17, X+15, Y+38, TFT_White);
+	TFT_DrawLine(X+16, Y+18, X+16, Y+37, TFT_White);
+	TFT_DrawLine(X+17, Y+18, X+17, Y+36, TFT_White);
+	TFT_DrawLine(X+18, Y+19, X+18, Y+36, TFT_White);
+	TFT_DrawLine(X+19, Y+20, X+19, Y+35, TFT_White);
+	TFT_DrawLine(X+20, Y+20, X+20, Y+34, TFT_White);
+	TFT_DrawLine(X+21, Y+21, X+21, Y+33, TFT_White);
+	TFT_DrawLine(X+22, Y+22, X+22, Y+33, TFT_White);
+	TFT_DrawLine(X+23, Y+22, X+23, Y+32, TFT_White);
+	TFT_DrawLine(X+24, Y+23, X+24, Y+31, TFT_White);
+	TFT_DrawLine(X+25, Y+24, X+25, Y+31, TFT_White);
+	TFT_DrawLine(X+26, Y+24, X+26, Y+30, TFT_White);
+	TFT_DrawLine(X+27, Y+25, X+27, Y+29, TFT_White);
+	TFT_DrawLine(X+28, Y+25, X+28, Y+28, TFT_White);
+	TFT_DrawLine(X+29, Y+26, X+29, Y+28, TFT_White);
+	TFT_DrawLine(X+30, Y+27, X+30, Y+27, TFT_White);
+}
+
 void GUI_Button_Measure_deltaE_Small(uint16_t X, uint16_t Y, uint16_t Active, uint8_t color)
 {
 		if(Active){
