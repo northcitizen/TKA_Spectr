@@ -1602,7 +1602,7 @@ void auto_exposure(void)
 //		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;
 	}
 	
-	if(max_el < Range_Value_MIN && exp_num != 9)//20000
+	if(max_el < 20000 && exp_num != 9)//20000
 	{
 		highSignal = 0;
 		lowSignal = 0;

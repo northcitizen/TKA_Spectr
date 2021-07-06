@@ -1129,7 +1129,7 @@ if(preGUI_screen_state != GUI_screen_state){
 uint8_t old_deltaE = 10, old_nan_deltaE = 0;
 void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uint8_t grey)
 {	
-	if(preGUI_screen_state != GUI_screen_state){old_nan_deltaE = 0;}
+	//if(preGUI_screen_state != GUI_screen_state){old_nan_deltaE = 0;}
 	char buffer[9] = {0};
 	uint8_t	delta_pos = 140, sign = 0, number = 0;
 	uint32_t dec = 10;

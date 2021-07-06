@@ -1263,18 +1263,17 @@ case Measure3_Screen:
 					start = 1;
 					pause = 0;
 
-					measure_number = 100;
+					measure_number = 250;
 					exp_stable = 0;
 					exp_num = 1;
 					cnt_delay = 1;
-					//cnt_delay_bar=1;
-					//htim2.Init.Period = 1;//////////5)
-					//max_el = 1;////////4)
-					//old_exp_num = 1;//////3)
-//					lowSignal = 0;
-//					highSignal = 0;
-					//exp_set = 1;//1)
-					//exp_start = 1;////2)
+					cnt_delay_bar=1;
+					htim2.Init.Period = 1;//////////5)
+					max_el = 1;////////4)
+					old_exp_num = 1;//////3)
+
+					exp_set = 1;//1)
+					exp_start = 1;////2)
 
 					//lowSignal = 1;
 					//memcpy(Line_Rabs_buff_graph2, 0, sizeof(Line_Rabs_buff_graph2));
