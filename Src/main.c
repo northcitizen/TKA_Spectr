@@ -1649,10 +1649,10 @@ void auto_exposure(void)
 	} else if((exp_num ==0 && max_el < 50000))//50000
 	{
 		highSignal = 0;
-	} else if((exp_num ==9 && max_el < DarkSignal[i_max]+2000))
+	} else if((exp_num == 9 && max_el < DarkSignal[i_max]+20000))
 	{
 		lowSignal = 1;
-	}else if((exp_num ==9 && max_el > DarkSignal[i_max]+ 2000))
+	}else if((exp_num == 9 && max_el > DarkSignal[i_max]+ 20000))
 	{
 		lowSignal = 0;
 	}

@@ -1020,52 +1020,120 @@ void GUI_Touch_Processing()
 			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54)) //Settings
 				{	
 					GUI_screen_state = DataSet1_Screen;
-					if(Measure_Field&Illuminance) {E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);}
-													if(Measure_Field&Irradiance) {E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);}
+			if (Measure_Field & delta_E) {
+				delta_Eab_Measure = Calculate_deltaEab();
+			}
+			if (Measure_Field & Illuminance) {
+				E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+			}
+			if (Measure_Field & Irradiance) {
+				E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);
+			}
 
-													if(Measure_Field&SP_measure) {E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
-																								E_day = (Measure_Field&Illuminance) ? E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
-																								SP_Measure = (Calculate_SP(E_day, E_Night));}
-													if(Measure_Field&PPFD) {PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff, WaveLenght));//*100000
-																											}
-													if(Measure_Field&PPFD_BGR) {PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, BLUE_RANGE));//*100000
-																											PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, GREEN_RANGE));//*100000
-																											PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, RED_RANGE));//*100000
-																											PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
-													}
-													if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
-													if(Measure_Field&CIE_Luv){Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);}
-													if(Measure_Field&CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
-													if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-													if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-													if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
-													ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
+			if (Measure_Field & SP_measure) {
+				E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
+				E_day = (Measure_Field & Illuminance) ?
+						E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+				SP_Measure = (Calculate_SP(E_day, E_Night));
+			}
+			if (Measure_Field & PPFD) {
+				PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff,
+						WaveLenght)); //*100000
+			}
+			if (Measure_Field & PPFD_BGR) {
+				PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, BLUE_RANGE)); //*100000
+				PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, GREEN_RANGE)); //*100000
+				PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff,
+						WaveLenght, RED_RANGE)); //*100000
+				PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, FAR_RED_RANGE)); //*100000
+			}
+			if (Measure_Field & CIE_Luv) {
+				Calculate_uv1976(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+				Calculate_uv(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+			}
+			if (Measure_Field & CIE_Lab) {
+				Calculate_Lab(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_XYZ1964 : colorimetry_XYZ1931,
+						Measure_Color_xy, Source_Type);
+			}
+			if (Measure_Field & lambda_d) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & lambda_c) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & EbEr) {
+				ELr_Measure = Calculate_ELr(Line_Rabs_buff, Hazard_Retina);
+				ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);
+			}
 				} 
 				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //down
 				{	
 					GUI_screen_state = (screen_count > 0) ? Measure2_Screen : Measure_Screen; 
 					//WriteFLASH_Screen(GUI_screen_state);
 					//WriteFLASH_Screen(Graph_Screen);
-					if(Measure_Field&Illuminance) {E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);}
-								if(Measure_Field&Irradiance) {E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);}
+			if (Measure_Field & delta_E) {
+				delta_Eab_Measure = Calculate_deltaEab();
+			}
+			if (Measure_Field & Illuminance) {
+				E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+			}
+			if (Measure_Field & Irradiance) {
+				E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);
+			}
 
-								if(Measure_Field&SP_measure) {E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
-																			E_day = (Measure_Field&Illuminance) ? E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
-																			SP_Measure = (Calculate_SP(E_day, E_Night));}
-								if(Measure_Field&PPFD) {PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff, WaveLenght));//*100000
-																						}
-								if(Measure_Field&PPFD_BGR) {PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, BLUE_RANGE));//*100000
-																						PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, GREEN_RANGE));//*100000
-																						PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, RED_RANGE));//*100000
-																						PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
-								}
-								if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
-								if(Measure_Field&CIE_Luv){Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);}
-								if(Measure_Field&CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
-								if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-								if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-								if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
-								ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
+			if (Measure_Field & SP_measure) {
+				E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
+				E_day = (Measure_Field & Illuminance) ?
+						E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+				SP_Measure = (Calculate_SP(E_day, E_Night));
+			}
+			if (Measure_Field & PPFD) {
+				PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff,
+						WaveLenght));					//*100000
+			}
+			if (Measure_Field & PPFD_BGR) {
+				PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, BLUE_RANGE));	//*100000
+				PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, GREEN_RANGE));	//*100000
+				PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff,
+						WaveLenght, RED_RANGE));					//*100000
+				PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
+			}
+			if (Measure_Field & CIE_Luv) {
+				Calculate_uv1976(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+				Calculate_uv(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+			}
+			if (Measure_Field & CIE_Lab) {
+				Calculate_Lab(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_XYZ1964 : colorimetry_XYZ1931,
+						Measure_Color_xy, Source_Type);
+			}
+			if (Measure_Field & lambda_d) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & lambda_c) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & EbEr) {
+				ELr_Measure = Calculate_ELr(Line_Rabs_buff, Hazard_Retina);
+				ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);
+			}
 				}
 				else 
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
@@ -1090,57 +1158,126 @@ void GUI_Touch_Processing()
 		break;
 				
 	case Measure2_Screen:
-			preGUI_screen_state = GUI_screen_state;
-		
-			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54)) //Settings
-				{	
-					GUI_screen_state = DataSet1_Screen;
-					if(Measure_Field&Illuminance) {E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);}
-													if(Measure_Field&Irradiance) {E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);}
+		preGUI_screen_state = GUI_screen_state;
 
-													if(Measure_Field&SP_measure) {E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
-																								E_day = (Measure_Field&Illuminance) ? E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
-																								SP_Measure = (Calculate_SP(E_day, E_Night));}
-													if(Measure_Field&PPFD) {PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff, WaveLenght));//*100000
-																											}
-													if(Measure_Field&PPFD_BGR) {PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, BLUE_RANGE));//*100000
-																											PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, GREEN_RANGE));//*100000
-																											PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, RED_RANGE));//*100000
-																											PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
-													}
-													if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
-													if(Measure_Field&CIE_Luv){Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);}
-													if(Measure_Field&CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
-													if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-													if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-													if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
-													ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
+		if (Touch_x >= 1 & Touch_x <= (1 + 54) & Touch_y >= 426
+				& Touch_y <= (426 + 54)) //Settings
+		{
+			GUI_screen_state = DataSet1_Screen;
+			if (Measure_Field & delta_E) {
+				delta_Eab_Measure = Calculate_deltaEab();
+			}
+			if (Measure_Field & Illuminance) {
+				E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+			}
+			if (Measure_Field & Irradiance) {
+				E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);
+			}
+
+			if (Measure_Field & SP_measure) {
+				E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
+				E_day = (Measure_Field & Illuminance) ?
+						E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+				SP_Measure = (Calculate_SP(E_day, E_Night));
+			}
+			if (Measure_Field & PPFD) {
+				PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff,
+						WaveLenght)); //*100000
+			}
+			if (Measure_Field & PPFD_BGR) {
+				PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, BLUE_RANGE)); //*100000
+				PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, GREEN_RANGE)); //*100000
+				PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff,
+						WaveLenght, RED_RANGE)); //*100000
+				PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, FAR_RED_RANGE)); //*100000
+			}
+			if (Measure_Field & CIE_Luv) {
+				Calculate_uv1976(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+				Calculate_uv(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+			}
+			if (Measure_Field & CIE_Lab) {
+				Calculate_Lab(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_XYZ1964 : colorimetry_XYZ1931,
+						Measure_Color_xy, Source_Type);
+			}
+			if (Measure_Field & lambda_d) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & lambda_c) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & EbEr) {
+				ELr_Measure = Calculate_ELr(Line_Rabs_buff, Hazard_Retina);
+				ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);
+			}
 				} 
 				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //down
 				{	
-					GUI_screen_state = (screen_count > 1) ? Measure3_Screen : Measure_Screen; 
-					//WriteFLASH_Screen(GUI_screen_state);
-					//WriteFLASH_Screen(Graph_Screen);
-					if(Measure_Field&Illuminance) {E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);}
-								if(Measure_Field&Irradiance) {E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);}
+					GUI_screen_state =
+					(screen_count > 1) ? Measure3_Screen : Measure_Screen;
+			if (Measure_Field & delta_E) {
+				delta_Eab_Measure = Calculate_deltaEab();
+			}
+			if (Measure_Field & Illuminance) {
+				E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+			}
+			if (Measure_Field & Irradiance) {
+				E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);
+			}
 
-								if(Measure_Field&SP_measure) {E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
-																			E_day = (Measure_Field&Illuminance) ? E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
-																			SP_Measure = (Calculate_SP(E_day, E_Night));}
-								if(Measure_Field&PPFD) {PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff, WaveLenght));//*100000
-																						}
-								if(Measure_Field&PPFD_BGR) {PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, BLUE_RANGE));//*100000
-																						PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, GREEN_RANGE));//*100000
-																						PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, RED_RANGE));//*100000
-																						PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
-								}
-								if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
-								if(Measure_Field&CIE_Luv){Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);}
-								if(Measure_Field&CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
-								if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-								if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-								if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
-								ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
+			if (Measure_Field & SP_measure) {
+				E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
+				E_day = (Measure_Field & Illuminance) ?
+						E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+				SP_Measure = (Calculate_SP(E_day, E_Night));
+			}
+			if (Measure_Field & PPFD) {
+				PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff,
+						WaveLenght)); //*100000
+			}
+			if (Measure_Field & PPFD_BGR) {
+				PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, BLUE_RANGE)); //*100000
+				PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, GREEN_RANGE)); //*100000
+				PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff,
+						WaveLenght, RED_RANGE)); //*100000
+				PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, FAR_RED_RANGE)); //*100000
+			}
+
+			if (Measure_Field & CIE_Luv) {
+				Calculate_uv1976(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+				Calculate_uv(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+			}
+			if (Measure_Field & CIE_Lab) {
+				Calculate_Lab(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_XYZ1964 : colorimetry_XYZ1931,
+						Measure_Color_xy, Source_Type);
+			}
+			if (Measure_Field & lambda_d) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & lambda_c) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & EbEr) {
+				ELr_Measure = Calculate_ELr(Line_Rabs_buff, Hazard_Retina);
+				ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);
+			}
 				}
 				else 
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
@@ -1166,52 +1303,88 @@ case Measure3_Screen:
 		
 			if(Touch_x >= 1 & Touch_x <= (1+54) & Touch_y >=426 & Touch_y <=(426+54)) //Settings
 			{
-				GUI_screen_state = DataSet1_Screen;
-				if(Measure_Field&Illuminance) {E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);}
-												if(Measure_Field&Irradiance) {E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);}
+			GUI_screen_state = DataSet1_Screen;
 
-												if(Measure_Field&SP_measure) {E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
-																							E_day = (Measure_Field&Illuminance) ? E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
-																							SP_Measure = (Calculate_SP(E_day, E_Night));}
-												if(Measure_Field&PPFD) {PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff, WaveLenght));//*100000
-																										}
-												if(Measure_Field&PPFD_BGR) {PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, BLUE_RANGE));//*100000
-																										PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, GREEN_RANGE));//*100000
-																										PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, RED_RANGE));//*100000
-																										PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
-												}
-												if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
-												if(Measure_Field&CIE_Luv){Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);}
-												if(Measure_Field&CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
-												if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-												if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-												if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
-												ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
+			if (Measure_Field & delta_E) {
+				delta_Eab_Measure = Calculate_deltaEab();
 			}
+			if (Measure_Field & Illuminance) {
+				E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+			}
+			if (Measure_Field & Irradiance) {
+				E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);
+			}
+			if (Measure_Field & SP_measure) {
+				E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
+				E_day = (Measure_Field & Illuminance) ?
+						E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+				SP_Measure = (Calculate_SP(E_day, E_Night));
+			}
+			if (Measure_Field & PPFD) {
+				PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff,
+						WaveLenght)); //*100000
+			}
+			if (Measure_Field & PPFD_BGR) {
+				PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, BLUE_RANGE)); //*100000
+				PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, GREEN_RANGE)); //*100000
+				PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff,
+						WaveLenght, RED_RANGE)); //*100000
+				PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, FAR_RED_RANGE)); //*100000
+			}
+			if (Measure_Field & CIE_Luv) {
+				Calculate_uv1976(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+				Calculate_uv(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+			}
+			if (Measure_Field & CIE_Lab) {
+				Calculate_Lab(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_XYZ1964 : colorimetry_XYZ1931,
+						Measure_Color_xy, Source_Type);
+			}
+			if (Measure_Field & lambda_d) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & lambda_c) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & EbEr) {
+				ELr_Measure = Calculate_ELr(Line_Rabs_buff, Hazard_Retina);
+				ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);
+			}
+		}
 			if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //Down
 			{
 				GUI_screen_state = Measure_Screen;
 				//WriteFLASH_Screen(GUI_screen_state);
+				if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
 				if(Measure_Field&Illuminance) {E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);}
-							if(Measure_Field&Irradiance) {E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);}
+				if(Measure_Field&Irradiance) {E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);}
+				if(Measure_Field&SP_measure) {E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
+				E_day = (Measure_Field&Illuminance) ? E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+				SP_Measure = (Calculate_SP(E_day, E_Night));}
+				if(Measure_Field&PPFD)
+				{
+					PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff, WaveLenght));//*100000
+				}
+				if(Measure_Field&PPFD_BGR) {PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, BLUE_RANGE));//*100000
+				PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, GREEN_RANGE));//*100000
+				PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, RED_RANGE));//*100000
+				PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
+				}
 
-							if(Measure_Field&SP_measure) {E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
-																		E_day = (Measure_Field&Illuminance) ? E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
-																		SP_Measure = (Calculate_SP(E_day, E_Night));}
-							if(Measure_Field&PPFD) {PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff, WaveLenght));//*100000
-																					}
-							if(Measure_Field&PPFD_BGR) {PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, BLUE_RANGE));//*100000
-																					PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, GREEN_RANGE));//*100000
-																					PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, RED_RANGE));//*100000
-																					PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
-							}
-							if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
-							if(Measure_Field&CIE_Luv){Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);}
-							if(Measure_Field&CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
-							if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-							if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-							if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
-							ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
+				if(Measure_Field&CIE_Luv){Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);}
+				if(Measure_Field&CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
+				if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
+				if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
+				if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
+				ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
 			}
 			else
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
@@ -1263,14 +1436,14 @@ case Measure3_Screen:
 					start = 1;
 					pause = 0;
 
-					measure_number = 250;
-					exp_stable = 0;
+					measure_number = 10;
+					exp_stable = 1;
 					exp_num = 1;
 					cnt_delay = 1;
 					cnt_delay_bar=1;
-					htim2.Init.Period = 1;//////////5)
-					max_el = 1;////////4)
-					old_exp_num = 1;//////3)
+					htim2.Init.Period = 500;//////////5)
+					max_el = 010000;////////4)
+					old_exp_num = 0;//////3)
 
 					exp_set = 1;//1)
 					exp_start = 1;////2)
@@ -1427,26 +1600,61 @@ case Measure3_Screen:
 				{
 					//WriteFLASH_Screen(Measure_Screen);/////////////////////////////////////////////////////////////////
 					GUI_screen_state = Measure_Screen;
-					if(Measure_Field&Illuminance) {E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);}
-								if(Measure_Field&Irradiance) {E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);}
+			if (Measure_Field & delta_E) {
+				delta_Eab_Measure = Calculate_deltaEab();
+			}
+			if (Measure_Field & Illuminance) {
+				E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+			}
+			if (Measure_Field & Irradiance) {
+				E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);
+			}
 
-								if(Measure_Field&SP_measure) {E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
-																			E_day = (Measure_Field&Illuminance) ? E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
-																			SP_Measure = (Calculate_SP(E_day, E_Night));}
-								if(Measure_Field&PPFD) {PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff, WaveLenght));//*100000
-																						}
-								if(Measure_Field&PPFD_BGR) {PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, BLUE_RANGE));//*100000
-																						PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, GREEN_RANGE));//*100000
-																						PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, RED_RANGE));//*100000
-																						PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff, WaveLenght, FAR_RED_RANGE));//*100000
-								}
-								if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
-								if(Measure_Field&CIE_Luv){Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);Calculate_uv((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);}
-								if(Measure_Field&CIE_Lab){Calculate_Lab((Measure_Color_xy == 0x00) ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);}
-								if(Measure_Field&lambda_d){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-								if(Measure_Field&lambda_c){Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);}
-								if(Measure_Field&EbEr){ELr_Measure = Calculate_ELr(Line_Rabs_buff,Hazard_Retina);
-								ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);}
+			if (Measure_Field & SP_measure) {
+				E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
+				E_day = (Measure_Field & Illuminance) ?
+						E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+				SP_Measure = (Calculate_SP(E_day, E_Night));
+			}
+			if (Measure_Field & PPFD) {
+				PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff,
+						WaveLenght)); //*100000
+			}
+			if (Measure_Field & PPFD_BGR) {
+				PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, BLUE_RANGE)); //*100000
+				PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, GREEN_RANGE)); //*100000
+				PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff,
+						WaveLenght, RED_RANGE)); //*100000
+				PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(
+						Line_Rabs_buff, WaveLenght, FAR_RED_RANGE)); //*100000
+			}
+
+			if (Measure_Field & CIE_Luv) {
+				Calculate_uv1976(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+				Calculate_uv(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_xy1964 : colorimetry_xy1931);
+			}
+			if (Measure_Field & CIE_Lab) {
+				Calculate_Lab(
+						(Measure_Color_xy == 0x00) ?
+								colorimetry_XYZ1964 : colorimetry_XYZ1931,
+						Measure_Color_xy, Source_Type);
+			}
+			if (Measure_Field & lambda_d) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & lambda_c) {
+				Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+			}
+			if (Measure_Field & EbEr) {
+				ELr_Measure = Calculate_ELr(Line_Rabs_buff, Hazard_Retina);
+				ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);
+			}
 				}	else 			
 				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Rotation_Screen
 				{
@@ -2115,28 +2323,29 @@ case Measure3_Screen:
 				{	
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Prev_Inf_Screen;
-					if (Color_rend_Field & CRI_CQS){
-																CRICQS_done = 0x00;
-																max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-																Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-																Calculate_xy1931(colorimetry_XYZ1931);
-																Calculate_uv(colorimetry_xy1931);
-																Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-																if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
-																else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
-																CRICQS_done = 0x01;
-															}
-															else{////
-																CRICQS_done = 0x00;
-																Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-																Calculate_xy1931(colorimetry_XYZ1931);
-																Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-																max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-																if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
-																else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
-																CRICQS_done = 0x01;
-															}
-															Calc_ColorRend = !Calc_ColorRend;
+					if (Color_rend_Field & CRI_CQS)
+					{
+						CRICQS_done = 0x00;
+						max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+						Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+						Calculate_xy1931(colorimetry_XYZ1931);
+						Calculate_uv(colorimetry_xy1931);
+						Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+						if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
+						else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
+						CRICQS_done = 0x01;
+					}else
+					{
+						CRICQS_done = 0x00;
+						Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+						Calculate_xy1931(colorimetry_XYZ1931);
+						Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+						max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+						if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
+						else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
+						CRICQS_done = 0x01;
+					}
+					Calc_ColorRend = !Calc_ColorRend;
 					switch (Prev_Inf_Screen){
 						case Measure_Screen: GUI_screen_state = Measure_Screen; 		break;
 						case Graph_Screen:  GUI_screen_state = Graph_Screen; 		break;

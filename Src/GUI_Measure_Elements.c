@@ -1149,11 +1149,14 @@ void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, 
 	else{
 		if(old_nan_deltaE){TFT_FillRectangle(X+40, Y, X+250, Y+26, TFT_Black_Bkgr);}
 	old_nan_deltaE = 0;
+	Value = floor(Value*10)/10.0;
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black_Bkgr);
 	TFT_SetFont(&Font26EN_arch_digit);
-	Value = floor(Value*10)/10.0;
-	if(Value < 0){Value *= -1; sign = 1;}
+	if(Value < 0)
+	{
+		Value *= -1; sign = 1;
+	}
 	
 	sprintf (buffer, "%.2f", Value);
 	

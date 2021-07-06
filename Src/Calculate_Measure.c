@@ -307,31 +307,42 @@ void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 	x2 = colorimetry_xy1931[0];
 	y2 = colorimetry_xy1931[1];
 	
-//	triangle_p1 = (((x2-x34_dominant[0])*(y34_dominant[0]-y1) + (y2-y34_dominant[0])*(x1 - x34_dominant[0]))>0) ? 1 : -1;
-//	triangle_p2 = (((x2-x1)*(y1 - y34_dominant[64]) + (y2-y1)*(x34_dominant[64]-x1))>0) ? 1: -1;
-//	triangle_p3 = (((x2 - x34_dominant[700])*(y34_dominant[64]-y34_dominant[0]) + (y2 - y34_dominant[64])*(x34_dominant[0] - x34_dominant[64]))>0) ? 1 : -1;
-	triangle_p1 = (((x1-x2)*(y34_dominant[0]-y1) - (x34_dominant[0] - y1)*(y1 - y2)) > 0)? 1 : -1;
-	triangle_p2 = (((x34_dominant[0] - x2)*(y34_dominant[64]-y34_dominant[0]) - (x34_dominant[64]-x34_dominant[0])*(y34_dominant[0]-y2)) > 0)? 1 : -1;
-	triangle_p3 = (((x34_dominant[64] - x2)*(y1 - y34_dominant[64]) - (x1 - x34_dominant[64])*(y34_dominant[64] - y2)) > 0)? 1 : -1;
+	triangle_p1 = (((x2-x34_dominant[0])*(y34_dominant[0]-y1) + (y2-y34_dominant[0])*(x1 - x34_dominant[0]))>0) ? 1 : -1;
+	triangle_p2 = (((x2-x1)*(y1 - y34_dominant[64]) + (y2-y1)*(x34_dominant[64]-x1))>0) ? 1: -1;
+	triangle_p3 = (((x2 - x34_dominant[700])*(y34_dominant[64]-y34_dominant[0]) + (y2 - y34_dominant[64])*(x34_dominant[0] - x34_dominant[64]))>0) ? 1 : -1;
+//	triangle_p1 = (((x1-x2)*(y34_dominant[0]-y1) - (x34_dominant[0] - y1)*(y1 - y2)) > 0)? 1 : -1;
+//	triangle_p2 = (((x34_dominant[0] - x2)*(y34_dominant[64]-y34_dominant[0]) - (x34_dominant[64]-x34_dominant[0])*(y34_dominant[0]-y2)) > 0)? 1 : -1;
+//	triangle_p3 = (((x34_dominant[64] - x2)*(y1 - y34_dominant[64]) - (x1 - x34_dominant[64])*(y34_dominant[64] - y2)) > 0)? 1 : -1;
 
 	//triangle_out = (triangle_p1 == triangle_p2 && triangle_p2 == triangle_p3) ? -1 : 1;
 	triangle_out = (triangle_p1 > 0 && triangle_p2 > 0 && triangle_p3 > 0) ? 1 : -1;
 	for(uint8_t i = 0; i < 64; i++)
 	{
 		divider = (x1-x2)*(y34_dominant[i] - y34_dominant[i+1]) - (y1 - y2)*(x34_dominant[i] - x34_dominant[i+1]);
+
 		Px = ((x1*y2 - y1*x2)*(x34_dominant[i] - x34_dominant[i+1]) - (x1 - x2)*(x34_dominant[i]*y34_dominant[i+1] - y34_dominant[i]*x34_dominant[i+1]))/divider;
 		Py = ((x1*y2 - y1*x2)*(y34_dominant[i] - y34_dominant[i+1]) - (y1 - y2)*(x34_dominant[i]*y34_dominant[i+1] - y34_dominant[i]*x34_dominant[i+1]))/divider;
 		
 		if(Px > MIN(x34_dominant[i], x34_dominant[i+1]) && Px < MAX(x34_dominant[i], x34_dominant[i+1]) && Py > MIN(y34_dominant[i], y34_dominant[i+1]) && Py < MAX(y34_dominant[i], y34_dominant[i+1]))
 		{
-			ld = (x2 > MIN(Px, x1) && x2 < MAX(Px, x1))? 1:-1;
+			//ld = (x2 > MIN(Px, x1) && x2 < MAX(Px, x1))? 1:-1;
 			
-			if((ld*triangle_out) > 0)
-			{
+			if(x2 > MIN(Px, x1) && x2 < MAX(Px, x1))
+			{//_ld
 				lambda_d_Measure = lamda_dominant[i+1];
-			} else {
-				lambda_d_Measure = triangle_out < 0 ? lamda_dominant[i+1] : lamda_dominant[i+1];
-			}
+
+			            }
+			            else
+			            {
+			            	lambda_d_Measure = lamda_dominant[i+1];
+
+			            }
+//			if((ld*triangle_out) > 0)
+//			{
+//				lambda_d_Measure = lamda_dominant[i+1];
+//			} else {
+//				lambda_d_Measure = triangle_out < 0 ? 0 : lamda_dominant[i+1];
+//			}
 		}
 	}
 }
