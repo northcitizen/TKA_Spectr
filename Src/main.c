@@ -1051,9 +1051,12 @@ int main(void)
 	HAL_Delay(1);
 #endif
   	MX_USART2_UART_Init();
+  	HAL_Delay(1);
   	HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);////////////////////////////////////////////////////////////////////
-    HAL_NVIC_EnableIRQ(USART2_IRQn);//////////////////////////////////////////////////////////////////////////////
-    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);//////////////////////////////////////////////////////////////////////////
+  	HAL_Delay(1);
+  	HAL_NVIC_EnableIRQ(USART2_IRQn);//////////////////////////////////////////////////////////////////////////////
+  	HAL_Delay(1);
+  	__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);//////////////////////////////////////////////////////////////////////////
 
 
 	HAL_Delay(1);
@@ -1098,7 +1101,9 @@ int main(void)
 	HAL_Delay(20);
 
 	BlueTooth_GPIO_Init();
-
+#ifdef BT
+		BlueTooth_Module_Init();
+#endif
 
 ////////////////////////////////////////////////
 
@@ -1124,48 +1129,48 @@ int main(void)
 
 //Load screen data	
 	buff_set = Calibration_Load_1byte(SET_MODEEL, 3);
-	if(buff_set == 0xFF){Mode_EL = 0;} else{Mode_EL = buff_set;}		
-			
+	if(buff_set == 0xFF){Mode_EL = 0;} else{Mode_EL = buff_set;}
+
 	buff_set = Calibration_Load_1byte(SET_GRAPHFIELD, 3);
 	if(buff_set == 0xFF){Graph_Field = 0;} else{Graph_Field = buff_set;}
-	
+
 	buff_set = Calibration_Load_1byte(SET_COLORFIELD, 3);
-	if(buff_set == 0xFF){Color_Field |= Color_CIE_xy;} else{Color_Field = buff_set;}	
-	
+	if(buff_set == 0xFF){Color_Field |= Color_CIE_xy;} else{Color_Field = buff_set;}
+
 	buff_set = Calibration_Load_1byte(SET_COLORRENDFIELD, 3);
-	if(buff_set == 0xFF){Color_rend_Field = 0;} else{Color_rend_Field = buff_set;}	
-	
+	if(buff_set == 0xFF){Color_rend_Field = 0;} else{Color_rend_Field = buff_set;}
+
 		buff_set = Calibration_Load_1byte(SET_LANGUAGE, 3);
-	if(buff_set == 0xFF){Language_status = Ru;} else{Language_status = buff_set;}	
-			
+	if(buff_set == 0xFF){Language_status = Ru;} else{Language_status = buff_set;}
+
 	buff_set = Calibration_Load_1byte(SET_SOURCETYPE, 3);
-	if(buff_set == 0xFF){Source_Type |= Source_D55;} else{Source_Type = buff_set;}	
-	
+	if(buff_set == 0xFF){Source_Type |= Source_D55;} else{Source_Type = buff_set;}
+
 	buff_set = Calibration_Load_1byte(SET_BLUETOOTH, 3);
-	if(buff_set == 0xFF){Bluetooth = 0x00;} else{Bluetooth = buff_set;}	
-	
-	buff_set2 = Calibration_Load_2byte(SET_MEASUREFIELD, 1);		
-	if(buff_set2 == 0xFFFF){Measure_Field = 0;} else{Measure_Field = buff_set2;}		
-	
-	buff_set2 = Calibration_Load_2byte(FILENUMBER, 1);		
-	if(buff_set2 == 0xFFFF){sdfile_cnt = 0;} else{sdfile_cnt = buff_set2;}	
-	
-	
-//Load calibration data	
+	if(buff_set == 0xFF){Bluetooth = 0x00;} else{Bluetooth = buff_set;}
+
+	buff_set2 = Calibration_Load_2byte(SET_MEASUREFIELD, 1);
+	if(buff_set2 == 0xFFFF){Measure_Field = 0;} else{Measure_Field = buff_set2;}
+
+	buff_set2 = Calibration_Load_2byte(FILENUMBER, 1);
+	if(buff_set2 == 0xFFFF){sdfile_cnt = 0;} else{sdfile_cnt = buff_set2;}
+
+
+//Load calibration data
 	Calibration_WaveLenght_Graph();
-	Calibration_Exposure_Change(exp_num);
+	Calibration_Exposure_Change(exp_num);/////////////////////////////////////////////////////////////////////////////////
 	Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
 
 	EnergyFactor_E = Calibration_Load_float(ENERGY_FACTOR_E);
 	EnergyFactor_L = Calibration_Load_float(ENERGY_FACTOR_L);
-	
+
 	Calibration_Load_Pack(SPECTRAL_DAY, 0x400, Spectral_day);
 	Calibration_Load_Pack(SPECTRAL_NIGHT, 0x400, Spectral_night);
-	
+
 	Calibration_Load_Pack(X10_CIE1964, 0x400, calibratre_x_1964);
 	Calibration_Load_Pack(Y10_CIE1964, 0x400, calibratre_y_1964);
 	Calibration_Load_Pack(Z10_CIE1964, 0x400, calibratre_z_1964);
-	
+
 	Calibration_Load_Pack(X2_CIE1931, 0x400, calibratre_x_1931);
 	Calibration_Load_Pack(Z2_CIE1931, 0x400, calibratre_z_1931);
 
@@ -1174,50 +1179,50 @@ int main(void)
 
 
 	uint16_t wave_num = 0;
-	
+
 	for(uint16_t i = 0; i < 2*1024; i=i+8){
 		WaveLenght[wave_num] = ((float)Calibration_Load_2byte(WAVELENGHT+i, 0))/100.0+300.0;
 		WaveLenght[wave_num+1] = ((float)Calibration_Load_2byte(WAVELENGHT+i, 1))/100.0+300.0;
 		WaveLenght[wave_num+2] = ((float)Calibration_Load_2byte(WAVELENGHT+i, 2))/100.0+300.0;
 		WaveLenght[wave_num+3] = ((float)Calibration_Load_2byte(WAVELENGHT+i, 3))/100.0+300.0;
-		
+
 		Hazard_Blue[wave_num] = ((float)Calibration_Load_2byte(SPECTRAL_BLUELIGHT+i, 0))/1000.0;
 		Hazard_Blue[wave_num+1] = ((float)Calibration_Load_2byte(SPECTRAL_BLUELIGHT+i, 1))/1000.0;
 		Hazard_Blue[wave_num+2] = ((float)Calibration_Load_2byte(SPECTRAL_BLUELIGHT+i, 2))/1000.0;
 		Hazard_Blue[wave_num+3] = ((float)Calibration_Load_2byte(SPECTRAL_BLUELIGHT+i, 3))/1000.0;
-		
+
 		Hazard_Retina[wave_num] = ((float)Calibration_Load_2byte(SPECTRAL_RETINA+i, 0))/1000.0;
 		Hazard_Retina[wave_num+1] = ((float)Calibration_Load_2byte(SPECTRAL_RETINA+i, 1))/1000.0;
 		Hazard_Retina[wave_num+2] = ((float)Calibration_Load_2byte(SPECTRAL_RETINA+i, 2))/1000.0;
 		Hazard_Retina[wave_num+3] = ((float)Calibration_Load_2byte(SPECTRAL_RETINA+i, 3))/1000.0;
-		
+
 		S0_lambda[wave_num] = ((float)Calibration_Load_2byte(SPECTRAL_S0+i, 0))/100.0-50;
 		S0_lambda[wave_num+1] = ((float)Calibration_Load_2byte(SPECTRAL_S0+i, 1))/100.0-50;
 		S0_lambda[wave_num+2] = ((float)Calibration_Load_2byte(SPECTRAL_S0+i, 2))/100.0-50;
 		S0_lambda[wave_num+3] = ((float)Calibration_Load_2byte(SPECTRAL_S0+i, 3))/100.0-50;
-		
+
 		S1_lambda[wave_num] = ((float)Calibration_Load_2byte(SPECTRAL_S1+i, 0))/100.0-50;
 		S1_lambda[wave_num+1] = ((float)Calibration_Load_2byte(SPECTRAL_S1+i, 1))/100.0-50;
 		S1_lambda[wave_num+2] = ((float)Calibration_Load_2byte(SPECTRAL_S1+i, 2))/100.0-50;
 		S1_lambda[wave_num+3] = ((float)Calibration_Load_2byte(SPECTRAL_S1+i, 3))/100.0-50;
-		
-		
+
+
 		S2_lambda[wave_num] = ((float)Calibration_Load_2byte(SPECTRAL_S2+i, 0))/100.0-50;
 		S2_lambda[wave_num+1] = ((float)Calibration_Load_2byte(SPECTRAL_S2+i, 1))/100.0-50;
 		S2_lambda[wave_num+2] = ((float)Calibration_Load_2byte(SPECTRAL_S2+i, 2))/100.0-50;
 		S2_lambda[wave_num+3] = ((float)Calibration_Load_2byte(SPECTRAL_S2+i, 3))/100.0-50;
-		
+
 		wave_num = wave_num + 4;
 	}
-	
+
 
 	Calibration_date =	Calibration_Load_2byte(CALIBRATION_DATE, 0);
 	Calibration_month =	Calibration_Load_2byte(CALIBRATION_DATE, 1);
 	Calibration_year =  Calibration_Load_2byte(CALIBRATION_YEAR, 0);
-	
+
 	Serial_part_device =  Calibration_Load_2byte(SERIAL_DEVICE, 0);
 	Serial_number_device =  Calibration_Load_2byte(SERIAL_DEVICE, 1);
-	
+
 	for(uint16_t i = 0; i < 1024; i++){
 		if(WaveLenght[i]<=400 && WaveLenght[i+1]>=400)
 		{
@@ -1234,12 +1239,12 @@ int main(void)
 			PARGraph_IR = i;
 		}
 	}
-	
+
 	WaveLenght_Graph[0] = (uint16_t)WaveLenght[0];
 	WaveLenght_Graph[1] = (uint16_t)WaveLenght[255];
 	WaveLenght_Graph[2] = (uint16_t)WaveLenght[511];
 	WaveLenght_Graph[3] = (uint16_t)WaveLenght[1023];
-	
+
 	if(Mode_EL == 0){
 		Factor2 = Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_L);
 	}else
@@ -1281,13 +1286,16 @@ int main(void)
 //		uint8_t p = 0;
 //	} else{TFT_FillScreen_DMA(TFT_Red);}
 
-#ifdef BT
-		BlueTooth_Module_Init();
-#endif
+
+
+
 		GUI_Title_Screen();
 		uint8_t p = 0;
-		HAL_Delay(2000);	
+		HAL_Delay(2000);
 		usb_receive_processing();
+
+
+
 #ifdef BT
 		if(Bluetooth == 0)
 		{
@@ -1390,6 +1398,7 @@ GUI_Button_Measure_Start_Pause_For_Button(109, 426, 1);
 	 			cnt_delay++;
 	 			Temperature_Measure_Func();
 	 			Calculate_Data();
+	 			GUI_SignalLevel();
 	 			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
 	 			{
 	 				auto_exposure();
@@ -1523,6 +1532,7 @@ measure_number--;
         	        scr_refresh = 0;
         	        block_graph = 0;
         	        GUI_SignalLevel();
+        	        if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
 
 
         	        }
@@ -1556,8 +1566,7 @@ measure_number--;
         //30.06.2021-------------------------------------------------------------------------------------------------------------------
 
 
-
-
+        if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
 
         if (pause && !Mode_EL)
         {

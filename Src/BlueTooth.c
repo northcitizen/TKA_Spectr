@@ -128,16 +128,16 @@ void BlueTooth_Module_Init(void)
 
 	BlueTooth_GPIO_Init();
 	BlueTooth_AT_Mode();
-	HAL_Delay(1000);
+	//HAL_Delay(1000);
 	BlueTooth_Param_Init(BT_BAUD_RATE, 1, 0);
 	BlueTooth_Module_Name("TKA_SPECTR");
 	BlueTooth_Set_PIN("1488");
 	Bluetooth_Reset();
 
 	HAL_GPIO_WritePin(GPIOB, BT_PROG_PIN, GPIO_PIN_RESET);
-	HAL_Delay(100);
+//	HAL_Delay(100);
 	HAL_GPIO_WritePin(GPIOB, BT_VCC_PIN, GPIO_PIN_RESET);
-	HAL_Delay(100);
+//	HAL_Delay(100);
 
 
 }

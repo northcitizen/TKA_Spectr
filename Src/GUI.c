@@ -713,7 +713,6 @@ void GUI_Graph_Screen(){
 
 	}
 	Prev_Inf_Screen = Graph_Screen;	
-
 }
 
 
