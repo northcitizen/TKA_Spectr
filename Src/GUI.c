@@ -1436,12 +1436,12 @@ case Measure3_Screen:
 					pause = 0;
 
 					measure_number = 10;
-					exp_stable = 1;
-					exp_num = 1;
-					cnt_delay = 1;
-					cnt_delay_bar=1;
-					htim2.Init.Period = 500;//////////5)
-					max_el = 010000;////////4)
+					exp_stable = 0;
+					exp_num = 0;
+					cnt_delay = 0;
+					cnt_delay_bar=0;
+					htim2.Init.Period = 0;//////////5)
+					max_el = 0;////////4)
 					old_exp_num = 0;//////3)
 
 					exp_set = 1;//1)

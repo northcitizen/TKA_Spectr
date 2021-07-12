@@ -11,7 +11,7 @@ volatile uint16_t temporary_y = 0, temporary_x = 0;
 void Error(void)
 {
 
-  }
+ }
 
 uint8_t TS_IO_Read(uint8_t DeviceAddr, uint8_t Reg)
 {

@@ -1024,6 +1024,15 @@ void Test_GUI(void)
 
 int main(void)
 {
+	//Deinit
+
+	HAL_DeInit();
+	//HAL_ADC_DeInit();
+	HAL_TIM_PWM_MspDeInit(&htim15);
+	//HAL_LTDC_DeInit();
+
+
+	//Init
   HAL_Init();
 	HAL_Delay(1);
   SystemClock_Config();
@@ -1101,9 +1110,7 @@ int main(void)
 	HAL_Delay(20);
 
 	BlueTooth_GPIO_Init();
-#ifdef BT
-		BlueTooth_Module_Init();
-#endif
+
 
 ////////////////////////////////////////////////
 
@@ -1295,7 +1302,9 @@ int main(void)
 		usb_receive_processing();
 
 
-
+#ifdef BT
+		BlueTooth_Module_Init();
+#endif
 #ifdef BT
 		if(Bluetooth == 0)
 		{
@@ -1532,8 +1541,8 @@ measure_number--;
         	        scr_refresh = 0;
         	        block_graph = 0;
         	        GUI_SignalLevel();
-        	        if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
 
+        	        if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
 
         	        }
         	        } else{__asm("nop");}
@@ -2301,12 +2310,11 @@ static void MX_LTDC_Init(void)
 /* DMA2D init function */
 static void MX_DMA2D_Init(void)
 {
-
   hdma2d.Instance = DMA2D;
   hdma2d.Init.Mode = DMA2D_R2M;
   hdma2d.Init.ColorMode = DMA2D_OUTPUT_RGB565;
   hdma2d.Init.OutputOffset = 0;
-	hdma2d.LayerCfg[0].InputOffset = 0;
+  hdma2d.LayerCfg[0].InputOffset = 0;
   hdma2d.LayerCfg[0].InputColorMode = DMA2D_INPUT_RGB565;
   hdma2d.LayerCfg[0].AlphaMode = DMA2D_NO_MODIF_ALPHA;
   hdma2d.LayerCfg[0].InputAlpha =125;
