@@ -1446,19 +1446,6 @@ void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA
 	uint8_t	delta_pos = 180, sign = 0, number = 0;
 	uint32_t dec = 10;
 	
-
-	//if(preGUI_screen_state != GUI_screen_state || GUI_screen_state == Color_Screen){
-				TFT_SetTextColor(TFT_White);
-				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_DrawChar(X+17, Y, '*');
-				TFT_DrawChar(X+17, Y+35, '*');
-				TFT_DrawChar(X+17, Y+70, '*');
-				TFT_SetFont(&Font26EN_arch_big);
-				TFT_DrawChar(X, Y, 'L'-33);
-				TFT_SetFont(&Font26EN_arch_small);
-				TFT_DrawChar(X, Y+35, 'a'-65);
-				TFT_DrawChar(X, Y+70, 'b'-65);//}
-
 	if(ValueA <= -431 || nope){
 		if(!old_nan){TFT_FillRectangle(X+40, Y, X+250, Y+95, TFT_Black_Bkgr);}
 		TFT_SetTextColor(TFT_White);
@@ -1549,7 +1536,19 @@ void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA
 			TFT_DisplayString(X+delta_pos, Y+70, (uint8_t *)buffer, LEFT_MODE);
 		old_nan = 0;
 	} 
-}	
+
+	if(preGUI_screen_state != GUI_screen_state || GUI_screen_state == Color_Screen){
+			TFT_SetTextColor(TFT_White);
+			TFT_SetFont(&Font26EN_arch_digit);
+			TFT_DrawChar(X+17, Y, '*');
+			TFT_DrawChar(X+17, Y+35, '*');
+			TFT_DrawChar(X+17, Y+70, '*');
+			TFT_SetFont(&Font26EN_arch_big);
+			TFT_DrawChar(X, Y, 'L'-33);
+			TFT_SetFont(&Font26EN_arch_small);
+			TFT_DrawChar(X, Y+35, 'a'-65);
+			TFT_DrawChar(X, Y+70, 'b'-65);}
+}
 			
 
 			

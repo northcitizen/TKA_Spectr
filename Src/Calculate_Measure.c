@@ -302,7 +302,7 @@ void Calculate_Lab(uint16_t colorimetry_XYZ_calculate[], uint8_t CIE_Type, uint8
 void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 {	
 	
-	 double x1 = 0.3333, y1 = 0.3333, x2, y2, triangle_p1, triangle_p2, triangle_p3,
+	 float x1 = 0.3333, y1 = 0.3333, x2, y2, triangle_p1, triangle_p2, triangle_p3,
 	           triangle_out, distance_divider, d_min, distance_d[D_SIZE]= {0};
 
 	    x2 = colorimetry_xy1931[0];
