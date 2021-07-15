@@ -79,8 +79,7 @@ void Rabs_calc_main(uint16_t R_data[], uint16_t Rdark[], float Factor1, float Fa
 //			temp = Rabs[1023-i];
 			//Rabs[1023-i] = (Rabs[1023-i] + Rabs_prev[1023-i][0] + Rabs_prev[1023-i][1] + Rabs_prev[1023-i][2] + Rabs_prev[1023-i][3])/5;
 			Factor3 = Factor3*Factor2*(Sn[r]);
-			Rabs[1023-i] = (Factor3 + Rabs_prev[1023-i][0] + Rabs_prev[1023-i][1] + Rabs_prev[1023-i][2] +
-					Rabs_prev[1023-i][3])/5;
+			Rabs[1023-i] = (Factor3 + Rabs_prev[1023-i][0] + Rabs_prev[1023-i][1] + Rabs_prev[1023-i][2] + Rabs_prev[1023-i][3])/5;
 		}
 
 		Rabs_prev[1023-i][n] = Factor3;

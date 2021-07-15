@@ -96,7 +96,6 @@ CRC_Check_StatusTypeDef CRC_STATUS;
 
 extern volatile uint8_t old_exp_num = 0, exp_set = 1;
 volatile uint8_t pause;
-extern uint8_t MEASURE_FLAG;
 
 uint8_t RxBuf[2];
 volatile extern uint8_t  GUI_screen_state, Graph_Field, Source_Type, Color_Field, Measure_Color_xy, flag_spectral, direction, Language_status, Bluetooth;
@@ -173,11 +172,6 @@ uint16_t Touch_x = 0, Touch_y = 0;
 uint16_t xt = 0, yt = 0;
 
 float temperature_a = 0, temperature_b = 0, temperature_c = 0, temperature_d = 0;
-////////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////////
-
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -1265,14 +1259,18 @@ int main(void)
 
 
 
-		GUI_Title_Screen();
-		uint8_t p = 0;
-		HAL_Delay(2000);
-		usb_receive_processing();
+
 
 #ifdef BT
 		BlueTooth_Module_Init();
 #endif
+
+		GUI_Title_Screen();
+				uint8_t p = 0;
+				HAL_Delay(2000);
+				usb_receive_processing();
+
+
 #ifdef BT
 		if(Bluetooth == 0)
 		{
@@ -1287,7 +1285,7 @@ int main(void)
 #endif
 
 //		BlueTooth_On();
-	HAL_Delay(200);
+//	HAL_Delay(200);
 
 
 
@@ -1333,10 +1331,8 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim7);
 
-	HAL_Delay(200);
+	HAL_Delay(1);
 
-	uint32_t scr_refresh = 0, scr_refresh_measure = 0, bat_refresh = 0;
-	uint8_t usb_cnt = 0;
 
 //	// LASER ON!
 //	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
@@ -1344,25 +1340,25 @@ int main(void)
 pause = 1;
 GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 
-	block_graph = 1;
+//	block_graph = 1;
+//
+//	if (preGUI_screen_state == Graph_Screen
+//			&& Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral) {
+//		Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
+//				Rotation_Screen_Spectral_Old3);
+//	}
+//	Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+//	max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
+//			Rotation_Screen_Spectral_Old3);
+//	Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
+//			Line_Rabs_buff_graph_test);
+//
+//	Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White,
+//			Rotation_Screen_Spectral_Old3);
+//	block_graph = 0;
+//	GUI_SignalLevel();
 
-	if (preGUI_screen_state == Graph_Screen
-			&& Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral) {
-		Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
-				Rotation_Screen_Spectral_Old3);
-	}
-	Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-	max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
-			Rotation_Screen_Spectral_Old3);
-	Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
-			Line_Rabs_buff_graph_test);
-
-	Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White,
-			Rotation_Screen_Spectral_Old3);
-	block_graph = 0;
-	GUI_SignalLevel();
-
-
+uint32_t bat_refresh = 0;
 
 	while (1) {
 		usb_receive_processing();
@@ -1382,7 +1378,7 @@ GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 		}
 
 		bat_refresh++;
-		if (bat_refresh == 1000) {
+		if (bat_refresh == 10000000) {
 			Get_Battery_Level();
 			if (percentage_charge < percentage_charge_prev) {
 				GUI_Battery_Level(0, 0, percentage_charge);
@@ -1727,24 +1723,34 @@ void TIM7_IRQHandler(void)
 
 }
 
-
+#define FILTER_SMA_ORDER 3
+uint16_t Filter_Buffer[FILTER_SMA_ORDER] = {0};
 /*SDO_IRQ interrupt*/
 void EXTI9_5_IRQHandler(void)
 {
 	DWT_Delay(1);
   HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)&RxBuf, (uint8_t*)&RxBuf, 2, 0);
 
-  //30
-	//if((RxBuf[0] << 8 | RxBuf[1])>=0xCFFF)
-	//{
-	//	Line[i] = Line[i-1];
-	//} else if((RxBuf[0] << 8 | RxBuf[1])<=0x0EFF)
-	//{
-	//	Line[i] = Line[i-1];
-	//} else
-	//{
-		Line[i] = RxBuf[0] << 8 | RxBuf[1];
-	//}
+
+
+  Filter_Buffer[FILTER_SMA_ORDER - 1] = RxBuf[0] << 8 | RxBuf[1];
+
+  /* For output value */
+  	uint32_t Output = 0;
+
+
+  	for(uint8_t j = 0; j < FILTER_SMA_ORDER; j++)
+  		{
+  			Output += Filter_Buffer[j];
+  		}
+
+  	Output /= FILTER_SMA_ORDER;
+
+
+  	for(uint8_t k = 0; k < FILTER_SMA_ORDER; k++){
+  					Filter_Buffer[k] = Filter_Buffer[k+1];}
+
+		Line[i] = Output;
 	
 	
 	if(i >= 1023)
@@ -1836,6 +1842,7 @@ void USART1_IRQHandler(void)
 {
 	uint8_t str[12]={0};
 //	b = str1[0];
+	CLEAR_BIT(USART1->ISR, USART_ISR_ORE);
 
 	if(BT_BAUD_RATE < 115200)
 	{
