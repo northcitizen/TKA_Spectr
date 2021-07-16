@@ -20,7 +20,7 @@
 #include "BlueTooth.h"
 #include "tmp144.h"
 #include "stm32_hal_legacy.h"
-uint16_t graph_spectral_day[355], graph_spectral_night[355];
+
 //CMD DEFINITION
 #define CMD_DATA_TRANSMIT 						0x01
 #define CMD_RABS_DATA_TRANSMIT 					0x01
@@ -1018,12 +1018,11 @@ void Test_GUI(void)
 
 int main(void)
 {
-
-  HAL_Init();
+	HAL_Init();
 	HAL_Delay(1);
-  SystemClock_Config();
+	SystemClock_Config();
 	HAL_Delay(1);
-  MX_GPIO_Init();
+	MX_GPIO_Init();
 	HAL_Delay(1);
 	DWT_Init();
 	HAL_Delay(1);
@@ -1046,11 +1045,8 @@ int main(void)
 	HAL_Delay(1);
 #endif
   	MX_USART2_UART_Init();
-  	HAL_Delay(1);
-  	HAL_NVIC_SetPriority(USART2_IRQn, 2, 1);////////////////////////////////////////////////////////////////////
-  	HAL_Delay(1);
+  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);////////////////////////////////////////////////////////////////////
   	HAL_NVIC_EnableIRQ(USART2_IRQn);//////////////////////////////////////////////////////////////////////////////
-  	HAL_Delay(1);
   	__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);//////////////////////////////////////////////////////////////////////////
 
 
@@ -1063,14 +1059,14 @@ int main(void)
 	HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 	HAL_Delay(1);
 	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //01ST Signal////////////////////////////////////////////////////////////////////////////////////
-   	HAL_Delay(2);
+   	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_Delay(1);
-    HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //13   01//////////////////////////////////////////////////////////////////////////////////////
+    HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //13   //////////////////////////////////////////////////////////////////////////////////////
 	HAL_NVIC_EnableIRQ(LTDC_IRQn);
-	HAL_Delay(2);
+	HAL_Delay(5);
 	HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);	//booster
 	TIM15->CCR2 = 50;
 	HAL_Delay(1);
@@ -1081,7 +1077,7 @@ int main(void)
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM6_IRQn, 2, 4);///////////////////////////////////////////////////
+	HAL_NVIC_SetPriority(TIM6_IRQn, 1, 4);///////////////////////////////////////////////////
 	HAL_TIM_Base_Start_IT(&htim6);/////////////////////////////////////////////////////////////////
 	HAL_Delay(1);
 	HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
@@ -1261,6 +1257,12 @@ int main(void)
 
 
 
+
+
+
+
+
+
 #ifdef BT
 		BlueTooth_Module_Init();
 #endif
@@ -1275,14 +1277,31 @@ int main(void)
 		if(Bluetooth == 0)
 		{
 			BlueTooth_Off();
-			HAL_Delay(200);
+			HAL_Delay(200);//200
 		}
 		else
 		{
 			BlueTooth_On();
-			HAL_Delay(200);
+			HAL_Delay(200);//200
 		}
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //		BlueTooth_On();
 //	HAL_Delay(200);
@@ -1331,7 +1350,6 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim7);
 
-	HAL_Delay(1);
 
 
 //	// LASER ON!
@@ -1340,23 +1358,23 @@ int main(void)
 pause = 1;
 GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 
-//	block_graph = 1;
-//
-//	if (preGUI_screen_state == Graph_Screen
-//			&& Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral) {
-//		Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
-//				Rotation_Screen_Spectral_Old3);
-//	}
-//	Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-//	max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
-//			Rotation_Screen_Spectral_Old3);
-//	Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
-//			Line_Rabs_buff_graph_test);
-//
-//	Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White,
-//			Rotation_Screen_Spectral_Old3);
-//	block_graph = 0;
-//	GUI_SignalLevel();
+	block_graph = 1;
+
+	if (preGUI_screen_state == Graph_Screen
+			&& Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral) {
+		Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
+				Rotation_Screen_Spectral_Old3);
+	}
+	Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+	max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
+			Rotation_Screen_Spectral_Old3);
+	Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
+			Line_Rabs_buff_graph_test);
+
+	Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White,
+			Rotation_Screen_Spectral_Old3);
+	block_graph = 0;
+	GUI_SignalLevel();
 
 uint32_t bat_refresh = 0;
 
@@ -1366,9 +1384,11 @@ uint32_t bat_refresh = 0;
 #ifndef SERVICE
 
 		if (send_bluetooth) {
-			HAL_UART_Transmit_DMA(&huart1, (uint8_t*) &data_bluetooth_send,
-					4122);
+			HAL_UART_Transmit_DMA(&huart1, (uint8_t*) &data_bluetooth_send, 4122);
 			send_bluetooth = 0;
+			HAL_Delay(10);///////1000
+			HAL_UART_DMAStop(&huart1);
+			HAL_DMA_Abort(huart1.hdmatx);
 		};
 
 		if (pause && !Mode_EL) {
@@ -1723,7 +1743,7 @@ void TIM7_IRQHandler(void)
 
 }
 
-#define FILTER_SMA_ORDER 3
+#define FILTER_SMA_ORDER 5
 uint16_t Filter_Buffer[FILTER_SMA_ORDER] = {0};
 /*SDO_IRQ interrupt*/
 void EXTI9_5_IRQHandler(void)
@@ -1749,6 +1769,8 @@ void EXTI9_5_IRQHandler(void)
 
   	for(uint8_t k = 0; k < FILTER_SMA_ORDER; k++){
   					Filter_Buffer[k] = Filter_Buffer[k+1];}
+
+
 
 		Line[i] = Output;
 	
@@ -1842,7 +1864,7 @@ void USART1_IRQHandler(void)
 {
 	uint8_t str[12]={0};
 //	b = str1[0];
-	CLEAR_BIT(USART1->ISR, USART_ISR_ORE);
+	//CLEAR_BIT(USART1->ISR, USART_ISR_ORE);
 
 	if(BT_BAUD_RATE < 115200)
 	{
@@ -1867,6 +1889,7 @@ void USART1_IRQHandler(void)
 			}
 		}
 	}
+
 
 	HAL_NVIC_ClearPendingIRQ(USART1_IRQn);
 	HAL_UART_IRQHandler(&huart1);
