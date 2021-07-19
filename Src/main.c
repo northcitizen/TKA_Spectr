@@ -1045,9 +1045,9 @@ int main(void)
 	HAL_Delay(1);
 #endif
   	MX_USART2_UART_Init();
-  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);////////////////////////////////////////////////////////////////////
-  	HAL_NVIC_EnableIRQ(USART2_IRQn);//////////////////////////////////////////////////////////////////////////////
-  	__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);//////////////////////////////////////////////////////////////////////////
+  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);
+  	HAL_NVIC_EnableIRQ(USART2_IRQn);
+  	__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
 
 
 	HAL_Delay(1);
@@ -1058,16 +1058,16 @@ int main(void)
 	HAL_Delay(1);
 	HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //01ST Signal////////////////////////////////////////////////////////////////////////////////////
+	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);
    	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM2_IRQn);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_Delay(1);
-    HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //13   //////////////////////////////////////////////////////////////////////////////////////
+    HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);
 	HAL_NVIC_EnableIRQ(LTDC_IRQn);
 	HAL_Delay(5);
-	HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);	//booster
+	HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);
 	TIM15->CCR2 = 50;
 	HAL_Delay(1);
 	HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
@@ -1077,8 +1077,8 @@ int main(void)
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM6_IRQn, 1, 4);///////////////////////////////////////////////////
-	HAL_TIM_Base_Start_IT(&htim6);/////////////////////////////////////////////////////////////////
+	HAL_NVIC_SetPriority(TIM6_IRQn, 1, 4);
+	HAL_TIM_Base_Start_IT(&htim6);
 	HAL_Delay(1);
 	HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
 	HAL_Delay(1);
@@ -1223,44 +1223,10 @@ int main(void)
 
 	Calculate_Data();
 
-
 	Get_Battery_Level();
 	HAL_Delay(1);
 
-///////////////////////////////////////////////////////////////////////////////
-//	CRC_STATUS = CRC_Check(FLASH_DATA_START, FLASH_DATA_SIZE, FLASH_CRC_ADDR);
-//	usb_receive_processing();
-//	Test_GUI();
-
-//	Test_T_coef_write();
-//
-//	while(1)
-//	{
-//
-//		Calibration_Exposure_Change(exp_num);
-//		HAL_Delay(100);
-//	}
-
-	//Load TKA Logo 
 	Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
-	
-	//CRC Check
-//	CRC_STATUS = CRC_Check(FLASH_DATA_START, FLASH_DATA_SIZE, FLASH_CRC_ADDR);
-//	if(CRC_STATUS == CRC_OK)
-//	{
-//		GUI_Title_Screen();
-//		uint8_t p = 0;
-//	} else{TFT_FillScreen_DMA(TFT_Red);}
-
-
-
-
-
-
-
-
-
-
 
 
 #ifdef BT
@@ -1285,28 +1251,6 @@ int main(void)
 			HAL_Delay(200);//200
 		}
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//		BlueTooth_On();
-//	HAL_Delay(200);
-
-
 
 	//Load Locus Image
 		Image_load(Color_Field&Color_CIE_xy ? (Measure_Color_xy&CIE_xy_1931_1964 ? XY2_LOCUS_BMP : XY10_LOCUS_BMP):
@@ -1414,168 +1358,6 @@ uint32_t bat_refresh = 0;
 	}
 
 }
-
-//	 if(GRAPH_FLAG)
-//	 {
-//		 HAL_NVIC_DisableIRQ(EXTI3_IRQn);
-//
-//		 while(measure_number != 0)
-//		 {
-//	 	 	while(start)
-//	 		{
-//	 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-//	 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-//
-//	 			if(!block_graph)
-//	 			{
-//	 				memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-//	 			}
-//	 			cnt_delay++;
-//	 			Temperature_Measure_Func();
-//	 			Calculate_Data();
-//	 			GUI_SignalLevel();
-//	 			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
-//	 			{
-//	 				auto_exposure();
-//	 				max_el = 0;
-//	 				cnt_delay = 0;
-//	 				exp_stable = exp_stable+1;
-//	 				exp_start = 1;
-//	 				if(exp_stable > 10)
-//	 				{
-//	 					start = 0;
-//	 				}
-//	 			}
-//	 			 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
-//	 				        Calculate_Lambda_Dominant(colorimetry_xy1964, 0);
-//	 		}
-//
-//	 		if(!exp_set)
-//	 		{
-//	 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-//	 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-//	 		}
-//
-//	 		if(!block_graph)
-//	 		{
-//	 			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-//	 		}
-//
-//	 		exp_start = 0;
-//
-//
-//	 		if((GUI_screen_state == Color_Screen) && !pause)
-//	 		{
-//	 			cnt_delay++;
-//	 			if(!pause & !exp_set)
-//	 			{
-//	 				scr_refresh_measure++;
-//	 				if(scr_refresh_measure == 14 )///*28*/14
-//	 				{
-//	 					Temperature_Measure_Func();
-//	 					Calculate_Data();
-//	 					scr_refresh_measure = 0;
-//	 				}
-//	 			}
-//	 			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 500 && exp_num >= 4))//68
-//	 			{
-//	 				auto_exposure();
-//	 				max_el = 0;
-//	 				cnt_delay = 0;
-//	 			}
-//	 		}
-//	 		else {
-//	 				cnt_delay++;
-//
-//	  				if((cnt_delay > 250 && exp_num < 3) || (cnt_delay > 950 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1450 && exp_num >= 4))
-//	 				{
-//	 					auto_exposure();
-//	 					max_el = 0;
-//	 					cnt_delay = 0;
-//	 				}
-//	 		}
-//
-//
-//
-//if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-//{
-//scr_refresh++;
-//if(scr_refresh == 40 )
-//{
-//block_graph = 1;
-//
-//if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-//{
-//		//GUI_Display_Refresh();
-//	Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-//}
-//Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-//max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-//Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-//
-//Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-//scr_refresh = 0;
-//block_graph = 0;
-//GUI_SignalLevel();
-//
-//
-//}
-//} else{__asm("nop");}
-//
-//
-//
-//
-//measure_number--;
-//
-//	 }
-//		 GRAPH_FLAG = 0;
-//		 pause = 0x01;
-//		 HAL_NVIC_EnableIRQ(EXTI3_IRQn);
-//	 	}
-//
-//
-//
-//
-//
-//        	if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-//        	        {
-//
-//        	        //GUI_Display_Refresh();
-//        	        scr_refresh++;
-//        	        if(scr_refresh == 40 )
-//        	        {
-//        	        	//GUI_Display_Refresh();
-//        	        block_graph = 1;
-//
-//        	        if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-//        	        {
-//        	        		//GUI_Display_Refresh();
-//        	        	 if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
-//        	        	Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-//        	        }
-//        	        Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-//        	        max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-//        	        if(GUI_screen_state == Graph_Screen)
-//        	        Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-//        	        if(GUI_screen_state == Graph_Screen)
-//        	        Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-//        	        scr_refresh = 0;
-//        	        block_graph = 0;
-//        	        GUI_SignalLevel();
-//        	        }
-//        	        } else{__asm("nop");}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void auto_exposure(void)

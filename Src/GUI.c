@@ -1918,69 +1918,71 @@ case Measure3_Screen:
 				{
 			if (Rotation_Screen_Spectral < 0x02) {
 
-				GUI_Display_Refresh();
+				//GUI_Display_Refresh();
 
 				Rotation_Screen_Spectral++;
-				if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-				{
-					block_graph = 1;
 
-					if (preGUI_screen_state == Graph_Screen
-							&& Rotation_Screen_Spectral_Old3
-									== Rotation_Screen_Spectral) {
-						//GUI_Display_Refresh();
-						if (GUI_screen_state != Color_Screen
-								&& GUI_screen_state == Graph_Screen)
-							Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
-									Rotation_Screen_Spectral_Old3);
-					}
-					Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-					max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
-							Rotation_Screen_Spectral_Old3);
-					if (GUI_screen_state == Graph_Screen)
-						Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
-								Line_Rabs_buff_graph_test);
-					if (GUI_screen_state == Graph_Screen)
-						Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2,
-								TFT_White, Rotation_Screen_Spectral_Old3);
-					block_graph = 0;
-					GUI_SignalLevel();
-				} else {
-					__asm("nop");
-				}
 
 			}else {
 
-				GUI_Display_Refresh();
+				//GUI_Display_Refresh();
 				Rotation_Screen_Spectral = 0x00;
-				if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-				{
-					block_graph = 1;
+//				if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
+//				{
+//					block_graph = 1;
 
-					if (preGUI_screen_state == Graph_Screen
-							&& Rotation_Screen_Spectral_Old3
-									== Rotation_Screen_Spectral) {
-						//GUI_Display_Refresh();
-						if (GUI_screen_state != Color_Screen
-								&& GUI_screen_state == Graph_Screen)
-							Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
-									Rotation_Screen_Spectral_Old3);
-					}
-					Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-					max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
-							Rotation_Screen_Spectral_Old3);
-					if (GUI_screen_state == Graph_Screen)
-						Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
-								Line_Rabs_buff_graph_test);
-					if (GUI_screen_state == Graph_Screen)
-						Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2,
-								TFT_White, Rotation_Screen_Spectral_Old3);
-					block_graph = 0;
-					GUI_SignalLevel();
-				} else {
-					__asm("nop");
-				}
+//					if (preGUI_screen_state == Graph_Screen
+//							&& Rotation_Screen_Spectral_Old3
+//									== Rotation_Screen_Spectral) {
+//						//GUI_Display_Refresh();
+//						if (GUI_screen_state != Color_Screen
+//								&& GUI_screen_state == Graph_Screen)
+//							Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
+//									Rotation_Screen_Spectral_Old3);
+//					}
+//					Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+//					max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
+//							Rotation_Screen_Spectral_Old3);
+//					if (GUI_screen_state == Graph_Screen)
+//						Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
+//								Line_Rabs_buff_graph_test);
+//					if (GUI_screen_state == Graph_Screen)
+//						Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2,
+//								TFT_White, Rotation_Screen_Spectral_Old3);
+//					block_graph = 0;
+//					GUI_SignalLevel();
+//				} else {
+//					__asm("nop");
+//				}
 			}
+			GUI_Display_Refresh();
+			if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
+							{
+								block_graph = 1;
+
+								if (preGUI_screen_state == Graph_Screen
+										&& Rotation_Screen_Spectral_Old3
+												== Rotation_Screen_Spectral) {
+									//GUI_Display_Refresh();
+									if (GUI_screen_state != Color_Screen
+											&& GUI_screen_state == Graph_Screen)
+										Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
+												Rotation_Screen_Spectral_Old3);
+								}
+								Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+								max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
+										Rotation_Screen_Spectral_Old3);
+								if (GUI_screen_state == Graph_Screen)
+									Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
+											Line_Rabs_buff_graph_test);
+								if (GUI_screen_state == Graph_Screen)
+									Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2,
+											TFT_White, Rotation_Screen_Spectral_Old3);
+								block_graph = 0;
+								GUI_SignalLevel();
+							} else {
+								__asm("nop");
+							}
 		} else
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Next
 				{
@@ -3027,9 +3029,7 @@ case Measure3_Screen:
 															block_graph = 1;
 
 															if (preGUI_screen_state == Graph_Screen
-																	&& Rotation_Screen_Spectral_Old3
-																			== Rotation_Screen_Spectral) {
-																//GUI_Display_Refresh();
+																	&& Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral) {
 																if (GUI_screen_state != Color_Screen
 																		&& GUI_screen_state == Graph_Screen)
 																	Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
@@ -3113,13 +3113,11 @@ case Measure3_Screen:
 																				block_graph = 1;
 
 																				if (preGUI_screen_state == Graph_Screen
-																						&& Rotation_Screen_Spectral_Old3
-																								== Rotation_Screen_Spectral) {
+																						&& Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral) {
 																					//GUI_Display_Refresh();
 																					if (GUI_screen_state != Color_Screen
 																							&& GUI_screen_state == Graph_Screen)
-																						Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
-																								Rotation_Screen_Spectral_Old3);
+																						Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
 																				}
 																				Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
 																				max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,

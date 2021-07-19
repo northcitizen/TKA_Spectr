@@ -505,6 +505,17 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
     memcpy(GraphData_Prev, GraphData, sizeof(GraphData_Prev));
     Spectral_Axes(direction);
 	Spectral_Axes_Text(direction);
+	if(Graph_Field&V_lambda)
+	        {
+	            Spectral_DrawGraph_Const(ZeroX, ZeroY, graph_spectral_day, TFT_Yellow, direction);
+	            Spectral_DrawGraph_Const(ZeroX, ZeroY, graph_spectral_night, TFT_Blue, direction);
+	            }
+
+	        if(Graph_Field&EbEr_graph)
+	            {
+	                Spectral_DrawGraph_Const(ZeroX, ZeroY, graph_spectral_Blue, TFT_DarkCyan, direction);
+	                Spectral_DrawGraph_Const(ZeroX, ZeroY, graph_spectral_Retina, TFT_Red, direction);
+	            }
 }
 
 
