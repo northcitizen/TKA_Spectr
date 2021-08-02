@@ -874,7 +874,7 @@ void GUI_SD_Write_Screen()
 {
 	
 	if(preGUI_screen_state != GUI_screen_state){
-		pause = 1;
+		pause = 0;
 		TFT_FillScreen_DMA(TFT_Black_Bkgr);
 		if(Language_status == En){
 			GUI_TextEn_WriteSD(80, 120);
@@ -899,8 +899,9 @@ void GUI_SD_Write_Screen()
 					sdfile_cnt = 0;
 				} 
 			WriteSDFLASH_t(sdfile_cnt);  
-			pause = 0; 
+			pause = 1;
 			GUI_screen_state = Prev_Inf_Screen;
+			GUI_Display_Refresh();
 	}
 
 }
@@ -2167,7 +2168,28 @@ case Measure3_Screen:
 				{
 					//WriteFLASH_Screen(Color_Rendition_Screen);/////////////////////////////////////////////////////////////////
 					GUI_screen_state = Color_Rendition_Screen;
-
+					if (Color_rend_Field & CRI_CQS){
+																					CRICQS_done = 0x00;
+																					max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+																					Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+																					Calculate_xy1931(colorimetry_XYZ1931);
+																					Calculate_uv(colorimetry_xy1931);
+																					Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+																					if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
+																					else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
+																					CRICQS_done = 0x01;
+																				}
+																				else{
+																					CRICQS_done = 0x00;
+																					Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+																					Calculate_xy1931(colorimetry_XYZ1931);
+																					Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+																					max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+																					if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
+																					else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
+																					CRICQS_done = 0x01;
+																				}
+																				Calc_ColorRend = !Calc_ColorRend;
 					GUI_Display_Refresh();
 
 				}	else 
@@ -3360,6 +3382,28 @@ case Measure3_Screen:
 						case Color_Rendition_Screen: GUI_screen_state = Color_Rendition_Screen; break;
 						case Color_Screen: GUI_screen_state = Color_Screen; break;
 					}
+					if (Color_rend_Field & CRI_CQS){
+																					CRICQS_done = 0x00;
+																					max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+																					Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+																					Calculate_xy1931(colorimetry_XYZ1931);
+																					Calculate_uv(colorimetry_xy1931);
+																					Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+																					if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
+																					else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
+																					CRICQS_done = 0x01;
+																				}
+																				else{
+																					CRICQS_done = 0x00;
+																					Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+																					Calculate_xy1931(colorimetry_XYZ1931);
+																					Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+																					max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+																					if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
+																					else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
+																					CRICQS_done = 0x01;
+																				}
+																				Calc_ColorRend = !Calc_ColorRend;
 					GUI_Display_Refresh();//REFRESH DISPLAY
 				}		else	
 				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card

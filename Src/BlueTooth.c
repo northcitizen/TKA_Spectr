@@ -37,7 +37,6 @@ void BlueTooth_On(void)
 
 	HAL_GPIO_WritePin(GPIOB, BT_VCC_PIN, GPIO_PIN_SET);
 	HAL_Delay(3);
-	//DWT_Delay(3000);
 
 }
 
@@ -66,13 +65,10 @@ void BlueTooth_AT_Mode(void)
 
 	HAL_GPIO_WritePin(GPIOB, BT_VCC_PIN, GPIO_PIN_RESET);
 	HAL_Delay(10);
-	//DWT_Delay(10000);
 	HAL_GPIO_WritePin(GPIOB, BT_PROG_PIN, GPIO_PIN_SET);
 	HAL_Delay(10);
-	//DWT_Delay(10000);
 	HAL_GPIO_WritePin(GPIOB, BT_VCC_PIN, GPIO_PIN_SET);
 	HAL_Delay(10);
-	//DWT_Delay(10000);
 
 }
 
@@ -87,7 +83,6 @@ void BlueTooth_Param_Init(uint32_t baud_rate, uint8_t stop_bit, uint8_t parity)
 
 	HAL_UART_Transmit(&huart1, (uint8_t *)&buf, (p - &buf[0])+1, 10);
 	HAL_Delay(10);
-	//DWT_Delay(10000);
 //	sprintf(buf, "%s%s", str, "?");
 
 }
@@ -102,7 +97,6 @@ void BlueTooth_Module_Name(char* name)
 	p = strchr(buf, '\n');
 
 	HAL_UART_Transmit(&huart1, (uint8_t *)&buf, (p - &buf[0])+1, 10);
-	//DWT_Delay(10000);
 	HAL_Delay(10);
 }
 
@@ -116,7 +110,6 @@ void BlueTooth_Set_PIN(char* pass)
 	p = strchr(buf, '\n');
 
 	HAL_UART_Transmit(&huart1, (uint8_t *)&buf, (p - &buf[0])+1, 10);
-	//DWT_Delay(10000);
     HAL_Delay(10);
 
 }
@@ -126,7 +119,6 @@ void Bluetooth_Reset(void)
 	char str[] = "AT+RESET\r\n";
 
 	HAL_UART_Transmit(&huart1, (uint8_t *)&str, sizeof(str), 10);
-	//DWT_Delay(10000);
 	HAL_Delay(10);
 }
 
@@ -137,21 +129,15 @@ void BlueTooth_Module_Init(void)
 	BlueTooth_GPIO_Init();
 	BlueTooth_AT_Mode();
 	HAL_Delay(1000);
-	//DWT_Delay(1000000);
 	BlueTooth_Param_Init(BT_BAUD_RATE, 1, 0);
-	HAL_Delay(100);
 	BlueTooth_Module_Name("TKA_SPECTR");
-	HAL_Delay(100);
 	BlueTooth_Set_PIN("1488");
-	HAL_Delay(100);
 	Bluetooth_Reset();
 
 	HAL_GPIO_WritePin(GPIOB, BT_PROG_PIN, GPIO_PIN_RESET);
 	HAL_Delay(100);
-	//DWT_Delay(100000);
 	HAL_GPIO_WritePin(GPIOB, BT_VCC_PIN, GPIO_PIN_RESET);
 	HAL_Delay(100);
-	//DWT_Delay(100000);
 
 
 }
@@ -165,12 +151,10 @@ void BlueTooth_Test(void)
 	BlueTooth_GPIO_Init();
 	BlueTooth_AT_Mode();
 	HAL_Delay(1000);
-	//DWT_Delay(1000000);
 
 	while(1)
 	{
 		HAL_UART_Transmit(&huart1, (uint8_t *)&str, sizeof(str), 10);
-		//DWT_Delay(200000);
 		HAL_Delay(200);
 	}
 

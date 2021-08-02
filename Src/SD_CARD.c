@@ -260,7 +260,7 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 		strcat(buffer_sd, digit_buff);
 		strcat(buffer_sd, ".txt");
 
-		res = f_mount(&SDFatFs,(TCHAR const*)SDPath, 1); 
+		res = f_mount(&SDFatFs,SDPath, 1);
        if (res != FR_OK)
         {
                 //printf("Ошибка монтирования диска %d\r\n", result);

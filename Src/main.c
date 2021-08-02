@@ -43,7 +43,7 @@
 ///////////////////////////////
 
 //#define SERVICE
-#define BT
+//#define BT
 
 extern uint8_t measure_number;
 extern volatile uint8_t GRAPH_FLAG = 0;
@@ -246,7 +246,7 @@ uint32_t DWT_Get(void)
   return DWT->CYCCNT;
 }
  
-__inline
+//__inline
 uint8_t DWT_Compare(int32_t tp)
 {
   return (((int32_t)DWT_Get() - tp) < 0);
@@ -1091,7 +1091,7 @@ int main(void)
 	Single_Mode();
 	HAL_Delay(20);
 
-	BlueTooth_GPIO_Init();
+//	BlueTooth_GPIO_Init();
 
 //Load screen data	
 	buff_set = Calibration_Load_1byte(SET_MODEEL, 3);
@@ -1221,7 +1221,7 @@ int main(void)
 	//WriteFLASH_Screen(Title_Screen);/////////////////////////////////////////////////////////////////
 	GUI_screen_state = Calibration_Load_1byte(SCREENADDR, 3);
 
-	Calculate_Data();
+	//Calculate_Data();
 
 	Get_Battery_Level();
 	HAL_Delay(1);
@@ -1233,22 +1233,22 @@ int main(void)
 		BlueTooth_Module_Init();
 #endif
 
-		GUI_Title_Screen();
-				uint8_t p = 0;
-				HAL_Delay(2000);
-				usb_receive_processing();
+	GUI_Title_Screen();
+	uint8_t p = 0;
+	HAL_Delay(2000);
+	usb_receive_processing();
 
 
 #ifdef BT
 		if(Bluetooth == 0)
 		{
 			BlueTooth_Off();
-			HAL_Delay(200);//200
+			HAL_Delay(200);
 		}
 		else
 		{
 			BlueTooth_On();
-			HAL_Delay(200);//200
+			HAL_Delay(200);
 		}
 #endif
 
@@ -1322,18 +1322,19 @@ GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 
 uint32_t bat_refresh = 0;
 
-	while (1) {
+
+while (1) {
 		usb_receive_processing();
 
 #ifndef SERVICE
 
-		if (send_bluetooth) {
-			HAL_UART_Transmit_DMA(&huart1, (uint8_t*) &data_bluetooth_send, 4122);
-			send_bluetooth = 0;
-			HAL_Delay(10);///////1000
-			HAL_UART_DMAStop(&huart1);
-			HAL_DMA_Abort(huart1.hdmatx);
-		};
+//		if (send_bluetooth) {
+//			HAL_UART_Transmit_DMA(&huart1, (uint8_t*) &data_bluetooth_send, 4122);
+//			send_bluetooth = 0;
+////			HAL_Delay(10);///////1000
+////			HAL_UART_DMAStop(&huart1);
+////			HAL_DMA_Abort(huart1.hdmatx);
+//		};
 
 		if (pause && !Mode_EL) {
 			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
@@ -1351,7 +1352,7 @@ uint32_t bat_refresh = 0;
 
 			bat_refresh = 0;
 		}
-		__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+		//__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
 
 #endif
 
@@ -1421,10 +1422,10 @@ void auto_exposure(void)
 	} else if((exp_num ==0 && max_el < 50000))//50000
 	{
 		highSignal = 0;
-	} else if((exp_num == 9 && max_el < DarkSignal[i_max]+20000))
+	} else if((exp_num == 9 && max_el < DarkSignal[i_max]+2000))//20000
 	{
 		lowSignal = 1;
-	}else if((exp_num == 9 && max_el > DarkSignal[i_max]+ 20000))
+	}else if((exp_num == 9 && max_el > DarkSignal[i_max]+ 2000))//20000
 	{
 		lowSignal = 0;
 	}
@@ -1522,6 +1523,7 @@ void TIM7_IRQHandler(void)
 			
 	HAL_NVIC_ClearPendingIRQ(TIM7_IRQn);
 	HAL_TIM_IRQHandler(&htim7);
+
 
 }
 
@@ -1691,15 +1693,15 @@ void SystemClock_Config(void)
     */
   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST) != HAL_OK)
   {
-    _Error_Handler(__FILE__, __LINE__);
+    Error_Handler();
   }
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = 64;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 2;
@@ -1709,7 +1711,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    _Error_Handler(__FILE__, __LINE__);
+	  Error_Handler();
   }
 
     /**Initializes the CPU, AHB and APB busses clocks 
@@ -1723,7 +1725,7 @@ void SystemClock_Config(void)
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
-    _Error_Handler(__FILE__, __LINE__);
+	  Error_Handler();
   }
 
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_LPUART1|RCC_PERIPHCLK_USB|RCC_PERIPHCLK_LTDC|RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_I2C1|RCC_PERIPHCLK_SDMMC1;
@@ -1732,7 +1734,7 @@ void SystemClock_Config(void)
   PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLLSAI1;
   PeriphClkInit.LtdcClockSelection = RCC_LTDCCLKSOURCE_PLLSAI2_DIV4;
   PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_SYSCLK;
-  PeriphClkInit.Sdmmc1ClockSelection = RCC_SDMMC1CLKSOURCE_PLLP;
+  PeriphClkInit.Sdmmc1ClockSelection = RCC_SDMMC1CLKSOURCE_PLLP;////////////////////////////
 
 	
   PeriphClkInit.PLLSAI2.PLLSAI2Source = RCC_PLLSOURCE_HSE;
@@ -1752,7 +1754,7 @@ void SystemClock_Config(void)
   PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_48M2CLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
-    _Error_Handler(__FILE__, __LINE__);
+	  Error_Handler();
   }
 
     /**Configure the Systick interrupt time 
@@ -2142,10 +2144,11 @@ static void MX_SDMMC1_SD_Init(void)
   hsd1.Instance = SDMMC1;
   hsd1.Init.ClockEdge = SDMMC_CLOCK_EDGE_RISING;
   hsd1.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
-  hsd1.Init.BusWide = SDMMC_BUS_WIDE_4B;
+  hsd1.Init.BusWide = SDMMC_BUS_WIDE_4B;//4
   hsd1.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
-  hsd1.Init.ClockDiv = 10;
+  hsd1.Init.ClockDiv = 22;//10
   hsd1.Init.Transceiver = SDMMC_TRANSCEIVER_DISABLE;
+  //hsd1.Init.Transceiver = SDMMC_TRANSCEIVER_ENABLE;
 }
 
 static void MX_DMA_Init(void) 
