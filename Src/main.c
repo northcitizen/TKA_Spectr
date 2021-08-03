@@ -1015,83 +1015,87 @@ void Test_GUI(void)
 
 	}
 }
-
+uint32_t start_time = 1000000;
 int main(void)
 {
+	while(start_time >0)
+		start_time--;
 	HAL_Init();
-	HAL_Delay(1);
-	SystemClock_Config();
-	HAL_Delay(1);
-	MX_GPIO_Init();
-	HAL_Delay(1);
-	DWT_Init();
-	HAL_Delay(1);
-	MX_TIM2_Init();
-	HAL_Delay(1);
-	MX_TIM15_Init();
-	HAL_Delay(1);
-	MX_TIM5_Init();
-	HAL_Delay(1);
-	MX_USB_DEVICE_Init();
-	HAL_Delay(1);
-	MX_DMA2D_Init();
-	HAL_Delay(1);
-	MX_SPI1_Init();
-	HAL_Delay(1);
-	MX_I2C1_Init();
-	HAL_Delay(1);
-#ifdef BT
-	MX_USART1_UART_Init();
-	HAL_Delay(1);
-#endif
-  	MX_USART2_UART_Init();
-  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);
-  	HAL_NVIC_EnableIRQ(USART2_IRQn);
-  	__HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
+		HAL_Delay(1);
+	  SystemClock_Config();
+		HAL_Delay(1);
+	  MX_GPIO_Init();
+		HAL_Delay(1);
+		DWT_Init();
+		HAL_Delay(1);
+		MX_TIM2_Init();
+		HAL_Delay(1);
+		HAL_Delay(1);
+				MX_SPI1_Init();
+				HAL_Delay(1);
+		MX_TIM15_Init();
+		HAL_Delay(1);
+		MX_TIM5_Init();
+		HAL_Delay(1);
+		MX_USB_DEVICE_Init();
+		HAL_Delay(1);
+		MX_DMA2D_Init();
+		HAL_Delay(1);
+		MX_I2C1_Init();
+		HAL_Delay(1);
+	#ifdef BT
+		MX_USART1_UART_Init();
+		HAL_Delay(1);
+	#endif
+	  	MX_USART2_UART_Init();
+	  	HAL_NVIC_SetPriority(USART2_IRQn, 1, 3);
+	    HAL_NVIC_EnableIRQ(USART2_IRQn);
+	    __HAL_UART_ENABLE_IT(&huart2, UART_IT_RXNE);
 
 
-	HAL_Delay(1);
- 	MX_LTDC_Init();
-	HAL_Delay(1);
-	MX_ADC1_Init();
-	MX_DMA_Init();
-	HAL_Delay(1);
-	HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
-	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);
-   	HAL_Delay(1);
-	HAL_NVIC_EnableIRQ(TIM2_IRQn);
-	HAL_Delay(1);
-	HAL_TIM_Base_Start_IT(&htim2);
-	HAL_Delay(1);
-    HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);
-	HAL_NVIC_EnableIRQ(LTDC_IRQn);
-	HAL_Delay(5);
-	HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);
-	TIM15->CCR2 = 50;
-	HAL_Delay(1);
-	HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
-	HAL_Delay(1);
-	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, GPIO_PIN_SET);
-	MX_TIM6_Init();
-	HAL_Delay(1);
-	HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
-	HAL_Delay(1);
-	HAL_NVIC_SetPriority(TIM6_IRQn, 1, 4);
-	HAL_TIM_Base_Start_IT(&htim6);
-	HAL_Delay(1);
-	HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
-	HAL_Delay(1);
-	Touch_Ini();
-	
-	MX_SDMMC1_SD_Init();
-	MX_FATFS_Init();
-	
-	GPIO_QSPI_Init();
-	Single_Mode();
-	HAL_Delay(20);
+		HAL_Delay(1);
+	 	MX_LTDC_Init();
+		HAL_Delay(1);
+		MX_ADC1_Init();
+		MX_DMA_Init();
+		HAL_Delay(1);
+		HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
+		HAL_Delay(1);
+		HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //ST Signal
+	//	HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
+		HAL_Delay(1);
+		HAL_NVIC_EnableIRQ(TIM2_IRQn);
+		HAL_Delay(1);
+		HAL_TIM_Base_Start_IT(&htim2);
+		HAL_Delay(1);
+		HAL_NVIC_SetPriority(LTDC_IRQn, 1, 3);  //
+		HAL_Delay(2);
+		HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);	//booster
+		TIM15->CCR2 = 50;
+		HAL_Delay(1);
+		HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+		HAL_Delay(1);
+		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, GPIO_PIN_SET);
+		MX_TIM6_Init();
+		HAL_Delay(1);
+		HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+		HAL_Delay(1);
+		HAL_TIM_Base_Start_IT(&htim6);
+		HAL_NVIC_SetPriority(TIM6_IRQn, 1, 4);
+		HAL_Delay(1);
+		HAL_LTDC_SetAddress(&hltdc,(uint32_t) &RGB565_480x272,0);
+		HAL_Delay(1);
+		Touch_Ini();
 
-//	BlueTooth_GPIO_Init();
+		MX_SDMMC1_SD_Init();
+		MX_FATFS_Init();
+
+		GPIO_QSPI_Init();
+		Single_Mode();
+		HAL_Delay(20);
+
+		BlueTooth_GPIO_Init();
+
 
 //Load screen data	
 	buff_set = Calibration_Load_1byte(SET_MODEEL, 3);
@@ -1223,8 +1227,8 @@ int main(void)
 
 	//Calculate_Data();
 
-	Get_Battery_Level();
-	HAL_Delay(1);
+	//Get_Battery_Level();
+	//HAL_Delay(1);
 
 	Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 
@@ -1331,9 +1335,9 @@ while (1) {
 //		if (send_bluetooth) {
 //			HAL_UART_Transmit_DMA(&huart1, (uint8_t*) &data_bluetooth_send, 4122);
 //			send_bluetooth = 0;
-////			HAL_Delay(10);///////1000
-////			HAL_UART_DMAStop(&huart1);
-////			HAL_DMA_Abort(huart1.hdmatx);
+//			HAL_Delay(10);///////1000
+//			HAL_UART_DMAStop(&huart1);
+//			HAL_DMA_Abort(huart1.hdmatx);
 //		};
 
 		if (pause && !Mode_EL) {
@@ -2192,7 +2196,7 @@ static void MX_TIM15_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
+  sConfigOC.Pulse = 20000;/****///
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
