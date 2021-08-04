@@ -43,7 +43,7 @@
 ///////////////////////////////
 
 //#define SERVICE
-//#define BT
+#define BT
 
 extern uint8_t measure_number;
 extern volatile uint8_t GRAPH_FLAG = 0;
@@ -1030,9 +1030,8 @@ int main(void)
 		HAL_Delay(1);
 		MX_TIM2_Init();
 		HAL_Delay(1);
+		MX_SPI1_Init();
 		HAL_Delay(1);
-				MX_SPI1_Init();
-				HAL_Delay(1);
 		MX_TIM15_Init();
 		HAL_Delay(1);
 		MX_TIM5_Init();
@@ -1332,13 +1331,13 @@ while (1) {
 
 #ifndef SERVICE
 
-//		if (send_bluetooth) {
-//			HAL_UART_Transmit_DMA(&huart1, (uint8_t*) &data_bluetooth_send, 4122);
-//			send_bluetooth = 0;
-//			HAL_Delay(10);///////1000
-//			HAL_UART_DMAStop(&huart1);
-//			HAL_DMA_Abort(huart1.hdmatx);
-//		};
+		if (send_bluetooth) {
+			HAL_UART_Transmit_DMA(&huart1, (uint8_t*) &data_bluetooth_send, 4122);
+			send_bluetooth = 0;
+			HAL_Delay(1);
+			HAL_UART_DMAStop(&huart1);
+			HAL_DMA_Abort(huart1.hdmatx);
+		};
 
 		if (pause && !Mode_EL) {
 			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
@@ -1356,7 +1355,7 @@ while (1) {
 
 			bat_refresh = 0;
 		}
-		//__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+		__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
 
 #endif
 
