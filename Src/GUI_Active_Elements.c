@@ -4,7 +4,7 @@
 #include "BlueTooth.h"
 
 //extern UART_HandleTypeDef hlpuart1;
-extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart3;
 extern uint8_t BluetoothStat;
 extern uint8_t pause;
 

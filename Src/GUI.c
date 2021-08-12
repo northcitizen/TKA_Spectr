@@ -2020,7 +2020,7 @@ case Measure3_Screen:
 					start = 1;
 					pause = 0;
 
-					measure_number = 10;
+					measure_number = 1;
 					exp_stable = 0;
 
 

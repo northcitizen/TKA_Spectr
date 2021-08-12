@@ -20,7 +20,6 @@
 #include "BlueTooth.h"
 #include "tmp144.h"
 #include "stm32_hal_legacy.h"
-
 //CMD DEFINITION
 #define CMD_DATA_TRANSMIT 						0x01
 #define CMD_RABS_DATA_TRANSMIT 					0x01
@@ -65,7 +64,7 @@ uint16_t Calibration_year, Serial_part_device, Serial_number_device, Calibration
 uint16_t PARGraph_B, PARGraph_G, PARGraph_R, PARGraph_IR;
 uint8_t BluetoothStat = 0;
 
-UART_HandleTypeDef huart1;
+UART_HandleTypeDef huart3;
 UART_HandleTypeDef huart2;
 SPI_HandleTypeDef hspi1;
 TIM_HandleTypeDef htim2;
@@ -77,7 +76,7 @@ ADC_HandleTypeDef hadc1;
 I2C_HandleTypeDef hi2c1;
 LTDC_HandleTypeDef hltdc;
 DMA2D_HandleTypeDef hdma2d;
-DMA_HandleTypeDef hdma_usart1_tx;
+DMA_HandleTypeDef hdma_usart3_tx;
 SD_HandleTypeDef hsd1;
 
 static void MX_SDMMC1_SD_Init(void);
@@ -187,7 +186,7 @@ static void MX_I2C1_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_DMA_Init(void);
-static void MX_USART1_UART_Init(void);
+static void MX_USART3_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void auto_exposure(void);
@@ -932,7 +931,7 @@ void UART2_RxCpltCallback(void)
 	 if (usartprop.usart_cnt>12)
 	  {
 	    usartprop.usart_cnt = 0;
-	    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+	    HAL_UART_Receive_IT(&huart3,(uint8_t*)str1,1);
 	    return;
 	  }
 	  usartprop.usart_buf[usartprop.usart_cnt] = b;
@@ -941,22 +940,22 @@ void UART2_RxCpltCallback(void)
 	    usartprop.usart_buf[usartprop.usart_cnt+1]=0;
 	    string_parse((uint8_t*)usartprop.usart_buf);
 	    usartprop.usart_cnt=0;
-	    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+	    HAL_UART_Receive_IT(&huart3,(uint8_t*)str1,1);
 
 	    return;
 	  }
 	  usartprop.usart_cnt++;
-	  HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+	  HAL_UART_Receive_IT(&huart3,(uint8_t*)str1,1);
 
 
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	//  if(huart==&huart2)
-		//  {
-		//
-		//  }
+//	  if(huart==&huart1)
+//		  {
+//		  	  USART1_IRQHandler();
+//		  }
 }
 
 void Test_GUI(void)
@@ -1015,7 +1014,7 @@ void Test_GUI(void)
 
 	}
 }
-uint32_t start_time = 1000000;
+uint32_t start_time = 10000;
 int main(void)
 {
 	while(start_time >0)
@@ -1031,7 +1030,7 @@ int main(void)
 		MX_TIM2_Init();
 		HAL_Delay(1);
 		MX_SPI1_Init();
-		HAL_Delay(1);
+				HAL_Delay(1);
 		MX_TIM15_Init();
 		HAL_Delay(1);
 		MX_TIM5_Init();
@@ -1043,7 +1042,7 @@ int main(void)
 		MX_I2C1_Init();
 		HAL_Delay(1);
 	#ifdef BT
-		MX_USART1_UART_Init();
+		MX_USART3_UART_Init();
 		HAL_Delay(1);
 	#endif
 	  	MX_USART2_UART_Init();
@@ -1061,7 +1060,6 @@ int main(void)
 		HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 		HAL_Delay(1);
 		HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //ST Signal
-	//	HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
 		HAL_Delay(1);
 		HAL_NVIC_EnableIRQ(TIM2_IRQn);
 		HAL_Delay(1);
@@ -1072,7 +1070,7 @@ int main(void)
 		HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);	//booster
 		TIM15->CCR2 = 50;
 		HAL_Delay(1);
-		HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
+		HAL_UART_Receive_IT(&huart3,(uint8_t*)str1,1);
 		HAL_Delay(1);
 		HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, GPIO_PIN_SET);
 		MX_TIM6_Init();
@@ -1096,7 +1094,7 @@ int main(void)
 		BlueTooth_GPIO_Init();
 
 
-//Load screen data	
+//Load screen data
 	buff_set = Calibration_Load_1byte(SET_MODEEL, 3);
 	if(buff_set == 0xFF){Mode_EL = 0;} else{Mode_EL = buff_set;}
 
@@ -1220,20 +1218,14 @@ int main(void)
 	{
 		Factor2 = Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E);
 	}
-	
-	//WriteFLASH_Screen(Title_Screen);/////////////////////////////////////////////////////////////////
+
 	GUI_screen_state = Calibration_Load_1byte(SCREENADDR, 3);
-
-	//Calculate_Data();
-
-	//Get_Battery_Level();
-	//HAL_Delay(1);
 
 	Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 
 
 #ifdef BT
-		BlueTooth_Module_Init();
+	BlueTooth_Module_Init();
 #endif
 
 	GUI_Title_Screen();
@@ -1259,22 +1251,22 @@ int main(void)
 		Image_load(Color_Field&Color_CIE_xy ? (Measure_Color_xy&CIE_xy_1931_1964 ? XY2_LOCUS_BMP : XY10_LOCUS_BMP):
 		Color_Field&Color_CIE_Luv ? LUV_LOCUS_BMP : LAB_LOCUS_BMP,
 		Color_Field&Color_CIE_xy ? (Measure_Color_xy&CIE_xy_1931_1964 ? XY2_LOCUS_BMP_SIZEX*XY2_LOCUS_BMP_SIZEY : XY10_LOCUS_BMP_SIZEX*XY10_LOCUS_BMP_SIZEY):
-		Color_Field&Color_CIE_Luv ? LUV_LOCUS_BMP_SIZEX*LUV_LOCUS_BMP_SIZEY : LAB_LOCUS_SIZEX*LAB_LOCUS_SIZEY);		
-		
+		Color_Field&Color_CIE_Luv ? LUV_LOCUS_BMP_SIZEX*LUV_LOCUS_BMP_SIZEY : LAB_LOCUS_SIZEX*LAB_LOCUS_SIZEY);
+
 		Locus.pData = (uint16_t *)bmp;
 		Locus.Width = Color_Field&Color_CIE_xy ? (Measure_Color_xy&CIE_xy_1931_1964 ? XY2_LOCUS_BMP_SIZEX : XY10_LOCUS_BMP_SIZEX):
 		Color_Field&Color_CIE_Luv ? LUV_LOCUS_BMP_SIZEX : LAB_LOCUS_SIZEX;
 		Locus.Height = Color_Field&Color_CIE_xy ? (Measure_Color_xy&CIE_xy_1931_1964 ? XY2_LOCUS_BMP_SIZEY : XY10_LOCUS_BMP_SIZEY):
 		Color_Field&Color_CIE_Luv ? LUV_LOCUS_BMP_SIZEY : LAB_LOCUS_SIZEY;
-	
+
 	// Switch screen (dependency Flash load)
 		switch(GUI_screen_state){
 		case Measure_Screen: GUI_Measure_Screen();  break;
 		case Measure2_Screen: preGUI_screen_state = Measure_Screen; GUI_Measure2_Screen();  break;
 		case Measure3_Screen: preGUI_screen_state = Measure2_Screen; GUI_Measure_Screen(); GUI_Measure2_Screen();GUI_Measure3_Screen();  break;
-		
+
 		case Graph_Screen: preGUI_screen_state = Measure_Screen; GUI_Graph_Screen(); break;
-		case Color_Screen: preGUI_screen_state = ColorSet1_Screen; GUI_Color_Screen();  break; 
+		case Color_Screen: preGUI_screen_state = ColorSet1_Screen; GUI_Color_Screen();  break;
 		case Color_Rendition_Screen: preGUI_screen_state = Measure_Screen; GUI_ColorRend_Screen();	break;
 		default: GUI_screen_state =  Measure_Screen; GUI_Measure_Screen();  break;
 		}
@@ -1287,8 +1279,8 @@ int main(void)
 	HAL_NVIC_EnableIRQ(TIM7_IRQn);
 	// HAL_NVIC_EnableIRQ(LPUART1_IRQn);
 #ifdef BT
-	HAL_NVIC_EnableIRQ(USART1_IRQn);
-	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+	HAL_NVIC_EnableIRQ(USART3_IRQn);
+	__HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 #endif
 
 
@@ -1325,18 +1317,17 @@ GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 
 uint32_t bat_refresh = 0;
 
-
 while (1) {
 		usb_receive_processing();
 
 #ifndef SERVICE
 
 		if (send_bluetooth) {
-			HAL_UART_Transmit_DMA(&huart1, (uint8_t*) &data_bluetooth_send, 4122);
+			HAL_UART_Transmit_DMA(&huart3, (uint8_t*) &data_bluetooth_send, 4122);
 			send_bluetooth = 0;
-			HAL_Delay(1);
-			HAL_UART_DMAStop(&huart1);
-			HAL_DMA_Abort(huart1.hdmatx);
+			HAL_Delay(10);///////1000
+			HAL_UART_DMAStop(&huart3);
+			HAL_DMA_Abort(huart3.hdmatx);
 		};
 
 		if (pause && !Mode_EL) {
@@ -1355,7 +1346,7 @@ while (1) {
 
 			bat_refresh = 0;
 		}
-		__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+		__HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 
 #endif
 
@@ -1415,19 +1406,29 @@ void auto_exposure(void)
 		
 		send_usb_block =0;
 	}	
-	if(old_exp_num!=exp_num ){exp_set = 1; }else{exp_set = 0;}
+
+	if(old_exp_num!=exp_num )
+	{
+		exp_set = 1;
+	}else{
+		exp_set = 0;
+	}
 		
 	old_exp_num = exp_num;
 	
 	if(exp_num == 0 && max_el >= 50000)//50000
 	{
 		highSignal = 1;
+		 GUI_SignalLevel();
+		start = 0;
 	} else if((exp_num ==0 && max_el < 50000))//50000
 	{
 		highSignal = 0;
 	} else if((exp_num == 9 && max_el < DarkSignal[i_max]+2000))//20000
 	{
 		lowSignal = 1;
+		 GUI_SignalLevel();
+		start = 0;
 	}else if((exp_num == 9 && max_el > DarkSignal[i_max]+ 2000))//20000
 	{
 		lowSignal = 0;
@@ -1472,43 +1473,43 @@ void TIM7_IRQHandler(void)
 	
 	if(!usart2_wait) usart2_wait = true;//1.07
 			
-	if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen||
-			GUI_screen_state == Graph_Screen || GUI_screen_state == Color_Screen) && !pause &&  !flag_spectral) 
-		{
-			cnt_delay_bar++;
-			
-			if(exp_num > 4){
-				
-				if(cnt_delay_bar == ((exposure_timer_period[exp_num]/12)/500))
-					{
-						GUI_Bar_Measure(85, 13, 0.2);
-					} 
-				else if (cnt_delay_bar == 2*(exposure_timer_period[exp_num]/12)/500)
-					{
-						GUI_Bar_Measure(85, 13, 0.4);
-					} 
-					else if (cnt_delay_bar == 3*(exposure_timer_period[exp_num]/12)/500)
-					{
-						GUI_Bar_Measure(85, 13, 0.6);
-					}
-					else if (cnt_delay_bar == 4*(exposure_timer_period[exp_num]/12)/500)
-					{
-						GUI_Bar_Measure(85, 13, 0.8);
-					 }
-					else if (cnt_delay_bar == 5*((exposure_timer_period[exp_num]/12)/500))
-					{
-						GUI_Bar_Measure(85, 13, 1);
-					}
-				} else if(exp_num > 2)
-				{
-							if(cnt_delay_bar == 1){
-								GUI_Bar_Measure(85, 13, 0.5);
-							} else if(cnt_delay_bar == 2){
-								GUI_Bar_Measure(85, 13, 1);
-							}
-				} else {
-									GUI_Bar_Measure(85, 13, 1);}
-			}
+//	if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen||
+//			GUI_screen_state == Graph_Screen || GUI_screen_state == Color_Screen) && !pause &&  !flag_spectral)
+//		{
+//			cnt_delay_bar++;
+//
+//			if(exp_num > 4){
+//
+//				if(cnt_delay_bar == ((exposure_timer_period[exp_num]/12)/500))
+//					{
+//						GUI_Bar_Measure(85, 13, 0.2);
+//					}
+//				else if (cnt_delay_bar == 2*(exposure_timer_period[exp_num]/12)/500)
+//					{
+//						GUI_Bar_Measure(85, 13, 0.4);
+//					}
+//					else if (cnt_delay_bar == 3*(exposure_timer_period[exp_num]/12)/500)
+//					{
+//						GUI_Bar_Measure(85, 13, 0.6);
+//					}
+//					else if (cnt_delay_bar == 4*(exposure_timer_period[exp_num]/12)/500)
+//					{
+//						GUI_Bar_Measure(85, 13, 0.8);
+//					 }
+//					else if (cnt_delay_bar == 5*((exposure_timer_period[exp_num]/12)/500))
+//					{
+//						GUI_Bar_Measure(85, 13, 1);
+//					}
+//				} else if(exp_num > 2)
+//				{
+//							if(cnt_delay_bar == 1){
+//								GUI_Bar_Measure(85, 13, 0.5);
+//							} else if(cnt_delay_bar == 2){
+//								GUI_Bar_Measure(85, 13, 1);
+//							}
+//				} else {
+//									GUI_Bar_Measure(85, 13, 1);}
+//			}
 		
 	SD_Detect = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_15);
 	if(old_sd_detect != SD_Detect & CRC_STATUS == CRC_OK){
@@ -1517,8 +1518,7 @@ void TIM7_IRQHandler(void)
 		if(SD_Detect == 0){
 				MX_SDMMC1_SD_Init();
 				MX_FATFS_Init();
-			} else
-			{
+			} else{
 			FATFS_UnLinkDriver(SDPath);
 				HAL_SD_DeInit(&hsd1);
 			}
@@ -1560,8 +1560,8 @@ void EXTI9_5_IRQHandler(void)
 
 
 		Line[i] = Output;
-	
-	
+
+
 	if(i >= 1023)
 	{
 		if(send_usb_block == 0 && (!pause))
@@ -1569,12 +1569,12 @@ void EXTI9_5_IRQHandler(void)
 				memcpy(Line_buff, Line, sizeof(Line));
 			}
 			i = 0;
-			
+
 	} else
 	{
 			i++;
 	}
-	
+
 	HAL_NVIC_ClearPendingIRQ(EXTI9_5_IRQn);
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_7);
 }
@@ -1647,7 +1647,7 @@ void EXTI3_IRQHandler(void)
 //  HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
 //}
 
-void USART1_IRQHandler(void)
+void USART3_IRQHandler(void)
 {
 	uint8_t str[12]={0};
 //	b = str1[0];
@@ -1655,11 +1655,11 @@ void USART1_IRQHandler(void)
 
 	if(BT_BAUD_RATE < 115200)
 	{
-		HAL_UART_Receive(&huart1,&str,12,10);
+		HAL_UART_Receive(&huart3,&str,12,10);
 	}
 	else if (BT_BAUD_RATE >= 115200)
 	{
-		HAL_UART_Receive(&huart1,&str, 12, 1);
+		HAL_UART_Receive(&huart3,&str, 12, 1);
 	}
 
 
@@ -1678,8 +1678,8 @@ void USART1_IRQHandler(void)
 	}
 
 
-	HAL_NVIC_ClearPendingIRQ(USART1_IRQn);
-	HAL_UART_IRQHandler(&huart1);
+	HAL_NVIC_ClearPendingIRQ(USART3_IRQn);
+	HAL_UART_IRQHandler(&huart3);
 
 }
 
@@ -1747,7 +1747,7 @@ void SystemClock_Config(void)
   PeriphClkInit.PLLSAI2.PLLSAI2R = RCC_PLLR_DIV2;
   PeriphClkInit.PLLSAI2.PLLSAI2Q = RCC_PLLQ_DIV2;
   PeriphClkInit.PLLSAI2.PLLSAI2ClockOut = RCC_PLLSAI2_LTDCCLK;
-	 
+
   PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_HSE;
   PeriphClkInit.PLLSAI1.PLLSAI1M = 2;
   PeriphClkInit.PLLSAI1.PLLSAI1N = 12;
@@ -1983,7 +1983,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-	
+
   /*Configure GPIO pin : PF2 LTDC_Reset*/
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, GPIO_PIN_RESET);
   GPIO_InitStruct.Pin = GPIO_PIN_2;
@@ -1992,7 +1992,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_2, GPIO_PIN_SET);
-	
+
 	/*Configure GPIO pin : PF1 TouchScreen_Reset*/
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, GPIO_PIN_RESET);
   GPIO_InitStruct.Pin = GPIO_PIN_1;
@@ -2001,7 +2001,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, GPIO_PIN_SET);
-	
+
 	/*Configure GPIO pin : PF11 LTDC_Display_En*/
 	GPIO_InitStruct.Pin = GPIO_PIN_11;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -2015,13 +2015,13 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-	  
+
 	/*Configure GPIO pin : PC15 SD CARD Detection INT*/
 	GPIO_InitStruct.Pin = GPIO_PIN_15;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-		
+
 	HAL_NVIC_SetPriority(EXTI9_5_IRQn, 2, 4); //SDO IRQ//24
 	HAL_NVIC_SetPriority(EXTI3_IRQn, 4, 2); //Touchscreen IRQ//42
 	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
@@ -2149,9 +2149,8 @@ static void MX_SDMMC1_SD_Init(void)
   hsd1.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
   hsd1.Init.BusWide = SDMMC_BUS_WIDE_4B;//4
   hsd1.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
-  hsd1.Init.ClockDiv = 22;//10
+  hsd1.Init.ClockDiv = 14;//10/22
   hsd1.Init.Transceiver = SDMMC_TRANSCEIVER_DISABLE;
-  //hsd1.Init.Transceiver = SDMMC_TRANSCEIVER_ENABLE;
 }
 
 static void MX_DMA_Init(void) 
@@ -2259,7 +2258,7 @@ static void MX_TIM7_Init(void)
 }
 
 
-static void MX_USART1_UART_Init(void)
+static void MX_USART3_UART_Init(void)
 {
 
   /* USER CODE BEGIN USART1_Init 0 */
@@ -2269,30 +2268,30 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 1 */
 
   /* USER CODE END USART1_Init 1 */
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
+	huart3.Instance = USART3;
+	huart3.Init.BaudRate = 9600;
+	huart3.Init.WordLength = UART_WORDLENGTH_8B;
+	huart3.Init.StopBits = UART_STOPBITS_1;
+	huart3.Init.Parity = UART_PARITY_NONE;
+	huart3.Init.Mode = UART_MODE_TX_RX;
+	huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+	huart3.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+	huart3.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+	huart3.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart3) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_UARTEx_SetTxFifoThreshold(&huart1, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart3, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_UARTEx_SetRxFifoThreshold(&huart1, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart3, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
   {
     Error_Handler();
   }
-  if (HAL_UARTEx_DisableFifoMode(&huart1) != HAL_OK)
+  if (HAL_UARTEx_DisableFifoMode(&huart3) != HAL_OK)
   {
     Error_Handler();
   }

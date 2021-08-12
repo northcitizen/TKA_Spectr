@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "stm32l4xx_hal_flash.h"
-
+volatile uint8_t	preGUI_screen_state;
+volatile uint8_t GUI_screen_state;
 FLASH_EraseInitTypeDef EraseInitStruct_SDNum;
 
 uint8_t SD_Text_SP_en[] = "\nS/P Photopic/Scotopic Ratio\n"; 
@@ -260,7 +261,15 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 		strcat(buffer_sd, digit_buff);
 		strcat(buffer_sd, ".txt");
 
-		res = f_mount(&SDFatFs,SDPath, 1);
+		HAL_Delay(1);
+
+		HAL_NVIC_DisableIRQ(TIM6_DAC_IRQn);
+		HAL_NVIC_DisableIRQ(TIM2_IRQn);
+		HAL_NVIC_DisableIRQ(USART2_IRQn);
+		HAL_NVIC_DisableIRQ(USART3_IRQn);
+		HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
+		res = f_mount(&SDFatFs,(TCHAR const*) SDPath, 1);
+		HAL_Delay(1);
        if (res != FR_OK)
         {
                 //printf("Ошибка монтирования диска %d\r\n", result);
@@ -270,7 +279,7 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 				res = f_open(&MyFile, buffer_sd, FA_CREATE_ALWAYS | FA_WRITE);
 				if (res == FR_OK)
 					{
-							
+
 							SDWr_Status_bar = 0.5;
 							GUI_Bar_Measure(85, 280, SDWr_Status_bar);
 						(Language_status==Ru)? (f_write(&MyFile, &SD_Text_SP_ru, sizeof(SD_Text_SP_ru), &byteswritten)) : (f_write(&MyFile, &SD_Text_SP_en, sizeof(SD_Text_SP_en), &byteswritten)); //S/P
@@ -596,11 +605,21 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 					}
 				}
 				
-			
+       HAL_Delay(1);
 				f_close(&MyFile);
+				HAL_Delay(1);
 				memset(buffer_sd, 0, 11);
-				
-				res = f_mount(&SDFatFs,(TCHAR const*)SDPath, 0);
+				HAL_Delay(1);
+				//res = f_mount(&SDFatFs,(TCHAR const*)SDPath, 0);
+				HAL_Delay(1);
 				SDWr_Status_bar = 1.0;
 				GUI_Bar_Measure(85, 280, SDWr_Status_bar);
+				HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+				HAL_NVIC_EnableIRQ(TIM2_IRQn);
+				HAL_NVIC_EnableIRQ(USART2_IRQn);
+				HAL_NVIC_EnableIRQ(USART3_IRQn);
+				HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+				//preGUI_screen_state = GUI_screen_state;
+				GUI_screen_state = 0x04;
+				GUI_Display_Refresh();
 	}

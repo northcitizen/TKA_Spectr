@@ -32,7 +32,7 @@
 <stringAttribute key="com.atollic.hardwaredebug.stlink.external_loader" value=""/>
 <stringAttribute key="com.atollic.hardwaredebug.stlink.log_file" value="C:/Users/Lab-prog/Atollic/TrueSTUDIO/STM32_workspace_9.3/tka_spectrum/\Debug\st-link_gdbserver_log.txt"/>
 <booleanAttribute key="com.atollic.hardwaredebug.stlink.stlink_check_serial_number" value="false"/>
-<stringAttribute key="com.atollic.hardwaredebug.stlink.stlink_txt_serial_number" value=""/>
+<stringAttribute key="com.atollic.hardwaredebug.stlink.stlink_txt_serial_number" value="56FF73065067485554441087"/>
 <booleanAttribute key="com.atollic.hardwaredebug.stlink.verify_flash" value="false"/>
 <stringAttribute key="org.eclipse.cdt.debug.mi.core.DEBUG_NAME" value="${TOOLCHAIN_PATH}/arm-atollic-eabi-gdb"/>
 <stringAttribute key="org.eclipse.cdt.debug.mi.core.commandFactory" value="Standard (Windows)"/>
