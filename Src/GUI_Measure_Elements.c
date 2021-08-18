@@ -9,7 +9,10 @@ void GUI_Bar_Measure(uint16_t X, uint16_t Y, float Value)
 	TFT_FillRectangle(X, Y, X+110*Value, Y+10, TFT_Blue_Off);
 }
 
-
+void GUI_Bar_Measure_OFF(uint16_t X, uint16_t Y)
+{
+	TFT_FillRectangle(X, Y, X+110, Y+10, TFT_Black_Bkgr);
+}
 
 uint8_t  old_num_e = 10, old_num_n = 10, old_deg_e = 0xFF, old_deg_e_wt = 0xFF;
 uint8_t old_meas_type_L = 2, old_numL_e = 10, old_numL_n = 10, old_rulx = 0, old_nan_Ee = 0, old_nan_El = 0; 

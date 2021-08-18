@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "stm32l4xx_hal_flash.h"
+ volatile uint8_t SD_CARD_FLAG;
 volatile uint8_t	preGUI_screen_state;
 volatile uint8_t GUI_screen_state;
 FLASH_EraseInitTypeDef EraseInitStruct_SDNum;
@@ -610,7 +611,7 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 				HAL_Delay(1);
 				memset(buffer_sd, 0, 11);
 				HAL_Delay(1);
-				//res = f_mount(&SDFatFs,(TCHAR const*)SDPath, 0);
+				res = f_mount(&SDFatFs,(TCHAR const*)SDPath, 0);
 				HAL_Delay(1);
 				SDWr_Status_bar = 1.0;
 				GUI_Bar_Measure(85, 280, SDWr_Status_bar);
@@ -619,7 +620,5 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 				HAL_NVIC_EnableIRQ(USART2_IRQn);
 				HAL_NVIC_EnableIRQ(USART3_IRQn);
 				HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-				//preGUI_screen_state = GUI_screen_state;
-				GUI_screen_state = 0x04;
-				GUI_Display_Refresh();
+				SD_CARD_FLAG = 1;
 	}

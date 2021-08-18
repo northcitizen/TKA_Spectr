@@ -4,7 +4,7 @@
 #include "Calculate_Measure.h"
 #include "Calibration_Address.h"
 TIM_HandleTypeDef htim2;
-
+float progress_bar= 0.0;
 	volatile extern uint8_t exp_stable;
 	uint32_t scr_refresh_measure = 0, bat_refresh = 0;
 	uint8_t usb_cnt = 0;
@@ -1190,10 +1190,10 @@ void GUI_Touch_Processing()
 										start = 1;
 										pause = 0;
 
-										measure_number = 10;
+										measure_number = 1;
 										exp_stable = 0;
 
-
+										GUI_Bar_Measure(85, 13, 0.1);
 
 
 											 	 	while(start)
@@ -1215,7 +1215,10 @@ void GUI_Touch_Processing()
 											 				max_el = 0;
 											 				cnt_delay = 0;
 											 				exp_stable = exp_stable+1;
+											 				progress_bar = exp_stable;
 											 				exp_start = 1;
+											 				if(exp_stable<=10)
+											 				GUI_Bar_Measure(85, 13, progress_bar*0.1);
 											 				if(exp_stable > 10)
 											 				{
 											 					start = 0;
@@ -1321,7 +1324,8 @@ void GUI_Touch_Processing()
 										        	        } else{__asm("nop");}
 
 										        	pause = 1;
-										        	GUI_Display_Refresh();//REFRESH DISPLAY
+										        	GUI_Bar_Measure_OFF(85, 13);
+										        	GUI_Display_Refresh();
 				}		
 
 		break;
@@ -1502,7 +1506,7 @@ void GUI_Touch_Processing()
 															exp_stable = 0;
 
 
-
+															GUI_Bar_Measure(85, 13, 0.1);
 
 																 	 	while(start)
 																 		{
@@ -1523,7 +1527,10 @@ void GUI_Touch_Processing()
 																 				max_el = 0;
 																 				cnt_delay = 0;
 																 				exp_stable = exp_stable+1;
+																 				progress_bar = exp_stable;
 																 				exp_start = 1;
+																 				if(exp_stable<=10)
+																 				GUI_Bar_Measure(85, 13, progress_bar*0.1);
 																 				if(exp_stable > 10)
 																 				{
 																 					start = 0;
@@ -1629,6 +1636,7 @@ void GUI_Touch_Processing()
 															        	        } else{__asm("nop");}
 
 															        	pause = 1;
+															        	GUI_Bar_Measure_OFF(85, 13);
 															        	GUI_Display_Refresh();//REFRESH DISPLAY
 				}		
 
@@ -1775,7 +1783,7 @@ case Measure3_Screen:
 															measure_number = 10;
 															exp_stable = 0;
 
-
+															GUI_Bar_Measure(85, 13, 0.1);
 
 
 																 	 	while(start)
@@ -1797,7 +1805,10 @@ case Measure3_Screen:
 																 				max_el = 0;
 																 				cnt_delay = 0;
 																 				exp_stable = exp_stable+1;
+																 				progress_bar = exp_stable;
 																 				exp_start = 1;
+																 				if(exp_stable<=10)
+																 				GUI_Bar_Measure(85, 13, progress_bar*0.1);
 																 				if(exp_stable > 10)
 																 				{
 																 					start = 0;
@@ -1903,6 +1914,7 @@ case Measure3_Screen:
 															        	        } else{__asm("nop");}
 
 															        	pause = 1;
+															        	GUI_Bar_Measure_OFF(85, 13);
 															        	GUI_Display_Refresh();//REFRESH DISPLAY
 				}		
 		break;
@@ -2023,11 +2035,12 @@ case Measure3_Screen:
 					measure_number = 1;
 					exp_stable = 0;
 
+					//GUI_Bar_Measure(85, 13, 0.5);
 
-
-
+					GUI_Bar_Measure(85, 13, 0.1);
 						 	 	while(start)
 						 		{
+
 						 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
 						 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
 
@@ -2045,17 +2058,22 @@ case Measure3_Screen:
 						 				max_el = 0;
 						 				cnt_delay = 0;
 						 				exp_stable = exp_stable+1;
+						 				progress_bar = exp_stable;
 						 				exp_start = 1;
+						 				if(exp_stable<=10)
+						 				GUI_Bar_Measure(85, 13, progress_bar*0.1);
 						 				if(exp_stable > 10)
 						 				{
 						 					start = 0;
+						 					//exp_num = 0;
+						 					//GUI_Bar_Measure(85, 13, 1);
 						 				}
 						 			}
 						 			 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
 						 				        Calculate_Lambda_Dominant(colorimetry_xy1964, 0);
 						 		}
 
-						 		if(!exp_set)
+						 	 	if(!exp_set)
 						 		{
 						 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
 						 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
@@ -2124,10 +2142,6 @@ case Measure3_Screen:
 					} else{__asm("nop");}
 
 
-
-
-
-
 					        	if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
 					        	        {
 
@@ -2151,6 +2165,7 @@ case Measure3_Screen:
 					        	        } else{__asm("nop");}
 
 					        	pause = 1;
+					        	GUI_Bar_Measure_OFF(85, 13);
 
 				}					
 		break;
@@ -2168,28 +2183,28 @@ case Measure3_Screen:
 				{
 					//WriteFLASH_Screen(Color_Rendition_Screen);/////////////////////////////////////////////////////////////////
 					GUI_screen_state = Color_Rendition_Screen;
-					if (Color_rend_Field & CRI_CQS){
-																					CRICQS_done = 0x00;
-																					max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-																					Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-																					Calculate_xy1931(colorimetry_XYZ1931);
-																					Calculate_uv(colorimetry_xy1931);
-																					Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-																					if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
-																					else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
-																					CRICQS_done = 0x01;
-																				}
-																				else{
-																					CRICQS_done = 0x00;
-																					Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-																					Calculate_xy1931(colorimetry_XYZ1931);
-																					Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-																					max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-																					if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
-																					else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
-																					CRICQS_done = 0x01;
-																				}
-																				Calc_ColorRend = !Calc_ColorRend;
+					if (Color_rend_Field & CRI_CQS)
+					{
+						CRICQS_done = 0x00;
+						max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+						Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+						Calculate_xy1931(colorimetry_XYZ1931);
+						Calculate_uv(colorimetry_xy1931);
+						Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+						if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
+						else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
+						CRICQS_done = 0x01;
+					}else{
+							CRICQS_done = 0x00;
+							Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+							Calculate_xy1931(colorimetry_XYZ1931);
+							Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+							max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+							if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
+								else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
+								CRICQS_done = 0x01;
+						}
+					Calc_ColorRend = !Calc_ColorRend;
 					GUI_Display_Refresh();
 
 				}	else 

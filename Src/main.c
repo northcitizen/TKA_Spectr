@@ -44,12 +44,17 @@
 //#define SERVICE
 #define BT
 
+
+extern volatile uint8_t SD_CARD_FLAG = 0;
+
 extern uint8_t measure_number;
 extern volatile uint8_t GRAPH_FLAG = 0;
  volatile uint8_t exp_stable;
 ///////////////////
  extern volatile uint32_t cnt_delay;
  volatile  uint8_t start;
+
+
 
 //USB
 uint8_t dataToSend[64]= {0}; 
@@ -1014,23 +1019,23 @@ void Test_GUI(void)
 
 	}
 }
-uint32_t start_time = 10000;
+uint32_t start_time = 1000000;
 int main(void)
 {
 	while(start_time >0)
 		start_time--;
-	HAL_Init();
+		HAL_Init();
 		HAL_Delay(1);
-	  SystemClock_Config();
+		SystemClock_Config();
 		HAL_Delay(1);
-	  MX_GPIO_Init();
+		MX_GPIO_Init();
 		HAL_Delay(1);
 		DWT_Init();
 		HAL_Delay(1);
 		MX_TIM2_Init();
 		HAL_Delay(1);
 		MX_SPI1_Init();
-				HAL_Delay(1);
+		HAL_Delay(1);
 		MX_TIM15_Init();
 		HAL_Delay(1);
 		MX_TIM5_Init();
@@ -1322,10 +1327,42 @@ while (1) {
 
 #ifndef SERVICE
 
+		if(SD_CARD_FLAG)
+		{
+			GUI_Display_Refresh();
+			if(GUI_screen_state == Graph_Screen)
+										{
+											block_graph = 1;
+
+											if (preGUI_screen_state == Graph_Screen
+													&& Rotation_Screen_Spectral_Old3
+															== Rotation_Screen_Spectral) {
+												if (GUI_screen_state != Color_Screen
+														&& GUI_screen_state == Graph_Screen)
+													Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
+															Rotation_Screen_Spectral_Old3);
+											}
+											Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+											max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
+													Rotation_Screen_Spectral_Old3);
+											if (GUI_screen_state == Graph_Screen)
+												Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
+														Line_Rabs_buff_graph_test);
+											if (GUI_screen_state == Graph_Screen)
+												Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2,
+														TFT_White, Rotation_Screen_Spectral_Old3);
+											block_graph = 0;
+											GUI_SignalLevel();
+										} else {
+											__asm("nop");
+										}
+			SD_CARD_FLAG = 0;
+		}
+
 		if (send_bluetooth) {
 			HAL_UART_Transmit_DMA(&huart3, (uint8_t*) &data_bluetooth_send, 4122);
 			send_bluetooth = 0;
-			HAL_Delay(10);///////1000
+			HAL_Delay(10);
 			HAL_UART_DMAStop(&huart3);
 			HAL_DMA_Abort(huart3.hdmatx);
 		};
@@ -1337,7 +1374,7 @@ while (1) {
 		}
 
 		bat_refresh++;
-		if (bat_refresh == 10000000) {
+		if (bat_refresh == 1000) {
 			Get_Battery_Level();
 			if (percentage_charge < percentage_charge_prev) {
 				GUI_Battery_Level(0, 0, percentage_charge);
@@ -1470,16 +1507,21 @@ void TIM6_DAC_IRQHandler(void)
 
 void TIM7_IRQHandler(void)
 {
-	
+	uint32_t temp_exp = 0;
+	float bar_value = 0.0;
 	if(!usart2_wait) usart2_wait = true;//1.07
 			
-//	if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen||
-//			GUI_screen_state == Graph_Screen || GUI_screen_state == Color_Screen) && !pause &&  !flag_spectral)
-//		{
-//			cnt_delay_bar++;
-//
-//			if(exp_num > 4){
-//
+	if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen||
+			GUI_screen_state == Graph_Screen || GUI_screen_state == Color_Screen) && !pause &&  !flag_spectral)
+		{
+			cnt_delay_bar++;
+
+temp_exp = exp_num;
+
+			if(exp_num > 4){
+				if(temp_exp != exp_num)
+					GUI_Bar_Measure(85, 13, bar_value=+0.1);
+
 //				if(cnt_delay_bar == ((exposure_timer_period[exp_num]/12)/500))
 //					{
 //						GUI_Bar_Measure(85, 13, 0.2);
@@ -1500,16 +1542,18 @@ void TIM7_IRQHandler(void)
 //					{
 //						GUI_Bar_Measure(85, 13, 1);
 //					}
-//				} else if(exp_num > 2)
-//				{
+				} else if(exp_num > 2)
+				{if(temp_exp != exp_num)
+					GUI_Bar_Measure(85, 13, bar_value=+0.1);
 //							if(cnt_delay_bar == 1){
 //								GUI_Bar_Measure(85, 13, 0.5);
 //							} else if(cnt_delay_bar == 2){
 //								GUI_Bar_Measure(85, 13, 1);
 //							}
-//				} else {
-//									GUI_Bar_Measure(85, 13, 1);}
-//			}
+				} else {
+									//GUI_Bar_Measure(85, 13, 1);
+				}
+			}
 		
 	SD_Detect = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_15);
 	if(old_sd_detect != SD_Detect & CRC_STATUS == CRC_OK){
@@ -1519,9 +1563,9 @@ void TIM7_IRQHandler(void)
 				MX_SDMMC1_SD_Init();
 				MX_FATFS_Init();
 			} else{
-			FATFS_UnLinkDriver(SDPath);
+				FATFS_UnLinkDriver(SDPath);
 				HAL_SD_DeInit(&hsd1);
-			}
+				}
 	}
 			
 	HAL_NVIC_ClearPendingIRQ(TIM7_IRQn);
@@ -1554,8 +1598,10 @@ void EXTI9_5_IRQHandler(void)
   	Output /= FILTER_SMA_ORDER;
 
 
-  	for(uint8_t k = 0; k < FILTER_SMA_ORDER; k++){
-  					Filter_Buffer[k] = Filter_Buffer[k+1];}
+  	for(uint8_t k = 0; k < FILTER_SMA_ORDER; k++)
+  	{
+  		Filter_Buffer[k] = Filter_Buffer[k+1];
+  	}
 
 
 

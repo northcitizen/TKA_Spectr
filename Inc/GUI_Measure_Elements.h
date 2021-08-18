@@ -14,6 +14,7 @@
 
 void GUI_Battery_Level(uint16_t X, uint16_t Y, double charge);
 void GUI_Bar_Measure(uint16_t X, uint16_t Y, float Value);
+void GUI_Bar_Measure_OFF(uint16_t X, uint16_t Y);
 void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_light, uint8_t nan, uint8_t grey);
 void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nan, uint8_t grey);
 void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG, float ValueB, float ValueFR, uint8_t nan, uint8_t grey);
