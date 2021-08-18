@@ -4,16 +4,16 @@
 #include "Calculate_Measure.h"
 #include "Calibration_Address.h"
 TIM_HandleTypeDef htim2;
-float progress_bar= 0.0;
-	volatile extern uint8_t exp_stable;
-	uint32_t scr_refresh_measure = 0, bat_refresh = 0;
-	uint8_t usb_cnt = 0;
-extern volatile	uint16_t max_el;
-//extern volatile uint8_t highSignal, lowSignal;
-	volatile extern uint8_t GRAPH_FLAG;
-	volatile uint8_t update_graph;
-	volatile uint32_t cnt_delay;
-extern	 volatile uint8_t old_exp_num;
+float progress_bar = 0.0;
+volatile extern uint8_t exp_stable;
+uint32_t scr_refresh_measure = 0, bat_refresh = 0;
+uint8_t usb_cnt = 0;
+extern volatile uint16_t max_el;
+volatile extern uint8_t GRAPH_FLAG;
+extern volatile uint8_t SPECTRAL_DONE;
+volatile uint8_t update_graph;
+volatile uint32_t cnt_delay;
+extern volatile uint8_t old_exp_num;
 
 uint16_t Line[1024], Line_buff[1024], buff_set2;
 float Spectral_Corection_Buff[1024], WaveLenght[1024], Scattering_Light, Exposure_Factor, Hazard_Blue[1024], Hazard_Retina[1024];
@@ -459,12 +459,18 @@ void GUI_Measure_Screen(){
 		oldLowSignal = 0;
 		oldHighSignal = 0;
 		screen_count = 0;
+		if(!SPECTRAL_DONE)
+			Measure_Elements_Draw_Zeros(0);
+		else
 		Measure_Elements_Draw(0);
 		GUI_Up_Panel();
 		GUI_Down_Panel();
 	} else
 	{
 		GUI_SignalLevel();
+		if(!SPECTRAL_DONE)
+					Measure_Elements_Draw_Zeros(0);
+				else
 		Measure_Elements_Draw(0);
 	}
 		Prev_Inf_Screen = Measure_Screen;
@@ -587,6 +593,122 @@ void Measure_Elements_Draw(uint8_t Measure_Number)
 	
 }
 
+
+void Measure_Elements_Draw_Zeros(uint8_t Measure_Number)
+{
+	uint16_t Y = 70, limit = 410;
+
+	for (uint8_t state_i = Measure_Number; state_i < 15; state_i++)
+	{
+		screen_count_old = screen_count;
+
+		switch(state_i){
+					case 0: if(Measure_Field&Illuminance && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+					if(Y+35 <= limit){
+									Mode_EL ?	 GUI_Text_E_Measure(20, Y, 0.0, 0, exp_start, exp_set):GUI_Text_L_Measure(20, Y, 0.0, 0, exp_start, exp_set);
+									Y+=35;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							} else {screen_count++;}} break;
+				case 1: if(Measure_Field&Irradiance && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+					if(Y+35 <= limit){
+					Mode_EL ?	GUI_Text_E_Measure(20, Y, 0.0, 1, exp_start, exp_set):GUI_Text_L_Measure(20, Y, 0.0, 1, exp_start, exp_set);
+									Y+=35;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+					} else {screen_count++;}} break;
+				case 2: if(Measure_Field&PPFD && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+						if(Y+35 <= limit){
+									GUI_Text_PPF_Measure(20, Y, 0.0, exp_start, exp_set);
+									Y+=35;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+
+				case 3: if(Measure_Field&PPFD_BGR && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+						if(Y+95 <= limit){
+									GUI_Text_PPFRGB_Measure(20, Y, 0.0, 0.0, 0.0, 0.0, exp_start, exp_set);
+									Y+=95;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+				case 4: if(Measure_Field&CCT && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+						if(Y+35 <= limit){
+							GUI_Text_CCT_Measure(20, Y, 0.0, exp_start, exp_set);
+									Y+=35;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+				case 5: if(Measure_Field&delta_E && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+						if(Y+35 <= limit){
+									GUI_Text_deltaE_Measure(20, Y, 0.0, exp_start, exp_set);
+									Y+=35;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+				case 6: if(Measure_Field&CIE_XYZ && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+						if(Y+105 <= limit){
+							GUI_Text_XYZ_Measure(20, Y, 0, 0, 0, exp_start, exp_set);
+									Y+=105;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+				case 7: if(Measure_Field&CIE_xy && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+					if(Y+70 <= limit){
+						GUI_Text_xy_Measure(20, Y, 0, 0, exp_start, exp_set);
+									Y+=70;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+				case 8: if(Measure_Field&CIE_Luv && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+					if(Y+70 <= limit){
+									GUI_Text_uv_Measure(20, Y, 0, 0, exp_start, exp_set);
+									Y+=70;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+				case 9: if(Measure_Field&CIE_Lab && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+					if(Y+105 <= limit){
+									GUI_Text_LAB_Measure(20, Y, 0, 0, 0, exp_start, exp_set);
+									Y+=105;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+				case 10: if(Measure_Field&lambda_d && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+					if(Y+35 <= limit){
+									GUI_Text_lambdaD_Measure(20, Y, 0.0, exp_start, exp_set);
+									Y+=35;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+				case 11: if(Measure_Field&EbEr && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+					if(Y+70 <= limit){
+						Mode_EL ?	 GUI_Text_EbEr_Measure(20, Y, 0.0, 0.0, exp_start, exp_set) : GUI_Text_LbLr_Measure(20, Y, 0.0, 0.0, exp_start, exp_set);
+									Y+=70;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+				case 12: if(Measure_Field&SP_measure && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
+					if(Y+35 <= limit){
+						GUI_Text_S_P_Measure(20, Y, 0.0, exp_start, exp_set);
+									Y+=35;
+									TFT_DrawLine(10, Y, 262, Y, TFT_White);
+									Y+=10;
+							}else {screen_count++;}} break;
+			default: break;
+		}
+
+		if (screen_count != screen_count_old)
+			{
+				state_Measure_Elements = state_i;
+				screen_count_old = screen_count;
+				break;
+			}
+
+	}
+
+}
+
 void GUI_Measure2_Screen()
 {
 
@@ -597,12 +719,18 @@ void GUI_Measure2_Screen()
 		screen_count = 1;
 		oldLowSignal = 0;
 		oldHighSignal = 0;
+			if(!SPECTRAL_DONE)
+						Measure_Elements_Draw_Zeros(current_state_Measure_Draw);
+					else
 		Measure_Elements_Draw(current_state_Measure_Draw);
 		GUI_Up_Panel();
 		GUI_Down_Panel();
 	} else
 	{
 			GUI_SignalLevel();
+			if(!SPECTRAL_DONE)
+				Measure_Elements_Draw_Zeros(current_state_Measure_Draw);
+				else
 			Measure_Elements_Draw(current_state_Measure_Draw);
 	}
 	Prev_Inf_Screen = Measure_Screen;
@@ -618,12 +746,18 @@ void GUI_Measure3_Screen()
 		screen_count = 2;
 		oldLowSignal = 0;
 		oldHighSignal = 0;
+		if(!SPECTRAL_DONE)
+				Measure_Elements_Draw_Zeros(current_state_Measure_Draw);
+				else
 		Measure_Elements_Draw(current_state_Measure_Draw);
 		GUI_Up_Panel();
 		GUI_Down_Panel();
 	} else
 	{
 			GUI_SignalLevel();
+			if(!SPECTRAL_DONE)
+				Measure_Elements_Draw_Zeros(current_state_Measure_Draw);
+				else
 			Measure_Elements_Draw(current_state_Measure_Draw);
 	}
 	Prev_Inf_Screen = Measure_Screen;
@@ -1324,6 +1458,7 @@ void GUI_Touch_Processing()
 										        	        } else{__asm("nop");}
 
 										        	pause = 1;
+										        	SPECTRAL_DONE = 1;
 										        	GUI_Bar_Measure_OFF(85, 13);
 										        	GUI_Display_Refresh();
 				}		
@@ -1636,6 +1771,7 @@ void GUI_Touch_Processing()
 															        	        } else{__asm("nop");}
 
 															        	pause = 1;
+															        	SPECTRAL_DONE = 1;
 															        	GUI_Bar_Measure_OFF(85, 13);
 															        	GUI_Display_Refresh();//REFRESH DISPLAY
 				}		
@@ -1914,6 +2050,7 @@ case Measure3_Screen:
 															        	        } else{__asm("nop");}
 
 															        	pause = 1;
+															        	SPECTRAL_DONE = 1;
 															        	GUI_Bar_Measure_OFF(85, 13);
 															        	GUI_Display_Refresh();//REFRESH DISPLAY
 				}		
@@ -2165,6 +2302,7 @@ case Measure3_Screen:
 					        	        } else{__asm("nop");}
 
 					        	pause = 1;
+					        	SPECTRAL_DONE = 1;
 					        	GUI_Bar_Measure_OFF(85, 13);
 
 				}					
@@ -2351,6 +2489,7 @@ case Measure3_Screen:
 					Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
 					Factor2 = (Mode_EL == 0x00 ? Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_L) : Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E));
 					GUI_Switch_ButtonActive(182, 202, Mode_EL);
+					SPECTRAL_DONE = 0;
 					GUI_Display_Refresh();//REFRESH DISPLAY
 				}				
 				else

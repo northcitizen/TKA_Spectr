@@ -49,6 +49,7 @@ extern volatile uint8_t SD_CARD_FLAG = 0;
 
 extern uint8_t measure_number;
 extern volatile uint8_t GRAPH_FLAG = 0;
+extern volatile uint8_t SPECTRAL_DONE = 0;
  volatile uint8_t exp_stable;
 ///////////////////
  extern volatile uint32_t cnt_delay;
@@ -1401,6 +1402,7 @@ void auto_exposure(void)
 		if(Line_buff[i] > max_el)
 		{
 			max_el = Line_buff[i];
+
 			i_max = i;
 		}
 //		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;

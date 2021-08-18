@@ -123,6 +123,7 @@ void GUI_Touch_Processing();
 void GUI_Information_Screen();
 void GUI_Display_Refresh();
 void Measure_Elements_Draw(uint8_t Measure_Number);
+void Measure_Elements_Draw_Zeros(uint8_t Measure_Number);
 void GUI_OptionMenuRu();
 void GUI_OptionMenuEn();
 
