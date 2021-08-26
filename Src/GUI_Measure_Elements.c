@@ -1020,7 +1020,7 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 
 	if(preGUI_screen_state != GUI_screen_state){old_nan_lambdaD = 0;}
 	Value = floor(Value*10)/10.0;
-	char buffer[9] = {0};
+	char buffer[7] = {0};
 	uint8_t	delta_pos = 122, number = 0;
 	uint32_t dec = 10;
 	
@@ -1042,15 +1042,15 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black_Bkgr);
 	TFT_SetFont(&Font26EN_arch_digit);
-	sprintf (buffer, "%.1f", Value);
+	sprintf (buffer, "%.0f", Value);
 
 		for (uint8_t i = 1; i <= 4; i++)
 	{
 		if((Value/(dec)) >= 1.0)
 		{
-			dec *= 10;
-			delta_pos-=23;
-			number++;
+			//dec *= 10;
+			//delta_pos-=23;
+			//number++;
 		}
 	}
 	

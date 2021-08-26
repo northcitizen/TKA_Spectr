@@ -1022,7 +1022,7 @@ void Test_GUI(void)
 uint32_t start_time = 1000000;
 int main(void)
 {
-	while(start_time >0)
+	while(start_time > 0)
 		start_time--;
 		HAL_Init();
 		HAL_Delay(1);
