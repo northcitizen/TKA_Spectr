@@ -102,8 +102,8 @@ void CRI_func(uint16_t CCT_measure, float *Rabs)
 	float u_test = colorimetry_uv[0];	
 	float v_test = colorimetry_uv[1];
 	
-	bar_CRI = 0.1;
-	GUI_Bar_Measure(85, 13, bar_CRI);
+	//bar_CRI = 0.1;
+	//GUI_Bar_Measure(85, 13, bar_CRI);
 	
 	for (uint16_t y = 0; y < 1024; y++){
 		s_test_CRI[y] = Rabs[y]/max_Rabs;
@@ -111,8 +111,8 @@ void CRI_func(uint16_t CCT_measure, float *Rabs)
 	
 	for (uint8_t i = 0; i < 15; i++)
 	{
-		bar_CRI += 0.05;
-		GUI_Bar_Measure(85, 13, bar_CRI);
+		//bar_CRI += 0.05;
+		//GUI_Bar_Measure(85, 13, bar_CRI);
 		
 		 x_i_test = 0;
 		 y_i_test = 0;
@@ -191,8 +191,8 @@ void CRI_func(uint16_t CCT_measure, float *Rabs)
 		memset(CRI_R_temp, 0, sizeof(CRI_R_temp));		
 	}
 	
-	bar_CRI = 0.9;
-	GUI_Bar_Measure(85, 13, bar_CRI);
+	//bar_CRI = 0.9;
+	//GUI_Bar_Measure(85, 13, bar_CRI);
 	
 	Rall_temp /= 14;
 	Rall = (int8_t)Rall_temp;
@@ -200,6 +200,6 @@ void CRI_func(uint16_t CCT_measure, float *Rabs)
 	Ra_temp /= 8;
 	Ra = (int8_t)Ra_temp;
 	
-	bar_CRI = 1.0;
-	GUI_Bar_Measure(85, 13, bar_CRI);
+	//bar_CRI = 1.0;
+	//GUI_Bar_Measure(85, 13, bar_CRI);
 }

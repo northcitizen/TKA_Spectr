@@ -48,7 +48,7 @@ double calcSref(int idx, uint16_t CCT_measure)
 
 void cqs_func(uint16_t CCT_measure, float *Rabs)
 {
-	
+	GUI_Bar_Measure_OFF(85, 13);
 	double Y_ic_test = 0;
 	double X_ic_test = 0;
 	double Z_ic_test = 0;
@@ -107,8 +107,8 @@ void cqs_func(uint16_t CCT_measure, float *Rabs)
 		M2 /= (0.0241 + 0.2562*xD - 0.7341*yD);
 	}
 	
-	bar_CQS = 0.2;
-	GUI_Bar_Measure(85, 13, bar_CQS);
+	//bar_CQS = 0.2;
+	//GUI_Bar_Measure(85, 13, bar_CQS);
 
 	memset(x_ref, 0, sizeof(x_ref));
 	memset(y_ref, 0, sizeof(y_ref));
@@ -117,8 +117,8 @@ void cqs_func(uint16_t CCT_measure, float *Rabs)
 	for (uint8_t i = 0; i < 15; i++)
 	{
 		
-		bar_CQS += 0.04;
-		GUI_Bar_Measure(85, 13, bar_CQS);
+		//bar_CQS += 0.04;
+		//GUI_Bar_Measure(85, 13, bar_CQS);
 		
 		 x_test = 0;	
 		 y_test = 0;		
@@ -211,8 +211,8 @@ void cqs_func(uint16_t CCT_measure, float *Rabs)
 		float delta_c_ref = sqrt(a_ref * a_ref + b_ref * b_ref);
 		float delta_c = delta_c_test - delta_c_ref;
 
-		bar_CQS = 0.9;
-		GUI_Bar_Measure(85, 13, bar_CQS);
+		//bar_CQS = 0.9;
+		//GUI_Bar_Measure(85, 13, bar_CQS);
 	
 		float delta_E_CQS = sqrt(pow(L_test - L_ref, 2) + pow(a_test - a_ref,2)+ pow(b_test - b_ref,2));
 		float E_sat = delta_E_CQS;
@@ -241,6 +241,6 @@ void cqs_func(uint16_t CCT_measure, float *Rabs)
 	 Qp_temp = Mcct * 10 * log(exp((100 - 3.78*(delta_e_rms - sum_delta_c/15))/10)-1);
 		Qp = (uint8_t)Qp_temp;
 	
-		bar_CQS = 1.0;
-		GUI_Bar_Measure(85, 13, bar_CQS);
+		//bar_CQS = 1.0;
+		//GUI_Bar_Measure(85, 13, bar_CQS);
 }

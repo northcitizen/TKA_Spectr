@@ -411,14 +411,13 @@ void packet_generator_Rabs_data_send(void) //send Rabs data
 					{
 						usb_status = USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
 					}
-					usb_status = 99;
-//					HAL_Delay(3);
+					usb_status = 99;;
 				}
 			}
 			memset(dataToReceive, 0, sizeof(dataToReceive));
 }
 
-void packet_generator_Calculated_data_send(void) //send Calculated data
+void packet_generator_Calculated_data_send(void)
 {
 			uint8_t q = 0;
 			uint16_t CRC_pack = 0, packet_number = 0;
@@ -1459,7 +1458,10 @@ void auto_exposure(void)
 	{
 		highSignal = 1;
 		 GUI_SignalLevel();
-		start = 0;
+		 pause = 1;
+		 start = 0;
+
+
 	} else if((exp_num ==0 && max_el < 50000))//50000
 	{
 		highSignal = 0;
@@ -1467,7 +1469,9 @@ void auto_exposure(void)
 	{
 		lowSignal = 1;
 		 GUI_SignalLevel();
-		start = 0;
+		 pause = 1;
+		 start = 0;
+
 	}else if((exp_num == 9 && max_el > DarkSignal[i_max]+ 2000))//20000
 	{
 		lowSignal = 0;
