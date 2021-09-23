@@ -7,87 +7,93 @@ volatile uint8_t	preGUI_screen_state;
 volatile uint8_t GUI_screen_state;
 FLASH_EraseInitTypeDef EraseInitStruct_SDNum;
 
-uint8_t SD_Text_SP_en[] = "\nS/P Photopic/Scotopic Ratio\n"; 
-uint8_t SD_Text_SP_ru[] = "\nS/P Дневное/Ночное отношение\n";
-uint8_t SD_Text_ColorXYZ_ru[] = "\nКоординаты цвета XYZ\n";
-uint8_t SD_Text_ColorXYZ_en[] = "\nXYZ color space\n";
+uint8_t SD_Text_SP_en[] = "S/P Twilight/Daytime ratio\r\n";
+uint8_t SD_Text_SP_ru[] = "S/P Сумеречное/дневное отношение\r\n";
 
-uint8_t SD_Text_Colorxy_ru[] = "\nКоординаты цветности x,y\n";
-uint8_t SD_Text_Colorxy_en[] = "\nx,y color space\n";
+uint8_t SD_Text_ColorXYZ_1931_ru[] = "\r\nКоординаты цвета МКО-1931(X,Y,Z)\r\n";
+uint8_t SD_Text_ColorXYZ_1964_ru[] = "\r\nКоординаты цвета МКО-1964(X,Y,Z)\r\n";
+uint8_t SD_Text_ColorXYZ_1931_en[] = "\r\nTristimulus values CIE-1931(X,Y,Z)\r\n";
+uint8_t SD_Text_ColorXYZ_1964_en[] = "\r\nTristimulus values CIE-1964(X,Y,Z)\r\n";
 
-uint8_t SD_Text_Coloruv_ru[] = "\nКоординаты цветности u',v'\n";
-uint8_t SD_Text_Coloruv_en[] = "\nu',v' color space\n";
+uint8_t SD_Text_Colorxy_1931_ru[] = "\r\nКоординаты цветности МКО-1931(x,y)\r\n";
+uint8_t SD_Text_Colorxy_1964_ru[] = "\r\nКоординаты цветности МКО-1964(x,y)\r\n";
+uint8_t SD_Text_Colorxy_1931_en[] = "\r\nChromaticity Coordinates CIE-1931(x,y)\r\n";
+uint8_t SD_Text_Colorxy_1964_en[] = "\r\nChromaticity Coordinates CIE-1964(x,y)\r\n";
 
-uint8_t SD_Text_CCT_ru[] = "\nКЦТ, К'\n";
-uint8_t SD_Text_CCT_en[] = "\nCCT, K\n";
+uint8_t SD_Text_Coloruv_ru[] = "\r\nКоординаты цветности МКО-1976 (u',v')\r\n";
+uint8_t SD_Text_Coloruv_en[] = "\r\nChromaticity Coordinates CIE-1976 (u',v')\r\n";
 
-uint8_t SD_Text_LAB_ru[] = "\nКоординаты цветового пространства L*a*b*\n";
-uint8_t SD_Text_RefSource_ru[] = "\nРеференсный источник\n";
-uint8_t SD_Text_LAB_en[] = "\nL*a*b* color space\n";
-uint8_t SD_Text_RefSource_en[] = "\nReference source\n"; 
+uint8_t SD_Text_CCT_ru[] = "\r\nКЦТ, К\r\n";
+uint8_t SD_Text_CCT_en[] = "\r\nCCT, K\r\n";
 
-uint8_t SD_Text_lambdaD_ru[] = "\nДоминантная длина волны, нм\n";
-uint8_t SD_Text_lambdaD_en[] = "\nDominant wavelenght, nm\n"; 
-uint8_t SD_Text_lambdaC_ru[] = "\nДополнительная длина волны, нм\n";
-uint8_t SD_Text_lambdaC_en[] = "\nComplementary wavelenght, nm\n"; 
+uint8_t SD_Text_LAB_ru[] = "\r\nКоординаты МКО-1976(Lab)\r\n";
+uint8_t SD_Text_RefSource_ru[] = "\r\nРеференсный источник\r\n";
+uint8_t SD_Text_LAB_en[] = "\r\nCIELAB-1976 coordinates\r\n";
+uint8_t SD_Text_RefSource_en[] = "\r\nReference White\r\n";
 
-uint8_t SD_Text_deltaE_ru[] = "\nЦветовое различие\n";
-uint8_t SD_Text_deltaE_en[] = "\nColor difference\n"; 
+uint8_t SD_Text_lambdaD_ru[] = "\r\nДоминантная длина волны, нм\r\n";
+uint8_t SD_Text_lambdaD_en[] = "\r\nDominant wavelenght, nm\r\n";
+uint8_t SD_Text_lambdaC_ru[] = "\r\nДополнительная длина волны, нм\r\n";
+uint8_t SD_Text_lambdaC_en[] = "\r\nComplementary wavelenght, nm\r\n";
 
-uint8_t SD_Text_Elambda_ru[] = "\nСпектральная плотность облученности\tДлина волны, нм\n";
-uint8_t SD_Text_Elambda_en[] = "\nSpectral irradiance\tWavelength, nm\n"; 
+uint8_t SD_Text_deltaE_ru[] = "\r\nЦветовое различие dEab\r\n";
+uint8_t SD_Text_deltaE_en[] = "\r\nCIELAB dEab\r\n";
 
-uint8_t SD_Text_Llambda_ru[] = "\nСпектральная плотность энергетической яркости\tДлина волны, нм\n";
-uint8_t SD_Text_Llambda_en[] = "\nSpectral radiance\tWavelength, nm\n"; 
+uint8_t SD_Text_Elambda_ru[] = "\r\nДлина волны, нм\tСПЭО, Вт/(м2*нм)\r\n";
+uint8_t SD_Text_Elambda_en[] = "\r\nWavelength, nm\tSpectral Irradiance W/(m2*nm)\r\n";
 
-uint8_t SD_Text_Le_ru[] = "\nЭнергетическая яркость, Вт/(м2*ср)\n";
-uint8_t SD_Text_Le_en[] = "\nRadiance, W/(m2*sr)\n"; 
+uint8_t SD_Text_Llambda_ru[] = "\r\nДлина волны, нм\tСПЭЯ, Вт/(м2*ср*нм)\r\n";
+uint8_t SD_Text_Llambda_en[] = "\r\nWavelength, nm\tSpectral Radiance, W/(m2*sr*nm)\r\n";
 
-uint8_t SD_Text_Lu_ru[] = "\nЯркость, кд/м2\n";
-uint8_t SD_Text_Lu_en[] = "\nLuminance, cd/m2\n"; 
+uint8_t SD_Text_Le_ru[] = "\r\nЯркость, кд/м2\r\n";
+uint8_t SD_Text_Le_en[] = "\r\nRadiance, W/(m2*sr)\r\n";
 
-uint8_t SD_Text_Ee_ru[] = "Облученность, Вт/м2\n";
-uint8_t SD_Text_Ee_en[] = "Irradiance, W/m2\n"; 
+uint8_t SD_Text_Lu_ru[] = "\r\nЭнергетическая яркость, Вт/(м2*ср)\r\n";
+uint8_t SD_Text_Lu_en[] = "\r\nLuminance, cd/m2\r\n";
 
-uint8_t SD_Text_Eu_ru[] = "\nОсвещенность, лк\n";
-uint8_t SD_Text_Eu_en[] = "\nIlluminance, lx\n"; 
+uint8_t SD_Text_Ee_ru[] = "\r\nЭнергетическая освещенность, Вт/м2\r\n";
+uint8_t SD_Text_Ee_en[] = "\r\nIrradiance, W/m2\n";
 
-uint8_t SD_Text_PPFD_ru[] = "\nФАР (PPFD), моль/(с*м2)\n";
-uint8_t SD_Text_PPFD_en[] = "\nPPFD, mol/(s*m2)\n"; 
+uint8_t SD_Text_Eu_ru[] = "\r\nОсвещенность, лк\r\n";
+uint8_t SD_Text_Eu_en[] = "\r\nIlluminance, lx\r\n";
 
-uint8_t SD_Text_PPFDRGB_ru[] = "\nФАР(PPFD) Cин-Кр-Зел-FR, [моль/(с*м2)]\n";
-uint8_t SD_Text_PPFDRGB_en[] = "\nPPFD, B-G-R-FR [mol/(s*m2)]\n"; 
+uint8_t SD_Text_PPFD_ru[] = "\r\nФАР яркость, мкмоль/(с*м2)\r\n";
+uint8_t SD_Text_PPFD_en[] = "\r\nPPFD, umol/(s*m2)\r\n";
 
-uint8_t SD_Text_PPL_ru[] = "\nФАР (PPL), моль/(с*м2*ср)\n";
-uint8_t SD_Text_PPL_en[] = "\nPPL, mol/(s*m2*sr)\n"; 
+uint8_t SD_Text_PPFDRGB_ru[] = "\r\nФАР-Cин\tФАР-Зел\tФАР-Кр\tФАР-FR, мкмоль/(с*м2)\r\n";
+uint8_t SD_Text_PPFDRGB_en[] = "\r\nPFD-B, PFD-G, PFD-R, PFD-FR, umol/(s*m2)\r\n";
 
-uint8_t SD_Text_PPLRGB_ru[] = "\nФАР(PPL) Cин-Кр-Зел-FR, [моль/(с*м2*ср)]\n";
-uint8_t SD_Text_PPLRGB_en[] = "\nPPL, B-G-R-FR [mol/(s*m2*sr)]\n"; 
+uint8_t SD_Text_PPL_ru[] = "\r\nФАР облученность, мкмоль/(с*м2*ср)\r\n";
+uint8_t SD_Text_PPL_en[] = "\r\nPPL, umol/(s*m2*sr)\r\n";
 
-uint8_t SD_Text_Eb_Er_ru[] = "\nEb, Er, Вт/м2\n";
-uint8_t SD_Text_Eb_Er_en[] = "\nEb, Er, W/m2\n"; 
+uint8_t SD_Text_PPLRGB_ru[] = "\r\nФАР-Cин\tФАР-Зел\tФАР-Кр\tФАР-FR, мкмоль/(с*м2*ср)\r\n";
+uint8_t SD_Text_PPLRGB_en[] = "\r\nPAR-B, PAR-G, PAR-R, PAR-FR, umol/(s*m2*sr)\r\n";
 
-uint8_t SD_Text_Lb_Lr_ru[] = "\nLb, Lr, Вт/(м2*ср)\n";
-uint8_t SD_Text_Lb_Lr_en[] = "\nLb, Lr, W/(m2*sr)\n"; 
+uint8_t SD_Text_Eb_Er_ru[] = "\r\nEb, Er(@390-760нм), Вт/м2\r\n";
+uint8_t SD_Text_Eb_Er_en[] = "\r\nEb, Er(@390-760nm), W/m2\r\n";
 
-uint8_t SD_Text_CRI_ru[] = "\nИндекс цветопередачи (CRI): Ra, Rall, \nR1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15\n";
-uint8_t SD_Text_CRI_en[] = "\nColour rendering index (CRI): Ra, Rall,\nR1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15\n"; 
+uint8_t SD_Text_Lb_Lr_ru[] = "\r\nLb, Lr(@390-760нм), Вт/(м2*ср)\r\n";
+uint8_t SD_Text_Lb_Lr_en[] = "\r\nLb, Lr(@390-760nm), W/(m2*sr)\r\n";
 
-uint8_t SD_Text_CQS_ru[] = "\nИндекс цветопередачи (CQS): Qa, Qp, Qf, \nQ1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15\n";
-uint8_t SD_Text_CQS_en[] = "\nColor Quality Scale (CQS): Qa, Qp, Qf, \nQ1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15\n"; 
+uint8_t SD_Text_CRI_ru[] = "\r\nИндекс цветопередачи (CRI): Ra, Rall, %\r\nR1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15\r\n";
+uint8_t SD_Text_CRI_en[] = "\r\nColour rendering index (CRI): Ra, Rall, %\r\nR1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15\r\n";
+
+uint8_t SD_Text_CQS_ru[] = "\r\nИндекс цветопередачи (CQS): Qa, Qp, Qf, \r\nQ1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15\r\n";
+uint8_t SD_Text_CQS_en[] = "\r\nColor Quality Scale (CQS): Qa, Qp, Qf, \r\nQ1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15\r\n";
 
 extern float E_day, E_day_Wt, E_Night, SP_Measure, PPFD_PPL_Measure, PPFD_PPL_Blue_Measure, PPFD_PPL_Green_Measure, PPFD_PPL_Red_Measure, PPFD_PPL_Far_Red_Measure,
 	ELr_Measure, ELb_Measure, CCT_Measure;
 extern uint16_t	Tc_Measure, lambda_d_Measure, lambda_c_Measure;
 extern uint16_t colorimetry_XYZ1931[3];
 extern int16_t colorimetry_LAB[3], delta_Eab_Measure;
-extern float colorimetry_xy1931[2], colorimetry_uv1976[2], Line_Rabs_buff[1024];
+extern float colorimetry_xy1931[2], colorimetry_xy1964[2], colorimetry_uv1976[2], Line_Rabs_buff[1024];
 extern uint8_t Q_i[15], Qf, Qa, Qp, Source_Type;
+extern int8_t Ra, Rall, R9, Ri[15];
 extern float WaveLenght[1024], calibratre_x_1931[1024], calibratre_z_1931[1024];
-extern float colorimetry_xy1931[2], colorimetry_uv1976[2], Spectral_day[1024], Spectral_night[1024], Hazard_Retina[1024], Hazard_Blue[1024];
+extern float colorimetry_xy1931[2], colorimetry_XYZ1964[3], colorimetry_uv1976[2], Spectral_day[1024], Spectral_night[1024], Hazard_Retina[1024], Hazard_Blue[1024];
 extern uint8_t Measure_Color_xy;
 double SDWr_Status_bar = 0;
-
+volatile uint8_t LAMBDA_TYPE;
 extern uint16_t	Measure_Field;
 extern uint8_t	Graph_Field, Color_Field, Color_rend_Field, Language_status, Source_Type, Mode_EL, Bluetooth;
 
@@ -253,7 +259,8 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 	char digit_buff[3];
 	char source_type[4];
 	char measure_buff[12];
-
+	float deltaWave = 0.0;
+	float E_Day_delata = 0.0;
 	strcpy(source_type, Source_Type == Source_A ? "A" : Source_Type == Source_D65 ? "D65" : Source_Type == Source_C ? "C" : Source_Type == Source_D50 ? "D50" : Source_Type == Source_D55 ? "D55" : Source_Type == Source_D75 ? "D75" : "NAN");
 	
 	memset(measure_buff, 0, 12);
@@ -288,28 +295,56 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 							memset(measure_buff, 0, 12);
 						
-							(Language_status==Ru)?(f_write(&MyFile, &SD_Text_ColorXYZ_ru, sizeof(SD_Text_ColorXYZ_ru), &byteswritten)) :(f_write(&MyFile, &SD_Text_ColorXYZ_en, sizeof(SD_Text_ColorXYZ_en), &byteswritten)); //XYZ
-							sprintf(measure_buff, "%d\t", colorimetry_XYZ1931[0]);//X
-							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-							memset(measure_buff, 0, 12);
+							if(Measure_Color_xy)
+							{
+								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_ColorXYZ_1931_ru, sizeof(SD_Text_ColorXYZ_1931_ru), &byteswritten)) :(f_write(&MyFile, &SD_Text_ColorXYZ_1931_en, sizeof(SD_Text_ColorXYZ_1931_en), &byteswritten)); //XYZ
+								sprintf(measure_buff, "%d\t", colorimetry_XYZ1931[0]);//X
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+
+								sprintf(measure_buff, "%d\t", colorimetry_XYZ1931[1]);//Y
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+
+								sprintf(measure_buff, "%d\t", colorimetry_XYZ1931[2]);//Z
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+							}else{
+								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_ColorXYZ_1964_ru, sizeof(SD_Text_ColorXYZ_1964_ru), &byteswritten)) :(f_write(&MyFile, &SD_Text_ColorXYZ_1964_en, sizeof(SD_Text_ColorXYZ_1964_en), &byteswritten)); //XYZ
+								sprintf(measure_buff, "%d\t", colorimetry_XYZ1964[0]);//X
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+
+								sprintf(measure_buff, "%d\t", colorimetry_XYZ1964[1]);//Y
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+
+								sprintf(measure_buff, "%d\t", colorimetry_XYZ1964[2]);//Z
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+							}
 						
-							sprintf(measure_buff, "%d\t", colorimetry_XYZ1931[1]);//Y
-							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-							memset(measure_buff, 0, 12);
+							if(Measure_Color_xy)
+							{
+								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Colorxy_1931_ru, sizeof(SD_Text_Colorxy_1931_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Colorxy_1931_en, sizeof(SD_Text_Colorxy_1931_en), &byteswritten));//xy
+								sprintf(measure_buff, "%.4f\t", colorimetry_xy1931[0]); //x
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
 						
-							sprintf(measure_buff, "%d\t", colorimetry_XYZ1931[2]);//Z
-							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-							memset(measure_buff, 0, 12);
-						
-							(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Colorxy_ru, sizeof(SD_Text_Colorxy_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Colorxy_en, sizeof(SD_Text_Colorxy_en), &byteswritten));//xy
-							sprintf(measure_buff, "%.4f\t", colorimetry_xy1931[0]); //x
-							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-							memset(measure_buff, 0, 12);
-						
-							sprintf(measure_buff, "%.4f", colorimetry_xy1931[1]);//y
-							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-							memset(measure_buff, 0, 12);
-							
+								sprintf(measure_buff, "%.4f", colorimetry_xy1931[1]);//y
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+							}else
+							{
+								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Colorxy_1964_ru, sizeof(SD_Text_Colorxy_1964_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Colorxy_1964_en, sizeof(SD_Text_Colorxy_1964_en), &byteswritten));//xy
+								sprintf(measure_buff, "%.4f\t", colorimetry_xy1964[0]); //x
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+
+								sprintf(measure_buff, "%.4f", colorimetry_xy1964[1]);//y
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+							}
 							(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Coloruv_ru, sizeof(SD_Text_Coloruv_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Coloruv_en, sizeof(SD_Text_Coloruv_en), &byteswritten));//u'v'
 							sprintf(measure_buff, "%.4f\t", colorimetry_uv1976[0]);//u'
 							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
@@ -345,15 +380,18 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 							(Language_status==Ru)?(f_write(&MyFile, &SD_Text_RefSource_ru, sizeof(SD_Text_RefSource_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_RefSource_en, sizeof(SD_Text_RefSource_en), &byteswritten)); //RefSource
 							f_write(&MyFile, &source_type, sizeof(source_type), &byteswritten);//SourceType
 						
-							(Language_status==Ru)?(f_write(&MyFile, &SD_Text_lambdaD_ru, sizeof(SD_Text_lambdaD_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_lambdaD_en, sizeof(SD_Text_lambdaD_en), &byteswritten));//Lambda D
-							sprintf(measure_buff, "%d\t", lambda_d_Measure); //Lambda D
-							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-							memset(measure_buff, 0, 12);
-						
-							(Language_status==Ru)?(f_write(&MyFile, &SD_Text_lambdaC_ru, sizeof(SD_Text_lambdaC_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_lambdaC_en, sizeof(SD_Text_lambdaC_en), &byteswritten));//Lambda C
-							sprintf(measure_buff, "%d\t", lambda_c_Measure); //Lambda C
-							f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-							memset(measure_buff, 0, 12);
+							if(LAMBDA_TYPE)
+							{
+								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_lambdaD_ru, sizeof(SD_Text_lambdaD_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_lambdaD_en, sizeof(SD_Text_lambdaD_en), &byteswritten));//Lambda D
+								sprintf(measure_buff, "%d\t", lambda_d_Measure); //Lambda D
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+							}else{
+								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_lambdaC_ru, sizeof(SD_Text_lambdaC_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_lambdaC_en, sizeof(SD_Text_lambdaC_en), &byteswritten));//Lambda C
+								sprintf(measure_buff, "%d\t", lambda_d_Measure); //Lambda C
+								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+								memset(measure_buff, 0, 12);
+							}
 						
 							if(Memory_Data_satus == 0x01)
 							{
@@ -379,7 +417,7 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 									f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 									memset(measure_buff, 0, 12);
 									
-									sprintf(measure_buff, "\t%.2f\n", WaveLenght[i]); //lambda
+									sprintf(measure_buff, "\t%.2f\r\n", WaveLenght[i]); //lambda
 									f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 									memset(measure_buff, 0, 12);
 								}
@@ -430,16 +468,20 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 							}
 							else //Lmode
 							{
+								deltaWave = WaveLenght[1023]-WaveLenght[1022];
 								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Llambda_ru, sizeof(SD_Text_Llambda_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Llambda_en, sizeof(SD_Text_Llambda_en), &byteswritten));//Delta E
+
 								for(uint16_t i=0; i < 1024; i++)
 								{
-									sprintf(measure_buff, "%.7f", Line_Rabs_buff[i]); //L(lambda)
+									sprintf(measure_buff, "%.2f", WaveLenght[i]); //lambda
 									f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 									memset(measure_buff, 0, 12);
 									
-									sprintf(measure_buff, "\t%.2f\n", WaveLenght[i]); //lambda
+									sprintf(measure_buff, "\t%.7f\r\n", Line_Rabs_buff[i]*deltaWave); //L(lambda)
 									f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 									memset(measure_buff, 0, 12);
+
+
 								}
 								
 								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Le_ru, sizeof(SD_Text_Le_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Le_en, sizeof(SD_Text_Le_en), &byteswritten));//Le
@@ -447,8 +489,13 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
 								
+									for (uint16_t iq = 0; iq < 1024; iq++)
+									{
+										E_Day_delata = E_Day_delata + (Line_Rabs_buff[iq]*deltaWave);
+									}
+
 								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Lu_ru, sizeof(SD_Text_Lu_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Lu_en, sizeof(SD_Text_Lu_en), &byteswritten));//Lu
-								sprintf(measure_buff, "%.1f", E_day_Wt); //Lu
+								sprintf(measure_buff, "%.5f", E_Day_delata); //Lu
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
 								
@@ -490,57 +537,57 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 							if(CRICQS_done == 0x01)
 							{
 								(Language_status==Ru)?(f_write(&MyFile, &SD_Text_CRI_ru, sizeof(SD_Text_CRI_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_CRI_en, sizeof(SD_Text_CRI_en), &byteswritten));
-								sprintf(measure_buff, "%d\t", 151); //Ra
+								sprintf(measure_buff, "%d\t", Ra); //Ra
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
 								
-								sprintf(measure_buff, "%d", 231); //Rall
+								sprintf(measure_buff, "%d", Rall); //Rall
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
 								
-								sprintf(measure_buff, "\n%d\t", 13); //R1
+								sprintf(measure_buff, "\n%d\t", Ri[0]); //R1
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 29); //R2
+								sprintf(measure_buff, "%d\t", Ri[1]); //R2
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 49); //R3
+								sprintf(measure_buff, "%d\t", Ri[2]); //R3
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 44); //R4
+								sprintf(measure_buff, "%d\t", Ri[3]); //R4
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 55); //R5
+								sprintf(measure_buff, "%d\t", Ri[4]); //R5
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 68); //R6
+								sprintf(measure_buff, "%d\t", Ri[5]); //R6
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t",79); //R7
+								sprintf(measure_buff, "%d\t",Ri[6]); //R7
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t",88); //R8
+								sprintf(measure_buff, "%d\t",Ri[7]); //R8
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t",98); //R9
+								sprintf(measure_buff, "%d\t",Ri[8]); //R9
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 105); //R10
+								sprintf(measure_buff, "%d\t", Ri[9]); //R10
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 112); //R11
+								sprintf(measure_buff, "%d\t", Ri[10]); //R11
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 127); //R12
+								sprintf(measure_buff, "%d\t", Ri[11]); //R12
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 133); //R13
+								sprintf(measure_buff, "%d\t", Ri[12]); //R13
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 148); //R14
+								sprintf(measure_buff, "%d\t", Ri[13]); //R14
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
-								sprintf(measure_buff, "%d\t", 152); //R15
+								sprintf(measure_buff, "%d\t", Ri[14]); //R15
 								f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 								memset(measure_buff, 0, 12);
 								

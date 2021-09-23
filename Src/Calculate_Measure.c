@@ -7,9 +7,11 @@ extern uint16_t colorimetry_XYZ1964[3], lambda_c_Measure, lambda_d_Measure, Meas
 extern int16_t colorimetry_LAB[3];
 extern float colorimetry_xy1964[2], colorimetry_uv[2], colorimetry_uv1976[2], colorimetry_xy1931[2];
 extern float calibratre_x_1931[1024], Spectral_day[1024], calibratre_z_1931[1024];
-	
+extern float WaveLenght[1024];
+extern volatile uint8_t LAMBDA_TYPE = 0;
 float Calculate_EL_Day(float R_data[], float Spectral_Day_const[])
 {
+
 	sum = 0;
 	for ( iq = 0; iq < 1024; iq++)
 	{
@@ -325,6 +327,7 @@ void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 
 	    if(triangle_out)
 	    {
+	    	LAMBDA_TYPE = 0;
 	        if(x2 <= x1)
 	        {
 	            for(int i = START_POINT; i < D_SIZE; i++)
@@ -350,6 +353,7 @@ void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 	    }
 	    else
 	    {
+	    	LAMBDA_TYPE = 1;
 	        if(x2 <= x1)
 	        {
 	            for(int i = 0; i < START_POINT; i++)
@@ -379,9 +383,9 @@ extern int16_t colorimetry_LAB_mem[3];
 float result, res1, res2, res3;
 
 int16_t Calculate_deltaEab() {
-	if((Measure_Field&CIE_Lab) == 0){
+//	if((Measure_Field&CIE_Lab) == 0){
 		Calculate_Lab(Measure_Color_xy == 0x00 ? colorimetry_XYZ1964 : colorimetry_XYZ1931, Measure_Color_xy, Source_Type);
-	}
+//	}
 	res1 = ((float)(colorimetry_LAB[0]) - (float)(colorimetry_LAB_mem[0]));
 	res2 = ((float)(colorimetry_LAB[1]) - (float)(colorimetry_LAB_mem[1]));
 	res3 = ((float)(colorimetry_LAB[2]) - (float)(colorimetry_LAB_mem[2]));

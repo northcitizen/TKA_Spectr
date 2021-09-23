@@ -8,6 +8,7 @@
 #include "GUI.h"
 #include "main.h"
 #include "CQS_Calculate.h"
+#include "CRI_Calculate.h"
 #include <stm32l4xx_hal_def.h>
 #include "Calculate_Measure.h"
 #include "Calibration_Address.h"

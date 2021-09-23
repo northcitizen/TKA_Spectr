@@ -4,7 +4,7 @@
 #include "Calculate_Measure.h"
 #include "Calibration_Address.h"
 TIM_HandleTypeDef htim2;
-float progress_bar = 0.0;
+extern volatile float progress_bar = 0.0;
 volatile extern uint8_t exp_stable;
 uint32_t scr_refresh_measure = 0, bat_refresh = 0;
 uint8_t usb_cnt = 0;
@@ -46,10 +46,10 @@ extern float Spectral_day[1024], Spectral_night[1024], WaveLenght[1024], Hazard_
 extern uint16_t colorimetry_XYZ1964[3],colorimetry_XYZ1931[3], cnt_delay_bar, Serial_part_device, Serial_number_device;
 extern int16_t colorimetry_LAB[3];
 extern float colorimetry_xy1964[2], colorimetry_uv[2], colorimetry_uv1976[2], max_Rabs, colorimetry_xy1931[2];
-uint16_t Measure_Field = 0x0000, sdfile_cnt = 0x00, Memory_Data_satus = 0x01, graph_spectral_day[355], graph_spectral_night[355], graph_spectral_Retina[355], graph_spectral_Blue[355];
+volatile uint16_t Measure_Field = 0x0000, sdfile_cnt = 0x00, Memory_Data_satus = 0x01, graph_spectral_day[355], graph_spectral_night[355], graph_spectral_Retina[355], graph_spectral_Blue[355];
 uint8_t Language_status = Ru, Graph_Field = 0x00, Color_Field = 0x00, preColor_Field = 0x00, Measure_Color_xy = 0x00, Color_rend_Field = 0x00, Bluetooth, Source_Type, Prev_Inf_Screen,Prev_Inf_Screen2, Rotation_Screen = 0x00,
 Calc_ColorRend = 0x00, Calc_ColorRend_old = 0x00, current_state_Measure_Draw = 0;
-uint8_t Rotation_Screen_Spectral = 0x00, Rotation_Screen_Rend = 0x00, CRICQS_done = 0x00;
+extern volatile uint8_t Rotation_Screen_Spectral = 0x00, Rotation_Screen_Rend = 0x00, CRICQS_done = 0x00;
 uint8_t oldHighSignal = 0, oldLowSignal = 0;
 extern double percentage_charge, bar_CQS, bar_CRI, SDWr_Status_bar;
 extern uint16_t graph_data_old[340];
@@ -518,7 +518,7 @@ void Measure_Elements_Draw(uint8_t Measure_Number)
 							}else {screen_count++;}} break;
 				case 4: if(Measure_Field&CCT && (GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen)){
 						if(Y+35 <= limit){
-							GUI_Text_CCT_Measure(20, Y,  Tc_Measure == 0xFFFF ? 0 : Tc_Measure, exp_start, exp_set); //
+							GUI_Text_CCT_Measure(20, Y,  Tc_Measure == 0xFFFF ? 0 : Tc_Measure, exp_start, exp_set);
 									Y+=35;
 									TFT_DrawLine(10, Y, 262, Y, TFT_White);
 									Y+=10;
@@ -1320,6 +1320,8 @@ void GUI_Touch_Processing()
 				}		else
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
+					GUI_Button_Measure_Start_Pause(109, 426);
+										GUI_Display_Refresh();
 					GRAPH_FLAG = 1;
 										start = 1;
 										pause = 0;
@@ -1481,6 +1483,7 @@ void GUI_Touch_Processing()
 										        	pause = 1;
 										        	SPECTRAL_DONE = 1;
 										        	GUI_Bar_Measure_OFF(85, 13);
+										        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 										        	GUI_Display_Refresh();
 				}		
 
@@ -1654,6 +1657,8 @@ void GUI_Touch_Processing()
 				}		else
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
+					GUI_Button_Measure_Start_Pause(109, 426);
+										GUI_Display_Refresh();
 					GRAPH_FLAG = 1;
 															start = 1;
 															pause = 0;
@@ -1815,6 +1820,7 @@ void GUI_Touch_Processing()
 															        	pause = 1;
 															        	SPECTRAL_DONE = 1;
 															        	GUI_Bar_Measure_OFF(85, 13);
+															        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 															        	GUI_Display_Refresh();//REFRESH DISPLAY
 				}		
 
@@ -1954,6 +1960,8 @@ case Measure3_Screen:
 				}		else
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
+					GUI_Button_Measure_Start_Pause(109, 426);
+										GUI_Display_Refresh();
 					GRAPH_FLAG = 1;
 					start = 1;
 					pause = 0;
@@ -2094,6 +2102,7 @@ case Measure3_Screen:
 															        	pause = 1;
 															        	SPECTRAL_DONE = 1;
 															        	GUI_Bar_Measure_OFF(85, 13);
+															        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 															        	GUI_Display_Refresh();//REFRESH DISPLAY
 				}		
 		break;
@@ -2207,6 +2216,8 @@ case Measure3_Screen:
 				else 	 
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
+					GUI_Button_Measure_Start_Pause(109, 426);
+					GUI_Display_Refresh();
 					GRAPH_FLAG = 1;
 					start = 1;
 					pause = 0;
@@ -2244,7 +2255,8 @@ case Measure3_Screen:
 						 				if(exp_stable > 10)
 						 				{
 						 					start = 0;
-						 					//exp_num = 0;
+						 					cnt_delay = 0;
+						 					htim2.Init.Period = exposure_timer_period[exp_num];
 						 					//GUI_Bar_Measure(85, 13, 1);
 						 				}
 						 			}
@@ -2368,6 +2380,7 @@ case Measure3_Screen:
 					        	pause = 1;
 					        	SPECTRAL_DONE = 1;
 					        	GUI_Bar_Measure_OFF(85, 13);
+					        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 					        	GUI_Display_Refresh();
 
 				}					
@@ -2390,6 +2403,8 @@ case Measure3_Screen:
 				}	else 
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
+					GUI_Button_Measure_Start_Pause(109, 426);
+										GUI_Display_Refresh();
 					GRAPH_FLAG = 1;
 										start = 1;
 										pause = 0;
@@ -2550,6 +2565,7 @@ case Measure3_Screen:
 										        	pause = 1;
 										        	SPECTRAL_DONE = 1;
 										        	GUI_Bar_Measure_OFF(85, 13);
+										        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 										        	GUI_Display_Refresh();
 
 				}else 			
@@ -2632,6 +2648,8 @@ case Measure3_Screen:
 				ELr_Measure = Calculate_ELr(Line_Rabs_buff, Hazard_Retina);
 				ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);
 			}
+
+			delta_Eab_Measure = Calculate_deltaEab();
 			GUI_Display_Refresh();//REFRESH DISPLAY
 				}	else 			
 				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Rotation_Screen
@@ -2641,6 +2659,8 @@ case Measure3_Screen:
 				}		else 
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
+					GUI_Button_Measure_Start_Pause(109, 426);
+										GUI_Display_Refresh();
 					GRAPH_FLAG = 1;
 										start = 1;
 										pause = 0;
@@ -2804,6 +2824,8 @@ case Measure3_Screen:
 						}
 						Calc_ColorRend = !Calc_ColorRend;
 						GUI_Bar_Measure_OFF(85, 13);
+						GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
+						delta_Eab_Measure = Calculate_deltaEab();
 						GUI_Display_Refresh();//REFRESH DISPLAY
 
 				}

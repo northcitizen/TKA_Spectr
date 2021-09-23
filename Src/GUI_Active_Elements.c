@@ -2,11 +2,13 @@
 #include "GUI_Active_Elements.h"
 #include "stm32l4xx_hal.h"
 #include "BlueTooth.h"
+#include "GUI.h"
 
 //extern UART_HandleTypeDef hlpuart1;
 extern UART_HandleTypeDef huart3;
 extern uint8_t BluetoothStat;
 extern uint8_t pause;
+extern uint8_t  GUI_screen_state;
 
 void GUI_Bluetooth_Logo(uint16_t X, uint16_t Y)
 {
@@ -65,7 +67,9 @@ void GUI_Button_TFT_On_Off(uint16_t X, uint16_t Y)
 
 void GUI_Button_TFT_Rotate(uint16_t X, uint16_t Y)
 {
-	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
+	if(GUI_screen_state == Color_Screen)	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_PAR_IRed);
+		else  TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
+	//TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
 	TFT_DrawRectangle(X+9, Y+9, X+28, Y+43, TFT_White);
 	TFT_DrawRectangle(X+18, Y+30, X+49, Y+48, TFT_White);
 	TFT_DrawCircleCorner(X+28, Y+30, 16, 2, TFT_White);
