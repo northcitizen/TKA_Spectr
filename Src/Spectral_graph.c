@@ -136,10 +136,18 @@ void Spectral_Axes_Text(uint8_t direction){
 
 		TFT_DrawChar(5, 410, '0');
 		
+		TFT_DrawChar(0, 333, '.');
+		TFT_DrawChar(5, 333, '2');
+		TFT_DrawChar(11, 333, '5');
+
 		TFT_DrawChar(7, 257, '.');
 		TFT_DrawChar(3, 257, '0');
 		TFT_DrawChar(11, 257, '5');
 		
+		TFT_DrawChar(0, 181, '.');
+		TFT_DrawChar(5, 181, '7');
+		TFT_DrawChar(11, 181, '5');
+
 		TFT_DrawChar(0, 105, '1');
 		TFT_DrawChar(4, 105, '.');
 		TFT_DrawChar(9, 105, '0');
@@ -176,11 +184,19 @@ void Spectral_Axes_Text(uint8_t direction){
 		
 		TFT_DrawChar(65, 250, '0');
 
+		TFT_DrawChar(57, 200, '.');
+		TFT_DrawChar(62, 200, '2');
+		TFT_DrawChar(67, 200, '5');
+
 		TFT_DrawChar(57, 149, '0');
 		TFT_DrawChar(62, 149, '.');
 		TFT_DrawChar(67, 149, '5');
 
-			
+
+		TFT_DrawChar(57, 93, '.');
+		TFT_DrawChar(62, 93, '7');
+		TFT_DrawChar(67, 93, '5');
+
 		TFT_DrawChar(57, 43, '1');
 		TFT_DrawChar(62, 43, '.');
 		TFT_DrawChar(67, 43, '0');

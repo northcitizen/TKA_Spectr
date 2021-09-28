@@ -887,7 +887,9 @@ float colorimetry_xy_buff[2];
 colorimetry_xy_buff[0] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[0] : colorimetry_xy1931[0];
 colorimetry_xy_buff[1] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[1] : colorimetry_xy1931[1];
 
-	if(Color_Field&Color_CIE_xy) {GUI_Text_xy_Measure(20, 70, colorimetry_xy_buff[0], colorimetry_xy_buff[1], exp_start, exp_set); 
+	if(Color_Field&Color_CIE_xy)//xy
+	{
+		GUI_Text_xy_Measure(20, 70, colorimetry_xy_buff[0], colorimetry_xy_buff[1], exp_start, exp_set);
 		
 
 		 if(colorimetry_xy_buff[0] < 0.74 & colorimetry_xy_buff[1] < 0.84 ){
@@ -901,6 +903,34 @@ colorimetry_xy_buff[1] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[1] : co
 		colorimetry_xy_old[1] = colorimetry_xy_buff[1];
 		TFT_DrawFilledCircle( 18+colorimetry_xy_buff[0]*295, 150+XY2_LOCUS_BMP_SIZEY-colorimetry_xy_buff[1]*300, 4, TFT_White);
 		TFT_DrawFilledCircle(18+colorimetry_xy_buff[0]*295, 150+XY2_LOCUS_BMP_SIZEY-colorimetry_xy_buff[1]*300, 2, TFT_Black);
+
+
+
+
+//		TFT_DrawFilledCircle(100,  290+30, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+1,  290+30-1, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+2,  290+30-2, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+3,  290+30-3, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+4,  290+30-4, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+5,  290+30-5, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+6,  290+30-6, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+7,  290+30-7, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+8,  290+30-8, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+9,  290+30-9, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+10,  290+30-10, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+11,  290+30-11, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+12,  290+30-12, 1, TFT_Black);
+//
+//		TFT_DrawFilledCircle(100+13,  290+30-12-1, 1, TFT_Black);
+//
+//		TFT_DrawFilledCircle(100+16+1,  290+30-14-1, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+18+2,  290+30-16-1, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+20+3,  290+30-18-2, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+22+4,  290+30-20-2, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+24+5,  290+30-22-2, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+26+6,  290+30-24-1, 1, TFT_Black);
+//		TFT_DrawFilledCircle(100+28+7,  290+30-26-1, 1, TFT_Black);
+
 		GUI_Axes_Locus_XY(18, 150+XY2_LOCUS_BMP_SIZEY, 0);
 		flag = 1;
 		}
@@ -908,7 +938,9 @@ colorimetry_xy_buff[1] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[1] : co
 
 	
 	} else
-	if(Color_Field&Color_CIE_Luv) {GUI_Text_uv_Measure(20, 70, colorimetry_uv1976[0], colorimetry_uv1976[1], exp_start, exp_set);
+	if(Color_Field&Color_CIE_Luv) //Luv
+	{
+		GUI_Text_uv_Measure(20, 70, colorimetry_uv1976[0], colorimetry_uv1976[1], exp_start, exp_set);
 		if(colorimetry_uv1976[0] < 0.63 & colorimetry_uv1976[1] < 0.59 & colorimetry_uv1976[0] > 0.0 & colorimetry_uv1976[1] > 0.0){
 			if(flag)
 			{

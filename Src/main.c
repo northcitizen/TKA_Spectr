@@ -1391,10 +1391,10 @@ int main(void)
 		}
 	}
 
-	WaveLenght_Graph[0] = (uint16_t)WaveLenght[0];
-	WaveLenght_Graph[1] = (uint16_t)WaveLenght[255];
-	WaveLenght_Graph[2] = (uint16_t)WaveLenght[511];
-	WaveLenght_Graph[3] = (uint16_t)WaveLenght[1023];
+	WaveLenght_Graph[0] = (uint16_t)WaveLenght[5];//0-? 1-379 2-379 3-379 5 -380
+	WaveLenght_Graph[1] = (uint16_t)WaveLenght[325];//500
+	WaveLenght_Graph[2] = (uint16_t)WaveLenght[642];//620
+	WaveLenght_Graph[3] = (uint16_t)WaveLenght[963];//740
 
 	if(Mode_EL == 0){
 		Factor2 = Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_L);
