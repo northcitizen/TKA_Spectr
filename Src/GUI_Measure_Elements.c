@@ -1599,41 +1599,154 @@ void GUI_Axes_Locus_XY(uint16_t X_center, uint16_t Y_center, uint8_t direction)
 		TFT_FillRectangle(X_center-2, Y_center-XY2_LOCUS_BMP_SIZEY, X_center, Y_center, TFT_White); //Yline
 		TFT_FillRectangle(X_center-2, Y_center+1, X_center+XY2_LOCUS_BMP_SIZEX, Y_center+3, TFT_White);//XLine
 		
+		//dash
+		TFT_DrawLine(X_center-5, Y_center-60/2, X_center+3, Y_center-60/2, TFT_White);
+		TFT_DrawLine(X_center+55/2, Y_center-3, X_center+55/2, Y_center+6, TFT_White);
+		
+		TFT_DrawLine(X_center-5, Y_center-120/2, X_center+3, Y_center-120/2, TFT_White);
+		TFT_DrawLine(X_center+115/2, Y_center-3, X_center+115/2, Y_center+6, TFT_White);
+
+		TFT_DrawLine(X_center-5, Y_center-180/2, X_center+3, Y_center-180/2, TFT_White);
+		TFT_DrawLine(X_center+175/2, Y_center-3, X_center+175/2, Y_center+6, TFT_White);
+
+		TFT_DrawLine(X_center-5, Y_center-240/2, X_center+3, Y_center-240/2, TFT_White);
+		TFT_DrawLine(X_center+235/2, Y_center-3, X_center+235/2, Y_center+6, TFT_White);
+
 		TFT_DrawLine(X_center-5, Y_center-300/2, X_center+3, Y_center-300/2, TFT_White);
 		TFT_DrawLine(X_center+295/2, Y_center-3, X_center+295/2, Y_center+6, TFT_White);
-		
+
+		TFT_DrawLine(X_center-5, Y_center-360/2, X_center+3, Y_center-360/2, TFT_White);
+		TFT_DrawLine(X_center+355/2, Y_center-3, X_center+355/2, Y_center+6, TFT_White);
+
+		TFT_DrawLine(X_center-5, Y_center-420/2, X_center+3, Y_center-420/2, TFT_White);
+		TFT_DrawLine(X_center+415/2, Y_center-3, X_center+415/2, Y_center+6, TFT_White);
+
 		TFT_SetFont(&Font6EN_arch_big);
 		TFT_SetTextColor(TFT_White);
 		TFT_SetBackColor(TFT_Black_Bkgr);
 		
+		//y
+		TFT_DrawChar(4,  Y_center-420/2-2, '.');
+		TFT_DrawChar(0,  Y_center-420/2-2, '0');
+		TFT_DrawChar(8,  Y_center-420/2-2, '7');
+
+		TFT_DrawChar(4,  Y_center-360/2-2, '.');
+		TFT_DrawChar(0,  Y_center-360/2-2, '0');
+		TFT_DrawChar(8,  Y_center-360/2-2, '6');
+
 		TFT_DrawChar(4,  Y_center-300/2-2, '.');
 		TFT_DrawChar(0,  Y_center-300/2-2, '0');
 		TFT_DrawChar(8,  Y_center-300/2-2, '5');
 		
+		TFT_DrawChar(4,  Y_center-240/2-2, '.');
+		TFT_DrawChar(0,  Y_center-240/2-2, '0');
+		TFT_DrawChar(8,  Y_center-240/2-2, '4');
+
+		TFT_DrawChar(4,  Y_center-180/2-2, '.');
+		TFT_DrawChar(0,  Y_center-180/2-2, '0');
+		TFT_DrawChar(8,  Y_center-180/2-2, '3');
+
+		TFT_DrawChar(4,  Y_center-120/2-2, '.');
+		TFT_DrawChar(0,  Y_center-120/2-2, '0');
+		TFT_DrawChar(8,  Y_center-120/2-2, '2');
+
+		TFT_DrawChar(4,  Y_center-60/2-2, '.');
+		TFT_DrawChar(0,  Y_center-60/2-2, '0');
+		TFT_DrawChar(8,  Y_center-60/2-2, '1');
+
+		//x
+		TFT_DrawChar(X_center+415/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+415/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+415/2-6+8,  Y_center+6, '7');
+
+		TFT_DrawChar(X_center+355/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+355/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+355/2-6+8,  Y_center+6, '6');
+
 		TFT_DrawChar(X_center+295/2-6+4,  Y_center+6, '.');
 		TFT_DrawChar(X_center+295/2-6+0,  Y_center+6, '0');
 		TFT_DrawChar(X_center+295/2-6+8,  Y_center+6, '5');
+
+		TFT_DrawChar(X_center+235/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+235/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+235/2-6+8,  Y_center+6, '4');
+
+		TFT_DrawChar(X_center+175/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+175/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+175/2-6+8,  Y_center+6, '3');
+
+		TFT_DrawChar(X_center+115/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+115/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+115/2-6+8,  Y_center+6, '2');
+
+		TFT_DrawChar(X_center+55/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+55/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+55/2-6+8,  Y_center+6, '1');
 }
 
 void GUI_Axes_Locus_LUV(uint16_t X_center, uint16_t Y_center, uint8_t direction)
 {
 		TFT_FillRectangle(X_center-2, Y_center-LUV_LOCUS_BMP_SIZEY, X_center, Y_center, TFT_White); //Yline
 		TFT_FillRectangle(X_center-2, Y_center+1, X_center+LUV_LOCUS_BMP_SIZEX, Y_center+3, TFT_White);//XLine
-		
+		//dash
 		TFT_DrawLine(X_center-5, Y_center-396/2, X_center+3, Y_center-396/2, TFT_White);
 		TFT_DrawLine(X_center+403/2, Y_center-3, X_center+403/2, Y_center+6, TFT_White);
 		
+		TFT_DrawLine(X_center-5, Y_center-317/2, X_center+3, Y_center-317/2, TFT_White);
+		TFT_DrawLine(X_center+324/2, Y_center-3, X_center+324/2, Y_center+6, TFT_White);
+
+		TFT_DrawLine(X_center-5, Y_center-238/2, X_center+3, Y_center-238/2, TFT_White);
+		TFT_DrawLine(X_center+245/2, Y_center-3, X_center+245/2, Y_center+6, TFT_White);
+
+		TFT_DrawLine(X_center-5, Y_center-159/2, X_center+3, Y_center-159/2, TFT_White);
+		TFT_DrawLine(X_center+166/2, Y_center-3, X_center+166/2, Y_center+6, TFT_White);
+
+		TFT_DrawLine(X_center-5, Y_center-80/2, X_center+3, Y_center-80/2, TFT_White);
+		TFT_DrawLine(X_center+87/2, Y_center-3, X_center+87/2, Y_center+6, TFT_White);
+
 		TFT_SetFont(&Font6EN_arch_big);
 		TFT_SetTextColor(TFT_White);
 		TFT_SetBackColor(TFT_Black_Bkgr);
-		
+		//y
 		TFT_DrawChar(4,  Y_center-396/2-2, '.');
 		TFT_DrawChar(0,  Y_center-396/2-2, '0');
 		TFT_DrawChar(8,  Y_center-396/2-2, '5');
 		
+		TFT_DrawChar(4,  Y_center-317/2-2, '.');
+		TFT_DrawChar(0,  Y_center-317/2-2, '0');
+		TFT_DrawChar(8,  Y_center-317/2-2, '4');
+
+		TFT_DrawChar(4,  Y_center-238/2-2, '.');
+		TFT_DrawChar(0,  Y_center-238/2-2, '0');
+		TFT_DrawChar(8,  Y_center-238/2-2, '3');
+
+		TFT_DrawChar(4,  Y_center-159/2-2, '.');
+		TFT_DrawChar(0,  Y_center-159/2-2, '0');
+		TFT_DrawChar(8,  Y_center-159/2-2, '2');
+
+		TFT_DrawChar(4,  Y_center-80/2-2, '.');
+		TFT_DrawChar(0,  Y_center-80/2-2, '0');
+		TFT_DrawChar(8,  Y_center-80/2-2, '1');
+		//x
 		TFT_DrawChar(X_center+403/2-6+4,  Y_center+6, '.');
 		TFT_DrawChar(X_center+403/2-6+0,  Y_center+6, '0');
 		TFT_DrawChar(X_center+403/2-6+8,  Y_center+6, '5');
+
+		TFT_DrawChar(X_center+324/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+324/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+324/2-6+8,  Y_center+6, '4');
+
+		TFT_DrawChar(X_center+245/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+245/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+245/2-6+8,  Y_center+6, '3');
+
+		TFT_DrawChar(X_center+166/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+166/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+166/2-6+8,  Y_center+6, '2');
+
+		TFT_DrawChar(X_center+87/2-6+4,  Y_center+6, '.');
+		TFT_DrawChar(X_center+87/2-6+0,  Y_center+6, '0');
+		TFT_DrawChar(X_center+87/2-6+8,  Y_center+6, '1');
 }
 
 void GUI_Axes_Locus_Lab(uint16_t X_center, uint16_t Y_center, uint8_t direction)
