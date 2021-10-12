@@ -110,7 +110,7 @@ void GUI_Button_SD_Card(uint16_t X, uint16_t Y, uint8_t Active)
 
 void GUI_Button_Measure_Start_Pause(uint16_t X, uint16_t Y)
 {
-	if(!pause)	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
+	if(!pause)	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Green);
 	else  TFT_FillRectangle(X, Y, X+54, Y+54, TFT_PAR_IRed);
 
 	
@@ -150,7 +150,7 @@ void GUI_Button_Measure_Start_Pause(uint16_t X, uint16_t Y)
 
 void GUI_Button_Measure_Start_Pause_For_Button(uint16_t X, uint16_t Y, uint8_t type)
 {
-	if(!type)	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
+	if(!type)	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Green);
 	else  TFT_FillRectangle(X, Y, X+54, Y+54, TFT_PAR_IRed);
 
 

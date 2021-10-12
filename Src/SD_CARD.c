@@ -406,100 +406,108 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 							}
 							
 
-							SDWr_Status_bar = 0.8;
-							GUI_Bar_Measure(85, 280, SDWr_Status_bar);
+	SDWr_Status_bar = 0.8;
+	GUI_Bar_Measure(85, 280, SDWr_Status_bar);
 
-							if(Mode_EL == 0x01) //E mode
-																					{
+	if(Mode_EL == 0x01) //E mode
+	{
 
 
-																						(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Ee_ru, sizeof(SD_Text_Ee_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Ee_en, sizeof(SD_Text_Ee_en), &byteswritten));//Ee
-																						sprintf(measure_buff, "%.2f",  E_day); //Ee
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+	(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Ee_ru, sizeof(SD_Text_Ee_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Ee_en, sizeof(SD_Text_Ee_en), &byteswritten));//Ee
+	sprintf(measure_buff, "%.2f",  E_day); //Ee
+	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+	memset(measure_buff, 0, 12);
 
-																						(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Eu_ru, sizeof(SD_Text_Eu_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Eu_en, sizeof(SD_Text_Eu_en), &byteswritten));//Eu
-																						sprintf(measure_buff, "%.1f",  E_day_Wt); //Eu
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+	(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Eu_ru, sizeof(SD_Text_Eu_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Eu_en, sizeof(SD_Text_Eu_en), &byteswritten));//Eu
+	sprintf(measure_buff, "%.1f",  E_day_Wt); //Eu
+	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+	memset(measure_buff, 0, 12);
 
-																						(Language_status==Ru)?(f_write(&MyFile, &SD_Text_PPFD_ru, sizeof(SD_Text_PPFD_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_PPFD_en, sizeof(SD_Text_PPFD_en), &byteswritten));//PPFD
-																						sprintf(measure_buff, "%.2f", PPFD_PPL_Measure); //PPFD
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+	(Language_status==Ru)?(f_write(&MyFile, &SD_Text_PPFD_ru, sizeof(SD_Text_PPFD_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_PPFD_en, sizeof(SD_Text_PPFD_en), &byteswritten));//PPFD
+	sprintf(measure_buff, "%.2f", PPFD_PPL_Measure); //PPFD
+	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+	memset(measure_buff, 0, 12);
 
-																						(Language_status==Ru)?(f_write(&MyFile, &SD_Text_PPFDRGB_ru, sizeof(SD_Text_PPFDRGB_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_PPFDRGB_en, sizeof(SD_Text_PPFDRGB_en), &byteswritten));//PPFDRGB
-																						sprintf(measure_buff, "%.2f\t", PPFD_PPL_Blue_Measure); //PPFD B
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+	(Language_status==Ru)?(f_write(&MyFile, &SD_Text_PPFDRGB_ru, sizeof(SD_Text_PPFDRGB_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_PPFDRGB_en, sizeof(SD_Text_PPFDRGB_en), &byteswritten));//PPFDRGB
+	sprintf(measure_buff, "%.2f\t", PPFD_PPL_Blue_Measure); //PPFD B
+	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+	memset(measure_buff, 0, 12);
 
-																						sprintf(measure_buff, "%.2f\t", PPFD_PPL_Green_Measure); //PPFD G
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+	sprintf(measure_buff, "%.2f\t", PPFD_PPL_Green_Measure); //PPFD G
+	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+	memset(measure_buff, 0, 12);
 
-																						sprintf(measure_buff, "%.2f\t", PPFD_PPL_Red_Measure); //PPFD R
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+	sprintf(measure_buff, "%.2f\t", PPFD_PPL_Red_Measure); //PPFD R
+	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+	memset(measure_buff, 0, 12);
 
-																						sprintf(measure_buff, "%.2f\t", PPFD_PPL_Far_Red_Measure); //PPFD FR
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+	sprintf(measure_buff, "%.2f\t", PPFD_PPL_Far_Red_Measure); //PPFD FR
+	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+	memset(measure_buff, 0, 12);
 
-																						(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Eb_Er_ru, sizeof(SD_Text_Eb_Er_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Eb_Er_en, sizeof(SD_Text_Eb_Er_en), &byteswritten));//Eb/Er
-																						sprintf(measure_buff, "%.2f\t", ELb_Measure); //Eb
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+	(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Eb_Er_ru, sizeof(SD_Text_Eb_Er_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Eb_Er_en, sizeof(SD_Text_Eb_Er_en), &byteswritten));//Eb/Er
+	sprintf(measure_buff, "%.2f\t", ELb_Measure); //Eb
+	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+	memset(measure_buff, 0, 12);
 
-																						sprintf(measure_buff, "%.2f", ELr_Measure); //Er
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+	sprintf(measure_buff, "%.2f", ELr_Measure); //Er
+	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+	memset(measure_buff, 0, 12);
 
-																						SDWr_Status_bar = 0.9;
-																						GUI_Bar_Measure(85, 280, SDWr_Status_bar);
-																					}
-																					else //Lmode
-																					{
+	SDWr_Status_bar = 0.9;
+	 GUI_Bar_Measure(85, 280, SDWr_Status_bar);
+	}
+	else //Lmode
+	{
+			for (uint16_t iq = 0; iq < 1024; iq++)
+			{
+				E_Day_delata = E_Day_delata + (Line_Rabs_buff[iq]*deltaWave);
+			}
 
-																						(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Lu_ru, sizeof(SD_Text_Lu_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Lu_en, sizeof(SD_Text_Lu_en), &byteswritten));//Lu
-																						sprintf(measure_buff, "%.5f", E_Day_delata); //Lu
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+		(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Le_ru, sizeof(SD_Text_Le_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Le_en, sizeof(SD_Text_Le_en), &byteswritten));//Le
+		sprintf(measure_buff, "%.2f", E_day); //Le
+		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+		memset(measure_buff, 0, 12);
+		(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Lu_ru, sizeof(SD_Text_Lu_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Lu_en, sizeof(SD_Text_Lu_en), &byteswritten));//Lu
+		sprintf(measure_buff, "%.5f", E_Day_delata); //Lu
+		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+		memset(measure_buff, 0, 12);
 
-																						(Language_status==Ru)?(f_write(&MyFile, &SD_Text_PPL_ru, sizeof(SD_Text_PPL_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_PPL_en, sizeof(SD_Text_PPL_en), &byteswritten));//PPL
-																						sprintf(measure_buff, "%.2f", PPFD_PPL_Measure); //PPL
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+		(Language_status==Ru)?(f_write(&MyFile, &SD_Text_PPL_ru, sizeof(SD_Text_PPL_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_PPL_en, sizeof(SD_Text_PPL_en), &byteswritten));//PPL
+		sprintf(measure_buff, "%.2f", PPFD_PPL_Measure); //PPL
+		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+		memset(measure_buff, 0, 12);
 
-																						(Language_status==Ru)?(f_write(&MyFile, &SD_Text_PPLRGB_ru, sizeof(SD_Text_PPLRGB_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_PPLRGB_en, sizeof(SD_Text_PPLRGB_en), &byteswritten));//PPFDRGB
-																						sprintf(measure_buff, "%.2f\t", PPFD_PPL_Blue_Measure); //PPL B
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+		(Language_status==Ru)?(f_write(&MyFile, &SD_Text_PPLRGB_ru, sizeof(SD_Text_PPLRGB_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_PPLRGB_en, sizeof(SD_Text_PPLRGB_en), &byteswritten));//PPFDRGB
+		sprintf(measure_buff, "%.2f\t", PPFD_PPL_Blue_Measure); //PPL B
+		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+		memset(measure_buff, 0, 12);
 
-																						sprintf(measure_buff, "%.2f\t", PPFD_PPL_Green_Measure); //PPL G
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+		sprintf(measure_buff, "%.2f\t", PPFD_PPL_Green_Measure); //PPL G
+		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+		memset(measure_buff, 0, 12);
 
-																						sprintf(measure_buff, "%.2f\t", PPFD_PPL_Red_Measure); //PPL R
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+		sprintf(measure_buff, "%.2f\t", PPFD_PPL_Red_Measure); //PPL R
+		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+		memset(measure_buff, 0, 12);
 
-																						sprintf(measure_buff, "%.2f\t", PPFD_PPL_Far_Red_Measure); //PPL FR
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+		sprintf(measure_buff, "%.2f\t", PPFD_PPL_Far_Red_Measure); //PPL FR
+		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+		memset(measure_buff, 0, 12);
 
-																						(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Lb_Lr_ru, sizeof(SD_Text_Lb_Lr_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Lb_Lr_en, sizeof(SD_Text_Lb_Lr_en), &byteswritten));//Lb/Lr
-																						sprintf(measure_buff, "%.2f\t", ELb_Measure); //Lb
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+		(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Lb_Lr_ru, sizeof(SD_Text_Lb_Lr_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Lb_Lr_en, sizeof(SD_Text_Lb_Lr_en), &byteswritten));//Lb/Lr
+		sprintf(measure_buff, "%.2f\t", ELb_Measure); //Lb
+		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+		memset(measure_buff, 0, 12);
 
-																						sprintf(measure_buff, "%.2f", ELr_Measure); //Lr
-																						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																						memset(measure_buff, 0, 12);
+		sprintf(measure_buff, "%.2f", ELr_Measure); //Lr
+		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+		memset(measure_buff, 0, 12);
 
-																						SDWr_Status_bar = 0.9;
-																						GUI_Bar_Measure(85, 280, SDWr_Status_bar);
 
-																					}
+		SDWr_Status_bar = 0.9;
+		GUI_Bar_Measure(85, 280, SDWr_Status_bar);
+	}
 
 							if(CRICQS_done == 0x01)
 							{
@@ -619,56 +627,42 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 							}
 
 
-														if(Mode_EL == 0x01) //E mode
-														{
-															(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Elambda_ru, sizeof(SD_Text_Elambda_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Elambda_en, sizeof(SD_Text_Elambda_en), &byteswritten));//Delta E
+				if(Mode_EL == 0x01) //E mode
+				{
+					(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Elambda_ru, sizeof(SD_Text_Elambda_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Elambda_en, sizeof(SD_Text_Elambda_en), &byteswritten));//Delta E
+					for(uint16_t i=0; i < 1024; i++)
+					{
+						sprintf(measure_buff, "%.2f", WaveLenght[i]); //lambda
+						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+						memset(measure_buff, 0, 12);
 
-															for(uint16_t i=0; i < 1024; i++)
-															{
-																sprintf(measure_buff, "%.7f", Line_Rabs_buff[i]); //E(lambda)
-																f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																memset(measure_buff, 0, 12);
+						sprintf(measure_buff, "\t%.7f\r\n", Line_Rabs_buff[i]); //E(lambda)
+						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+						memset(measure_buff, 0, 12);
+					}
+					SDWr_Status_bar = 0.9;
+					GUI_Bar_Measure(85, 280, SDWr_Status_bar);
+				}
+				else //Lmode
+				{
+					deltaWave = WaveLenght[1023]-WaveLenght[1022];
+					(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Llambda_ru, sizeof(SD_Text_Llambda_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Llambda_en, sizeof(SD_Text_Llambda_en), &byteswritten));//Delta E
 
-																sprintf(measure_buff, "\t%.2f\r\n", WaveLenght[i]); //lambda
-																f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																memset(measure_buff, 0, 12);
-															}
+					for(uint16_t i=0; i < 1024; i++)
+					{
+						sprintf(measure_buff, "%.2f", WaveLenght[i]); //lambda
+						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+						memset(measure_buff, 0, 12);
 
-															SDWr_Status_bar = 0.9;
-															GUI_Bar_Measure(85, 280, SDWr_Status_bar);
-														}
-														else //Lmode
-														{
-															deltaWave = WaveLenght[1023]-WaveLenght[1022];
-															(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Llambda_ru, sizeof(SD_Text_Llambda_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Llambda_en, sizeof(SD_Text_Llambda_en), &byteswritten));//Delta E
+						sprintf(measure_buff, "\t%.7f\r\n", Line_Rabs_buff[i]*deltaWave); //L(lambda)
+						f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
+						memset(measure_buff, 0, 12);
 
-															for(uint16_t i=0; i < 1024; i++)
-															{
-																sprintf(measure_buff, "%.2f", WaveLenght[i]); //lambda
-																f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																memset(measure_buff, 0, 12);
+					}
+					SDWr_Status_bar = 0.9;
+					GUI_Bar_Measure(85, 280, SDWr_Status_bar);
 
-																sprintf(measure_buff, "\t%.7f\r\n", Line_Rabs_buff[i]*deltaWave); //L(lambda)
-																f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-																memset(measure_buff, 0, 12);
-
-
-															}
-
-															(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Le_ru, sizeof(SD_Text_Le_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Le_en, sizeof(SD_Text_Le_en), &byteswritten));//Le
-															sprintf(measure_buff, "%.2f", E_day); //Le
-															f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
-															memset(measure_buff, 0, 12);
-
-																for (uint16_t iq = 0; iq < 1024; iq++)
-																{
-																	E_Day_delata = E_Day_delata + (Line_Rabs_buff[iq]*deltaWave);
-																}
-
-															SDWr_Status_bar = 0.9;
-															GUI_Bar_Measure(85, 280, SDWr_Status_bar);
-
-														}
+				}
 					}
 				}
 				
