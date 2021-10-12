@@ -1503,8 +1503,7 @@ uint32_t bat_refresh = 0;
 
 while (1) {
 
-
-					delta_Eab_Measure = Calculate_deltaEab();
+		//delta_Eab_Measure = Calculate_deltaEab();
 
 		usb_receive_processing();
 
