@@ -67,7 +67,7 @@ void GUI_Button_TFT_On_Off(uint16_t X, uint16_t Y)
 
 void GUI_Button_TFT_Rotate(uint16_t X, uint16_t Y)
 {
-	if(GUI_screen_state == Color_Screen)	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_PAR_IRed);
+	if(GUI_screen_state == Color_Screen)	TFT_FillRectangle(X, Y, X+54, Y+54, TFT_GreyMain);
 		else  TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
 	//TFT_FillRectangle(X, Y, X+54, Y+54, TFT_Blue_Off);
 	TFT_DrawRectangle(X+9, Y+9, X+28, Y+43, TFT_White);

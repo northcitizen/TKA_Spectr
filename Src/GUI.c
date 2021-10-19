@@ -1390,6 +1390,8 @@ void GUI_Touch_Processing()
 											 				if(exp_stable > 10)
 											 				{
 											 					start = 0;
+											 					cnt_delay = 0;
+											 					htim2.Init.Period = exposure_timer_period[exp_num];
 											 				}
 											 			}
 											 			 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
@@ -1695,7 +1697,7 @@ void GUI_Touch_Processing()
 															start = 1;
 															pause = 0;
 
-															measure_number = 10;
+															measure_number = 1;
 															exp_stable = 0;
 
 
@@ -1727,6 +1729,8 @@ void GUI_Touch_Processing()
 																 				if(exp_stable > 10)
 																 				{
 																 					start = 0;
+																 					cnt_delay = 0;
+																 					htim2.Init.Period = exposure_timer_period[exp_num];
 																 				}
 																 			}
 																 			 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
@@ -1997,7 +2001,7 @@ case Measure3_Screen:
 					GRAPH_FLAG = 1;
 					start = 1;
 					pause = 0;
-					measure_number = 10;
+					measure_number = 1;
 					exp_stable = 0;
 					GUI_Bar_Measure(85, 13, 0.1);
 			 	 	while(start)
@@ -2025,6 +2029,8 @@ case Measure3_Screen:
 			 				if(exp_stable > 10)
 			 				{
 			 					start = 0;
+			 					cnt_delay = 0;
+			 					htim2.Init.Period = exposure_timer_period[exp_num];
 			 				}
 				 				}
 								 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
@@ -2474,6 +2480,8 @@ case Measure3_Screen:
 											 				if(exp_stable > 10)
 											 				{
 											 					start = 0;
+											 					cnt_delay = 0;
+											 					htim2.Init.Period = exposure_timer_period[exp_num];
 											 					//exp_num = 0;
 											 					//GUI_Bar_Measure(85, 13, 1);
 											 				}
@@ -2730,6 +2738,8 @@ case Measure3_Screen:
 											 				if(exp_stable > 10)
 											 				{
 											 					start = 0;
+											 					cnt_delay = 0;
+											 					htim2.Init.Period = exposure_timer_period[exp_num];
 											 					//exp_num = 0;
 											 					//GUI_Bar_Measure(85, 13, 1);
 											 				}
@@ -3562,6 +3572,7 @@ case Measure3_Screen:
 					Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
 					Factor2 = (Mode_EL == 0x00 ? Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_L) : Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E));
 					GUI_Switch_ButtonActive(182, 202, Mode_EL);
+					SPECTRAL_DONE = 0;
 					GUI_Display_Refresh();//REFRESH DISPLAY
 				}				
 				else
@@ -3729,6 +3740,7 @@ case Measure3_Screen:
 					Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
 					Factor2 = (Mode_EL == 0x00 ? Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_L) : Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E));
 					GUI_Switch_ButtonActive(182, 202, Mode_EL);
+					SPECTRAL_DONE = 0;
 					GUI_Display_Refresh();//REFRESH DISPLAY
 				}				
 				else
@@ -3883,6 +3895,7 @@ case Measure3_Screen:
 					Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
 					Factor2 = (Mode_EL == 0x00 ? Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_L) : Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E));
 					GUI_Switch_ButtonActive(182, 202, Mode_EL);
+					SPECTRAL_DONE = 0;
 					GUI_Display_Refresh();//REFRESH DISPLAY
 				}				
 				else

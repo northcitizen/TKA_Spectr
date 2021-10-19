@@ -9,6 +9,7 @@ extern float colorimetry_xy1964[2], colorimetry_uv[2], colorimetry_uv1976[2], co
 extern float calibratre_x_1931[1024], Spectral_day[1024], calibratre_z_1931[1024];
 extern float WaveLenght[1024];
 extern volatile uint8_t LAMBDA_TYPE = 0;
+
 float Calculate_EL_Day(float R_data[], float Spectral_Day_const[])
 {
 

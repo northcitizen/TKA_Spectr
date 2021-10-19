@@ -289,6 +289,65 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 					{
 
 							SDWr_Status_bar = 0.5;
+							/////////////////////////////
+							if (Measure_Field & delta_E) {
+											delta_Eab_Measure = Calculate_deltaEab();
+										}
+										if (Measure_Field & Illuminance) {
+											E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+										}
+										if (Measure_Field & Irradiance) {
+											E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);
+										}
+
+										if (Measure_Field & SP_measure) {
+											E_Night = Calculate_EL_Night(Line_Rabs_buff, Spectral_night);
+											E_day = (Measure_Field & Illuminance) ?
+													E_day : Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
+											SP_Measure = (Calculate_SP(E_day, E_Night));
+										}
+										if (Measure_Field & PPFD) {
+											PPFD_PPL_Measure = (Calculate_PPFD_PPL(Line_Rabs_buff,
+													WaveLenght)); //*100000
+										}
+										if (Measure_Field & PPFD_BGR) {
+											PPFD_PPL_Blue_Measure = (Calculate_PPFD_PPL_Range(
+													Line_Rabs_buff, WaveLenght, BLUE_RANGE)); //*100000
+											PPFD_PPL_Green_Measure = (Calculate_PPFD_PPL_Range(
+													Line_Rabs_buff, WaveLenght, GREEN_RANGE)); //*100000
+											PPFD_PPL_Red_Measure = (Calculate_PPFD_PPL_Range(Line_Rabs_buff,
+													WaveLenght, RED_RANGE)); //*100000
+											PPFD_PPL_Far_Red_Measure = (Calculate_PPFD_PPL_Range(
+													Line_Rabs_buff, WaveLenght, FAR_RED_RANGE)); //*100000
+										}
+
+										if (Measure_Field & CIE_Luv) {
+											Calculate_uv1976(
+													(Measure_Color_xy == 0x00) ?
+															colorimetry_xy1964 : colorimetry_xy1931);
+											Calculate_uv(
+													(Measure_Color_xy == 0x00) ?
+															colorimetry_xy1964 : colorimetry_xy1931);
+										}
+										if (Measure_Field & CIE_Lab) {
+											Calculate_Lab(
+													(Measure_Color_xy == 0x00) ?
+															colorimetry_XYZ1964 : colorimetry_XYZ1931,
+													Measure_Color_xy, Source_Type);
+										}
+										if (Measure_Field & lambda_d) {
+											Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+										}
+										if (Measure_Field & lambda_c) {
+											Calculate_Lambda_Dominant(Line_Rabs_buff, Measure_Color_xy);
+										}
+										if (Measure_Field & EbEr) {
+											ELr_Measure = Calculate_ELr(Line_Rabs_buff, Hazard_Retina);
+											ELb_Measure = Calculate_ELb(Line_Rabs_buff, Hazard_Blue);
+										}
+
+										delta_Eab_Measure = Calculate_deltaEab();
+							////////////////////////////
 							GUI_Bar_Measure(85, 280, SDWr_Status_bar);
 						(Language_status==Ru)? (f_write(&MyFile, &SD_Text_SP_ru, sizeof(SD_Text_SP_ru), &byteswritten)) : (f_write(&MyFile, &SD_Text_SP_en, sizeof(SD_Text_SP_en), &byteswritten)); //S/P
 							sprintf(measure_buff, "%.4f", SP_Measure);
@@ -469,7 +528,7 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 		memset(measure_buff, 0, 12);
 		(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Lu_ru, sizeof(SD_Text_Lu_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Lu_en, sizeof(SD_Text_Lu_en), &byteswritten));//Lu
-		sprintf(measure_buff, "%.5f", E_Day_delata); //Lu
+		sprintf(measure_buff, "%.5f", E_day_Wt); //Lu E_Day_delata изменено на E_Day_Wt 14_10_2021
 		f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 		memset(measure_buff, 0, 12);
 

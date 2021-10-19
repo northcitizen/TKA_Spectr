@@ -740,8 +740,7 @@ void usb_receive_processing(void)
 				while (start) {
 					Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light,
 							Line_buff);
-					Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2,
-							Spectral_Corection_Buff, Line_Rabs_buff);
+					Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
 
 					if (!block_graph) {
 						memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
@@ -1507,37 +1506,31 @@ while (1) {
 
 		usb_receive_processing();
 
+
 #ifndef SERVICE
 
 		if(SD_CARD_FLAG)
 		{
 			GUI_Display_Refresh();
 			if(GUI_screen_state == Graph_Screen)
-										{
-											block_graph = 1;
-
-											if (preGUI_screen_state == Graph_Screen
-													&& Rotation_Screen_Spectral_Old3
-															== Rotation_Screen_Spectral) {
-												if (GUI_screen_state != Color_Screen
-														&& GUI_screen_state == Graph_Screen)
-													Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
-															Rotation_Screen_Spectral_Old3);
-											}
-											Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-											max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
-													Rotation_Screen_Spectral_Old3);
-											if (GUI_screen_state == Graph_Screen)
-												Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
-														Line_Rabs_buff_graph_test);
-											if (GUI_screen_state == Graph_Screen)
-												Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2,
-														TFT_White, Rotation_Screen_Spectral_Old3);
-											block_graph = 0;
-											GUI_SignalLevel();
-										} else {
-											__asm("nop");
-										}
+			{
+				block_graph = 1;
+				if (preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
+				{
+					if (GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
+							Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
+				}
+					Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+					max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
+					if (GUI_screen_state == Graph_Screen)
+					Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
+					if (GUI_screen_state == Graph_Screen)
+						Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
+						block_graph = 0;
+						GUI_SignalLevel();
+				} else {
+				__asm("nop");
+				}
 			SD_CARD_FLAG = 0;
 		}
 
@@ -1780,7 +1773,7 @@ void EXTI9_5_IRQHandler(void)
 
   Filter_Buffer[FILTER_SMA_ORDER - 1] = RxBuf[0] << 8 | RxBuf[1];
 
-  /* For output value */
+
   	uint32_t Output = 0;
 
 
@@ -1800,6 +1793,18 @@ void EXTI9_5_IRQHandler(void)
 
 
 		Line[i] = Output;
+
+
+//  if((RxBuf[0] << 8 | RxBuf[1]) >= 0xCFFF)
+//  {
+//	  Line[i] = Line[i-1];
+//  }else if ((RxBuf[0] << 8 | RxBuf[1]) <= 0x0EFF)
+//  {
+//	  Line[i] = Line[i-1];
+//  }else
+//  {
+//	  Line[i] =  RxBuf[0] << 8 | RxBuf[1];
+//  }
 
 
 	if(i >= 1023)
