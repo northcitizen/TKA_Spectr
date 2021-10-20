@@ -1,2 +1,11 @@
+.gitignore
 /Debug/
 /Release/
+*.ioc
+*.launch
+.mxproject
+.cproject
+/startup/
+/.settings/
+/Debug/Src/
+/Debug/Inc/

@@ -44,8 +44,8 @@
 #define 	SPECTRAL_CORRECTION_E		0x08100838
 #define 	SPECTRAL_CORRECTION_L		0x08101838
 //P
-#define 	ENERGY_FACTOR_E					0x08102838
-#define 	ENERGY_FACTOR_L					0x0810283C
+#define 	ENERGY_FACTOR_L					0x08102838
+#define 	ENERGY_FACTOR_E					0x0810283C
 
 //Spectral Day V(lambda)
 #define 	SPECTRAL_DAY						0x08102840	//float
