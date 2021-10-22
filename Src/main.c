@@ -1055,7 +1055,7 @@ void string_parse_no_check(void)
 							data_bluetooth_send[3] = (Mode_EL == 0)? 0 : 1;
 							data_bluetooth_send[4] = 0;
 
-							uint16_t qz = 5;
+					 uint16_t qz = 5;
 							for(uint16_t i = 0; i < 1024; i++){
 								memcpy(&buff_float, &Line_Rabs_buff[1023-i], sizeof(float));
 								data_bluetooth_send[qz+0] =  (buff_float >> 24) & 0x000000FF;
@@ -1514,7 +1514,6 @@ while (1) {
 		//delta_Eab_Measure = Calculate_deltaEab();
 
 		usb_receive_processing();
-
 
 #ifndef SERVICE
 

@@ -459,7 +459,7 @@ void GUI_Measure_Screen(){
 		oldLowSignal = 0;
 		oldHighSignal = 0;
 		screen_count = 0;
-		if(!SPECTRAL_DONE)
+		if(!SPECTRAL_DONE || highSignal || lowSignal)
 			Measure_Elements_Draw_Zeros(0);
 		else
 		Measure_Elements_Draw(0);
@@ -468,7 +468,7 @@ void GUI_Measure_Screen(){
 	} else
 	{
 		GUI_SignalLevel();
-		if(!SPECTRAL_DONE)
+		if(!SPECTRAL_DONE || highSignal || lowSignal)
 					Measure_Elements_Draw_Zeros(0);
 				else
 		Measure_Elements_Draw(0);
@@ -719,7 +719,7 @@ void GUI_Measure2_Screen()
 		screen_count = 1;
 		oldLowSignal = 0;
 		oldHighSignal = 0;
-			if(!SPECTRAL_DONE)
+			if(!SPECTRAL_DONE || highSignal || lowSignal)
 						Measure_Elements_Draw_Zeros(current_state_Measure_Draw);
 					else
 		Measure_Elements_Draw(current_state_Measure_Draw);
@@ -728,7 +728,7 @@ void GUI_Measure2_Screen()
 	} else
 	{
 			GUI_SignalLevel();
-			if(!SPECTRAL_DONE)
+			if(!SPECTRAL_DONE || highSignal || lowSignal)
 				Measure_Elements_Draw_Zeros(current_state_Measure_Draw);
 				else
 			Measure_Elements_Draw(current_state_Measure_Draw);
@@ -746,7 +746,7 @@ void GUI_Measure3_Screen()
 		screen_count = 2;
 		oldLowSignal = 0;
 		oldHighSignal = 0;
-		if(!SPECTRAL_DONE)
+		if(!SPECTRAL_DONE || highSignal || lowSignal)
 				Measure_Elements_Draw_Zeros(current_state_Measure_Draw);
 				else
 		Measure_Elements_Draw(current_state_Measure_Draw);
@@ -755,7 +755,7 @@ void GUI_Measure3_Screen()
 	} else
 	{
 			GUI_SignalLevel();
-			if(!SPECTRAL_DONE)
+			if(!SPECTRAL_DONE || highSignal || lowSignal)
 				Measure_Elements_Draw_Zeros(current_state_Measure_Draw);
 				else
 			Measure_Elements_Draw(current_state_Measure_Draw);
