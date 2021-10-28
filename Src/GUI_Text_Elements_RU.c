@@ -38,7 +38,7 @@ void GUI_TitleString_Version(uint16_t X, uint16_t Y, float Version)
 void GUI_TextRu_Language(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Я');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -50,7 +50,7 @@ void GUI_TextRu_Language(uint16_t X, uint16_t Y)
 void GUI_TextRu_Russian(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Р');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -67,7 +67,7 @@ void GUI_TextRu_Russian(uint16_t X, uint16_t Y)
 void GUI_TextRu_Info(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'И');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -95,7 +95,7 @@ void GUI_TextRu_Info(uint16_t X, uint16_t Y)
 void GUI_TextRu_Mode(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Р');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -108,7 +108,7 @@ void GUI_TextRu_Mode(uint16_t X, uint16_t Y)
 void GUI_TextRu_LxFl(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Л');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -130,7 +130,7 @@ void GUI_TextRu_LxFl(uint16_t X, uint16_t Y)
 void GUI_TextRu_Illuminance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'О');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -150,7 +150,7 @@ void GUI_TextRu_Illuminance(uint16_t X, uint16_t Y)
 void GUI_TextRu_PPF(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Ф');
 	TFT_DrawCharRus(X+17, Y, 'А');
@@ -160,7 +160,7 @@ void GUI_TextRu_PPF(uint16_t X, uint16_t Y)
 void GUI_TextRu_PPF_RGB(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'С');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -187,7 +187,7 @@ void GUI_TextRu_PPF_RGB(uint16_t X, uint16_t Y)
 void GUI_TextRu_PPF_bands(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Ф');
 	TFT_DrawCharRus(X+17, Y, 'А');
@@ -212,7 +212,7 @@ void GUI_TextRu_Info_Callibration(uint16_t X, uint16_t Y, uint8_t date, uint8_t 
 	Y = 100;
 	
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y-4, 'К');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -242,7 +242,7 @@ void GUI_TextRu_Info_Callibration(uint16_t X, uint16_t Y, uint8_t date, uint8_t 
 void GUI_TextRu_WriteSD(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'З');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -261,7 +261,7 @@ void GUI_TextRu_Info_Serial(uint16_t X, uint16_t Y, uint16_t Part, uint16_t Numb
 	Y = 200;
 	
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y-4, 'С');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -293,7 +293,7 @@ void GUI_TextRu_Info_Ver(uint16_t X, uint16_t Y, float Version)
 	Y = 350;
 	
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y-1, 'П');
 	TFT_DrawCharRus(X+18, Y-1, 'О');
@@ -310,7 +310,7 @@ void GUI_TextRu_Info_Ver(uint16_t X, uint16_t Y, float Version)
 void GUI_TextRu_CCT(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'К');
 	TFT_DrawCharRus(X+17, Y, 'Ц');
@@ -327,7 +327,7 @@ void GUI_TextRu_CCT(uint16_t X, uint16_t Y)
 void GUI_TextRu_umol(uint16_t X, uint16_t Y, uint8_t deg)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font12RU_arch_small);
 	
 	if(deg){
@@ -352,7 +352,7 @@ void GUI_TextRu_umol(uint16_t X, uint16_t Y, uint8_t deg)
 void GUI_TextRu_umol_sr(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font12RU_arch_small);
 	
 	TFT_DrawCharRus(X+7, Y, 'я'+1);
@@ -376,7 +376,7 @@ void GUI_TextRu_umol_sr(uint16_t X, uint16_t Y)
 void GUI_TextRu_mW_m2(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 
 	TFT_SetFont(&Font12RU_arch_small);
 	TFT_DrawCharRus(X-1, Y+2, 'м');
@@ -394,7 +394,7 @@ void GUI_TextRu_mW_m2(uint16_t X, uint16_t Y)
 void GUI_TextRu_W_m2(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font12RU_arch_big);
 	TFT_DrawCharRus(X+1, Y, 'В'-17);
 	TFT_SetFont(&Font12RU_arch_small);
@@ -409,7 +409,7 @@ void GUI_TextRu_W_m2(uint16_t X, uint16_t Y)
 void GUI_TextRu_W_m2_sr(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font12RU_arch_big);
 	TFT_DrawCharRus(X+8, Y, 'В'-17);
 	TFT_SetFont(&Font12RU_arch_small);
@@ -427,7 +427,7 @@ void GUI_TextRu_W_m2_sr(uint16_t X, uint16_t Y)
 void GUI_TextRu_mW_m2_sr(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font12RU_arch_small);
 	TFT_DrawCharRus(X+5, Y+2, 'м');
 	TFT_SetFont(&Font12RU_arch_big);
@@ -447,7 +447,7 @@ void GUI_TextRu_mW_m2_sr(uint16_t X, uint16_t Y)
 void GUI_TextRu_Cd_m2(uint16_t X, uint16_t Y, uint8_t deg)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font12RU_arch_small);
 	
 	if(deg){
@@ -473,7 +473,7 @@ void GUI_TextRu_Cd_m2(uint16_t X, uint16_t Y, uint8_t deg)
 void GUI_TextRu_Cd_m2_Big(uint16_t X, uint16_t Y, uint8_t deg)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_small);
 
 		TFT_DrawCharRus(X+8, Y, 'к');
@@ -489,7 +489,7 @@ void GUI_TextRu_Cd_m2_Big(uint16_t X, uint16_t Y, uint8_t deg)
 void GUI_TextRu_Irradiance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'О');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -509,7 +509,7 @@ void GUI_TextRu_Irradiance(uint16_t X, uint16_t Y)
 void GUI_TextRu_Luminance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Я');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -524,7 +524,7 @@ void GUI_TextRu_Luminance(uint16_t X, uint16_t Y)
 void GUI_TextRu_Radiance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Э');
 	TFT_SetFont(&Font16RU_arch_small);
@@ -548,7 +548,7 @@ void GUI_TextRu_Radiance(uint16_t X, uint16_t Y)
 void GUI_TextMsgRu_LowIrradiance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'М');
@@ -575,7 +575,7 @@ void GUI_TextMsgRu_LowIrradiance(uint16_t X, uint16_t Y)
 void GUI_TextMsgRu_LowRadiance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'М');
@@ -597,7 +597,7 @@ void GUI_TextMsgRu_LowRadiance(uint16_t X, uint16_t Y)
 void GUI_TextMsgRu_HighIrradiance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Б');
@@ -626,7 +626,7 @@ void GUI_TextMsgRu_HighIrradiance(uint16_t X, uint16_t Y)
 void GUI_TextMsgRu_HighRadiance(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	
 	TFT_SetFont(&Font16RU_arch_big);
 	TFT_DrawCharRus(X, Y, 'Б');

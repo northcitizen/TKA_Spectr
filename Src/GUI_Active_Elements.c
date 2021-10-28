@@ -228,7 +228,7 @@ void GUI_CheckBox(uint16_t X, uint16_t Y, uint16_t Check)
 			TFT_DrawLine(X+8, Y+17, X+16, Y+26, TFT_Blue_Off);
 			TFT_DrawLine(X+16, Y+26, X+29, Y+5, TFT_Blue_Off);
 		} else {
-			TFT_FillRectangle(X+2, Y+2, X+32, Y+32, TFT_Black_Bkgr); //Pause
+			TFT_FillRectangle(X+2, Y+2, X+32, Y+32, TFT_Black); //Pause
 		}
 }
 
@@ -249,13 +249,13 @@ void GUI_RadioBox(uint16_t X, uint16_t Y, uint16_t Check, uint16_t Active)
 				{	TFT_DrawFilledCircle(X+17, Y+17, 10, TFT_GreyMain);}
 		} else
 		{
-			TFT_DrawFilledCircle(X+17, Y+17, 10, TFT_Black_Bkgr);
+			TFT_DrawFilledCircle(X+17, Y+17, 10, TFT_Black);
 		}
 }
 
 void GUI_Switch_Button(uint16_t X, uint16_t Y, uint8_t Check)
 {
-	TFT_FillRectangle(X, Y, X+36, Y+28, TFT_Black_Bkgr);
+	TFT_FillRectangle(X, Y, X+36, Y+28, TFT_Black);
 	if(Check)
 		{
 			TFT_DrawFilledRoundedRectangle(X, Y+10, X+35, Y+24, 10, TFT_Blue_On);
@@ -277,7 +277,7 @@ void GUI_Switch_Button(uint16_t X, uint16_t Y, uint8_t Check)
 
 void GUI_Switch_ButtonActive(uint16_t X, uint16_t Y, uint8_t Check)
 {
-	TFT_FillRectangle(X, Y, X+36, Y+28, TFT_Black_Bkgr);
+	TFT_FillRectangle(X, Y, X+36, Y+28, TFT_Black);
 	if(Check)
 		{
 			TFT_DrawFilledRoundedRectangle(X, Y+10, X+35, Y+24, 10, TFT_Blue_On);
@@ -292,7 +292,7 @@ void GUI_Switch_ButtonActive(uint16_t X, uint16_t Y, uint8_t Check)
 
 void GUI_Switch_Button_Lx_Fl(uint16_t X, uint16_t Y, uint8_t Check)
 {
-	TFT_FillRectangle(X, Y, X+36, Y+28, TFT_Black_Bkgr);
+	TFT_FillRectangle(X, Y, X+36, Y+28, TFT_Black);
 	if(Check)
 		{
 			TFT_DrawFilledRoundedRectangle(X, Y+10, X+35, Y+24, 10, TFT_Blue_On);

@@ -42,7 +42,7 @@ if (direction == 0x00)
 	{
 		
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font16EN_arch_small);
 		TFT_DrawChar(20, 70, 'a');
 		TFT_SetFont(&Font16EN_arch_big);
@@ -73,7 +73,7 @@ if (direction == 0x00)
 		else {TFT_direction = 0x02;}
 
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font16EN_arch_small);
 		TFT_DrawChar(100, 16, 'a');
 		TFT_SetFont(&Font16EN_arch_big);
@@ -109,7 +109,7 @@ void CQS_Axes_Text(uint8_t direction){
 		//max Y = 105    min Y = 410
 		TFT_SetFont(&Font6EN_arch_big);
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		
 		TFT_DrawChar(24, 415, 'Q');
 		TFT_DrawChar(30, 415, '1');
@@ -184,7 +184,7 @@ void CQS_Axes_Text(uint8_t direction){
 		else {TFT_direction = 0x02;}
 
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font6EN_arch_big);
 		
 		TFT_DrawChar(87, 258, 'Q');
@@ -284,7 +284,7 @@ void CQS_chart(uint8_t direction, uint8_t *GraphData)
 		
 		TFT_SetFont(&Font6EN_arch_big);
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		
 		for(uint8_t i = 0; i<=14; i++)
 		{
@@ -326,7 +326,7 @@ void CQS_chart(uint8_t direction, uint8_t *GraphData)
 }
 
 void CQS_Draw(uint8_t direction, uint8_t *GraphData, uint8_t Qa, uint8_t Qp, uint8_t Qf){
-	TFT_FillRectangle(5, 58, 270, 410, TFT_Black_Bkgr);
+	TFT_FillRectangle(5, 58, 270, 410, TFT_Black);
 	CQS_Axes(direction);
 	CQS_Axes_Text(direction);
 	CQS_chart(direction, GraphData);

@@ -11,7 +11,7 @@ void GUI_Bar_Measure(uint16_t X, uint16_t Y, float Value)
 
 void GUI_Bar_Measure_OFF(uint16_t X, uint16_t Y)
 {
-	TFT_FillRectangle(X, Y, X+110, Y+10, TFT_Black_Bkgr);
+	TFT_FillRectangle(X, Y, X+110, Y+10, TFT_Black);
 }
 
 uint8_t  old_num_e = 10, old_num_n = 10, old_deg_e = 0xFF, old_deg_e_wt = 0xFF;
@@ -25,7 +25,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	uint32_t dec = 10;
 	
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_big);
 	TFT_DrawChar(X, Y+2, 'E'-33);
 
@@ -46,18 +46,18 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		{	
 			if(energy_light & !old_nan_Ee){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+35, Y, X+195, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+35, Y, X+195, Y+26, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
 				old_nan_Ee = 1;
 			}
 			else if(!energy_light & !old_nan_El){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+35, Y, X+195, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+35, Y, X+195, Y+26, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
 				old_nan_El = 1;
@@ -85,7 +85,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		}
 
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	
 	if(energy_light){
@@ -106,11 +106,11 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	
 	if(energy_light && number < old_num_e )
 	{
-		TFT_FillRectangle(X+40, Y, X+127, Y+26, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+127, Y+26, TFT_Black);
 	} 
 	else if(!energy_light && number < old_num_n)
 	{
-		TFT_FillRectangle(X+40, Y, X+127, Y+26, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+127, Y+26, TFT_Black);
 	}
 	
 	if(energy_light){
@@ -126,7 +126,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	if (Language_status == Ru && !energy_light)
 	{
 			if(deg != old_deg_e){
-			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black);
 			TFT_SetTextColor(TFT_White);
 			TFT_SetFont(&Font26RU_arch_small);
 			if(deg){
@@ -159,7 +159,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	} else if (Language_status == En && !energy_light)
 	{
 		if(deg != old_deg_e){
-			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black);
 			if (deg){
 				if(Mode_Lx_Fl)
 				{
@@ -199,7 +199,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	{	
 		if (deg != old_deg_e_wt)
 		{
-			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black);
 		}
 		if (deg == 2)
 		{
@@ -217,7 +217,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	{
 		if (deg != old_deg_e_wt)
 		{
-			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black);
 		}
 		if (deg == 2)
 		{
@@ -264,7 +264,7 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	}
 
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_big);
 	TFT_DrawChar(X, Y+2, 'L'-33);
 	
@@ -280,18 +280,18 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		{
 			if(energy_light & !old_nan_Le){
 			TFT_SetTextColor(TFT_White);
-			TFT_SetBackColor(TFT_Black_Bkgr);
+			TFT_SetBackColor(TFT_Black);
 			TFT_SetFont(&Font26EN_arch_digit);
-			TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black);
 			buffer[0] = '-';buffer[1] = '-';
 			TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
 			old_nan_Le = 1;}
 			
 			if(!energy_light & !old_nan_Ll){
 			TFT_SetTextColor(TFT_White);
-			TFT_SetBackColor(TFT_Black_Bkgr);
+			TFT_SetBackColor(TFT_Black);
 			TFT_SetFont(&Font26EN_arch_digit);
-			TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black);
 			buffer[0] = '-';buffer[1] = '-';
 			TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
 			old_nan_Ll = 1;}
@@ -319,7 +319,7 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	
 	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	
 		sprintf (buffer, "%.1f", Value);
@@ -337,11 +337,11 @@ for (uint8_t i = 1; i <= 4; i++)
 	
 	if(energy_light && number < old_numL_e )
 	{
-		TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black);
 	} 
 	else if(!energy_light && number < old_numL_n)
 	{
-		TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black);
 	}
 	
 	if(energy_light){
@@ -358,7 +358,7 @@ for (uint8_t i = 1; i <= 4; i++)
 	{
 		if (deg && old_deg_L != 1){
 			old_deg_L = 1;
-			TFT_FillRectangle(X+195, Y+3, X+250, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+195, Y+3, X+250, Y+26, TFT_Black);
 			if(Mode_Lx_Fl)
 			{
 				TFT_SetFont(&Font16EN_arch_small);
@@ -371,7 +371,7 @@ for (uint8_t i = 1; i <= 4; i++)
 			GUI_TextRu_Cd_m2(X+205, Y, 1);
 		}else if(!deg && old_deg_L != 0){
 			old_deg_L = 0;
-			TFT_FillRectangle(X+193, Y, X+251, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+193, Y, X+251, Y+26, TFT_Black);
 			if(Mode_Lx_Fl)
 			{
 				TFT_SetFont(&Font16EN_arch_small);
@@ -387,7 +387,7 @@ for (uint8_t i = 1; i <= 4; i++)
 	{
 		if (deg && old_deg_L != 1){
 			old_deg_L = 1;
-			TFT_FillRectangle(X+195, Y-5, X+251, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+195, Y-5, X+251, Y+26, TFT_Black);
 			if(Mode_Lx_Fl)
 			{
 				TFT_SetFont(&Font16EN_arch_small);
@@ -400,7 +400,7 @@ for (uint8_t i = 1; i <= 4; i++)
 			GUI_TextEn_cd_m2(X+210, Y-4, 1);
 		}else if(!deg && old_deg_L != 0){
 			old_deg_L = 0;
-			TFT_FillRectangle(X+195, Y-5, X+251, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+195, Y-5, X+251, Y+26, TFT_Black);
 			if(Mode_Lx_Fl)
 			{
 				TFT_SetFont(&Font16EN_arch_small);
@@ -419,7 +419,7 @@ for (uint8_t i = 1; i <= 4; i++)
 	{	
 		if (deg != old_deg_L_wt)
 		{
-			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black);
 		}
 		if (deg == 2)
 		{
@@ -436,7 +436,7 @@ for (uint8_t i = 1; i <= 4; i++)
 	{
 		if (deg != old_deg_L_wt)
 		{
-			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black);
 		}
 		if (deg == 2)
 		{
@@ -462,9 +462,9 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 		{	
 			if(!old_nan_PPF){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+70, Y, X+197, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+70, Y, X+197, Y+26, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				old_nan_PPF = 1;
@@ -473,7 +473,7 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 	else{
 		if(old_nan_PPF)
 		{
-			TFT_FillRectangle(X+70, Y, X+197, Y+26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+70, Y, X+197, Y+26, TFT_Black);
 		}
 	old_nan_PPF = 0;
 	Value = floor(Value*10)/10.0;
@@ -485,7 +485,7 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 	}
 	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	sprintf (buffer, "%.1f", Value);
 
@@ -501,7 +501,7 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 	
 	if(number < old_numPPF )
 	{
-		TFT_FillRectangle(X+70, Y, X+228, Y+26, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+70, Y, X+228, Y+26, TFT_Black);
 	} 
 
 	old_numPPF = number;
@@ -512,7 +512,7 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 
 {
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	if(Language_status == Ru ){
 			TFT_SetFont(&Font26RU_arch_big);
 			//if(preGUI_screen_state != GUI_screen_state){
@@ -554,12 +554,12 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 		{	
 			if(!old_nan_PPFRGB){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+98, Y+0, X+195, Y+20, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+98, Y+21, X+195, Y+41, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+98, Y+42, X+195, Y+63, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+98, Y+65, X+195, Y+87, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+98, Y+0, X+195, Y+20, TFT_Black);
+				TFT_FillRectangle(X+98, Y+21, X+195, Y+41, TFT_Black);
+				TFT_FillRectangle(X+98, Y+42, X+195, Y+63, TFT_Black);
+				TFT_FillRectangle(X+98, Y+65, X+195, Y+87, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				TFT_DisplayString(X+117, Y+22, (uint8_t *)buffer, LEFT_MODE);
@@ -572,10 +572,10 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 		
 		if(old_nan_PPFRGB) 
 		{
-			TFT_FillRectangle(X+98, Y+0, X+195, Y+20, TFT_Black_Bkgr);
-			TFT_FillRectangle(X+98, Y+21, X+195, Y+41, TFT_Black_Bkgr);
-			TFT_FillRectangle(X+98, Y+42, X+195, Y+63, TFT_Black_Bkgr);
-			TFT_FillRectangle(X+98, Y+65, X+195, Y+87, TFT_Black_Bkgr);
+			TFT_FillRectangle(X+98, Y+0, X+195, Y+20, TFT_Black);
+			TFT_FillRectangle(X+98, Y+21, X+195, Y+41, TFT_Black);
+			TFT_FillRectangle(X+98, Y+42, X+195, Y+63, TFT_Black);
+			TFT_FillRectangle(X+98, Y+65, X+195, Y+87, TFT_Black);
 		}
 	old_nan_PPFRGB = 0;
 	ValueB = floor(ValueB*10)/10.0;
@@ -588,7 +588,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 	else deg=0;
 	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16EN_arch_big);
 	sprintf (buffer, "%.1f", ValueB);
 	for (uint8_t i = 1; i <= 4; i++)
@@ -603,7 +603,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 
 	if(number < old_numPPFB )
 	{
-		TFT_FillRectangle(X+98, Y, X+197, Y+20, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+98, Y, X+197, Y+20, TFT_Black);
 	} 
 	old_numPPFB = number;
 	number = 0;
@@ -634,7 +634,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 	
 		if(number < old_numPPFG )
 	{
-		TFT_FillRectangle(X+98, Y+21, X+197, Y+41, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+98, Y+21, X+197, Y+41, TFT_Black);
 	} 
 	old_numPPFG = number;
 	number = 0;
@@ -665,7 +665,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 	
 	if(number < old_numPPFR )
 	{
-		TFT_FillRectangle(X+98, Y+42, X+197, Y+63, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+98, Y+42, X+197, Y+63, TFT_Black);
 	} 
 	old_numPPFR = number;
 	number = 0;
@@ -697,7 +697,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 	
 	if(number < old_numPPFFR )
 	{
-		TFT_FillRectangle(X+98, Y+65, X+197, Y+87, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+98, Y+65, X+197, Y+87, TFT_Black);
 	} 
 	old_numPPFFR = number;
 	number = 0;
@@ -767,9 +767,9 @@ void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t Valu
 	
 	if((ValueX ==0 && ValueY ==100 && ValueZ ==0)||nope)
 	{
-		if(!old_nanXYZ){TFT_FillRectangle(X+40, Y, X+250, Y+95, TFT_Black_Bkgr);}
+		if(!old_nanXYZ){TFT_FillRectangle(X+40, Y, X+250, Y+95, TFT_Black);}
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+135, Y, 'N'-33);TFT_DrawChar(X+160, Y, 'A'-33);TFT_DrawChar(X+185, Y, 'N'-33);
 		TFT_DrawChar(X+135, Y+35, 'N'-33);TFT_DrawChar(X+160, Y+35, 'A'-33);TFT_DrawChar(X+185, Y+35, 'N'-33);
 		TFT_DrawChar(X+135, Y+70, 'N'-33);TFT_DrawChar(X+160, Y+70, 'A'-33);TFT_DrawChar(X+185, Y+70, 'N'-33);
@@ -777,7 +777,7 @@ void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t Valu
 	}else{
 	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	sprintf (buffer, "%d", ValueX);
 	
@@ -793,7 +793,7 @@ void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t Valu
 	
 	if(number < old_numX || old_nanXYZ )
 	{
-		TFT_FillRectangle(X+40, Y, X+197, Y+24, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+197, Y+24, TFT_Black);
 	} 
 	old_numX = number;
 	number = 0;
@@ -817,7 +817,7 @@ void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t Valu
 	
 	if(number < old_numY || old_nanXYZ)
 	{
-		TFT_FillRectangle(X+40, Y+35, X+197, Y+59, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y+35, X+197, Y+59, TFT_Black);
 	} 
 	old_numY = number;
 	number = 0;
@@ -842,7 +842,7 @@ void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t Valu
 	
 	if(number < old_numZ || old_nanXYZ)
 	{
-		TFT_FillRectangle(X+40, Y+70, X+197, Y+94, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y+70, X+197, Y+94, TFT_Black);
 	} 
 	old_numZ = number;
 	number = 0;
@@ -850,7 +850,7 @@ void GUI_Text_XYZ_Measure(uint16_t X, uint16_t Y, uint16_t ValueX, uint16_t Valu
 	old_nanXYZ = 0;
 }
 			TFT_SetTextColor(TFT_White);
-			TFT_SetBackColor(TFT_Black_Bkgr);
+			TFT_SetBackColor(TFT_Black);
 			TFT_SetFont(&Font26EN_arch_big);
 			TFT_DrawChar(X, Y, 'X'-34);
 			TFT_DrawChar(X, Y+35, 'Y'-34);
@@ -863,10 +863,10 @@ void GUI_Text_xy_Measure(uint16_t X, uint16_t Y, float Valuex, float Valuey, uin
 	uint8_t	delta_pos = 70;
 	
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 
 	if((Valuex == 0 && Valuey ==1) || nope){
-		if(!old_nanxy){TFT_FillRectangle(X+40, Y, X+250, Y+60, TFT_Black_Bkgr);}
+		if(!old_nanxy){TFT_FillRectangle(X+40, Y, X+250, Y+60, TFT_Black);}
 		TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+135, Y, 'N'-33);TFT_DrawChar(X+160, Y, 'A'-33);TFT_DrawChar(X+185, Y, 'N'-33);
 		TFT_DrawChar(X+135, Y+35, 'N'-33);TFT_DrawChar(X+160, Y+35, 'A'-33);TFT_DrawChar(X+185, Y+35, 'N'-33);
 		old_nanxy = 1;
@@ -881,7 +881,7 @@ void GUI_Text_xy_Measure(uint16_t X, uint16_t Y, float Valuex, float Valuey, uin
 		old_nanxy = 0;
 	}
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_small);
 	TFT_DrawChar(X, Y, 'x'-65);
 	TFT_DrawChar(X, Y+35, 'y'-65);
@@ -894,10 +894,10 @@ void GUI_Text_uv_Measure(uint16_t X, uint16_t Y, float ValueU, float ValueV, uin
 	uint8_t	delta_pos = 70;
 	
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	
 	if((ValueU == 0 && (ValueV >0.6 && ValueV <0.6001)) || nope){
-		if(!old_nanuv){TFT_FillRectangle(X+40, Y, X+250, Y+60, TFT_Black_Bkgr);}
+		if(!old_nanuv){TFT_FillRectangle(X+40, Y, X+250, Y+60, TFT_Black);}
 		TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+135, Y, 'N'-33);TFT_DrawChar(X+160, Y, 'A'-33);TFT_DrawChar(X+185, Y, 'N'-33);
 		TFT_DrawChar(X+135, Y+35, 'N'-33);TFT_DrawChar(X+160, Y+35, 'A'-33);TFT_DrawChar(X+185, Y+35, 'N'-33);
 		old_nanuv = 1;
@@ -927,7 +927,7 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 	uint32_t dec = 10;
 	
 	
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	sprintf (buffer, "%d", Value);
 	for (uint8_t i = 1; i <= 4; i++)
@@ -940,11 +940,11 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 		}
 	}
 	
-	if((Value == 0 || nope) & !old_nan_CCT){old_nan_CCT = 1; TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black_Bkgr);TFT_SetTextColor(TFT_White); TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+125, Y+4, 'N'-33);TFT_DrawChar(X+150, Y+4, 'A'-33);TFT_DrawChar(X+175, Y+4, 'N'-33);}
+	if((Value == 0 || nope) & !old_nan_CCT){old_nan_CCT = 1; TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black);TFT_SetTextColor(TFT_White); TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+125, Y+4, 'N'-33);TFT_DrawChar(X+150, Y+4, 'A'-33);TFT_DrawChar(X+175, Y+4, 'N'-33);}
 	else if(!nope & Value != 0){
 	if(number < old_numCCT )
 	{
-		TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black);
 	} 
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	old_numCCT = number;
@@ -953,7 +953,7 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 	}
 	
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	if(Language_status == Ru ){
 			TFT_SetFont(&Font26RU_arch_big);
 			TFT_DrawCharRus(X, Y, 'К'-17);
@@ -972,11 +972,11 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 {	
 
 	TFT_SetTextColor(TFT_White);
-			TFT_SetBackColor(TFT_Black_Bkgr);
+			TFT_SetBackColor(TFT_Black);
 			//GUI_Text_lambda_d(X, Y+5);
 
 			TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 
 				TFT_SetFont(&Font16EN_arch_big);
 				TFT_DrawChar(X, Y+5, '~'+1);
@@ -995,11 +995,11 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 				}
 	if(preGUI_screen_state != GUI_screen_state){
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		//GUI_Text_lambda_d(X, Y+5);
 
 		TFT_SetTextColor(TFT_White);
-			TFT_SetBackColor(TFT_Black_Bkgr);
+			TFT_SetBackColor(TFT_Black);
 
 			TFT_SetFont(&Font16EN_arch_big);
 			TFT_DrawChar(X, Y+5, '~'+1);
@@ -1028,9 +1028,9 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 		{	
 			if(!old_nan_lambdaD){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				old_nan_lambdaD = 1;
@@ -1040,7 +1040,7 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 	old_nan_lambdaD = 0;
 	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	sprintf (buffer, "%.0f", Value);
 
@@ -1056,7 +1056,7 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 	
 	if(number < old_lambdaD )
 	{
-		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black);
 	} 
 	old_lambdaD = number;
 	
@@ -1075,9 +1075,9 @@ void GUI_Text_lambdaC_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 		{	
 			if(!old_nan_lambdaC){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				old_nan_lambdaC = 1;
@@ -1086,7 +1086,7 @@ void GUI_Text_lambdaC_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 	else{
 	old_nan_lambdaC = 0;
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	Value = floor(Value*10)/10.0;
 	sprintf (buffer, "%.1f", Value);
@@ -1102,7 +1102,7 @@ void GUI_Text_lambdaC_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 	
 	if(number < old_lambdaC )
 	{
-		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black);
 	} 
 	old_lambdaC = number;
 
@@ -1111,7 +1111,7 @@ void GUI_Text_lambdaC_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 	
 if(preGUI_screen_state != GUI_screen_state){
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	GUI_Text_lambda_c(X, Y+5);
 
 
@@ -1141,9 +1141,9 @@ void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, 
 		{	
 			if(!old_nan_deltaE){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+40, Y, X+250, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40, Y, X+250, Y+26, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				old_nan_deltaE = 1;
@@ -1151,12 +1151,12 @@ void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, 
 		}
 	else{
 		if (old_nan_deltaE) {
-			TFT_FillRectangle(X + 40, Y, X + 250, Y + 26, TFT_Black_Bkgr);
+			TFT_FillRectangle(X + 40, Y, X + 250, Y + 26, TFT_Black);
 		}
 	old_nan_deltaE = 0;
 	Value = floor(Value*10)/10.0;
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	if(Value < 0)
 	{
@@ -1177,7 +1177,7 @@ void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, 
 	
 	if(number < old_deltaE )
 	{
-		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black);
 	} 
 	old_deltaE = number;
 	
@@ -1186,7 +1186,7 @@ void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, 
 	TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
 }
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 
 	TFT_SetFont(&Font16EN_arch_big);
 	TFT_DrawChar(X, Y+6, '~'+2);
@@ -1207,10 +1207,10 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 		{	
 			if(!old_nan_EBER){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black);
+				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				TFT_DisplayString(X+117, Y+35, (uint8_t *)buffer, LEFT_MODE);
@@ -1219,13 +1219,13 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 		}
 	else{
 		if(old_nan_EBER){
-			 TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black_Bkgr);}
+			 TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black);
+				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black);}
 	old_nan_EBER = 0;
 	ValueEB = floor(ValueEB*100)/100.0;
 	ValueER = floor(ValueER*100)/100.0;
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	
 	sprintf (buffer, "%.2f", ValueEB);
@@ -1241,7 +1241,7 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 	
 	if(number < old_num_EB )
 	{
-		TFT_FillRectangle(X+40-50, Y, X+197-50, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40-50, Y, X+197-50, Y+25, TFT_Black);
 	} 
 	old_num_EB = number;
 	number = 0;
@@ -1261,7 +1261,7 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 	
 	if(number < old_num_ER )
 	{
-		TFT_FillRectangle(X+40-50, Y+33, X+197-50, Y+59, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40-50, Y+33, X+197-50, Y+59, TFT_Black);
 	} 
 	old_num_ER = number;
 	number = 0;
@@ -1302,10 +1302,10 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 		{	
 			if(!old_nan_LBLR){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black);
+				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				TFT_DisplayString(X+117, Y+35, (uint8_t *)buffer, LEFT_MODE);
@@ -1314,15 +1314,15 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 		}
 	else{
 				if(old_nan_LBLR){
-					TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black_Bkgr);
-				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black_Bkgr);}
+					TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black);
+				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black);}
 		
 	old_nan_LBLR = 0;
 	ValueLB = floor(ValueLB*100)/100.0;
 	ValueLR = floor(ValueLR*100)/100.0;
 	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	sprintf (buffer, "%.2f", ValueLB);
 	for (uint8_t i = 1; i <= 4; i++)
@@ -1337,7 +1337,7 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 	
 	if(number < old_num_LB )
 	{
-		TFT_FillRectangle(X+40-50, Y, X+197-50, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40-50, Y, X+197-50, Y+25, TFT_Black);
 	} 
 	old_num_LB = number;
 	number = 0;
@@ -1357,7 +1357,7 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 	
 	if(number < old_num_LR )
 	{
-		TFT_FillRectangle(X+40-50, Y+33, X+197-50, Y+59, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40-50, Y+33, X+197-50, Y+59, TFT_Black);
 	} 
 	old_num_LR = number;
 	number = 0;
@@ -1400,9 +1400,9 @@ void GUI_Text_S_P_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 		{	
 			if(!old_nan_SP){
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font26EN_arch_digit);
-				TFT_FillRectangle(X+40, Y, X+250, Y+26, TFT_Black_Bkgr);
+				TFT_FillRectangle(X+40, Y, X+250, Y+26, TFT_Black);
 				buffer[0] = '-';buffer[1] = '-';
 				TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 				old_nan_SP = 1;
@@ -1412,7 +1412,7 @@ void GUI_Text_S_P_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 	old_nan_SP = 0;
 	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	sprintf (buffer, "%.4f", Value);
 	for (uint8_t i = 1; i <= 4; i++)
@@ -1427,7 +1427,7 @@ void GUI_Text_S_P_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 	
 	if(number < old_num_SP )
 	{
-		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+197, Y+25, TFT_Black);
 	} 
 	old_num_SP = number;
 
@@ -1450,16 +1450,16 @@ void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA
 	uint32_t dec = 10;
 	
 	if(ValueA <= -431 || nope){
-		if(!old_nan){TFT_FillRectangle(X+40, Y, X+250, Y+95, TFT_Black_Bkgr);}
+		if(!old_nan){TFT_FillRectangle(X+40, Y, X+250, Y+95, TFT_Black);}
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font26EN_arch_big);  TFT_DrawChar(X+135, Y, 'N'-33);TFT_DrawChar(X+160, Y, 'A'-33);TFT_DrawChar(X+185, Y, 'N'-33);
 		TFT_DrawChar(X+135, Y+35, 'N'-33);TFT_DrawChar(X+160, Y+35, 'A'-33);TFT_DrawChar(X+185, Y+35, 'N'-33);
 		TFT_DrawChar(X+135, Y+70, 'N'-33);TFT_DrawChar(X+160, Y+70, 'A'-33);TFT_DrawChar(X+185, Y+70, 'N'-33);
 		old_nan = 1;
 	} else{
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	
 	if(ValueL < 0){ValueL *= -1; sign = 1;}
@@ -1477,7 +1477,7 @@ void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA
 	
 	if(number < old_num_L || old_nan == 1 )
 	{
-		TFT_FillRectangle(X+40, Y, X+250, Y+25, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y, X+250, Y+25, TFT_Black);
 	} 
 	old_num_L = number;
 	number = 0;
@@ -1503,7 +1503,7 @@ void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA
 	
 	if(number < old_num_A || old_nan == 1 )
 	{
-		TFT_FillRectangle(X+40, Y+35, X+250, Y+62, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y+35, X+250, Y+62, TFT_Black);
 	} 
 	old_num_A = number;
 	number = 0;
@@ -1530,7 +1530,7 @@ void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA
 	
 	if(number < old_num_B || old_nan == 1)
 	{
-		TFT_FillRectangle(X+40, Y+70, X+250, Y+95, TFT_Black_Bkgr);
+		TFT_FillRectangle(X+40, Y+70, X+250, Y+95, TFT_Black);
 	} 
 	old_num_B = number;
 	number = 0;
@@ -1588,8 +1588,8 @@ void GUI_Battery_Level(uint16_t X, uint16_t Y, double charge)
 		sprintf (buffer, "%.1f%%", charge);
 		TFT_SetFont(&Font8);
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
-		TFT_FillRectangle(X+50, Y+10, X+80, Y+24, TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
+		TFT_FillRectangle(X+50, Y+10, X+80, Y+24, TFT_Black);
 		TFT_DisplayString(X+52, Y+14, (uint8_t *)buffer, LEFT_MODE);
 
 }
@@ -1623,7 +1623,7 @@ void GUI_Axes_Locus_XY(uint16_t X_center, uint16_t Y_center, uint8_t direction)
 
 		TFT_SetFont(&Font6EN_arch_big);
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		
 		//y
 		TFT_DrawChar(4,  Y_center-420/2-2, '.');
@@ -1706,7 +1706,7 @@ void GUI_Axes_Locus_LUV(uint16_t X_center, uint16_t Y_center, uint8_t direction)
 
 		TFT_SetFont(&Font6EN_arch_big);
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		//y
 		TFT_DrawChar(4,  Y_center-396/2-2, '.');
 		TFT_DrawChar(0,  Y_center-396/2-2, '0');
@@ -1757,7 +1757,7 @@ void GUI_Axes_Locus_Lab(uint16_t X_center, uint16_t Y_center, uint8_t direction)
 
 		TFT_SetFont(&Font6EN_arch_big);
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 	
 		TFT_DrawChar(X_center-35+5,  Y_center-LAB_LOCUS_SIZEY/2, '+');
 		TFT_DrawChar(X_center-35+10,  Y_center-LAB_LOCUS_SIZEY/2, '1');

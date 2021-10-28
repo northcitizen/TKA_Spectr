@@ -76,7 +76,7 @@ void GUI_OptionMenuRu()
 	GUI_TextRu_Mode(10, 209);
 	GUI_Switch_ButtonActive(182, 202, Mode_EL);
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16EN_arch_big);
 	TFT_DrawChar(225, 210, 'E' );
 	TFT_DrawChar(155, 210, 'L');
@@ -101,7 +101,7 @@ void GUI_OptionMenuEn()
 	GUI_TextEn_Mode(10, 211);
 	GUI_Switch_ButtonActive(182, 202, Mode_EL);
 	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black_Bkgr);
+	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font16EN_arch_big);
 	TFT_DrawChar(225, 210, 'E' );
 	TFT_DrawChar(155, 210, 'L');
@@ -167,7 +167,7 @@ void GUI_DataSet2_Screen()
 				if(!Mode_EL)
 				{
 					TFT_SetTextColor(TFT_White);
-					TFT_SetBackColor(TFT_Black_Bkgr);
+					TFT_SetBackColor(TFT_Black);
 					GUI_TextRu_Cd_m2_Big(10, 130, 0);
 					TFT_SetFont(&Font16EN_arch_big);
 				    TFT_DrawChar(50, 141, '-');
@@ -179,7 +179,7 @@ void GUI_DataSet2_Screen()
 				}else
 				{
 					TFT_SetTextColor(TFT_White);
-					TFT_SetBackColor(TFT_Black_Bkgr);
+					TFT_SetBackColor(TFT_Black);
 					TFT_SetFont(&Font16RU_arch_small);
 					TFT_DrawCharRus(10, 145, 'л');
 					TFT_DrawCharRus(23, 145, 'к');
@@ -194,7 +194,7 @@ void GUI_DataSet2_Screen()
 
 				GUI_Switch_Button_Lx_Fl(200, 133, Mode_Lx_Fl);
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font16EN_arch_big);
 
 				TFT_DrawLine(10, 183, 262, 183, TFT_White);
@@ -234,7 +234,7 @@ void GUI_DataSet2_Screen()
 				}else
 				{
 					TFT_SetTextColor(TFT_White);
-					TFT_SetBackColor(TFT_Black_Bkgr);
+					TFT_SetBackColor(TFT_Black);
 					TFT_SetFont(&Font16EN_arch_small_A);
 					TFT_DrawChar(10, 145, 'l');
 					TFT_DrawChar(15, 145, 'x');
@@ -249,7 +249,7 @@ void GUI_DataSet2_Screen()
 
 				GUI_Switch_Button_Lx_Fl(200, 133, Mode_Lx_Fl);
 				TFT_SetTextColor(TFT_White);
-				TFT_SetBackColor(TFT_Black_Bkgr);
+				TFT_SetBackColor(TFT_Black);
 				TFT_SetFont(&Font16EN_arch_big);
 
 				TFT_DrawLine(10, 183, 262, 183, TFT_White);
@@ -455,7 +455,7 @@ void GUI_Measure_Screen(){
 	
 	
 	if(preGUI_screen_state != GUI_screen_state){
-		TFT_FillScreen_DMA(TFT_Black_Bkgr);
+		TFT_FillScreen_DMA(TFT_Black);
 		oldLowSignal = 0;
 		oldHighSignal = 0;
 		screen_count = 0;
@@ -714,7 +714,7 @@ void GUI_Measure2_Screen()
 
  old_meas_type_L = 2;
 	if(preGUI_screen_state != Measure2_Screen){
-		TFT_FillScreen_DMA(TFT_Black_Bkgr);
+		TFT_FillScreen_DMA(TFT_Black);
 		current_state_Measure_Draw = state_Measure_Elements;
 		screen_count = 1;
 		oldLowSignal = 0;
@@ -741,7 +741,7 @@ void GUI_Measure3_Screen()
 
  old_meas_type_L = 2;
 	if(preGUI_screen_state != Measure3_Screen){
-		TFT_FillScreen_DMA(TFT_Black_Bkgr);
+		TFT_FillScreen_DMA(TFT_Black);
 		current_state_Measure_Draw= state_Measure_Elements;
 		screen_count = 2;
 		oldLowSignal = 0;
@@ -771,7 +771,7 @@ void GUI_Graph_Screen(){
 
 
 	if((preGUI_screen_state != GUI_screen_state || Rotation_Screen_Spectral_Old != Rotation_Screen_Spectral)){
-		TFT_FillScreen_DMA(TFT_Black_Bkgr);
+		TFT_FillScreen_DMA(TFT_Black);
 		oldLowSignal = 0;
 		oldHighSignal = 0;
 		GUI_Panels();		
@@ -1021,7 +1021,7 @@ void GUI_Error_Screen()
 void GUI_Information_Screen()
 {
 	if(preGUI_screen_state != GUI_screen_state){
-		TFT_FillScreen_DMA(TFT_Black_Bkgr);
+		TFT_FillScreen_DMA(TFT_Black);
 		if(Language_status == En){
 			GUI_TextEn_Info_Callibration(0, 0, (uint8_t)(Calibration_date&0x00FF), (uint8_t)(Calibration_month&0x00FF), Calibration_year);
 			GUI_TextEn_Info_Serial(0,0, Serial_part_device, Serial_number_device);
@@ -1041,7 +1041,7 @@ void GUI_SD_Write_Screen()
 	
 	if(preGUI_screen_state != GUI_screen_state){
 		pause = 0;
-		TFT_FillScreen_DMA(TFT_Black_Bkgr);
+		TFT_FillScreen_DMA(TFT_Black);
 		if(Language_status == En){
 			GUI_TextEn_WriteSD(80, 120);
 		}
@@ -1080,7 +1080,7 @@ void GUI_Up_Panel()
 		GUI_Bluetooth_Logo(240, 2);
 	} else
 	{
-		TFT_FillRectangle(239, 1, 260, 35, TFT_Black_Bkgr);
+		TFT_FillRectangle(239, 1, 260, 35, TFT_Black);
 	}
 }
 
@@ -1114,13 +1114,13 @@ void GUI_Panels()
 			|| (preGUI_screen_state >= DataSet1_Screen && GUI_screen_state < DataSet1_Screen)
 			|| (preGUI_screen_state == Information_Screen) || ((GUI_screen_state == Color_Rendition_Screen) && preGUI_screen_state < Color_Rendition_Screen))
 	{
-		TFT_FillScreen_DMA(TFT_Black_Bkgr);
+		TFT_FillScreen_DMA(TFT_Black);
 		GUI_Up_Panel();
 		GUI_Down_Panel();
 	} 
 	else 
 	{
-		TFT_FillRectangle(0, 40, 271, 425, TFT_Black_Bkgr);
+		TFT_FillRectangle(0, 40, 271, 425, TFT_Black);
 	}
 }
 
@@ -1133,7 +1133,7 @@ void GUI_SignalLevel()
     {
       (Language_status == Ru)? ( Mode_EL ? GUI_TextMsgRu_HighIrradiance(15, 30) : GUI_TextMsgRu_HighRadiance(50, 30)):
       (Mode_EL ? GUI_TextMsgEn_HighIrradiance(55, 30) : GUI_TextMsgEn_HighRadiance(55, 30));
-    }else{TFT_FillRectangle(10, 32, 270, 56, TFT_Black_Bkgr);}
+    }else{TFT_FillRectangle(10, 32, 270, 56, TFT_Black);}
   }
 
   if(oldLowSignal != lowSignal)
@@ -1142,7 +1142,7 @@ void GUI_SignalLevel()
     {
       (Language_status == Ru)? ( Mode_EL ? GUI_TextMsgRu_LowIrradiance(20, 30) : GUI_TextMsgRu_LowRadiance(55,30)):
       (Mode_EL ? GUI_TextMsgEn_LowIrradiance(70, 30) : GUI_TextMsgEn_LowRadiance(70, 30));
-    }else{TFT_FillRectangle(10, 32, 270, 56, TFT_Black_Bkgr);}
+    }else{TFT_FillRectangle(10, 32, 270, 56, TFT_Black);}
   }
 	oldHighSignal = highSignal;
 	oldLowSignal = lowSignal;
