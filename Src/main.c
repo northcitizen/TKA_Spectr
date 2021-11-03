@@ -1296,8 +1296,8 @@ int main(void)
 	buff_set = Calibration_Load_1byte(SET_COLORFIELD, 3);
 	if(buff_set == 0xFF){Color_Field |= Color_CIE_xy;} else{Color_Field = buff_set;}
 
-	buff_set = Calibration_Load_1byte(SET_COLORRENDFIELD, 3);
-	if(buff_set == 0xFF){Color_rend_Field = 0;} else{Color_rend_Field = buff_set;}
+	//buff_set = Calibration_Load_1byte(SET_COLORRENDFIELD, 3);
+	//if(buff_set == 0xFF){Color_rend_Field = 0;} else{Color_rend_Field = buff_set;}
 
 		buff_set = Calibration_Load_1byte(SET_LANGUAGE, 3);
 	if(buff_set == 0xFF){Language_status = Ru;} else{Language_status = buff_set;}

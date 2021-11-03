@@ -44,7 +44,7 @@ void CRI_Axes_Measure(uint8_t direction, int8_t Ra, int8_t Rall, int8_t R9){
 if (direction == 0x00)
 	{
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font16EN_arch_small);
 		TFT_DrawChar(17, 70, 'a');
 		TFT_SetFont(&Font16EN_arch_big);
@@ -77,7 +77,7 @@ if (direction == 0x00)
 		else {TFT_direction = 0x02;}
 		
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font16EN_arch_small);
 		TFT_DrawChar(100, 16, 'a');
 		TFT_SetFont(&Font16EN_arch_big);
@@ -114,7 +114,7 @@ void CRI_Axes_Text(uint8_t direction){
 		//max Y = 105    min Y = 410
 		TFT_SetFont(&Font6EN_arch_big);
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		
 		TFT_DrawChar(24, 415, 'R');
 		TFT_DrawChar(30, 415, '1');
@@ -189,7 +189,7 @@ void CRI_Axes_Text(uint8_t direction){
 		else {TFT_direction = 0x02;}
 
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font6EN_arch_big);
 		
 		TFT_DrawChar(87, 258, 'R');
@@ -288,7 +288,7 @@ void CRI_chart(uint8_t direction, int8_t *GraphData)
 		
 		TFT_SetFont(&Font6EN_arch_big);
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		
 		for(uint8_t i = 0; i<=14; i++)
 		{
@@ -330,7 +330,7 @@ void CRI_chart(uint8_t direction, int8_t *GraphData)
 }
 
 void CRI_Draw(uint8_t direction, int8_t *GraphData, int8_t Ra, int8_t Rall, int8_t R9){
-	TFT_FillRectangle(5, 58, 270, 410, TFT_Black_Bkgr);
+	TFT_FillRectangle(5, 58, 270, 410, TFT_Black);
 	CRI_Axes(direction);
 	CRI_Axes_Text(direction);
 	CRI_chart(direction, GraphData);
