@@ -49,7 +49,10 @@ float Calculate_SP(float EL_day_data, float EL_Night_data)
 
 float Calculate_PPFD_PPL(float R_data[], float Wavelenght[])
 {
-	uint16_t it = 0, beg = 0, end = 1024;
+
+      uint16_t it = 0, beg = 0, end = 1024, Range_min = 700, Range_max = 1000;
+       float sum2 = 0.0;
+
 
 	while(Wavelenght[it]<400)
 	{
@@ -63,6 +66,19 @@ float Calculate_PPFD_PPL(float R_data[], float Wavelenght[])
 		it--;
 	}
 	end = it-1;
+	 for(iq = 0; iq < 1024; iq++)
+               {
+                       if(Wavelenght[iq] > Range_min && Wavelenght[iq] < Range_max)
+	                      {
+	                              if(Wavelenght[iq] == Range_max || Wavelenght[iq] == Range_min)
+	                              {
+	                                      sum2 = sum2 + (0.5 * R_data[iq]*Wavelenght[iq]*0.00835936108917328);
+	                              } else
+	                              {
+	                                      sum2 = sum2 + (R_data[iq]*Wavelenght[iq]*0.00835936108917328);
+	                              }
+	                      }
+	              }
 
 
 	sum = 0;
@@ -70,7 +86,7 @@ float Calculate_PPFD_PPL(float R_data[], float Wavelenght[])
 	{
 		sum = sum + (R_data[iq]*Wavelenght[iq]*0.00835936108917328);
 	}
-	return sum;
+	return sum-sum2;
 }
 
 float Calculate_PPFD_PPL_Range(float R_data[], float Wavelenght[], uint8_t Range)

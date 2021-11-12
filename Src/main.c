@@ -48,19 +48,16 @@
 
 extern volatile float progress_bar;
 
-extern volatile uint8_t SD_CARD_FLAG = 0;
+extern volatile uint8_t SD_CARD_FLAG = 0, GRAPH_FLAG = 0;
 
 extern uint8_t measure_number;
-extern volatile uint8_t GRAPH_FLAG = 0;
-extern volatile uint8_t SPECTRAL_DONE = 0;
+extern volatile uint8_t SPECTRAL_DONE = 0, START_MEASURE_VALUE_FLAG = 0;
  volatile uint8_t exp_stable;
-///////////////////
  extern volatile uint32_t cnt_delay;
  volatile  uint8_t start;
  uint8_t USB_MEASURE = 0x0;
  extern volatile uint8_t Rotation_Screen_Rend, CRICQS_done;
- extern int8_t Ra, Rall, R9, Ri[14];
- extern uint8_t Q_i[15], Qf, Qa, Qp;
+ extern int8_t Ra, Rall, R9, Ri[14], Q_i[15], Qf, Qa, Qp;
  uint8_t Calc_ColorRend;
 
 //USB
@@ -1415,7 +1412,6 @@ int main(void)
 
 	Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 
-
 #ifdef BT
 	BlueTooth_Module_Init();
 #endif
@@ -1496,19 +1492,16 @@ GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 		Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
 				Rotation_Screen_Spectral_Old3);
 	}
-	Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-	max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
-			Rotation_Screen_Spectral_Old3);
-	Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
-			Line_Rabs_buff_graph_test);
-
-	Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White,
-			Rotation_Screen_Spectral_Old3);
+Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
+Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
+Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
 	block_graph = 0;
 	GUI_SignalLevel();
 
 uint32_t bat_refresh = 0;
 
+START_MEASURE_VALUE_FLAG = 0;
 while (1) {
 
 		//delta_Eab_Measure = Calculate_deltaEab();
