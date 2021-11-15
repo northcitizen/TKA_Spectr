@@ -1248,7 +1248,7 @@ void GUI_Touch_Processing()
 				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //down
 				{	
 					GUI_screen_state = (screen_count > 0) ? Measure2_Screen : Measure_Screen; 
-					//WriteFLASH_Screen(GUI_screen_state);
+					WriteFLASH_Screen(GUI_screen_state);
 			if (Measure_Field & delta_E) {
 				delta_Eab_Measure = Calculate_deltaEab();
 			}
@@ -1309,7 +1309,7 @@ void GUI_Touch_Processing()
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
 				{
 
-					//WriteFLASH_Screen(Graph_Screen);
+					WriteFLASH_Screen(Graph_Screen);
 					GUI_screen_state =  Graph_Screen;
 					GUI_Display_Refresh();
 									Rotation_Screen_Spectral = 0x00;
@@ -1587,7 +1587,7 @@ void GUI_Touch_Processing()
 				if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //down
 				{	
 					GUI_screen_state = (screen_count > 1) ? Measure3_Screen : Measure_Screen;
-					//WriteFLASH_Screen(GUI_screen_state);
+					WriteFLASH_Screen(GUI_screen_state);
 			if (Measure_Field & delta_E) {
 				delta_Eab_Measure = Calculate_deltaEab();
 			}
@@ -1649,7 +1649,7 @@ void GUI_Touch_Processing()
 				else 
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
 				{
-					//WriteFLASH_Screen(Graph_Screen);//08.11.2021
+					WriteFLASH_Screen(Graph_Screen);
 					GUI_screen_state = Graph_Screen;
 					GUI_Display_Refresh();
 									Rotation_Screen_Spectral = 0x00;
@@ -1925,7 +1925,7 @@ case Measure3_Screen:
 			if(Touch_x >= 163 & Touch_x <= (163+54) & Touch_y >=426 & Touch_y <=(426+54)) //Down
 			{
 				GUI_screen_state = Measure_Screen;
-				//WriteFLASH_Screen(GUI_screen_state);
+				WriteFLASH_Screen(GUI_screen_state);
 				if(Measure_Field&delta_E){delta_Eab_Measure = Calculate_deltaEab();}
 				if(Measure_Field&Illuminance) {E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);}
 				if(Measure_Field&Irradiance) {E_day_Wt = Calculate_EL_Day_Wt(Line_Rabs_buff);}
@@ -1953,7 +1953,7 @@ case Measure3_Screen:
 			else
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54)) //Next
 				{
-					//WriteFLASH_Screen(Graph_Screen);//08.11.2021
+					WriteFLASH_Screen(Graph_Screen);//08.11.2021
 					GUI_screen_state = Graph_Screen;
 					GUI_Display_Refresh();
 									Rotation_Screen_Spectral = 0x00;
@@ -2192,7 +2192,7 @@ case Measure3_Screen:
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Next
 				{
 
-					//WriteFLASH_Screen(Color_Screen);
+					WriteFLASH_Screen(Color_Screen);
 					GUI_screen_state = Color_Screen;
 
 				Calculate_uv1976((Measure_Color_xy == 0x00) ? colorimetry_xy1964 : colorimetry_xy1931);
@@ -2392,7 +2392,7 @@ case Measure3_Screen:
 				} else 
 			if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Next
 				{
-					//WriteFLASH_Screen(Color_Rendition_Screen);
+					WriteFLASH_Screen(Color_Rendition_Screen);
 					GUI_screen_state = Color_Rendition_Screen;
 					GUI_Display_Refresh();
 
@@ -2588,7 +2588,7 @@ case Measure3_Screen:
 				} else 
 				if(Touch_x >= 217 & Touch_x <= (217+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Next
 				{
-					//WriteFLASH_Screen(Measure_Screen);//08.11.2021
+					WriteFLASH_Screen(Measure_Screen);//08.11.2021
 					GUI_screen_state = Measure_Screen;
 
 					if (Measure_Field & delta_E) {delta_Eab_Measure = Calculate_deltaEab();}
