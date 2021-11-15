@@ -1495,9 +1495,9 @@ GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
 max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
 Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
+//Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
 	block_graph = 0;
-	GUI_SignalLevel();
+//	GUI_SignalLevel();
 
 uint32_t bat_refresh = 0;
 
