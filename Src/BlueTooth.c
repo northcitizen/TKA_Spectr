@@ -130,7 +130,7 @@ void BlueTooth_Module_Init(void)
 	BlueTooth_Param_Init(BT_BAUD_RATE, 0, 0);
 	BlueTooth_Module_Name("TKA_SPECTR");
 	HAL_Delay(100);
-	BlueTooth_Set_PIN("1488");
+	BlueTooth_Set_PIN("1234");
 	HAL_Delay(100);
 	Bluetooth_Reset();
 
