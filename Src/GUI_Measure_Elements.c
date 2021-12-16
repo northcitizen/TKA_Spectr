@@ -3,6 +3,8 @@
 #include <math.h>
 extern uint8_t Language_status, Mode_EL, preGUI_screen_state, GUI_screen_state, Mode_Lx_Fl;
 volatile extern uint8_t GRAPH_FLAG;
+volatile uint8_t SPECTRAL_DONE;
+volatile uint8_t LAMBDA_TYPE;
 void GUI_Bar_Measure(uint16_t X, uint16_t Y, float Value)
 {
 	TFT_FillRectangle(X, Y, X+110, Y+10, TFT_White);	
@@ -942,8 +944,10 @@ void GUI_Text_uv_Measure(uint16_t X, uint16_t Y, float ValueU, float ValueV, uin
 }	
 
 uint8_t old_numCCT = 10, old_nan_CCT = 0;
+uint8_t entry = 0;
 void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, uint8_t grey)
 {	
+
 	if(preGUI_screen_state != GUI_screen_state){old_nan_CCT = 0; }
 	char buffer[9] = {0};
 	uint8_t	delta_pos = 180, number = 0;
@@ -963,18 +967,37 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 		}
 	}
 
-	if(GRAPH_FLAG && (Value == 0))//0 if Mode E/L
-	{
-		buffer[0] = '0';
+//	if(/*GRAPH_FLAG &&*/ (Value == 0 || nope) && !old_nan_CCT)//0 if Mode E/L
+//	{
+//		buffer[0] = '0';
+//
+//		TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
+//			old_numCCT = number;
+//
+//			TFT_DisplayString(X+delta_pos, Y+2, (uint8_t *)buffer, LEFT_MODE);
+//			old_nan_CCT = 0;
+//	}
 
+	if((Value == 0 || nope) && !old_nan_CCT && SPECTRAL_DONE)
+	{old_nan_CCT = 1;
+	TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black);
+	TFT_SetTextColor(TFT_White);
+	TFT_SetFont(&Font26EN_arch_big);
+	TFT_DrawChar(X+125, Y+4, 'N'-33);
+	TFT_DrawChar(X+150, Y+4, 'A'-33);
+	TFT_DrawChar(X+175, Y+4, 'N'-33);}
+		else if(!nope & Value != 0){
+		if(number < old_numCCT )
+		{
+			TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black);
+		}
 		TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-			old_numCCT = number;
+		old_numCCT = number;
 
-			TFT_DisplayString(X+delta_pos, Y+2, (uint8_t *)buffer, LEFT_MODE);
-			old_nan_CCT = 0;
-	}
+		TFT_DisplayString(X+delta_pos, Y+2, (uint8_t *)buffer, LEFT_MODE); old_nan_CCT = 0;
+		}
 
-	if((nope) & !old_nan_CCT)
+	if((nope) && !old_nan_CCT)
 	{
 		old_nan_CCT = 1;
 		TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black);
@@ -985,7 +1008,7 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 		buffer[1] = '-';
 		TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 	}
-	else if(!nope & Value != 0){
+	else if(!nope && Value != 0){
 	if(number < old_numCCT )
 	{
 		TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black);
@@ -1025,7 +1048,7 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 				TFT_SetFont(&Font16EN_arch_big);
 				TFT_DrawChar(X, Y+5, '~'+1);
 				TFT_SetFont(&Font16EN_arch_small);
-				TFT_DrawChar(X+15, Y+7+5, 'd');
+				(LAMBDA_TYPE==1) ? TFT_DrawChar(X+15, Y+7+5, 'd') : TFT_DrawChar(X+15, Y+7+5, 'c');//
 
 			if(Language_status == Ru ){
 					TFT_SetFont(&Font26RU_arch_small);
@@ -1048,7 +1071,7 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 			TFT_SetFont(&Font16EN_arch_big);
 			TFT_DrawChar(X, Y+5, '~'+1);
 			TFT_SetFont(&Font16EN_arch_small);
-			TFT_DrawChar(X+15, Y+7+5, 'd');
+			LAMBDA_TYPE ? TFT_DrawChar(X+15, Y+7+5, 'd') : TFT_DrawChar(X+15, Y+7+5, 'c');//
 
 		if(Language_status == Ru ){
 				TFT_SetFont(&Font26RU_arch_small);

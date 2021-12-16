@@ -1192,6 +1192,9 @@ void GUI_Touch_Processing()
 			if (Measure_Field & delta_E) {
 				delta_Eab_Measure = Calculate_deltaEab();
 			}
+			if(Measure_Field & CCT){
+				Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+			}
 			if (Measure_Field & Illuminance) {
 				E_day = Calculate_EL_Day(Line_Rabs_buff, Spectral_day);
 			}
@@ -1482,20 +1485,22 @@ void GUI_Touch_Processing()
    							if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
    							else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
    							CRICQS_done = 0x01;
-       						}else{
-    								CRICQS_done = 0x00;
-    								Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-      								Calculate_xy1931(colorimetry_XYZ1931);
-    								Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-	   								max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-	   								if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
-									else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
-									CRICQS_done = 0x01;
-	       							}
-
+       						}else
+       						{
+       							CRICQS_done = 0x00;
+    							Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
+      							Calculate_xy1931(colorimetry_XYZ1931);
+    							Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+	   							max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+	   							if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
+								else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
+								CRICQS_done = 0x01;
+	       						}
 	        						Calc_ColorRend = !Calc_ColorRend;
-
-						        	pause = 1;
+	        						if(Measure_Field & CCT){
+	        										Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+	        									}
+	        						pause = 1;
 						        	SPECTRAL_DONE = 1;
 						        	GUI_Bar_Measure_OFF(85, 13);
 						        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);

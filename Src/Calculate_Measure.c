@@ -257,7 +257,7 @@ float Calculate_Tc(float R_data[], uint8_t CIE_Type)
 	
 	deltaC = sqrt((pow((u_dop - up), 2)+ pow((v_dop - vp), 2)));
 	
-	if(deltaC > 0.05)
+	if(deltaC > 0.02236067977)
 	{
 		return 0xFFFF;
 	}else
@@ -344,7 +344,7 @@ void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 
 	    if(triangle_out)
 	    {
-	    	LAMBDA_TYPE = 0;
+	    	LAMBDA_TYPE = 0;//dominant
 	        if(x2 <= x1)
 	        {
 	            for(int i = START_POINT; i < D_SIZE; i++)
@@ -370,7 +370,7 @@ void Calculate_Lambda_Dominant(float R_data[], uint8_t CIE_Type)
 	    }
 	    else
 	    {
-	    	LAMBDA_TYPE = 1;
+	    	LAMBDA_TYPE = 1;//complementary
 	        if(x2 <= x1)
 	        {
 	            for(int i = 0; i < START_POINT; i++)
