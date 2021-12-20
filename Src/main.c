@@ -55,7 +55,7 @@ extern volatile uint8_t SPECTRAL_DONE = 0, START_MEASURE_VALUE_FLAG = 0;
  volatile uint8_t exp_stable;
  extern volatile uint32_t cnt_delay;
  volatile  uint8_t start;
- uint8_t USB_MEASURE = 0x0;
+ uint8_t USB_MEASURE = 0x0, TOUCH_SCREEN = 0x0;
  extern volatile uint8_t Rotation_Screen_Rend, CRICQS_done;
  extern int8_t Ra, Rall, R9, Ri[14], Q_i[15], Qf, Qa, Qp;
  uint8_t Calc_ColorRend;
@@ -1502,6 +1502,7 @@ Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
 uint32_t bat_refresh = 0;
 
 START_MEASURE_VALUE_FLAG = 0;
+TOUCH_SCREEN = 0x1;
 while (1) {
 
 		//delta_Eab_Measure = Calculate_deltaEab();
@@ -1583,7 +1584,7 @@ void auto_exposure(void)
 //		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;
 	}
 	
-	if(max_el < 20000 && exp_num != 9)//20000
+	if(max_el < Range_Value_MIN && exp_num != 9)//20000
 	{
 		highSignal = 0;
 		lowSignal = 0;
@@ -1601,7 +1602,7 @@ void auto_exposure(void)
 		}
 
 		send_usb_block = 0;
-	} else if(max_el > 45000 && exp_num != 0)//45000
+	} else if(max_el > Range_Value_MAX && exp_num != 0)//45000
 	{
 		highSignal = 0;
 		lowSignal = 0;
@@ -1630,7 +1631,7 @@ void auto_exposure(void)
 		
 	old_exp_num = exp_num;
 	
-	if(exp_num == 0 && max_el >= 50000)//50000
+	if(exp_num == 0 && max_el >= Range_Value_MAX)//50000
 	{
 		highSignal = 1;
 		 GUI_SignalLevel();
@@ -1640,10 +1641,10 @@ void auto_exposure(void)
 		 max_el=0;
 		 htim2.Init.Period = exposure_timer_period[exp_num];
 
-	} else if((exp_num ==0 && max_el < 50000))//50000
+	} else if((exp_num ==0 && max_el < Range_Value_MAX))//50000
 	{
 		highSignal = 0;
-	} else if((exp_num == 9 && max_el < DarkSignal[i_max]+2000))//20000
+	} else if((exp_num == 9 && max_el < DarkSignal[i_max]+Range_Value_MIN))//20000
 	{
 		lowSignal = 1;
 		 GUI_SignalLevel();
@@ -1654,7 +1655,7 @@ void auto_exposure(void)
 
 		 htim2.Init.Period = exposure_timer_period[exp_num];
 
-	}else if((exp_num == 9 && max_el > DarkSignal[i_max]+ 2000))//20000
+	}else if((exp_num == 9 && max_el > DarkSignal[i_max]+ Range_Value_MIN))//20000
 	{
 		lowSignal = 0;
 	}
@@ -1829,43 +1830,47 @@ void EXTI9_5_IRQHandler(void)
 /*Touch_screen interrupt*/
 void EXTI3_IRQHandler(void)
 {
-
-	cnt_touch_delay = cnt_touch_delay + 1;
-	
-	Touch_x = 0, Touch_y = 0;
-
-//	TS_Get_XY1(TS_I2C_ADDRESS, &Touch_x, &Touch_y);
-	
-	if((!TFT_ON_OFF) && (cnt_touch_delay >= 50))
+	if(TOUCH_SCREEN)
 	{
-			TFT_ON_OFF = 0x01;
-			HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);//booster
-	}else{
+		cnt_touch_delay = cnt_touch_delay + 1;
 
-		if(TFT_ON_OFF){
-			TS_Get_XY1(TS_I2C_ADDRESS, &Touch_x, &Touch_y);
+			Touch_x = 0, Touch_y = 0;
 
-			if((Mode_EL == 0x00) && ((Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) )))
+		//	TS_Get_XY1(TS_I2C_ADDRESS, &Touch_x, &Touch_y);
+
+			if((!TFT_ON_OFF) && (cnt_touch_delay >= 50))
 			{
-				pause_button++;
-				if(pause_button > 3)
-				{	
-					LaserOnOff = !LaserOnOff;
-					LaserOnOff ? HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET):HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-					cnt_touch_delay = 0;
-					pause_button = 0;
-				}
-				GUI_Touch_Processing();
-				cnt_touch_delay = 0;
-			} else {
-				GUI_Touch_Processing();
-				cnt_touch_delay = 0;
-			}
-		} 
+					TFT_ON_OFF = 0x01;
+					HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);//booster
+			}else{
 
-		HAL_NVIC_ClearPendingIRQ(EXTI3_IRQn);
-		HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+				if(TFT_ON_OFF){
+					TS_Get_XY1(TS_I2C_ADDRESS, &Touch_x, &Touch_y);
+
+					if((Mode_EL == 0x00) && ((Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) )))
+					{
+						pause_button++;
+						if(pause_button > 3)
+						{
+							LaserOnOff = !LaserOnOff;
+							LaserOnOff ? HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET):HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+							cnt_touch_delay = 0;
+							pause_button = 0;
+						}
+						GUI_Touch_Processing();
+						cnt_touch_delay = 0;
+					} else {
+						GUI_Touch_Processing();
+						cnt_touch_delay = 0;
+					}
+				}
+
+				HAL_NVIC_ClearPendingIRQ(EXTI3_IRQn);
+				HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+			}
 	}
+	HAL_NVIC_ClearPendingIRQ(EXTI3_IRQn);
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
 }
 
 //void UART2_RxCpltCallback(void)
