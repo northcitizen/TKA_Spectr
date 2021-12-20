@@ -139,9 +139,8 @@ extern volatile uint8_t highSignal = 0, lowSignal = 0;
 uint8_t Mode_EL = 1, SD_Detect, old_sd_detect = 10, write_FileNum = 0, Mode_Lx_Fl = 0;
 
 //Calibration Ranges Values
-uint16_t Range_Value_MAX = 0;
-uint16_t Range_Value_MID = 0;
-uint16_t Range_Value_MIN = 0;
+extern uint16_t Range_Value_MAX = 0;
+extern uint16_t Range_Value_MIN = 0;
 
 //Calibration table factors data
 float Spectral_day[1024] = {0}, Spectral_night[1024] = {0}, Spectral_B[1024] = {0}, Spectral_R[1024] = {0};
@@ -1314,6 +1313,7 @@ int main(void)
 
 //Load calibration data
 	Calibration_WaveLenght_Graph();
+	Calibration_Ranges_Values();
 	Calibration_Exposure_Change(exp_num);
 	Calibration_Load_Pack(Mode_EL == 0x00 ? SPECTRAL_CORRECTION_L:SPECTRAL_CORRECTION_E, 0x400, Spectral_Corection_Buff);
 
@@ -1329,9 +1329,6 @@ int main(void)
 
 	Calibration_Load_Pack(X2_CIE1931, 0x400, calibratre_x_1931);
 	Calibration_Load_Pack(Z2_CIE1931, 0x400, calibratre_z_1931);
-
-
-	Calibration_Ranges_Values();
 
 
 	uint16_t wave_num = 0;

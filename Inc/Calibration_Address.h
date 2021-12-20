@@ -104,6 +104,7 @@
 #define		TEMP_4000						0x0812F0E0
 
 
+
 //dynamic settings_data
 //#define		FILENUMBER							0x0812B020
 //#define		SET_MODEEL							0x0812B030

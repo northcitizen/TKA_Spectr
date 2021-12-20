@@ -1,7 +1,6 @@
 #include "Calibration_Address.h"
 
 extern uint16_t Range_Value_MAX;
-extern uint16_t Range_Value_MID;
 extern uint16_t Range_Value_MIN;
 extern uint16_t WaveLenght_Graph[7], DarkSignal[1024];
 extern float Unit_nm[7], Spectral_Corection_Buff[1024], Scattering_Light, Exposure_Factor;
@@ -17,7 +16,8 @@ uint32_t address_array[10] = {DARK_SIGNAL_7_812, DARK_SIGNAL_15_625, DARK_SIGNAL
 							  DARK_SIGNAL_500, DARK_SIGNAL_1000, DARK_SIGNAL_2000, DARK_SIGNAL_4000};
 
 uint32_t address_temp_array[10] = {TEMP_7_812, TEMP_15_625, TEMP_31_25, TEMP_62_5, TEMP_125, TEMP_250, TEMP_500, TEMP_1000, TEMP_2000, TEMP_4000};
-
+uint16_t range_max_array[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+uint16_t range_min_array[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 uint16_t buff2_array[4] = {0};
 
@@ -150,6 +150,11 @@ void Calibration_Exposure_Change(uint8_t Exp)
 	 Calibration_Load_Temperature_Coef(address_temp_array[Exp]);
 
 	 Exposure_Factor = ((float)Calibration_Load_2byte(EXPOSURE_FACTOR_7_812+8*(Exp/4), Exp))/100.0;
+
+	 Range_Value_MAX = range_max_array[Exp];
+	 Range_Value_MIN = range_min_array[Exp];
+
+
 }
 
 void Calibration_WaveLenght_Graph()
@@ -164,7 +169,25 @@ void Calibration_WaveLenght_Graph()
 
 void Calibration_Ranges_Values()
 {
-	Range_Value_MAX = Calibration_Load_2byte(0x0812F0F0, 0);
-	Range_Value_MID = Calibration_Load_2byte(0x0812F110, 0);
-	Range_Value_MIN = Calibration_Load_2byte(0x0812F114, 1);
+	 range_max_array[1] = Calibration_Load_2byte(0x0812F0F0+8*(1/4), 1);
+	 range_max_array[0] = Calibration_Load_2byte(0x0812F0F0+8*(0/4), 0);
+	 range_max_array[3] = Calibration_Load_2byte(0x0812F0F0+8*(3/4), 3);
+	 range_max_array[2] = Calibration_Load_2byte(0x0812F0F0+8*(2/4), 2);
+	 range_max_array[5] = Calibration_Load_2byte(0x0812F0F0+8*(5/4), 5);
+	 range_max_array[4] = Calibration_Load_2byte(0x0812F0F0+8*(4/4), 4);
+	 range_max_array[7] = Calibration_Load_2byte(0x0812F0F0+8*(7/4), 7);
+	 range_max_array[6] = Calibration_Load_2byte(0x0812F0F0+8*(6/4), 6);
+	 range_max_array[9] = Calibration_Load_2byte(0x0812F0F0+8*(9/4), 9);
+	 range_max_array[8] = Calibration_Load_2byte(0x0812F0F0+8*(8/4), 8);
+
+	 range_min_array[1] = Calibration_Load_2byte(0x0812F104+8*(1/4), 1);//1=15ms
+	 range_min_array[0] = Calibration_Load_2byte(0x0812F104+8*(0/4), 0);//0=7ms
+	 range_min_array[3] = Calibration_Load_2byte(0x0812F104+8*(3/4), 3);//3=62ms
+	 range_min_array[2] = Calibration_Load_2byte(0x0812F104+8*(2/4), 2);//2=31ms
+	 range_min_array[5] = Calibration_Load_2byte(0x0812F104+8*(5/4), 5);//5=250ms
+	 range_min_array[4] = Calibration_Load_2byte(0x0812F104+8*(4/4), 4);//4=125ms
+	 range_min_array[7] = Calibration_Load_2byte(0x0812F104+8*(7/4), 7);//7=1000ms
+	 range_min_array[6] = Calibration_Load_2byte(0x0812F104+8*(6/4), 6);//6=500ms
+	 range_min_array[9] = Calibration_Load_2byte(0x0812F104+8*(9/4), 9);//9=4000ms
+	 range_min_array[8] = Calibration_Load_2byte(0x0812F104+8*(8/4), 8);//8=2000ms
 }
