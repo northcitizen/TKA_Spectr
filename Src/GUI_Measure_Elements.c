@@ -3,8 +3,8 @@
 #include <math.h>
 extern uint8_t Language_status, Mode_EL, preGUI_screen_state, GUI_screen_state, Mode_Lx_Fl;
 volatile extern uint8_t GRAPH_FLAG;
-volatile uint8_t SPECTRAL_DONE;
-volatile uint8_t LAMBDA_TYPE;
+volatile uint8_t SPECTRAL_DONE, LAMBDA_TYPE;
+
 void GUI_Bar_Measure(uint16_t X, uint16_t Y, float Value)
 {
 	TFT_FillRectangle(X, Y, X+110, Y+10, TFT_White);	
@@ -23,7 +23,7 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	if(preGUI_screen_state != GUI_screen_state){old_nan_Ee = 0; old_nan_El = 0; old_deg_e = 0xFF;}
 	
 	char buffer[9] = {0};
-	uint8_t	delta_pos = 122, number = 0, meas_type=0, deg = 0; 
+	uint8_t	delta_pos = 122, number = 0, deg = 0;
 	uint32_t dec = 10;
 	
 	TFT_SetTextColor(TFT_White);
@@ -35,13 +35,11 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	{
 		Value = Value/(1000.0);
 		deg = 1;
-		meas_type = 1;
 	}
 	else if (energy_light && Value < 1.0)
 	{
 		Value = Value * 1000.0;
 		deg = 2;
-		meas_type = 0;
 	}
 
 	if(nope)
@@ -249,20 +247,18 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 {
 	if(preGUI_screen_state != GUI_screen_state){old_nan_Le = 0; old_nan_Ll = 0; old_deg_L = 0xFF;}
 	char buffer[9] = {0};
-	uint8_t	delta_pos = 117, deg = 0, number = 0, meas_type;
+	uint8_t	delta_pos = 117, deg = 0, number = 0;
 	uint32_t dec = 10;
 
 	if((Value/1000.0) >= 1.0)
 	{
 		Value = Value/(1000.0);
 		deg = 1;
-		meas_type = 1;
 	}
 	else if (energy_light && Value < 1.0)
 	{
 		Value = Value * 1000.0;
 		deg = 2;
-		meas_type = 0;
 	}
 
 	TFT_SetTextColor(TFT_White);
@@ -324,7 +320,7 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
 	
-		sprintf (buffer, "%.1f", Value);
+		sprintf (buffer, "%.2f", Value);
 
 
 for (uint8_t i = 1; i <= 4; i++)
@@ -360,26 +356,26 @@ for (uint8_t i = 1; i <= 4; i++)
 	{
 		if (deg && old_deg_L != 1){
 			old_deg_L = 1;
-			TFT_FillRectangle(X+195, Y+3, X+250, Y+26, TFT_Black);
+			TFT_FillRectangle(X+210, Y+3, X+250, Y+26, TFT_Black);
 			if(Mode_Lx_Fl)
 			{
-				TFT_SetFont(&Font16EN_arch_small);
+				TFT_SetFont(&Font11EN_arch_big);
 				TFT_DrawChar(X+200, Y+5, 'k');
 				TFT_DrawChar(X+215, Y+5, 'f');
-				TFT_SetFont(&Font16EN_arch_big);
-				TFT_DrawChar(X+225, Y+3, 'L');
+				TFT_SetFont(&Font11EN_arch_big);
+				TFT_DrawChar(X+225, Y+5, 'L');
 			}
 			else
 			GUI_TextRu_Cd_m2(X+205, Y, 1);
 		}else if(!deg && old_deg_L != 0){
 			old_deg_L = 0;
-			TFT_FillRectangle(X+193, Y, X+251, Y+26, TFT_Black);
+			TFT_FillRectangle(X+210, Y, X+251, Y+26, TFT_Black);
 			if(Mode_Lx_Fl)
 			{
-				TFT_SetFont(&Font16EN_arch_small);
+				TFT_SetFont(&Font11EN_arch_big);
 				TFT_DrawChar(X+215, Y+5, 'f');
-				TFT_SetFont(&Font16EN_arch_big);
-				TFT_DrawChar(X+225, Y+3, 'L');
+				TFT_SetFont(&Font11EN_arch_big);
+				TFT_DrawChar(X+225, Y+5, 'L');
 			}
 			else
 			GUI_TextRu_Cd_m2(X+205, Y, 0);
@@ -389,26 +385,29 @@ for (uint8_t i = 1; i <= 4; i++)
 	{
 		if (deg && old_deg_L != 1){
 			old_deg_L = 1;
-			TFT_FillRectangle(X+195, Y-5, X+251, Y+26, TFT_Black);
+			TFT_FillRectangle(X+210, Y-5, X+251, Y+26, TFT_Black);
 			if(Mode_Lx_Fl)
 			{
-				TFT_SetFont(&Font16EN_arch_small);
+				TFT_SetFont(&Font11EN_arch_big);
 				TFT_DrawChar(X+200, Y+5, 'k');
 				TFT_DrawChar(X+215, Y+5, 'f');
-				TFT_SetFont(&Font16EN_arch_big);
-				TFT_DrawChar(X+225, Y+3, 'L');
+				TFT_SetFont(&Font11EN_arch_big);
+				TFT_DrawChar(X+225, Y+5, 'L');
 			}
 			else
 			GUI_TextEn_cd_m2(X+210, Y-4, 1);
 		}else if(!deg && old_deg_L != 0){
 			old_deg_L = 0;
-			TFT_FillRectangle(X+195, Y-5, X+251, Y+26, TFT_Black);
+			TFT_FillRectangle(X+210, Y-5, X+251, Y+26, TFT_Black);
 			if(Mode_Lx_Fl)
 			{
-				TFT_SetFont(&Font16EN_arch_small);
+				TFT_SetFont(&Font11EN_arch_big);
 				TFT_DrawChar(X+215, Y+5, 'f');
-				TFT_SetFont(&Font16EN_arch_big);
-				TFT_DrawChar(X+225, Y+3, 'L');
+				TFT_SetFont(&Font11EN_arch_big);
+				TFT_DrawChar(X+225, Y+5, 'L');
+
+
+
 			}
 			else
 			GUI_TextEn_cd_m2(X+215, Y-4, 0);
@@ -880,8 +879,8 @@ void GUI_Text_xy_Measure(uint16_t X, uint16_t Y, float Valuex, float Valuey, uin
 			TFT_SetFont(&Font26EN_arch_digit);
 			TFT_SetTextColor(TFT_White);
 			TFT_SetBackColor(TFT_Black);
-			TFT_FillRectangle(X+70, Y, X+197, Y+26, TFT_Black);
-			TFT_FillRectangle(X+70, Y+35, X+197, Y+26+35, TFT_Black);
+			TFT_FillRectangle(X+70, Y, X+210, Y+26, TFT_Black);
+			TFT_FillRectangle(X+70, Y+35, X+210, Y+26+35, TFT_Black);
 			buffer[0] = '-';buffer[1] = '-';
 			TFT_DisplayString(X+117, Y, (uint8_t *)buffer, LEFT_MODE);
 			TFT_DisplayString(X+117, Y+35, (uint8_t *)buffer, LEFT_MODE);
@@ -967,19 +966,9 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 		}
 	}
 
-//	if(/*GRAPH_FLAG &&*/ (Value == 0 || nope) && !old_nan_CCT)//0 if Mode E/L
-//	{
-//		buffer[0] = '0';
-//
-//		TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
-//			old_numCCT = number;
-//
-//			TFT_DisplayString(X+delta_pos, Y+2, (uint8_t *)buffer, LEFT_MODE);
-//			old_nan_CCT = 0;
-//	}
-
 	if((Value == 0 || nope) && !old_nan_CCT && SPECTRAL_DONE)
-	{old_nan_CCT = 1;
+	{
+	old_nan_CCT = 1;
 	TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black);
 	TFT_SetTextColor(TFT_White);
 	TFT_SetFont(&Font26EN_arch_big);
