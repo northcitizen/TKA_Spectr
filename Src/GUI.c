@@ -9,8 +9,8 @@ volatile extern uint8_t exp_stable;
 uint32_t scr_refresh_measure = 0, bat_refresh = 0;
 uint8_t usb_cnt = 0;
 extern volatile uint16_t max_el;
-volatile extern uint8_t GRAPH_FLAG, START_MEASURE_VALUE_FLAG;
-extern volatile uint8_t SPECTRAL_DONE;
+volatile uint8_t GRAPH_FLAG, START_MEASURE_VALUE_FLAG;
+volatile uint8_t SPECTRAL_DONE;
 volatile uint8_t update_graph;
 volatile uint32_t cnt_delay;
 extern volatile uint8_t old_exp_num;
@@ -31,8 +31,9 @@ volatile extern uint8_t pause;
 volatile uint8_t GUI_screen_state = Title_Screen, Rotation_Screen_Spectral_Old, Rotation_Screen_Rend_Old, Language_status_prev, Mode_EL_Old,
 Rotation_Screen_Color = 0x00;
 volatile uint8_t	preGUI_screen_state = 0xFF;
-extern uint8_t exp_num, VGain, LaserOnOff, MeasureFlag_display, Mode_EL, TFT_ON_OFF, Q_i[15], Qf, Qa, Qp, Mode_Lx_Fl, MEASURE_FLAG = 0;
-extern uint8_t  old_meas_type_L, SD_Detect, highSignal, lowSignal, exp_start, exp_set;
+uint8_t VGain, LaserOnOff, MeasureFlag_display, Mode_EL, TFT_ON_OFF, Q_i[15], Qf, Qa, Qp, Mode_Lx_Fl, MEASURE_FLAG = 0;
+extern uint8_t  old_meas_type_L, SD_Detect, exp_start, exp_set;
+volatile uint8_t highSignal, lowSignal, exp_num;
 extern int8_t Ra, Rall, R9, Ri[14];
 int16_t colorimetry_LAB_mem[3];
 extern uint8_t SD_Detect, write_FileNum;
@@ -141,15 +142,11 @@ void GUI_DataSet1_Screen()
 		if(Language_status == Ru){
 
 			GUI_OptionMenuRu();
-			//Mode_EL ? GUI_TextRu_Illuminance(10, 337):GUI_TextRu_Luminance(10, 337);
 		}
 		else if (Language_status == En) {
 
 			GUI_OptionMenuEn();
-			//Mode_EL ? GUI_TextEn_Illuminance(10, 339):GUI_TextEn_Luminance(10, 339);
 		}
-		//GUI_CheckBox(200, 327, Measure_Field&Illuminance);
-		//TFT_DrawLine(10, 377, 262, 377, TFT_White);
 	}
 }
 
@@ -459,6 +456,7 @@ void GUI_Measure_Screen(){
 		oldLowSignal = 0;
 		oldHighSignal = 0;
 		screen_count = 0;
+		GUI_SignalLevel();
 		if(!SPECTRAL_DONE || highSignal || lowSignal || START_MEASURE_VALUE_FLAG)
 			Measure_Elements_Draw_Zeros(0);
 		else
@@ -891,7 +889,6 @@ colorimetry_xy_buff[1] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[1] : co
 	{
 		GUI_Text_xy_Measure(20, 70, colorimetry_xy_buff[0], colorimetry_xy_buff[1], exp_start, exp_set);
 		
-
 		 if(colorimetry_xy_buff[0] < 0.74 & colorimetry_xy_buff[1] < 0.84 ){
 		
 			 if(flag)
@@ -903,39 +900,9 @@ colorimetry_xy_buff[1] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[1] : co
 		colorimetry_xy_old[1] = colorimetry_xy_buff[1];
 		TFT_DrawFilledCircle( 18+colorimetry_xy_buff[0]*295, 150+XY2_LOCUS_BMP_SIZEY-colorimetry_xy_buff[1]*300, 4, TFT_White);
 		TFT_DrawFilledCircle(18+colorimetry_xy_buff[0]*295, 150+XY2_LOCUS_BMP_SIZEY-colorimetry_xy_buff[1]*300, 2, TFT_Black);
-
-
-
-
-//		TFT_DrawFilledCircle(100,  290+30, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+1,  290+30-1, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+2,  290+30-2, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+3,  290+30-3, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+4,  290+30-4, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+5,  290+30-5, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+6,  290+30-6, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+7,  290+30-7, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+8,  290+30-8, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+9,  290+30-9, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+10,  290+30-10, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+11,  290+30-11, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+12,  290+30-12, 1, TFT_Black);
-//
-//		TFT_DrawFilledCircle(100+13,  290+30-12-1, 1, TFT_Black);
-//
-//		TFT_DrawFilledCircle(100+16+1,  290+30-14-1, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+18+2,  290+30-16-1, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+20+3,  290+30-18-2, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+22+4,  290+30-20-2, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+24+5,  290+30-22-2, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+26+6,  290+30-24-1, 1, TFT_Black);
-//		TFT_DrawFilledCircle(100+28+7,  290+30-26-1, 1, TFT_Black);
-
 		GUI_Axes_Locus_XY(18, 150+XY2_LOCUS_BMP_SIZEY, 0);
 		flag = 1;
 		}
-
-
 	
 	} else
 	if(Color_Field&Color_CIE_Luv) //Luv
@@ -955,13 +922,8 @@ colorimetry_xy_buff[1] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[1] : co
 			TFT_DrawFilledCircle(18 + colorimetry_uv1976[0]*403, 172+LUV_LOCUS_BMP_SIZEY-colorimetry_uv1976[1]*396, 2, TFT_Black);
 			GUI_Axes_Locus_LUV(18, 172+LUV_LOCUS_BMP_SIZEY, 0);
 			flag = 1;
-
-
 		 }
-
-	}
-	else
-	if(Color_Field&Color_CIE_Lab)
+	}else if(Color_Field&Color_CIE_Lab)
 	{
 		GUI_Text_LAB_Measure(20, 54, colorimetry_LAB[0], colorimetry_LAB[1], colorimetry_LAB[2], exp_start, exp_set);
 		if(colorimetry_LAB[1] < 128 & colorimetry_LAB[1] > -128 & colorimetry_LAB[2]<128 & colorimetry_LAB[2] > -128){
@@ -991,7 +953,6 @@ void GUI_ColorRend_Screen(){
 	oldLowSignal = 0;
 	oldHighSignal = 0;
 	Rotation_Screen_Rend_Old = Rotation_Screen_Rend;
-	//GUI_Bar_Measure(85, 13, Color_rend_Field? bar_CRI : bar_CQS);
 	Prev_Inf_Screen = Color_Rendition_Screen;
 	if (Color_rend_Field&CRI_CQS){
 		CRI_Draw(Rotation_Screen_Rend, Ri, Ra, Rall, R9);
@@ -1176,11 +1137,154 @@ void GUI_Display_Refresh()
 		default: break;
 	}
 }
+void measure()
+{
+	GUI_Button_Measure_Start_Pause(109, 426);
+	lowSignal = 0;
+	highSignal = 0;
+	GUI_Display_Refresh();
+	GUI_SignalLevel();
+	GRAPH_FLAG = 1;
+	start = 1;
+	pause = 0;
+	exp_num = 2;
+	measure_number = 1;
+	exp_stable = 0;
 
+	GUI_Bar_Measure(85, 13, 0.1);
+	if (!Mode_EL)
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+
+	while (start) {
+		cnt_delay++;
+		GUI_SignalLevel();
+		if ((cnt_delay > 20 && exp_num < 6)
+				|| (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))
+				|| (cnt_delay > 100 && exp_num >= 8)) {
+			auto_exposure();
+			max_el = 0;
+			cnt_delay = 0;
+			exp_stable = exp_stable + 1;
+			progress_bar = exp_stable;
+			exp_start = 1;
+			if (exp_stable <= 10)
+				GUI_Bar_Measure(85, 13, progress_bar * 0.1);
+			if (exp_stable > 9) {
+				start = 0;
+			}
+		}
+		Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
+		Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2,
+				Spectral_Corection_Buff, Line_Rabs_buff);
+
+		if (!block_graph)
+			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff,
+					sizeof(Line_Rabs_buff));
+
+		Temperature_Measure_Func();
+		Calculate_Data();
+	}
+
+	exp_start = 0;
+
+	if (GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
+	{
+
+		block_graph = 1;
+
+		if (preGUI_screen_state == Graph_Screen
+				&& Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral) {
+			Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
+					Rotation_Screen_Spectral_Old3);
+		}
+		Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+		max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
+				Rotation_Screen_Spectral_Old3);
+		Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
+				Line_Rabs_buff_graph_test);
+
+		Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White,
+				Rotation_Screen_Spectral_Old3);
+		block_graph = 0;
+		GUI_SignalLevel();
+
+	} else {
+		__asm("nop");
+	}
+
+	if (GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
+	{
+
+		block_graph = 1;
+
+		if (preGUI_screen_state == Graph_Screen
+				&& Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral) {
+			if (GUI_screen_state != Color_Screen
+					&& GUI_screen_state == Graph_Screen)
+				Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2,
+						Rotation_Screen_Spectral_Old3);
+		}
+		Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
+		max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test,
+				Rotation_Screen_Spectral_Old3);
+		if (GUI_screen_state == Graph_Screen)
+			Rabs_graph_to_display(Rotation_Screen_Spectral_Old3,
+					Line_Rabs_buff_graph_test);
+		if (GUI_screen_state == Graph_Screen)
+			Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White,
+					Rotation_Screen_Spectral_Old3);
+		block_graph = 0;
+		GUI_SignalLevel();
+
+	} else {
+		__asm("nop");
+	}
+	if (Color_rend_Field & CRI_CQS) {
+		CRICQS_done = 0x00;
+		max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+		Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day,
+				calibratre_z_1931);
+		Calculate_xy1931(colorimetry_XYZ1931);
+		Calculate_uv(colorimetry_xy1931);
+		Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+		if (Tc_Measure == 0xFFFF) {
+			Ra = 0;
+			Rall = 0;
+			R9 = 0;
+			memset(Ri, 0, sizeof(Ri));
+		} else {
+			CRI_func(Tc_Measure, Line_Rabs_buff);
+		}
+		CRICQS_done = 0x01;
+	} else {
+		CRICQS_done = 0x00;
+		Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day,
+				calibratre_z_1931);
+		Calculate_xy1931(colorimetry_XYZ1931);
+		Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
+		max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
+		if (Tc_Measure == 0xFFFF) {
+			Qa = 0;
+			Qp = 0;
+			Qf = 0;
+			memset(Q_i, 0, sizeof(Q_i));
+		} else {
+			cqs_func(Tc_Measure, Line_Rabs_buff);
+		}
+		CRICQS_done = 0x01;
+	}
+	Calc_ColorRend = !Calc_ColorRend;
+
+	pause = 1;
+	SPECTRAL_DONE = 1;
+	GUI_Bar_Measure_OFF(85, 13);
+	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
+	if (!Mode_EL)
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+	GUI_Display_Refresh();
+}
 void GUI_Touch_Processing()
 {
-//	uint16_t Touch_x = 0, Touch_y = 0;
-//	TS_Get_XY1(TS_I2C_ADDRESS, &temp_x, &temp_y);
 	switch(GUI_screen_state){
 		
 		case Measure_Screen:
@@ -1353,160 +1457,8 @@ void GUI_Touch_Processing()
 				}		else
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
-					GUI_Button_Measure_Start_Pause(109, 426);
-					GUI_Display_Refresh();
-					GRAPH_FLAG = 1;
-					start = 1;
-					pause = 0;
-					measure_number = 1;
-					exp_stable = 0;
-					GUI_Bar_Measure(85, 13, 0.1);
-					if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-			 	 	while(start)
-			 		{
-			 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-			 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-			 			if(!block_graph)
-			 			{
-			 				memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-			 			}
-			 			cnt_delay++;
-			 			Temperature_Measure_Func();
-			 			Calculate_Data();
-			 			GUI_SignalLevel();
-			 			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
-			 			{
-			 				auto_exposure();
-			 				max_el = 0;
-			 				cnt_delay = 0;
-			 				exp_stable = exp_stable+1;
-			 				progress_bar = exp_stable;
-			 				exp_start = 1;
-			 				if(exp_stable<=10)
-			 				GUI_Bar_Measure(85, 13, progress_bar*0.1);
-			 				if(exp_stable > 10)
-			 				{
-			 					start = 0;
-			 					cnt_delay = 0;
-			 					htim2.Init.Period = exposure_timer_period[exp_num];
-			 				}
-			 			 }
-						 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
-						 Calculate_Lambda_Dominant(colorimetry_xy1964, 0);
-						}
-
-						if(!exp_set)
-						{
-						  Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-						  Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-						}
-
-						if(!block_graph)
-						{
-							memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-						}
-
-						exp_start = 0;
-
-
-						if((GUI_screen_state == Color_Screen) && !pause)
-						{
-							cnt_delay++;
-							if(!pause & !exp_set)
-							{
-								scr_refresh_measure++;
-								if(scr_refresh_measure == 14 )///*28*/14
-								{
-									Temperature_Measure_Func();
-									Calculate_Data();
-									scr_refresh_measure = 0;
-						    	 }
-							 }
-							if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 500 && exp_num >= 4))//68
-							{
-								auto_exposure();
-								max_el = 0;
-								cnt_delay = 0;
-							}
-						}
-						else {
-							cnt_delay++;
-
-							if((cnt_delay > 250 && exp_num < 3) || (cnt_delay > 950 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1450 && exp_num >= 4))
-							{
-								auto_exposure();
-								max_el = 0;
-								cnt_delay = 0;
-							}
-								}
-
-
-						if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-						{
-							block_graph = 1;
-						if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-						{
-							Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-						}
-						Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-						max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-						Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-						Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-						block_graph = 0;
-						GUI_SignalLevel();
-					} else{__asm("nop");}
-
-		        	if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-        	        {
-	        	        block_graph = 1;
-	        	        if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-	        	        {
-       	        		//GUI_Display_Refresh();
-        	        	 if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
-	        	        	Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-	        	        }
-	        	        Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-	        	        max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-	        	        if(GUI_screen_state == Graph_Screen)
-	        	        Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-	        	        if(GUI_screen_state == Graph_Screen)
-	        	        Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-	        	        block_graph = 0;
-	        	        GUI_SignalLevel();
-	        	        } else{__asm("nop");}
-			        	if (Color_rend_Field & CRI_CQS)
-   						{
-   							CRICQS_done = 0x00;
-   							max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-   							Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-   							Calculate_xy1931(colorimetry_XYZ1931);
-  							Calculate_uv(colorimetry_xy1931);
-   							Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-   							if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
-   							else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
-   							CRICQS_done = 0x01;
-       						}else
-       						{
-       							CRICQS_done = 0x00;
-    							Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-      							Calculate_xy1931(colorimetry_XYZ1931);
-    							Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-	   							max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-	   							if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
-								else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
-								CRICQS_done = 0x01;
-	       						}
-	        						Calc_ColorRend = !Calc_ColorRend;
-	        						if(Measure_Field & CCT){
-	        										Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-	        									}
-	        						pause = 1;
-						        	SPECTRAL_DONE = 1;
-						        	GUI_Bar_Measure_OFF(85, 13);
-						        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
-						        	if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-						        	GUI_Display_Refresh();
-		}
+					measure();
+				}
 
 		break;
 				
@@ -1678,174 +1630,7 @@ void GUI_Touch_Processing()
 				}		else
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
-					GUI_Button_Measure_Start_Pause(109, 426);
-										GUI_Display_Refresh();
-					GRAPH_FLAG = 1;
-															start = 1;
-															pause = 0;
-
-															measure_number = 1;
-															exp_stable = 0;
-
-
-															GUI_Bar_Measure(85, 13, 0.1);
-															if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-																 	 	while(start)
-																 		{
-																 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-																 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-
-																 			if(!block_graph)
-																 			{
-																 				memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-																 			}
-																 			cnt_delay++;
-																 			Temperature_Measure_Func();
-																 			Calculate_Data();
-																 			GUI_SignalLevel();
-																 			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
-																 			{
-																 				auto_exposure();
-																 				max_el = 0;
-																 				cnt_delay = 0;
-																 				exp_stable = exp_stable+1;
-																 				progress_bar = exp_stable;
-																 				exp_start = 1;
-																 				if(exp_stable<=10)
-																 				GUI_Bar_Measure(85, 13, progress_bar*0.1);
-																 				if(exp_stable > 10)
-																 				{
-																 					start = 0;
-																 					cnt_delay = 0;
-																 					htim2.Init.Period = exposure_timer_period[exp_num];
-																 				}
-																 			}
-																 			 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
-																 				        Calculate_Lambda_Dominant(colorimetry_xy1964, 0);
-																 		}
-
-																 		if(!exp_set)
-																 		{
-																 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-																 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-																 		}
-
-																 		if(!block_graph)
-																 		{
-																 			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-																 		}
-
-																 		exp_start = 0;
-
-
-																 		if((GUI_screen_state == Color_Screen) && !pause)
-																 		{
-																 			cnt_delay++;
-																 			if(!pause & !exp_set)
-																 			{
-																 				scr_refresh_measure++;
-																 				if(scr_refresh_measure == 14 )///*28*/14
-																 				{
-																 					Temperature_Measure_Func();
-																 					Calculate_Data();
-																 					scr_refresh_measure = 0;
-																 				}
-																 			}
-																 			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 500 && exp_num >= 4))//68
-																 			{
-																 				auto_exposure();
-																 				max_el = 0;
-																 				cnt_delay = 0;
-																 			}
-																 		}
-																 		else {
-																 				cnt_delay++;
-
-																  				if((cnt_delay > 250 && exp_num < 3) || (cnt_delay > 950 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1450 && exp_num >= 4))
-																 				{
-																 					auto_exposure();
-																 					max_el = 0;
-																 					cnt_delay = 0;
-																 				}
-																 		}
-
-
-
-															if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-															{
-
-															block_graph = 1;
-
-															if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-															{
-																Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-															}
-															Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-															max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-															Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-
-															Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-															block_graph = 0;
-															GUI_SignalLevel();
-
-
-
-															} else{__asm("nop");}
-
-
-
-
-
-
-															        	if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-															        	        {
-
-															        	        block_graph = 1;
-
-															        	        if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-															        	        {
-															        	        		//GUI_Display_Refresh();
-															        	        	 if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
-															        	        	Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-															        	        }
-															        	        Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-															        	        max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-															        	        if(GUI_screen_state == Graph_Screen)
-															        	        Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-															        	        if(GUI_screen_state == Graph_Screen)
-															        	        Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-															        	        block_graph = 0;
-															        	        GUI_SignalLevel();
-
-															        	        } else{__asm("nop");}
-															        	if (Color_rend_Field & CRI_CQS)
-															        						        						{
-															        						        							CRICQS_done = 0x00;
-															        						        							max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-															        						        							Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-															        						        							Calculate_xy1931(colorimetry_XYZ1931);
-															        						        							Calculate_uv(colorimetry_xy1931);
-															        						        							Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-															        						        							if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
-															        						        							else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
-															        						        							CRICQS_done = 0x01;
-															        						        						}else{
-															        						        								CRICQS_done = 0x00;
-															        						        								Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-															        						        								Calculate_xy1931(colorimetry_XYZ1931);
-															        						        								Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-															        						        								max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-															        						        								if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
-															        						        									else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
-															        						        									CRICQS_done = 0x01;
-															        						        							}
-															        						        						Calc_ColorRend = !Calc_ColorRend;
-															        	pause = 1;
-															        	SPECTRAL_DONE = 1;
-															        	GUI_Bar_Measure_OFF(85, 13);
-															        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
-															        	if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-															        	GUI_Display_Refresh();//REFRESH DISPLAY
+					measure();
 				}		
 
 		break;
@@ -1984,154 +1769,7 @@ case Measure3_Screen:
 				}		else
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54)) //Measure
 				{
-					GUI_Button_Measure_Start_Pause(109, 426);
-										GUI_Display_Refresh();
-					GRAPH_FLAG = 1;
-					start = 1;
-					pause = 0;
-					measure_number = 1;
-					exp_stable = 0;
-					GUI_Bar_Measure(85, 13, 0.1);
-					if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-			 	 	while(start)
-			 		{
-			 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-			 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-        	 			if(!block_graph)
-			 			{
-			 				memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-			 			}
-				 			cnt_delay++;
-				 			Temperature_Measure_Func();
-				 			Calculate_Data();
-				 			GUI_SignalLevel();
-				 			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
-				 			{
-				 				auto_exposure();
-				 				max_el = 0;
-				 				cnt_delay = 0;
-				 				exp_stable = exp_stable+1;
-				 				progress_bar = exp_stable;
-				 				exp_start = 1;
-			 				if(exp_stable<=10)
-			 				GUI_Bar_Measure(85, 13, progress_bar*0.1);
-			 				if(exp_stable > 10)
-			 				{
-			 					start = 0;
-			 					cnt_delay = 0;
-			 					htim2.Init.Period = exposure_timer_period[exp_num];
-			 				}
-				 				}
-								 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
-								 Calculate_Lambda_Dominant(colorimetry_xy1964, 0);
-								}
-
-								if(!exp_set)
-								{
-									Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-									Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-								}
-
-								if(!block_graph)
-								{
-									memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-								}
-
-								exp_start = 0;
-
-
-								if((GUI_screen_state == Color_Screen) && !pause)
-								{
-									cnt_delay++;
-									if(!pause & !exp_set)
-								{
-									scr_refresh_measure++;
-									if(scr_refresh_measure == 14 )///*28*/14
-									{
-										Temperature_Measure_Func();
-										Calculate_Data();
-										scr_refresh_measure = 0;
-										}
-											}
-										if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 500 && exp_num >= 4))//68
-										{
-											auto_exposure();
-											max_el = 0;
-											cnt_delay = 0;
-											}
-												}
-												else {
-													cnt_delay++;
-									  				if((cnt_delay > 250 && exp_num < 3) || (cnt_delay > 950 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1450 && exp_num >= 4))
-									 				{
-									 					auto_exposure();
-									 					max_el = 0;
-									 					cnt_delay = 0;
-									 				}
-												 		}
-
-														if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-														{
-															block_graph = 1;
-															if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-														{
-															Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-														}
-														Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-														max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-														Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-														Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-														block_graph = 0;
-														GUI_SignalLevel();
-														} else{__asm("nop");}
-
-											        	if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-									        	        {
-										        	        block_graph = 1;
-										        	        if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-										        	        {
-								        	        		//GUI_Display_Refresh();
-										        	        	if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
-									        	        		 Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-															    }
-															      Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-															       max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-															       if(GUI_screen_state == Graph_Screen)
-															        Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-															         if(GUI_screen_state == Graph_Screen)
-															           Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-															            block_graph = 0;
-															            GUI_SignalLevel();
-
-															        	        } else{__asm("nop");}
-											        	if (Color_rend_Field & CRI_CQS)
-											        						        						{
-											        						        							CRICQS_done = 0x00;
-											        						        							max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-											        						        							Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-											        						        							Calculate_xy1931(colorimetry_XYZ1931);
-											        						        							Calculate_uv(colorimetry_xy1931);
-											        						        							Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-											        						        							if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
-											        						        							else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
-											        						        							CRICQS_done = 0x01;
-											        						        						}else{
-											        						        								CRICQS_done = 0x00;
-											        						        								Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-											        						        								Calculate_xy1931(colorimetry_XYZ1931);
-											        						        								Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-											        						        								max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-											        						        								if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
-											        						        									else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
-											        						        									CRICQS_done = 0x01;
-											        						        							}
-											        						        						Calc_ColorRend = !Calc_ColorRend;
-															        	pause = 1;
-															        	SPECTRAL_DONE = 1;
-															        	GUI_Bar_Measure_OFF(85, 13);
-															        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
-															        	if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-															        	GUI_Display_Refresh();//REFRESH DISPLAY
+					measure();
 				}		
 		break;
 				
@@ -2203,175 +1841,7 @@ case Measure3_Screen:
 				else 	 
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
-					GUI_Button_Measure_Start_Pause(109, 426);
-					GUI_Display_Refresh();
-					GRAPH_FLAG = 1;
-					start = 1;
-					pause = 0;
-
-					measure_number = 1;
-					exp_stable = 0;
-
-					//GUI_Bar_Measure(85, 13, 0.5);
-
-					GUI_Bar_Measure(85, 13, 0.1);
-					if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-						 	 	while(start)
-						 		{
-
-						 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-						 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-
-						 			if(!block_graph)
-						 			{
-						 				memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-						 			}
-						 			cnt_delay++;
-						 			Temperature_Measure_Func();
-						 			Calculate_Data();
-						 			GUI_SignalLevel();
-						 			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
-						 			{
-						 				auto_exposure();
-						 				max_el = 0;
-						 				cnt_delay = 0;
-						 				exp_stable = exp_stable+1;
-						 				progress_bar = exp_stable;
-						 				exp_start = 1;
-						 				if(exp_stable<=10)
-						 				GUI_Bar_Measure(85, 13, progress_bar*0.1);
-						 				if(exp_stable > 10)
-						 				{
-						 					start = 0;
-						 					cnt_delay = 0;
-						 					htim2.Init.Period = exposure_timer_period[exp_num];
-						 					//GUI_Bar_Measure(85, 13, 1);
-						 				}
-						 			}
-						 			 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
-						 				        Calculate_Lambda_Dominant(colorimetry_xy1964, 0);
-						 		}
-
-						 	 	if(!exp_set)
-						 		{
-						 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-						 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-						 		}
-
-						 		if(!block_graph)
-						 		{
-						 			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-						 		}
-
-						 		exp_start = 0;
-
-
-						 		if((GUI_screen_state == Color_Screen) && !pause)
-						 		{
-						 			cnt_delay++;
-						 			if(!pause & !exp_set)
-						 			{
-						 				scr_refresh_measure++;
-						 				if(scr_refresh_measure == 14 )///*28*/14
-						 				{
-						 					Temperature_Measure_Func();
-						 					Calculate_Data();
-						 					scr_refresh_measure = 0;
-						 				}
-						 			}
-						 			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 500 && exp_num >= 4))//68
-						 			{
-						 				auto_exposure();
-						 				max_el = 0;
-						 				cnt_delay = 0;
-						 			}
-						 		}
-						 		else {
-						 				cnt_delay++;
-
-						  				if((cnt_delay > 250 && exp_num < 3) || (cnt_delay > 950 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1450 && exp_num >= 4))
-						 				{
-						 					auto_exposure();
-						 					max_el = 0;
-						 					cnt_delay = 0;
-						 				}
-						 		}
-
-
-
-					if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-					{
-
-					block_graph = 1;
-
-					if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-					{
-						Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-					}
-					Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-					max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-					Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-
-					Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-					block_graph = 0;
-					GUI_SignalLevel();
-
-
-
-					} else{__asm("nop");}
-
-
-					        	if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-					        	        {
-
-					        	        block_graph = 1;
-
-					        	        if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-					        	        {
-					        	        		//GUI_Display_Refresh();
-					        	        	 if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
-					        	        	Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-					        	        }
-					        	        Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-					        	        max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-					        	        if(GUI_screen_state == Graph_Screen)
-					        	        Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-					        	        if(GUI_screen_state == Graph_Screen)
-					        	        Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-					        	        block_graph = 0;
-					        	        GUI_SignalLevel();
-
-					        	        } else{__asm("nop");}
-					        						if (Color_rend_Field & CRI_CQS)
-					        						{
-					        							CRICQS_done = 0x00;
-					        							max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-					        							Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-					        							Calculate_xy1931(colorimetry_XYZ1931);
-					        							Calculate_uv(colorimetry_xy1931);
-					        							Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-					        							if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
-					        							else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
-					        							CRICQS_done = 0x01;
-					        						}else{
-					        								CRICQS_done = 0x00;
-					        								Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-					        								Calculate_xy1931(colorimetry_XYZ1931);
-					        								Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-					        								max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-					        								if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
-					        									else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
-					        									CRICQS_done = 0x01;
-					        							}
-					        						Calc_ColorRend = !Calc_ColorRend;
-
-					        	pause = 1;
-					        	SPECTRAL_DONE = 1;
-					        	GUI_Bar_Measure_OFF(85, 13);
-					        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
-					        	if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-					        	GUI_Display_Refresh();
-
+					measure();
 				}					
 		break;
 				
@@ -2393,175 +1863,7 @@ case Measure3_Screen:
 				}	else 
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
-					GUI_Button_Measure_Start_Pause(109, 426);
-										GUI_Display_Refresh();
-					GRAPH_FLAG = 1;
-										start = 1;
-										pause = 0;
-
-										measure_number = 1;
-										exp_stable = 0;
-
-										//GUI_Bar_Measure(85, 13, 0.5);
-
-										GUI_Bar_Measure(85, 13, 0.1);
-										if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-											 	 	while(start)
-											 		{
-
-											 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-											 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-
-											 			if(!block_graph)
-											 			{
-											 				memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-											 			}
-											 			cnt_delay++;
-											 			Temperature_Measure_Func();
-											 			Calculate_Data();
-											 			GUI_SignalLevel();
-											 			if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
-											 			{
-											 				auto_exposure();
-											 				max_el = 0;
-											 				cnt_delay = 0;
-											 				exp_stable = exp_stable+1;
-											 				progress_bar = exp_stable;
-											 				exp_start = 1;
-											 				if(exp_stable<=10)
-											 				GUI_Bar_Measure(85, 13, progress_bar*0.1);
-											 				if(exp_stable > 10)
-											 				{
-											 					start = 0;
-											 					cnt_delay = 0;
-											 					htim2.Init.Period = exposure_timer_period[exp_num];
-											 					//exp_num = 0;
-											 					//GUI_Bar_Measure(85, 13, 1);
-											 				}
-											 			}
-											 			 delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
-											 				        Calculate_Lambda_Dominant(colorimetry_xy1964, 0);
-											 		}
-
-											 	 	if(!exp_set)
-											 		{
-											 			Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-											 			Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-											 		}
-
-											 		if(!block_graph)
-											 		{
-											 			memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-											 		}
-
-											 		exp_start = 0;
-
-
-											 		if((GUI_screen_state == Color_Screen) && !pause)
-											 		{
-											 			cnt_delay++;
-											 			if(!pause & !exp_set)
-											 			{
-											 				scr_refresh_measure++;
-											 				if(scr_refresh_measure == 14 )///*28*/14
-											 				{
-											 					Temperature_Measure_Func();
-											 					Calculate_Data();
-											 					scr_refresh_measure = 0;
-											 				}
-											 			}
-											 			if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 500 && exp_num >= 4))//68
-											 			{
-											 				auto_exposure();
-											 				max_el = 0;
-											 				cnt_delay = 0;
-											 			}
-											 		}
-											 		else {
-											 				cnt_delay++;
-
-											  				if((cnt_delay > 250 && exp_num < 3) || (cnt_delay > 950 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1450 && exp_num >= 4))
-											 				{
-											 					auto_exposure();
-											 					max_el = 0;
-											 					cnt_delay = 0;
-											 				}
-											 		}
-
-
-
-										if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-										{
-
-										block_graph = 1;
-
-										if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-										{
-											Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-										}
-										Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-										max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-										Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-
-										Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-										block_graph = 0;
-										GUI_SignalLevel();
-
-
-
-										} else{__asm("nop");}
-
-
-										        	if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-										        	        {
-
-										        	        block_graph = 1;
-
-										        	        if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-										        	        {
-										        	        		//GUI_Display_Refresh();
-										        	        	 if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
-										        	        	Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-										        	        }
-										        	        Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-										        	        max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-										        	        if(GUI_screen_state == Graph_Screen)
-										        	        Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-										        	        if(GUI_screen_state == Graph_Screen)
-										        	        Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-										        	        block_graph = 0;
-										        	        GUI_SignalLevel();
-
-										        	        } else{__asm("nop");}
-										        	if (Color_rend_Field & CRI_CQS)
-										        						        						{
-										        						        							CRICQS_done = 0x00;
-										        						        							max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-										        						        							Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-										        						        							Calculate_xy1931(colorimetry_XYZ1931);
-										        						        							Calculate_uv(colorimetry_xy1931);
-										        						        							Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-										        						        							if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
-										        						        							else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
-										        						        							CRICQS_done = 0x01;
-										        						        						}else{
-										        						        								CRICQS_done = 0x00;
-										        						        								Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-										        						        								Calculate_xy1931(colorimetry_XYZ1931);
-										        						        								Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-										        						        								max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-										        						        								if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
-										        						        									else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
-										        						        									CRICQS_done = 0x01;
-										        						        							}
-										        						        						Calc_ColorRend = !Calc_ColorRend;
-										        	pause = 1;
-										        	SPECTRAL_DONE = 1;
-										        	GUI_Bar_Measure_OFF(85, 13);
-										        	GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
-										        	if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-										        	GUI_Display_Refresh();
-
+					measure();
 				}else 			
 				if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 				{
@@ -2637,167 +1939,8 @@ case Measure3_Screen:
 				}		else 
 				if(Touch_x >= 109 & Touch_x <= (109+54) & Touch_y >=426 & Touch_y <=(426+54) ) //Measure
 				{
-					GUI_Button_Measure_Start_Pause(109, 426);
-										GUI_Display_Refresh();
-					GRAPH_FLAG = 1;
-					start = 1;
-					pause = 0;
-					measure_number = 1;
-					exp_stable = 0;
-					GUI_Bar_Measure(85, 13, 0.1);
-					if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-					while(start)
-					{
-						Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-						Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-			 			if(!block_graph)
-			 			{
-			 				memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-			 			}
-			 			cnt_delay++;
-			 			Temperature_Measure_Func();
-			 			Calculate_Data();
-			 			GUI_SignalLevel();
-						if((cnt_delay > 20 && exp_num < 6) || (cnt_delay > 50 && (exp_num >= 6 && exp_num < 8))||(cnt_delay > 400 && exp_num >= 8))
-						{
-							auto_exposure();
-							max_el = 0;
-							cnt_delay = 0;
-							exp_stable = exp_stable+1;
-							progress_bar = exp_stable;
-							exp_start = 1;
-							if(exp_stable<=10)
-							GUI_Bar_Measure(85, 13, progress_bar*0.1);
-							if(exp_stable > 10)
-							{
-								start = 0;
-								cnt_delay = 0;
-								htim2.Init.Period = exposure_timer_period[exp_num];
-							}
-						}
-							delta_Eab_Measure = Calculate_deltaEab();//12.07.2021
-							Calculate_Lambda_Dominant(colorimetry_xy1964, 0);
-					}
-
-					if(!exp_set)
-					{
-						Factor1 = Rabs_calc_Factor1(DarkSignal, Scattering_Light, Line_buff);
-						Rabs_calc_main(Line_buff, DarkSignal, Factor1, Factor2, Spectral_Corection_Buff, Line_Rabs_buff);
-					}
-
-					if(!block_graph)
-					{
-						memcpy(Line_Rabs_buff_graph_test, Line_Rabs_buff, sizeof(Line_Rabs_buff));
-					}
-
-					exp_start = 0;
-
-
-					if((GUI_screen_state == Color_Screen) && !pause)
-					{
-						cnt_delay++;
-						if(!pause & !exp_set)
-						{
-							scr_refresh_measure++;
-							if(scr_refresh_measure == 14 )///*28*/14
-							{
-								Temperature_Measure_Func();
-								Calculate_Data();
-								scr_refresh_measure = 0;
-							}
-						}
-
-						if((cnt_delay > 40 && exp_num < 3) || (cnt_delay > 70 && (exp_num >= 3 && exp_num < 4))||(cnt_delay > 500 && exp_num >= 4))//68
-						{
-							auto_exposure();
-							max_el = 0;
-							cnt_delay = 0;
-						}
-					}else
-					{
-						cnt_delay++;
-						if((cnt_delay > 250 && exp_num < 3) || (cnt_delay > 950 && (exp_num >=+ 3 && exp_num < 4))||(cnt_delay > 1450 && exp_num >= 4))
-						{
-							auto_exposure();
-							max_el = 0;
-							cnt_delay = 0;
-						}
-					}
-
-
-
-		if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-		{
-
-			block_graph = 1;
-			if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-			{
-				Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-			}
-			Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-			max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-			Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-			Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-			block_graph = 0;
-			GUI_SignalLevel();
-		} else{__asm("nop");}
-
-		if(GUI_screen_state == Graph_Screen)/*GRAPH SCREEN*/
-		{
-  	        block_graph = 1;
-
-  	        if(preGUI_screen_state == Graph_Screen && Rotation_Screen_Spectral_Old3 == Rotation_Screen_Spectral)
-			{
-				//GUI_Display_Refresh();
-			    if(GUI_screen_state != Color_Screen && GUI_screen_state == Graph_Screen)
-				Refresh_screen_Graph(20, 20, Line_Rabs_buff_graph2, Rotation_Screen_Spectral_Old3);
-			}
-
-  	        Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
-			max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
-			if(GUI_screen_state == Graph_Screen)
-			   	Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-
-				if(GUI_screen_state == Graph_Screen)
-				    Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
-				    block_graph = 0;
-				    GUI_SignalLevel();
-		} else{__asm("nop");}
-
-		pause = 1;
-		SPECTRAL_DONE = 1;
-
-					//GUI_Display_Refresh();//REFRESH DISPLAY
-
-		if (Color_rend_Field & CRI_CQS){
-			CRICQS_done = 0x00;
-			max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-			Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-			Calculate_xy1931(colorimetry_XYZ1931);
-			Calculate_uv(colorimetry_xy1931);
-			Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-			if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
-			else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
-			CRICQS_done = 0x01;
-		}
-		else{
-			CRICQS_done = 0x00;
-			Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-			Calculate_xy1931(colorimetry_XYZ1931);
-			Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-			max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-			if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
-			else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
-			CRICQS_done = 0x01;
-		}
-
-		Calc_ColorRend = !Calc_ColorRend;
-		GUI_Bar_Measure_OFF(85, 13);
-		GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
-		delta_Eab_Measure = Calculate_deltaEab();
-		if (!Mode_EL) HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-		GUI_Display_Refresh();
-		}else
+					measure();
+				}else
 			if(Touch_x >= 55 & Touch_x <= (55+54) & Touch_y >=426 & Touch_y <=(426+54) ) //SD_Card
 			{
 				pause = 1;
@@ -3801,7 +2944,7 @@ case Measure3_Screen:
 				if(Touch_x >= 55  & Touch_x <= (55+54)  & Touch_y >=426  & Touch_y <=(426+54) ) //SD_Card
 				{
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
-							GUI_Display_Refresh();//REFRESH DISPLAY
+							GUI_Display_Refresh();
 				}		
 				
 			break;
@@ -3812,7 +2955,7 @@ case Measure3_Screen:
 				{	
 					WriteSDFLASH_t(sdfile_cnt);
 					GUI_screen_state = Color_Rendition_Screen;
-					GUI_Display_Refresh();//REFRESH DISPLAY
+					GUI_Display_Refresh();
 				}
 				else 
 				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=202  & Touch_y <=(202+54) ) //Mode_EL
@@ -3822,7 +2965,7 @@ case Measure3_Screen:
 					Factor2 = (Mode_EL == 0x00 ? Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_L) : Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E));
 					GUI_Switch_ButtonActive(182, 202, Mode_EL);
 					SPECTRAL_DONE = 0;
-					GUI_Display_Refresh();//REFRESH DISPLAY
+					GUI_Display_Refresh();
 				}				
 				else
 				if(Touch_x >= 182  & Touch_x <= (182+54)  & Touch_y >=268  & Touch_y <=(268+54) ) //Bluetooth
@@ -3830,12 +2973,12 @@ case Measure3_Screen:
 					Bluetooth = !Bluetooth;
 					GUI_Switch_Button(182, 268, Bluetooth);
 					GUI_Up_Panel();
-					GUI_Display_Refresh();//REFRESH DISPLAY
+					GUI_Display_Refresh();
 				}else 
 				if(Touch_x >= 8  & Touch_x <= (250)  & Touch_y >=124  & Touch_y <=(174) ) // Information
 				{
 					GUI_screen_state = Information_Screen;
-					GUI_Display_Refresh();//REFRESH DISPLAY
+					GUI_Display_Refresh();
 				}	else
 				if(Touch_x >= 185  & Touch_x <= (185+54)  & Touch_y >=318  & Touch_y <=(318+54) ) //CRI
 				{
@@ -3873,21 +3016,12 @@ case Measure3_Screen:
 					}
 					if (Color_rend_Field & CRI_CQS){
 						CRICQS_done = 0x00;
-//						max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-//						Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-//						Calculate_xy1931(colorimetry_XYZ1931);
-//						Calculate_uv(colorimetry_xy1931);
-//						Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
 						if(Tc_Measure == 0xFFFF ){Ra = 0; Rall = 0; R9 = 0; memset(Ri, 0, sizeof(Ri)); }
 						else	{CRI_func(Tc_Measure, Line_Rabs_buff);}
 						CRICQS_done = 0x01;
 						}
 						else{
 						CRICQS_done = 0x00;
-//						Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
-//						Calculate_xy1931(colorimetry_XYZ1931);
-//						Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
-//						max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
 						if(Tc_Measure == 0xFFFF ){Qa = 0; Qp = 0; Qf = 0; memset(Q_i, 0, sizeof(Q_i)); }
 						else	{cqs_func(Tc_Measure, Line_Rabs_buff);}
 						CRICQS_done = 0x01;
@@ -3900,7 +3034,7 @@ case Measure3_Screen:
 							if(!SD_Detect){GUI_screen_state = SD_Write_Screen;}
 							GUI_Display_Refresh();//REFRESH DISPLAY
 				}		else
-				if(Touch_x >= 8  & Touch_x <= (250)  & Touch_y >=80  & Touch_y <=(120) ) // Language change
+				if((Touch_x >= 8)  & (Touch_x <= (250))  & (Touch_y >=80)  & (Touch_y <=(120)) ) // Language change
 				{
 					if (Language_status == Ru) Language_status=En;
 					else if (Language_status == En) Language_status=Ru;
@@ -3910,7 +3044,7 @@ case Measure3_Screen:
 				
 			case Information_Screen:
 			
-			if(Touch_x >= 8  & Touch_x <= (270)  & Touch_y >=8  & Touch_y <=(470) ) // Information
+			if((Touch_x >= 8)  & (Touch_x <= (270))  & (Touch_y >=8)  & (Touch_y <=(470)) ) // Information
 				{
 					GUI_screen_state = preGUI_screen_state;
 					preGUI_screen_state = Information_Screen;
@@ -3921,7 +3055,7 @@ case Measure3_Screen:
 						case ColorRendSet_Screen: GUI_screen_state = ColorRendSet_Screen; Prev_Inf_Screen = Color_Rendition_Screen; break;
 					}
 				}
-			GUI_Display_Refresh();//REFRESH DISPLAY
+			GUI_Display_Refresh();
 			break;
 						
 			case SD_Write_Screen:

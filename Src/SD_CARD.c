@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "stm32l4xx_hal_flash.h"
- volatile uint8_t SD_CARD_FLAG;
+volatile uint8_t SD_CARD_FLAG;
 volatile uint8_t	preGUI_screen_state;
 volatile uint8_t GUI_screen_state;
 FLASH_EraseInitTypeDef EraseInitStruct_SDNum;

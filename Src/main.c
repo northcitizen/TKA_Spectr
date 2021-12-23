@@ -40,18 +40,15 @@
 #define FLASH_DATA_SIZE								21514				//number of uint64_t data 
 #define FLASH_CRC_ADDR 								0x0812A050	//addr for FLASH CRC check 
 
-
-///////////////////////////////
-
 //#define SERVICE
 #define BT
 
 extern volatile float progress_bar;
 
-extern volatile uint8_t SD_CARD_FLAG = 0, GRAPH_FLAG = 0;
+extern volatile uint8_t SD_CARD_FLAG, GRAPH_FLAG = 0;
 
 extern uint8_t measure_number;
-extern volatile uint8_t SPECTRAL_DONE = 0, START_MEASURE_VALUE_FLAG = 0;
+extern volatile uint8_t SPECTRAL_DONE, START_MEASURE_VALUE_FLAG;
  volatile uint8_t exp_stable;
  extern volatile uint32_t cnt_delay;
  volatile  uint8_t start;
@@ -61,16 +58,16 @@ extern volatile uint8_t SPECTRAL_DONE = 0, START_MEASURE_VALUE_FLAG = 0;
  uint8_t Calc_ColorRend;
 
 //USB
-uint8_t dataToSend[64]= {0}; 
-uint8_t dataToReceive[12]= {0};
+uint8_t dataToSend[64]= {0}, dataToReceive[12]= {0};
 
 uint64_t	flash_data_write, flash_data_read;
 uint32_t	flash_address;
 uint8_t		flash_data_read_SND[8]= {0};
 
-uint16_t Calibration_year, Serial_part_device, Serial_number_device, Calibration_date, Calibration_month;
+uint16_t Calibration_year, Serial_part_device, Serial_number_device,
+		Calibration_date, Calibration_month,
+		PARGraph_B, PARGraph_G, PARGraph_R, PARGraph_IR;
 
-uint16_t PARGraph_B, PARGraph_G, PARGraph_R, PARGraph_IR;
 uint8_t BluetoothStat = 0;
 
 UART_HandleTypeDef huart3;
@@ -135,7 +132,7 @@ int16_t colorimetry_LAB[3] = {0};
 extern int16_t delta_Eab_Measure;
 volatile extern uint16_t max_el = 0, cnt_delay_bar = 0;
 extern uint8_t Rotation_Screen_Spectral, Rotation_Screen_Spectral_Old, Calculate_deltaEab_Done, Color_rend_Field, preGUI_screen_state;
-extern volatile uint8_t highSignal = 0, lowSignal = 0;
+extern volatile uint8_t highSignal, lowSignal;
 uint8_t Mode_EL = 1, SD_Detect, old_sd_detect = 10, write_FileNum = 0, Mode_Lx_Fl = 0;
 
 //Calibration Ranges Values
@@ -148,7 +145,7 @@ float Spectral_day[1024] = {0}, Spectral_night[1024] = {0}, Spectral_B[1024] = {
 const uint16_t exposure_timer_period[10] = {93,			186,			372,		744,		1488,	2976,	5952,	11905,	23810,	47619}; //93 = 7.812ms
 	
 volatile uint16_t	i=0, j=0;
-extern volatile uint8_t	exp_num = 0;
+extern volatile uint8_t	exp_num;
 volatile uint8_t VGain = 0, LaserOnOff = 0, TFT_ON_OFF = 1, temp = 0, send_usb_block = 0, MeasureFlag_display = 0;
 double percentage_charge = 0, percentage_charge_prev = 101.0; //battery charge
 volatile uint16_t RGB565_480x272[130560] = {0x00000000};
@@ -1247,7 +1244,7 @@ int main(void)
 		HAL_Delay(1);
 		HAL_TIM_OC_Start(&htim5, TIM_CHANNEL_1);
 		HAL_Delay(1);
-		HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);  //ST Signal
+		HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);  //ST Signal0,1
 		HAL_Delay(1);
 		HAL_NVIC_EnableIRQ(TIM2_IRQn);
 		HAL_Delay(1);
@@ -1575,10 +1572,8 @@ void auto_exposure(void)
 		if(Line_buff[i] > max_el)
 		{
 			max_el = Line_buff[i];
-
 			i_max = i;
 		}
-//		max_el = Line_buff[i] > max_el ? Line_buff[i] : max_el;
 	}
 	
 	if(max_el < Range_Value_MIN && exp_num != 9)//20000
@@ -1631,12 +1626,12 @@ void auto_exposure(void)
 	if(exp_num == 0 && max_el >= Range_Value_MAX)//50000
 	{
 		highSignal = 1;
-		 GUI_SignalLevel();
+		 //GUI_SignalLevel();
 		 pause = 1;
 		 start = 0;
-		 exp_num = 0;
-		 max_el=0;
-		 htim2.Init.Period = exposure_timer_period[exp_num];
+//		 exp_num = 0;
+//		 max_el=0;
+//		 htim2.Init.Period = exposure_timer_period[exp_num];
 
 	} else if((exp_num ==0 && max_el < Range_Value_MAX))//50000
 	{
@@ -1644,13 +1639,13 @@ void auto_exposure(void)
 	} else if((exp_num == 9 && max_el < DarkSignal[i_max]+Range_Value_MIN))//20000
 	{
 		lowSignal = 1;
-		 GUI_SignalLevel();
+		 //GUI_SignalLevel();
 		 pause = 1;
 		 start = 0;
-		 exp_num = 0;
-		 max_el=0;
-
-		 htim2.Init.Period = exposure_timer_period[exp_num];
+//		 exp_num = 0;
+//		 max_el=0;
+//
+//		 htim2.Init.Period = exposure_timer_period[exp_num];
 
 	}else if((exp_num == 9 && max_el > DarkSignal[i_max]+ Range_Value_MIN))//20000
 	{
@@ -1667,24 +1662,17 @@ void TIM2_IRQHandler(void)
 	DWT_Delay(10);
 	i = 0;
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_SET);
-	
-  cnt_delay_bar = 0;
+
 	
 	HAL_NVIC_ClearPendingIRQ(TIM2_IRQn);
 	HAL_TIM_IRQHandler(&htim2);
 }
-											//7.812ms 15.625ms 31.25ms	62.5ms 125ms 250ms 500ms 1s 2s 4s
-//const uint16_t exposure_timer_period[10] = {93, 186, 372,	744, 1488, 2976, 5952, 11905, 23810, 47619}; //93 = 7.812ms
-
 
 void TIM6_DAC_IRQHandler(void)
 {
-
 	pause_button = 0;
-  /* USER CODE BEGIN TIM6_IRQn 0 */
 	Get_Battery_Level();
 	
-	/* USER CODE END TIM6_IRQn 0 */
 	HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
   HAL_TIM_IRQHandler(&htim6);
 
@@ -1693,54 +1681,8 @@ void TIM6_DAC_IRQHandler(void)
 
 void TIM7_IRQHandler(void)
 {
-	uint32_t temp_exp = 0;
-	float bar_value = 0.0;
 	if(!usart2_wait) usart2_wait = true;//1.07
 			
-	if((GUI_screen_state == Measure_Screen || GUI_screen_state == Measure2_Screen || GUI_screen_state == Measure3_Screen||
-			GUI_screen_state == Graph_Screen || GUI_screen_state == Color_Screen) && !pause &&  !flag_spectral)
-		{
-			cnt_delay_bar++;
-
-temp_exp = exp_num;
-
-			if(exp_num > 4){
-				if(temp_exp != exp_num)
-					GUI_Bar_Measure(85, 13, bar_value=+0.1);
-
-//				if(cnt_delay_bar == ((exposure_timer_period[exp_num]/12)/500))
-//					{
-//						GUI_Bar_Measure(85, 13, 0.2);
-//					}
-//				else if (cnt_delay_bar == 2*(exposure_timer_period[exp_num]/12)/500)
-//					{
-//						GUI_Bar_Measure(85, 13, 0.4);
-//					}
-//					else if (cnt_delay_bar == 3*(exposure_timer_period[exp_num]/12)/500)
-//					{
-//						GUI_Bar_Measure(85, 13, 0.6);
-//					}
-//					else if (cnt_delay_bar == 4*(exposure_timer_period[exp_num]/12)/500)
-//					{
-//						GUI_Bar_Measure(85, 13, 0.8);
-//					 }
-//					else if (cnt_delay_bar == 5*((exposure_timer_period[exp_num]/12)/500))
-//					{
-//						GUI_Bar_Measure(85, 13, 1);
-//					}
-				} else if(exp_num > 2)
-				{if(temp_exp != exp_num)
-					GUI_Bar_Measure(85, 13, bar_value=+0.1);
-//							if(cnt_delay_bar == 1){
-//								GUI_Bar_Measure(85, 13, 0.5);
-//							} else if(cnt_delay_bar == 2){
-//								GUI_Bar_Measure(85, 13, 1);
-//							}
-				} else {
-									//GUI_Bar_Measure(85, 13, 1);
-				}
-			}
-		
 	SD_Detect = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_15);
 	if(old_sd_detect != SD_Detect & CRC_STATUS == CRC_OK){
 		GUI_Button_SD_Card(55, 426, !SD_Detect);
@@ -1756,8 +1698,6 @@ temp_exp = exp_num;
 			
 	HAL_NVIC_ClearPendingIRQ(TIM7_IRQn);
 	HAL_TIM_IRQHandler(&htim7);
-
-
 }
 
 #define FILTER_SMA_ORDER 5
@@ -1768,43 +1708,20 @@ void EXTI9_5_IRQHandler(void)
 	DWT_Delay(1);
   HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)&RxBuf, (uint8_t*)&RxBuf, 2, 0);
 
-
-
   Filter_Buffer[FILTER_SMA_ORDER - 1] = RxBuf[0] << 8 | RxBuf[1];
-
 
   	uint32_t Output = 0;
 
-
-  	for(uint8_t j = 0; j < FILTER_SMA_ORDER; j++)
-  		{
-  			Output += Filter_Buffer[j];
-  		}
+  	for(uint8_t j = 0; j < FILTER_SMA_ORDER; j++) Output += Filter_Buffer[j];
 
   	Output /= FILTER_SMA_ORDER;
-
 
   	for(uint8_t k = 0; k < FILTER_SMA_ORDER; k++)
   	{
   		Filter_Buffer[k] = Filter_Buffer[k+1];
   	}
 
-
-
 		Line[i] = Output;
-
-
-//  if((RxBuf[0] << 8 | RxBuf[1]) >= 0xCFFF)
-//  {
-//	  Line[i] = Line[i-1];
-//  }else if ((RxBuf[0] << 8 | RxBuf[1]) <= 0x0EFF)
-//  {
-//	  Line[i] = Line[i-1];
-//  }else
-//  {
-//	  Line[i] =  RxBuf[0] << 8 | RxBuf[1];
-//  }
-
 
 	if(i >= 1023)
 	{
@@ -1870,36 +1787,9 @@ void EXTI3_IRQHandler(void)
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
 }
 
-//void UART2_RxCpltCallback(void)
-//{
-//
-//	uint8_t b;
-//  b = str1[0];
-// if (usartprop.usart_cnt>12)
-//  {
-//    usartprop.usart_cnt = 0;
-//    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
-//    return;
-//  }
-//  usartprop.usart_buf[usartprop.usart_cnt] = b;
-//  if(b==0x0A)
-//  {
-//    usartprop.usart_buf[usartprop.usart_cnt+1]=0;
-//    string_parse((uint8_t*)usartprop.usart_buf);
-//    usartprop.usart_cnt=0;
-//    HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
-//
-//    return;
-//  }
-//  usartprop.usart_cnt++;
-//  HAL_UART_Receive_IT(&huart1,(uint8_t*)str1,1);
-//}
-
 void USART3_IRQHandler(void)
 {
 	uint8_t str[12]={0};
-//	b = str1[0];
-	//CLEAR_BIT(USART1->ISR, USART_ISR_ORE);
 
 	if(BT_BAUD_RATE < 115200)
 	{
@@ -1928,7 +1818,6 @@ void USART3_IRQHandler(void)
 
 	HAL_NVIC_ClearPendingIRQ(USART3_IRQn);
 	HAL_UART_IRQHandler(&huart3);
-
 }
 
 
@@ -1985,7 +1874,7 @@ void SystemClock_Config(void)
   PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLLSAI1;
   PeriphClkInit.LtdcClockSelection = RCC_LTDCCLKSOURCE_PLLSAI2_DIV4;
   PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_SYSCLK;
-  PeriphClkInit.Sdmmc1ClockSelection = RCC_SDMMC1CLKSOURCE_PLLP;////////////////////////////
+  PeriphClkInit.Sdmmc1ClockSelection = RCC_SDMMC1CLKSOURCE_PLLP;
 
 	
   PeriphClkInit.PLLSAI2.PLLSAI2Source = RCC_PLLSOURCE_HSE;
@@ -2007,14 +1896,6 @@ void SystemClock_Config(void)
   {
 	  Error_Handler();
   }
-
-    /**Configure the Systick interrupt time 
-    */
-//  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
-
-    /**Configure the Systick 
-    */
-//  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
@@ -2168,9 +2049,6 @@ static void MX_TIM6_Init(void)
 {
   TIM_MasterConfigTypeDef sMasterConfig = {0};
 
-  /* USER CODE BEGIN TIM6_Init 1 */
-
-  /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
   htim6.Init.Prescaler = 48000;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -2277,8 +2155,6 @@ static void MX_GPIO_Init(void)
 
 }
 
-
-
 /* LTDC init function */
 static void MX_LTDC_Init(void)
 {
@@ -2383,10 +2259,6 @@ static void MX_I2C1_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN I2C1_Init 2 */
-
-  /* USER CODE END I2C1_Init 2 */
-
 }
 
 /* SDMMC1 init function */
@@ -2421,9 +2293,6 @@ static void MX_TIM15_Init(void)
   TIM_OC_InitTypeDef sConfigOC = {0};
   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
-  /* USER CODE BEGIN TIM15_Init 1 */
-
-  /* USER CODE END TIM15_Init 1 */
   htim15.Instance = TIM15;
   htim15.Init.Prescaler = 1200;
   htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -2464,9 +2333,6 @@ static void MX_TIM15_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN TIM15_Init 2 */
-
-  /* USER CODE END TIM15_Init 2 */
   HAL_TIM_MspPostInit(&htim15);
 
 }
@@ -2474,16 +2340,8 @@ static void MX_TIM15_Init(void)
 /*timer for Measure Bar*/
 static void MX_TIM7_Init(void)
 {
-
-  /* USER CODE BEGIN TIM7_Init 0 */
-
-  /* USER CODE END TIM7_Init 0 */
-
   TIM_MasterConfigTypeDef sMasterConfig = {0};
 
-  /* USER CODE BEGIN TIM7_Init 1 */
-
-  /* USER CODE END TIM7_Init 1 */
   htim7.Instance = TIM7;
   htim7.Init.Prescaler = 60000;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -2499,23 +2357,11 @@ static void MX_TIM7_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN TIM7_Init 2 */
-
-  /* USER CODE END TIM7_Init 2 */
-
 }
 
 
 static void MX_USART3_UART_Init(void)
 {
-
-  /* USER CODE BEGIN USART1_Init 0 */
-
-  /* USER CODE END USART1_Init 0 */
-
-  /* USER CODE BEGIN USART1_Init 1 */
-
-  /* USER CODE END USART1_Init 1 */
 	huart3.Instance = USART3;
 	huart3.Init.BaudRate = 9600;
 	huart3.Init.WordLength = UART_WORDLENGTH_8B;
@@ -2543,20 +2389,10 @@ static void MX_USART3_UART_Init(void)
   {
     Error_Handler();
   }
-
- // HAL_NVIC_SetPriority(USART1_IRQn, 1, 3);//?0
 }
 
 static void MX_USART2_UART_Init(void)
 {
-
-  /* USER CODE BEGIN USART1_Init 0 */
-
-  /* USER CODE END USART1_Init 0 */
-
-  /* USER CODE BEGIN USART1_Init 1 */
-
-  /* USER CODE END USART1_Init 1 */
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -2584,9 +2420,6 @@ static void MX_USART2_UART_Init(void)
   {
     Error_Handler();
   }
-
-   //HAL_NVIC_SetPriority(USART2_IRQn, 1, 1);
-
 }
 
 void _Error_Handler(char *file, int line){while(1){}}
