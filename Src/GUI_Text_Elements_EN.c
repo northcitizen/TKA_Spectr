@@ -939,3 +939,40 @@ void GUI_TextEn_Info_Ver(uint16_t X, uint16_t Y, float Version)
 	TFT_SetFont(&Font16);
 	TFT_DisplayString(X+172, Y, (uint8_t *)buffer, LEFT_MODE);
 }
+
+void GUI_TextEn_CRI_no(uint16_t X, uint16_t Y)
+{//CRI/CQS can not be calculated
+	TFT_SetFont(&Font11EN_arch_big);
+	TFT_DrawChar(X+5+10, Y+5, 'C');
+	TFT_DrawChar(X+17+10, Y+5, 'R');
+	TFT_DrawChar(X+29+10, Y+5, 'I');
+	TFT_DrawChar(X+41+10, Y+5, '/');
+	TFT_DrawChar(X+53+10, Y+5, 'C');
+	TFT_DrawChar(X+65+10, Y+5, 'Q');
+	TFT_DrawChar(X+77+10, Y+5, 'S');
+
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black);
+	TFT_SetFont(&Font12EN_arch_small);
+	TFT_DrawChar(X+101+10, Y+5, 'c'-65);
+	TFT_DrawChar(X+113+10, Y+5, 'a'-65);
+	TFT_DrawChar(X+125+10, Y+5, 'n'-65);
+
+	TFT_DrawChar(X+149+10, Y+5, 'n'-65);
+	TFT_DrawChar(X+161+10, Y+5, 'o'-65);
+	TFT_DrawChar(X+173+10, Y+5, 't'-65);
+
+	TFT_DrawChar(X+197+10, Y+5, 'b'-65);
+	TFT_DrawChar(X+209+10, Y+5, 'e'-65);
+
+	TFT_DrawChar(X+133-50, Y+20, 'c'-65);
+	TFT_DrawChar(X+145-50, Y+20, 'a'-65);
+	TFT_DrawChar(X+157-50, Y+20, 'l'-65);
+	TFT_DrawChar(X+169-50, Y+20, 'c'-65);
+	TFT_DrawChar(X+181-50, Y+20, 'u'-65);
+	TFT_DrawChar(X+193-50, Y+20, 'l'-65);
+	TFT_DrawChar(X+205-50, Y+20, 'a'-65);
+	TFT_DrawChar(X+217-50, Y+20, 't'-65);
+	TFT_DrawChar(X+229-50, Y+20, 'e'-65);
+	TFT_DrawChar(X+241-50, Y+20, 'd'-65);
+}

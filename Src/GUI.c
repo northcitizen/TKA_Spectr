@@ -9,7 +9,7 @@ volatile extern uint8_t exp_stable;
 uint32_t scr_refresh_measure = 0, bat_refresh = 0;
 uint8_t usb_cnt = 0;
 extern volatile uint16_t max_el;
-volatile uint8_t GRAPH_FLAG, START_MEASURE_VALUE_FLAG;
+volatile uint8_t GRAPH_FLAG, START_MEASURE_VALUE_FLAG, CCT_NO_FLAG;
 volatile uint8_t SPECTRAL_DONE;
 volatile uint8_t update_graph;
 volatile uint32_t cnt_delay;
@@ -954,10 +954,10 @@ colorimetry_xy_buff[1] = (Measure_Color_xy == 0x00) ? colorimetry_xy1964[1] : co
 
 }         
 
-
+uint16_t Value = 0;
 void GUI_ColorRend_Screen(){
  old_meas_type_L = 2;
-	
+ Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
  if(lowSignal || highSignal){
 	 for(uint8_t i = 0; i < 15; i++)
 	 {
@@ -996,6 +996,21 @@ void GUI_ColorRend_Screen(){
 		}
 	}
 	GUI_SignalLevel();
+	if(Tc_Measure == 0xFFFF) { Value = 0;}else{Value = Tc_Measure;}
+	if((Value == 0 || exp_start || lowSignal || highSignal) && SPECTRAL_DONE)
+		{
+		CCT_NO_FLAG = 1;
+		}else if(!exp_start && Value != 0){
+				CCT_NO_FLAG = 0;
+			}
+	if(CCT_NO_FLAG)
+	{
+		if(Language_status == Ru)
+			GUI_TextRu_CRI_no(20, 200);
+		if(Language_status == En)
+			GUI_TextEn_CRI_no(20, 200);
+	}
+
 }
 
 void GUI_Error_Screen()
@@ -1265,8 +1280,7 @@ void measure()
 	if (Color_rend_Field & CRI_CQS) {
 		CRICQS_done = 0x00;
 		max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);
-		Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day,
-				calibratre_z_1931);
+		Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
 		Calculate_xy1931(colorimetry_XYZ1931);
 		Calculate_uv(colorimetry_xy1931);
 		Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
@@ -1281,8 +1295,7 @@ void measure()
 		CRICQS_done = 0x01;
 	} else {
 		CRICQS_done = 0x00;
-		Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day,
-				calibratre_z_1931);
+		Calculate_XYZ1931(Line_Rabs_buff, calibratre_x_1931, Spectral_day, calibratre_z_1931);
 		Calculate_xy1931(colorimetry_XYZ1931);
 		Tc_Measure = Calculate_Tc(Line_Rabs_buff, Measure_Color_xy);
 		max_Rabs = Rabs_find_MAX_all(Line_Rabs_buff);

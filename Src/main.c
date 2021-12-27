@@ -1454,27 +1454,20 @@ int main(void)
 		}
 
 
-
 // Timer init
 	MX_TIM7_Init();
 	HAL_Delay(1);
 	HAL_NVIC_EnableIRQ(TIM7_IRQn);
-	// HAL_NVIC_EnableIRQ(LPUART1_IRQn);
+
 #ifdef BT
 	HAL_NVIC_EnableIRQ(USART3_IRQn);
 	__HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
 #endif
 
-
 	HAL_Delay(1);
 	HAL_TIM_Base_Start(&htim7);
 	HAL_Delay(1);
 	HAL_TIM_Base_Start_IT(&htim7);
-
-
-
-//	// LASER ON!
-//	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 
 pause = 1;
 GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
@@ -1489,17 +1482,12 @@ GUI_Button_Measure_Start_Pause_For_Button(109, 426, 0);
 Rotation_Screen_Spectral_Old3 = Rotation_Screen_Spectral;
 max_Rabs_graph = Rabs_find_MAX(Line_Rabs_buff_graph_test, Rotation_Screen_Spectral_Old3);
 Rabs_graph_to_display(Rotation_Screen_Spectral_Old3, Line_Rabs_buff_graph_test);
-//Spectral_DrawGraph_Line2(20, 20, Line_Rabs_buff_graph2, TFT_White, Rotation_Screen_Spectral_Old3);
 	block_graph = 0;
-//	GUI_SignalLevel();
-
 uint32_t bat_refresh = 0;
 
 START_MEASURE_VALUE_FLAG = 0;
 TOUCH_SCREEN = 0x1;
 while (1) {
-
-		//delta_Eab_Measure = Calculate_deltaEab();
 
 		usb_receive_processing();
 
@@ -1545,13 +1533,12 @@ while (1) {
 		}
 
 		bat_refresh++;
-		if (bat_refresh == 1000) {
+		if (bat_refresh == 10) {
 			Get_Battery_Level();
 			if (percentage_charge < percentage_charge_prev) {
 				GUI_Battery_Level(0, 0, percentage_charge);
 				percentage_charge_prev = percentage_charge;
 			}
-
 			bat_refresh = 0;
 		}
 		__HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);

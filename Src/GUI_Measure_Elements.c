@@ -2,7 +2,7 @@
 #include "GUI_Measure_Elements.h"
 #include <math.h>
 extern uint8_t Language_status, Mode_EL, preGUI_screen_state, GUI_screen_state, Mode_Lx_Fl;
-volatile extern uint8_t GRAPH_FLAG;
+volatile extern uint8_t GRAPH_FLAG, CCT_NO_FLAG;
 volatile uint8_t SPECTRAL_DONE, LAMBDA_TYPE;
 
 void GUI_Bar_Measure(uint16_t X, uint16_t Y, float Value)
@@ -968,6 +968,7 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 
 	if((Value == 0 || nope) && !old_nan_CCT && SPECTRAL_DONE)
 	{
+	CCT_NO_FLAG = 1;
 	old_nan_CCT = 1;
 	TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black);
 	TFT_SetTextColor(TFT_White);
@@ -976,6 +977,7 @@ void GUI_Text_CCT_Measure(uint16_t X, uint16_t Y, uint16_t Value, uint8_t nope, 
 	TFT_DrawChar(X+150, Y+4, 'A'-33);
 	TFT_DrawChar(X+175, Y+4, 'N'-33);}
 		else if(!nope & Value != 0){
+			CCT_NO_FLAG = 0;
 		if(number < old_numCCT )
 		{
 			TFT_FillRectangle(X+40, Y, X+205, Y+25, TFT_Black);
@@ -1621,9 +1623,7 @@ void GUI_Text_LAB_Measure(uint16_t X, uint16_t Y, int16_t ValueL, int16_t ValueA
 			TFT_DrawChar(X, Y+35, 'a'-65);
 			TFT_DrawChar(X, Y+70, 'b'-65);}
 }
-			
 
-			
 
 void GUI_Battery_Level(uint16_t X, uint16_t Y, double charge)
 {
@@ -1847,15 +1847,9 @@ void GUI_Axes_Locus_Lab(uint16_t X_center, uint16_t Y_center, uint8_t direction)
 		TFT_DrawChar(260-10,  Y_center-11, '1');
 		TFT_DrawChar(260-5,  Y_center-11, '2');
 		TFT_DrawChar(260,  Y_center-11, '8');
-		
-		//		TFT_DrawLine(X_center-5, Y_center-LAB_LOCUS_SIZEY/4, X_center+3, Y_center-LAB_LOCUS_SIZEY/4, TFT_White);
-//		TFT_DrawLine(X_center-5, Y_center+LAB_LOCUS_SIZEY/4, X_center+3, Y_center+LAB_LOCUS_SIZEY/4, TFT_White);
-		
+
 		TFT_DrawLine(X_center-5, Y_center-LAB_LOCUS_SIZEY/2, X_center+3, Y_center-LAB_LOCUS_SIZEY/2, TFT_White);
 		TFT_DrawLine(X_center-5, Y_center+LAB_LOCUS_SIZEY/2, X_center+3, Y_center+LAB_LOCUS_SIZEY/2, TFT_White);
-	
-//		TFT_DrawLine(X_center-LAB_LOCUS_SIZEX/4, Y_center-3, X_center-LAB_LOCUS_SIZEX/4, Y_center+6, TFT_White);
-//		TFT_DrawLine(X_center+LAB_LOCUS_SIZEX/4, Y_center-3, X_center+LAB_LOCUS_SIZEX/4, Y_center+6, TFT_White);
 		
 		TFT_DrawLine(X_center-LAB_LOCUS_SIZEX/2+1, Y_center-3, X_center-LAB_LOCUS_SIZEX/2+1, Y_center+6, TFT_White);
 		TFT_DrawLine(X_center+LAB_LOCUS_SIZEX/2, Y_center-3, X_center+LAB_LOCUS_SIZEX/2, Y_center+6, TFT_White);
