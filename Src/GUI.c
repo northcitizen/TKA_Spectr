@@ -1006,9 +1006,9 @@ void GUI_ColorRend_Screen(){
 	if(CCT_NO_FLAG)
 	{
 		if(Language_status == Ru)
-			GUI_TextRu_CRI_no(20, 200);
+			GUI_TextRu_CRI_no(20, 200, Rotation_Screen_Rend);
 		if(Language_status == En)
-			GUI_TextEn_CRI_no(20, 200);
+			GUI_TextEn_CRI_no(20, 200, Rotation_Screen_Rend);
 	}
 
 }

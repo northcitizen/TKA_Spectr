@@ -1,5 +1,5 @@
 #include "CRI_graph.h"
-uint8_t TFT_direction = 0x00;
+volatile uint8_t TFT_direction;
 
 
 

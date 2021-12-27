@@ -43,6 +43,6 @@ void GUI_TextMsgRu_LowRadiance(uint16_t X, uint16_t Y);
 void GUI_TextMsgRu_HighRadiance(uint16_t X, uint16_t Y);
 void GUI_TextMsgRu_HighIrradiance(uint16_t X, uint16_t Y);
 
-void GUI_TextRu_CRI_no(uint16_t X, uint16_t Y);
+void GUI_TextRu_CRI_no(uint16_t X, uint16_t Y,uint8_t direction);
 
 #endif

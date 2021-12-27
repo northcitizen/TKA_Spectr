@@ -1,6 +1,8 @@
 #include "stdio.h"
 #include "GUI_Text_Elements_RU.h"
 
+extern volatile uint8_t TFT_direction;
+
 void GUI_TitleString_Name(uint16_t X, uint16_t Y)
 {
 	TFT_SetTextColor(TFT_White);
@@ -647,39 +649,80 @@ void GUI_TextMsgRu_HighRadiance(uint16_t X, uint16_t Y)
   TFT_DrawCharRus(X+172, Y+5, 'ь');
 }
 
-void GUI_TextRu_CRI_no(uint16_t X, uint16_t Y)
+void GUI_TextRu_CRI_no(uint16_t X, uint16_t Y, uint8_t direction)
 {
-	TFT_SetTextColor(TFT_White);
-	TFT_SetBackColor(TFT_Black);
-	TFT_SetFont(&Font12RU_arch_small);
-	TFT_DrawCharRus(X+5, Y+5, 'н');
-	TFT_DrawCharRus(X+16, Y+5, 'е');
-	TFT_DrawCharRus(X+27, Y+5, 'в');
-	TFT_DrawCharRus(X+39, Y+5, 'о');
-	TFT_DrawCharRus(X+51, Y+5, 'з');
-	TFT_DrawCharRus(X+63, Y+5, 'м');
-	TFT_DrawCharRus(X+74, Y+5, 'о');
-	TFT_DrawCharRus(X+86, Y+5, 'ж');
-	TFT_DrawCharRus(X+98, Y+5, 'н');
-	TFT_DrawCharRus(X+110, Y+5, 'о');
+	if (direction == 0x00)
+	{
+		TFT_SetTextColor(TFT_White);
+		TFT_SetBackColor(TFT_Black);
+		TFT_SetFont(&Font12RU_arch_small);
+		TFT_DrawCharRus(X + 5, Y + 5, 'н');
+		TFT_DrawCharRus(X + 16, Y + 5, 'е');
+		TFT_DrawCharRus(X + 27, Y + 5, 'в');
+		TFT_DrawCharRus(X + 39, Y + 5, 'о');
+		TFT_DrawCharRus(X + 51, Y + 5, 'з');
+		TFT_DrawCharRus(X + 63, Y + 5, 'м');
+		TFT_DrawCharRus(X + 74, Y + 5, 'о');
+		TFT_DrawCharRus(X + 86, Y + 5, 'ж');
+		TFT_DrawCharRus(X + 98, Y + 5, 'н');
+		TFT_DrawCharRus(X + 110, Y + 5, 'о');
 
-	TFT_DrawCharRus(X+133, Y+5, 'р');
-	TFT_DrawCharRus(X+145, Y+5, 'а');
-	TFT_DrawCharRus(X+157, Y+5, 'с');
-	TFT_DrawCharRus(X+169, Y+5, 'с');
-	TFT_DrawCharRus(X+181, Y+5, 'ч');
-	TFT_DrawCharRus(X+193, Y+5, 'и');
-	TFT_DrawCharRus(X+205, Y+5, 'т');
-	TFT_DrawCharRus(X+217, Y+5, 'а');
-	TFT_DrawCharRus(X+229, Y+5, 'т');
-	TFT_DrawCharRus(X+241, Y+5, 'ь');
+		TFT_DrawCharRus(X + 133, Y + 5, 'р');
+		TFT_DrawCharRus(X + 145, Y + 5, 'а');
+		TFT_DrawCharRus(X + 157, Y + 5, 'с');
+		TFT_DrawCharRus(X + 169, Y + 5, 'с');
+		TFT_DrawCharRus(X + 181, Y + 5, 'ч');
+		TFT_DrawCharRus(X + 193, Y + 5, 'и');
+		TFT_DrawCharRus(X + 205, Y + 5, 'т');
+		TFT_DrawCharRus(X + 217, Y + 5, 'а');
+		TFT_DrawCharRus(X + 229, Y + 5, 'т');
+		TFT_DrawCharRus(X + 241, Y + 5, 'ь');
 
-	TFT_SetFont(&Font11EN_arch_big);
-	TFT_DrawChar(X+104, Y+15, 'C');
-	TFT_DrawChar(X+116, Y+15, 'R');
-	TFT_DrawChar(X+128, Y+15, 'I');
-	TFT_DrawChar(X+140, Y+15, '/');
-	TFT_DrawChar(X+152, Y+15, 'C');
-	TFT_DrawChar(X+164, Y+15, 'Q');
-	TFT_DrawChar(X+176, Y+15, 'S');
+		TFT_SetFont(&Font11EN_arch_big);
+		TFT_DrawChar(X + 104, Y + 15, 'C');
+		TFT_DrawChar(X + 116, Y + 15, 'R');
+		TFT_DrawChar(X + 128, Y + 15, 'I');
+		TFT_DrawChar(X + 140, Y + 15, '/');
+		TFT_DrawChar(X + 152, Y + 15, 'C');
+		TFT_DrawChar(X + 164, Y + 15, 'Q');
+		TFT_DrawChar(X + 176, Y + 15, 'S');
+	}else if (direction != 0x00)
+	{
+		if(direction == 0x01){TFT_direction = 0x01;}
+			else {TFT_direction = 0x02;}
+		TFT_SetTextColor(TFT_White);
+		TFT_SetBackColor(TFT_Black);
+		TFT_SetFont(&Font12RU_arch_small);
+		TFT_DrawCharRus(X + 85, Y - 87, 'н');
+		TFT_DrawCharRus(X + 97, Y - 87, 'е');
+		TFT_DrawCharRus(X + 109, Y - 87, 'в');
+		TFT_DrawCharRus(X + 121, Y - 87, 'о');
+		TFT_DrawCharRus(X + 133, Y - 87, 'з');
+		TFT_DrawCharRus(X + 145, Y - 87, 'м');
+		TFT_DrawCharRus(X + 157, Y - 87, 'о');
+		TFT_DrawCharRus(X + 169, Y - 87, 'ж');
+		TFT_DrawCharRus(X + 181, Y - 87, 'н');
+		TFT_DrawCharRus(X + 193, Y - 87, 'о');
+
+		TFT_DrawCharRus(X + 217, Y - 87, 'р');
+		TFT_DrawCharRus(X + 229, Y - 87, 'а');
+		TFT_DrawCharRus(X + 241, Y - 87, 'с');
+		TFT_DrawCharRus(X + 253, Y - 87, 'с');
+		TFT_DrawCharRus(X + 265, Y - 87, 'ч');
+		TFT_DrawCharRus(X + 277, Y - 87, 'и');
+		TFT_DrawCharRus(X + 289, Y - 87, 'т');
+		TFT_DrawCharRus(X + 301, Y - 87, 'а');
+		TFT_DrawCharRus(X + 313, Y - 87, 'т');
+		TFT_DrawCharRus(X + 325, Y - 87, 'ь');
+
+		TFT_SetFont(&Font11EN_arch_big);
+		TFT_DrawChar(X + 154, Y - 78, 'C');
+		TFT_DrawChar(X + 166, Y - 78, 'R');
+		TFT_DrawChar(X + 178, Y - 78, 'I');
+		TFT_DrawChar(X + 190, Y - 78, '/');
+		TFT_DrawChar(X + 202, Y - 78, 'C');
+		TFT_DrawChar(X + 214, Y - 78, 'Q');
+		TFT_DrawChar(X + 226, Y - 78, 'S');
+		TFT_direction = 0x00;
+	}
 }
