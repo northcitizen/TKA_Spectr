@@ -153,13 +153,13 @@ void Spectral_Axes_Text(uint8_t direction){
 		TFT_DrawChar(9, 105, '0');
 		
 		
-		sprintf (buffer, "%.0u", WaveLenght_Graph[0]);
+		sprintf (buffer, "%d", ((WaveLenght_Graph[0]+5)/10)*10);
 		TFT_DisplayString(11, 416, (uint8_t *)buffer, LEFT_MODE);
-		sprintf (buffer, "%.0u", WaveLenght_Graph[1]);
+		sprintf (buffer, "%d", ((WaveLenght_Graph[1]+5)/10)*10);
 		TFT_DisplayString(85, 416, (uint8_t *)buffer, LEFT_MODE);
-		sprintf (buffer, "%.0u", WaveLenght_Graph[2]);
+		sprintf (buffer, "%d", ((WaveLenght_Graph[2]+5)/10)*10);
 		TFT_DisplayString(165, 416, (uint8_t *)buffer, LEFT_MODE);
-		sprintf (buffer, "%.0u", WaveLenght_Graph[3]);
+		sprintf (buffer, "%d", ((WaveLenght_Graph[3]+5)/10)*10);
 		TFT_DisplayString(245, 416, (uint8_t *)buffer, LEFT_MODE);
 		
 	} else if (direction != 0x00)
@@ -173,13 +173,13 @@ void Spectral_Axes_Text(uint8_t direction){
 		TFT_SetBackColor(TFT_Black_Bkgr);
 		TFT_SetFont(&Font6EN_arch_big);
 
-		sprintf (buffer, "%.0u", WaveLenght_Graph[0]);
+		sprintf (buffer, "%d", ((WaveLenght_Graph[0]+5)/10)*10);
 		TFT_DisplayString(65, 258, (uint8_t *)buffer, LEFT_MODE);
-		sprintf (buffer, "%.0u", WaveLenght_Graph[1]);
+		sprintf (buffer, "%d", ((WaveLenght_Graph[1]+5)/10)*10);
 		TFT_DisplayString(165, 258, (uint8_t *)buffer, LEFT_MODE);
-		sprintf (buffer, "%.0u", WaveLenght_Graph[2]);
+		sprintf (buffer, "%d", ((WaveLenght_Graph[2]+5)/10)*10);
 		TFT_DisplayString(265, 258, (uint8_t *)buffer, LEFT_MODE);
-		sprintf (buffer, "%.0u", WaveLenght_Graph[3]);
+		sprintf (buffer, "%d", ((WaveLenght_Graph[3]+5)/10)*10);
 		TFT_DisplayString(365, 258, (uint8_t *)buffer, LEFT_MODE);
 		
 		TFT_DrawChar(65, 250, '0');
