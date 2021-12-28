@@ -59,11 +59,15 @@ void GUI_TextEn_LR(uint16_t X, uint16_t Y);
 void GUI_TextEn_CCT(uint16_t X, uint16_t Y);
 void GUI_TextEn_W_m2(uint16_t X, uint16_t Y);
 void GUI_TextEn_mW_m2(uint16_t X, uint16_t Y);
+void GUI_TextEn_mW_m2_Big(uint16_t X, uint16_t Y);
+void GUI_TextEn_mW_m2_Big_modeL(uint16_t X, uint16_t Y);
 void GUI_TextEn_W_m2_sr(uint16_t X, uint16_t Y);
 void GUI_TextEn_mW_m2_sr(uint16_t X, uint16_t Y);
 void GUI_TextEn_cd_m2(uint16_t X, uint16_t Y, uint8_t deg);
 void GUI_TextEn_mol_s_2(uint16_t X, uint16_t Y);
 void GUI_TextEn_umol_sr(uint16_t X, uint16_t Y, uint8_t deg);
+void GUI_TextEn_umol_Big(uint16_t X, uint16_t Y);
+void GUI_TextEn_umol_Big_modeL(uint16_t X, uint16_t Y);
 void GUI_TextEn_WriteSD(uint16_t X, uint16_t Y);
 
 void GUI_TextEn_Info_Callibration(uint16_t X, uint16_t Y, uint8_t date, uint8_t month, uint16_t year);

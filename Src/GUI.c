@@ -203,9 +203,27 @@ void GUI_DataSet2_Screen()
 				GUI_TextRu_PPF(10, 275);
 				GUI_CheckBox(200, 263, Measure_Field&PPFD);
 				
-				GUI_TextRu_PPF_RGB(10, 337);
-				GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
-				TFT_DrawLine(10, 377, 262, 377, TFT_White);
+				if(!Mode_EL)
+				{
+					GUI_TextRu_mW_m2_Big_modeL(10, 320);
+					TFT_SetFont(&Font16EN_arch_big);
+					TFT_DrawChar(60, 331, '-');
+					TFT_DrawChar(70, 332, '>');
+					GUI_Switch_Button_mWt_umol(200, 320, Mode_Lx_Fl);
+					GUI_TextRu_umol_Big_modeL(105, 320);
+				}else
+				{
+					GUI_TextRu_mW_m2_Big(10, 320);
+					TFT_SetFont(&Font16EN_arch_big);
+					TFT_DrawChar(55, 332, '-');
+					TFT_DrawChar(70, 332, '>');
+					GUI_Switch_Button_mWt_umol(200, 320, Mode_Lx_Fl);
+					GUI_TextRu_umol_Big(105, 320);
+				}
+
+				GUI_TextRu_PPF_RGB(10, 387);
+				GUI_CheckBox(200, 377, Measure_Field&PPFD_BGR);
+				//TFT_DrawLine(10, 377, 262, 377, TFT_White);
 			}
 			else if(Language_status == En){
 
@@ -218,7 +236,7 @@ void GUI_DataSet2_Screen()
 					TFT_DrawChar(10+2, 140-5, 'c');
 					TFT_DrawChar(15+9, 135, 'd');
 					TFT_DrawChar(15+2, 145+17, 'm');
-					TFT_SetFont(&Font9EN_arch_big);
+					TFT_SetFont(&Font6EN_arch_big);
 					TFT_DrawChar(20+12, 145+16, '2');
 					TFT_DrawLine(10, 145+14, 10+39, 145+14, TFT_White);
 					TFT_SetFont(&Font16EN_arch_big);
@@ -257,10 +275,26 @@ void GUI_DataSet2_Screen()
 
 				Mode_EL ?  GUI_TextEn_PPFD(10, 277) : GUI_TextEn_PPL(10, 277);
 				GUI_CheckBox(200, 263, Measure_Field&PPFD);
-				
-				GUI_TextEn_B_G_R_FR(10, 337);
-				GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
-				TFT_DrawLine(10, 377, 262, 377, TFT_White);
+
+				if(!Mode_EL)
+				{
+					GUI_TextEn_mW_m2_Big_modeL(10, 320);
+					TFT_SetFont(&Font16EN_arch_big);
+					TFT_DrawChar(55-2, 330, '-');
+					TFT_DrawChar(70-2, 331, '>');
+					GUI_Switch_Button_mWt_umol(200, 320, Mode_Lx_Fl);
+					GUI_TextEn_umol_Big_modeL(85, 320);
+				}else{
+					GUI_TextEn_mW_m2_Big(10, 320);
+					TFT_SetFont(&Font16EN_arch_big);
+					TFT_DrawChar(55-2, 330, '-');
+					TFT_DrawChar(70-2, 331, '>');
+					GUI_Switch_Button_mWt_umol(200, 320, Mode_Lx_Fl);/////////////////////////////////////////////////////////////////////
+					GUI_TextEn_umol_Big(85, 320);
+				}
+				GUI_TextEn_B_G_R_FR(10, 337+50);
+				GUI_CheckBox(200, 327+50, Measure_Field&PPFD_BGR);
+				//TFT_DrawLine(10, 377, 262, 377, TFT_White);
 			}
 		}
 }

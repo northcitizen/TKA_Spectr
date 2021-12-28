@@ -334,6 +334,49 @@ void GUI_TextEn_umol_sr(uint16_t X, uint16_t Y, uint8_t deg)
 	TFT_DrawChar(X+39, Y+11, 'r'-65);
 }
 
+void GUI_TextEn_umol_Big(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black);
+	TFT_SetFont(&Font16EN_arch_small);
+	TFT_DrawChar(X+40, Y+23, 's');
+	TFT_DrawChar(X, Y, 'z'+2);//μ
+ 	TFT_DrawChar(X+14, Y, 'm');
+	TFT_DrawChar(X+28, Y, 'o');
+	TFT_DrawChar(X+40, Y, 'l');
+
+	TFT_DrawLine(X, Y+19, X+55, Y+19, TFT_White);
+
+	TFT_DrawChar(X+13, Y+24, 'm');
+	TFT_SetFont(&Font6EN_arch_big);
+	TFT_DrawChar(X+28, Y+21, '2');
+	TFT_DrawRectangle(X+40-5-1, Y+36-3-1, X+41-5-1, Y+37-3-1, TFT_White);
+
+}
+
+void GUI_TextEn_umol_Big_modeL(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black);
+	TFT_SetFont(&Font16EN_arch_small);
+	TFT_DrawChar(X+40-13-3, Y+23, 's');
+	TFT_DrawChar(X+42, Y+23, 's');
+	TFT_DrawChar(X+54, Y+23, 'r');
+	TFT_DrawChar(X+5, Y, 'z'+2);//μ
+ 	TFT_DrawChar(X+14+5, Y, 'm');
+	TFT_DrawChar(X+28+5, Y, 'o');
+	TFT_DrawChar(X+40+6, Y, 'l');
+
+	TFT_DrawLine(X, Y+19, X+55, Y+19, TFT_White);
+
+	TFT_DrawChar(X, Y+24, 'm');
+	TFT_SetFont(&Font6EN_arch_big);
+	TFT_DrawChar(X+28-13, Y+21, '2');
+	TFT_DrawRectangle(X+21, Y+32, X+22, Y+33, TFT_White);
+	TFT_DrawRectangle(X+40, Y+32, X+41, Y+33, TFT_White);
+
+}
+
 
 void GUI_Text_On(uint16_t X, uint16_t Y)
 {
@@ -708,6 +751,35 @@ void GUI_TextEn_W_m2(uint16_t X, uint16_t Y)
 	TFT_SetFont(&Font6EN_arch_big);
 	TFT_DrawChar(X+11, Y+16, '2');	
   TFT_DrawLine(X, Y+14, X+17, Y+14, TFT_White);
+}
+
+void GUI_TextEn_mW_m2_Big(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black);
+	TFT_SetFont(&Font16EN_arch_big);
+	TFT_DrawChar(X, Y, 'm');
+	TFT_DrawChar(X+17, Y, 'W');
+	TFT_DrawChar(X+13, Y+24, 'm');
+	TFT_SetFont(&Font6EN_arch_big);
+	TFT_DrawChar(X+28, Y+21, '2');
+	TFT_DrawLine(X, Y+19, X+39, Y+19, TFT_White);
+}
+
+void GUI_TextEn_mW_m2_Big_modeL(uint16_t X, uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetBackColor(TFT_Black);
+	TFT_SetFont(&Font16EN_arch_big);
+	TFT_DrawChar(X+5, Y, 'm');
+	TFT_DrawChar(X+17+5, Y, 'W');
+	TFT_DrawChar(X+20, Y+24, 's');
+	TFT_DrawChar(X+35, Y+24, 'r');
+	TFT_DrawChar(X+13-12, Y+24, 'm');
+	TFT_SetFont(&Font6EN_arch_big);
+	TFT_DrawChar(X+28-12, Y+21, '2');
+	TFT_DrawLine(X, Y+19, X+39+5, Y+19, TFT_White);
+	TFT_DrawRectangle(X+19, Y+34, X+20, Y+34, TFT_White);
 }
 
 void GUI_TextEn_mW_m2(uint16_t X, uint16_t Y)

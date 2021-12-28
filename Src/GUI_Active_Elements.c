@@ -304,6 +304,20 @@ void GUI_Switch_Button_Lx_Fl(uint16_t X, uint16_t Y, uint8_t Check)
 		}
 }
 
+void GUI_Switch_Button_mWt_umol(uint16_t X, uint16_t Y, uint8_t Check)
+{
+	TFT_FillRectangle(X, Y, X+36, Y+28, TFT_Black);
+	if(Check)
+		{
+			TFT_DrawFilledRoundedRectangle(X, Y+10, X+35, Y+24, 10, TFT_Blue_On);
+			TFT_DrawFilledCircle(X+25, Y+17, 10, TFT_Blue_Off);
+		} else
+		{
+			TFT_DrawFilledRoundedRectangle(X, Y+10, X+35, Y+24, 10, TFT_Blue_On);
+			TFT_DrawFilledCircle(X+10, Y+17, 10, TFT_White);
+		}
+}
+
 void GUI_Flag_Ru(uint16_t X, uint16_t Y)
 {
 	TFT_FillRectangle(X, Y, X+35, Y+7, TFT_White);
