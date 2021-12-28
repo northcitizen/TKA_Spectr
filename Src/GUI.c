@@ -31,7 +31,7 @@ volatile extern uint8_t pause;
 volatile uint8_t GUI_screen_state = Title_Screen, Rotation_Screen_Spectral_Old, Rotation_Screen_Rend_Old, Language_status_prev, Mode_EL_Old,
 Rotation_Screen_Color = 0x00;
 volatile uint8_t	preGUI_screen_state = 0xFF;
-uint8_t VGain, LaserOnOff, MeasureFlag_display, Mode_EL, TFT_ON_OFF, Q_i[15], Qf, Qa, Qp, Mode_Lx_Fl, MEASURE_FLAG = 0;
+uint8_t VGain, LaserOnOff, MeasureFlag_display, Mode_EL, TFT_ON_OFF, Q_i[15], Qf, Qa, Qp, Mode_Lx_Fl, mW_to_umol, MEASURE_FLAG = 0;
 extern uint8_t  old_meas_type_L, SD_Detect, exp_start, exp_set;
 volatile uint8_t highSignal, lowSignal, exp_num;
 extern int8_t Ra, Rall, R9, Ri[14];
@@ -209,7 +209,7 @@ void GUI_DataSet2_Screen()
 					TFT_SetFont(&Font16EN_arch_big);
 					TFT_DrawChar(60, 331, '-');
 					TFT_DrawChar(70, 332, '>');
-					GUI_Switch_Button_mWt_umol(200, 320, Mode_Lx_Fl);
+					GUI_Switch_Button_mWt_umol(200, 320, mW_to_umol);
 					GUI_TextRu_umol_Big_modeL(105, 320);
 				}else
 				{
@@ -217,7 +217,7 @@ void GUI_DataSet2_Screen()
 					TFT_SetFont(&Font16EN_arch_big);
 					TFT_DrawChar(55, 332, '-');
 					TFT_DrawChar(70, 332, '>');
-					GUI_Switch_Button_mWt_umol(200, 320, Mode_Lx_Fl);
+					GUI_Switch_Button_mWt_umol(200, 320, mW_to_umol);
 					GUI_TextRu_umol_Big(105, 320);
 				}
 
@@ -282,19 +282,18 @@ void GUI_DataSet2_Screen()
 					TFT_SetFont(&Font16EN_arch_big);
 					TFT_DrawChar(55-2, 330, '-');
 					TFT_DrawChar(70-2, 331, '>');
-					GUI_Switch_Button_mWt_umol(200, 320, Mode_Lx_Fl);
+					GUI_Switch_Button_mWt_umol(200, 320, mW_to_umol);
 					GUI_TextEn_umol_Big_modeL(85, 320);
 				}else{
 					GUI_TextEn_mW_m2_Big(10, 320);
 					TFT_SetFont(&Font16EN_arch_big);
 					TFT_DrawChar(55-2, 330, '-');
 					TFT_DrawChar(70-2, 331, '>');
-					GUI_Switch_Button_mWt_umol(200, 320, Mode_Lx_Fl);/////////////////////////////////////////////////////////////////////
+					GUI_Switch_Button_mWt_umol(200, 320, mW_to_umol);
 					GUI_TextEn_umol_Big(85, 320);
 				}
 				GUI_TextEn_B_G_R_FR(10, 337+50);
 				GUI_CheckBox(200, 327+50, Measure_Field&PPFD_BGR);
-				//TFT_DrawLine(10, 377, 262, 377, TFT_White);
 			}
 		}
 }
@@ -2315,7 +2314,7 @@ case Measure3_Screen:
 					GUI_CheckBox(200, 70, Measure_Field&Illuminance);
 					GUI_Display_Refresh();//REFRESH DISPLAY
 				}else
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=133 & Touch_y <=(133+54) ) //PPFD
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=133 & Touch_y <=(133+54) ) //lx to fc
 				{	
 					Mode_Lx_Fl = !Mode_Lx_Fl;
 					GUI_Switch_Button_Lx_Fl(200, 133, Mode_Lx_Fl);
@@ -2328,16 +2327,23 @@ case Measure3_Screen:
 					GUI_CheckBox(200, 198, Measure_Field&Irradiance);
 					GUI_Display_Refresh();//REFRESH DISPLAY
 				}else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=263 & Touch_y <=(263+54) ) //PPFD
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=253 & Touch_y <=(253+54) ) //PPFD
 				{	
 					Measure_Field ^= PPFD;
 					GUI_CheckBox(200, 263, Measure_Field&PPFD);
 					GUI_Display_Refresh();//REFRESH DISPLAY
 				}else 
-				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=327 & Touch_y <=(327+54) ) //BGR
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=308 & Touch_y <=(308+54) ) //mW to umol
 				{	
+					mW_to_umol = !mW_to_umol;
+					GUI_Switch_Button_mWt_umol(200, 320, mW_to_umol);
+					GUI_Display_Refresh();//REFRESH DISPLAY
+				}
+				else
+				if(Touch_x >= 200 & Touch_x <= (200+54) & Touch_y >=363 & Touch_y <=(363+54) ) //BGR
+				{
 					Measure_Field ^= PPFD_BGR;
-					GUI_CheckBox(200, 327, Measure_Field&PPFD_BGR);
+					GUI_CheckBox(200, 377, Measure_Field&PPFD_BGR);
 					GUI_Display_Refresh();//REFRESH DISPLAY
 				} 				
 				else

@@ -540,6 +540,8 @@ void GUI_TextRu_mW_m2_sr(uint16_t X, uint16_t Y)
 	TFT_DrawCharRus(X+28, Y+12, 'р');
 }
 
+
+
 void GUI_TextRu_Cd_m2(uint16_t X, uint16_t Y, uint8_t deg)
 {
 	TFT_SetTextColor(TFT_White);

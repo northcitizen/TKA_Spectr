@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "GUI_Measure_Elements.h"
 #include <math.h>
-extern uint8_t Language_status, Mode_EL, preGUI_screen_state, GUI_screen_state, Mode_Lx_Fl;
+extern uint8_t Language_status, Mode_EL, preGUI_screen_state, GUI_screen_state, Mode_Lx_Fl, mW_to_umol;
 volatile extern uint8_t GRAPH_FLAG, CCT_NO_FLAG;
 volatile uint8_t SPECTRAL_DONE, LAMBDA_TYPE;
 
@@ -516,28 +516,33 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 	TFT_SetBackColor(TFT_Black);
 	if(Language_status == Ru ){
 			TFT_SetFont(&Font26RU_arch_big);
-			//if(preGUI_screen_state != GUI_screen_state){
+
 				TFT_DrawCharRus(X, Y, 'Ф'-17);
 				TFT_DrawCharRus(X+24, Y, 'А'-17);
-				TFT_DrawCharRus(X+48, Y, 'Р'-17);//}
-		(Mode_EL) ? GUI_TextRu_umol(X+200, Y+2, deg) : GUI_TextRu_umol_sr(X+200, Y+2);
+				TFT_DrawCharRus(X+48, Y, 'Р'-17);
+		if(Mode_EL)
+		{
+			(mW_to_umol) ? GUI_TextRu_umol(X+200, Y+2, deg) : GUI_TextRu_mW_m2(X+200, Y+2);
+		}else{
+			(mW_to_umol) ?  GUI_TextRu_umol_sr(X+200, Y+2) : GUI_TextRu_mW_m2_sr(X+200, Y+2);
+		}
 		} else
 		{
 			TFT_SetFont(&Font16EN_arch_big);
 			if(Mode_EL){
-				//if(preGUI_screen_state != GUI_screen_state){
+
 				TFT_DrawChar(X-10, Y+2, 'P');
 				TFT_DrawChar(X+5, Y+2, 'P');
 				TFT_DrawChar(X+20, Y+2, 'F');
-				TFT_DrawChar(X+35, Y+2, 'D');//}
-				GUI_TextEn_umol(X+200, Y+2, deg);
+				TFT_DrawChar(X+35, Y+2, 'D');
+				(mW_to_umol) ? GUI_TextEn_umol(X+200, Y+2, deg) : GUI_TextEn_mW_m2(X+200, Y+2);
 			} else
 			{
 				//if(preGUI_screen_state != GUI_screen_state){
 				TFT_DrawChar(X-10, Y+2, 'P');
 				TFT_DrawChar(X+5, Y+2, 'P');
 				TFT_DrawChar(X+20, Y+2, 'L');//}
-				GUI_TextEn_umol_sr(X+200, Y+2, deg);
+				(mW_to_umol) ? GUI_TextEn_umol_sr(X+200, Y+2, deg) : GUI_TextEn_mW_m2_sr(X+200, Y+2);
 			}
 		}	}
 }
@@ -714,12 +719,22 @@ if (Language_status==Ru)
 		TFT_SetFont(&Font16RU_arch_small);
 		TFT_DrawCharRus(X+54, Y+5, 'и');
 		TFT_DrawCharRus(X+66, Y+5, 'н');
-		(Mode_EL) ? GUI_TextRu_umol(X+202, Y, deg) : GUI_TextRu_umol_sr(X+202, Y) ;
+		if(Mode_EL)
+		{
+			(mW_to_umol) ? GUI_TextRu_umol(X+202, Y, deg) : GUI_TextRu_mW_m2(X+202, Y);
+		}else{
+			(mW_to_umol) ?  GUI_TextRu_umol_sr(X+202, Y) : GUI_TextRu_mW_m2_sr(X+202, Y);
+		}
 	}
 	else if (Language_status==En)
 	{TFT_SetTextColor(TFT_White);
 		GUI_TextEn_Blue(X+34, Y);
-		(Mode_EL) ? GUI_TextEn_umol(X+200, Y, deg) : GUI_TextEn_umol_sr(X+200, Y, deg);	
+		if(Mode_EL)
+		{
+			(mW_to_umol) ? GUI_TextEn_umol(X+202, Y, deg) : GUI_TextEn_mW_m2(X+202, Y);
+		}else{
+			(mW_to_umol) ? GUI_TextEn_umol_sr(X+202, Y, deg) : GUI_TextEn_mW_m2_sr(X+202, Y);
+		}
 	}
 	
 	if (Language_status==Ru)
@@ -729,12 +744,23 @@ if (Language_status==Ru)
 		TFT_SetFont(&Font16RU_arch_small);
 		TFT_DrawCharRus(X+54, Y+27, 'е');
 		TFT_DrawCharRus(X+66, Y+27, 'л');
-		(Mode_EL) ? GUI_TextRu_umol(X+202, Y+22, deg) : GUI_TextRu_umol_sr(X+202, Y+22) ;	
+		if(Mode_EL)
+		{
+			(mW_to_umol) ? GUI_TextRu_umol(X+202, Y+22, deg) : GUI_TextRu_mW_m2(X+202, Y+22);
+		}else{
+			(mW_to_umol) ?  GUI_TextRu_umol_sr(X+202, Y+22) : GUI_TextRu_mW_m2_sr(X+202, Y+22);
+		}
 	}
 	else if (Language_status==En)
 	{	TFT_SetTextColor(TFT_White);
 		GUI_TextEn_Green(X+17, Y+22);
-		(Mode_EL) ? GUI_TextEn_umol(X+200, Y+22, deg) : GUI_TextEn_umol_sr(X+200, Y+22, deg);	
+		//(Mode_EL) ? GUI_TextEn_umol(X+200, Y+22, deg) : GUI_TextEn_umol_sr(X+200, Y+22, deg);
+		if(Mode_EL)
+		{
+			(mW_to_umol) ? GUI_TextEn_umol(X+200, Y+22, deg) : GUI_TextEn_mW_m2(X+200, Y+22);
+		}else{
+			(mW_to_umol) ? GUI_TextEn_umol_sr(X+200, Y+22, deg) : GUI_TextEn_mW_m2_sr(X+200, Y+22);
+		}
 	}
 	
 	
@@ -744,19 +770,46 @@ if (Language_status==Ru)
 		TFT_DrawCharRus(X+40, Y+44, 'К');
 		TFT_SetFont(&Font16RU_arch_small);
 		TFT_DrawCharRus(X+55, Y+49, 'р');
-		(Mode_EL) ? GUI_TextRu_umol(X+202, Y+44, deg) : GUI_TextRu_umol_sr(X+202, Y+44) ;	
+		if(Mode_EL)
+		{
+			(mW_to_umol) ? GUI_TextRu_umol(X+202, Y+44, deg) : GUI_TextRu_mW_m2(X+202, Y+44);
+		}else{
+			(mW_to_umol) ?  GUI_TextRu_umol_sr(X+202, Y+44) : GUI_TextRu_mW_m2_sr(X+202, Y+44);
+		}
 	}
 	else if (Language_status==En)
 	{	TFT_SetTextColor(TFT_White);
 		GUI_TextEn_Red(X+37, Y+44);
-		(Mode_EL) ? GUI_TextEn_umol(X+200, Y+44, deg) : GUI_TextEn_umol_sr(X+200, Y+44, deg);	
+		//(Mode_EL) ? GUI_TextEn_umol(X+200, Y+44, deg) : GUI_TextEn_umol_sr(X+200, Y+44, deg);
+		if(Mode_EL)
+		{
+			(mW_to_umol) ? GUI_TextEn_umol(X+200, Y+44, deg) : GUI_TextEn_mW_m2(X+200, Y+44);
+		}else{
+			(mW_to_umol) ? GUI_TextEn_umol_sr(X+200, Y+44, deg) : GUI_TextEn_mW_m2_sr(X+200, Y+44);
+		}
 	}
 	TFT_SetTextColor(TFT_White);
 	TFT_SetFont(&Font16EN_arch_big);
 	TFT_DrawChar(X+37, Y+66, 'F');
 	TFT_DrawChar(X+53, Y+66, 'R');
-	if (Language_status==Ru) (Mode_EL) ? GUI_TextRu_umol(X+202, Y+66, deg) : GUI_TextRu_umol_sr(X+202, Y+66) ;	
-	else if (Language_status==En) (Mode_EL) ? GUI_TextEn_umol(X+200, Y+66, deg) : GUI_TextEn_umol_sr(X+200, Y+66, deg);	;
+	if (Language_status==Ru) {
+		//(Mode_EL) ? GUI_TextRu_umol(X+202, Y+66, deg) : GUI_TextRu_umol_sr(X+202, Y+66) ;
+		if(Mode_EL)
+		{
+			(mW_to_umol) ? GUI_TextRu_umol(X+202, Y+66, deg) : GUI_TextRu_mW_m2(X+202, Y+66);
+		}else{
+			(mW_to_umol) ?  GUI_TextRu_umol_sr(X+202, Y+66) : GUI_TextRu_mW_m2_sr(X+202, Y+66);
+		}
+	}
+	else if (Language_status==En) {
+		//(Mode_EL) ? GUI_TextEn_umol(X+200, Y+66, deg) : GUI_TextEn_umol_sr(X+200, Y+66, deg);
+		if(Mode_EL)
+		{
+			(mW_to_umol) ? GUI_TextEn_umol(X+200, Y+66, deg) : GUI_TextEn_mW_m2(X+200, Y+66);
+		}else{
+			(mW_to_umol) ? GUI_TextEn_umol_sr(X+200, Y+66, deg) : GUI_TextEn_mW_m2_sr(X+200, Y+66);
+		}
+}
 //}
 }
 uint8_t old_numX = 10, old_numY = 10, old_numZ = 10, old_nanXYZ = 0;
