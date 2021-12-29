@@ -104,7 +104,7 @@ void Spectral_Axes(uint8_t direction){
 void Spectral_PAR_Range(uint8_t direction){
 	if (direction == 0x00)
 	{
-		TFT_FillRectangle(19, 105, 19+PARGraph_B/4, 411, TFT_Black_Bkgr);
+		TFT_FillRectangle(19, 105, 19+PARGraph_B/4, 411, TFT_Black);
 		TFT_FillRectangle(19+PARGraph_B/4, 105, 19+PARGraph_G/4, 411, TFT_PAR_Blue);
 		TFT_FillRectangle(19+PARGraph_G/4, 105, 19+PARGraph_R/4, 411, TFT_PAR_Green);
 		TFT_FillRectangle(19+PARGraph_R/4, 105, 19+PARGraph_IR/4, 411, TFT_PAR_Red);
@@ -131,7 +131,7 @@ void Spectral_Axes_Text(uint8_t direction){
 	if (direction == 0x00)
 	{
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font6EN_arch_big);
 
 		TFT_DrawChar(5, 410, '0');
@@ -170,7 +170,7 @@ void Spectral_Axes_Text(uint8_t direction){
 
 		
 		TFT_SetTextColor(TFT_White);
-		TFT_SetBackColor(TFT_Black_Bkgr);
+		TFT_SetBackColor(TFT_Black);
 		TFT_SetFont(&Font6EN_arch_big);
 
 		sprintf (buffer, "%d", ((WaveLenght_Graph[0]+5)/10)*10);
@@ -230,7 +230,7 @@ void Spectral_DrawGraph(uint16_t ZeroX, uint16_t ZeroY, float GraphData[], uint1
         if(Graph_Field&PPF_Bands)
         {
             Spectral_PAR_Range(direction);
-        }else{TFT_FillRectangle(5, 55, 270, 421, TFT_Black_Bkgr);
+        }else{TFT_FillRectangle(5, 55, 270, 421, TFT_Black);
         }
         
         if(Graph_Field&V_lambda)
@@ -326,7 +326,7 @@ void Spectral_DrawGraph_Line(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData[
         if(Graph_Field&PPF_Bands)
         {
             Spectral_PAR_Range(direction);
-        }else{TFT_FillRectangle(5, 55, 270, 421, TFT_Black_Bkgr);
+        }else{TFT_FillRectangle(5, 55, 270, 421, TFT_Black);
         }
         
         if(Graph_Field&V_lambda)
@@ -390,12 +390,12 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
 //	screen_cnt > 200 ||
     if( direction != Rotation_Screen_Spectral_Old2){
 			Rotation_Screen_Spectral_Old2 = direction;
-			TFT_FillRectangle(1, 55, 271, 421, TFT_Black_Bkgr);
+			TFT_FillRectangle(1, 55, 271, 421, TFT_Black);
 
         if(Graph_Field&PPF_Bands)
         {
             Spectral_PAR_Range(direction);
-        }else{TFT_FillRectangle(5, 55, 270, 421, TFT_Black_Bkgr);
+        }else{TFT_FillRectangle(5, 55, 270, 421, TFT_Black);
         }
 
 //    Spectral_Axes(direction);
@@ -443,7 +443,7 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
 //						DrawLineX(ZeroX+i, 411-GraphData[i], ZeroX+i, 411, Vertical_color_dara[i]);
 
 
-						if(GraphData_Prev[i]>GraphData[i]) if(GUI_screen_state == Graph_Screen)	DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 412 - GraphData_Prev[i], TFT_Black_Bkgr);
+						if(GraphData_Prev[i]>GraphData[i]) if(GUI_screen_state == Graph_Screen)	DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i, 412 - GraphData_Prev[i], TFT_Black);
 
 //						DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i+1, 412-GraphData[i+1], color);
             flag_spectral = 0;
@@ -477,7 +477,7 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
             	DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 252, 72+i, Horizontal_color_dara[graph_lenht - i]);
             }
 
-            if(GraphData_Prev[graph_lenht-i] > GraphData[graph_lenht-i])	 DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 253 - GraphData_Prev[graph_lenht-i], 72+i, TFT_Black_Bkgr);
+            if(GraphData_Prev[graph_lenht-i] > GraphData[graph_lenht-i])	 DrawLineX(253 - GraphData[graph_lenht-i], 72+i, 253 - GraphData_Prev[graph_lenht-i], 72+i, TFT_Black);
 
 //          DrawLineX(253 - GraphData[graph_lenht-i], 72+i+1, 253 - GraphData[graph_lenht-i+1], 72+i, color);
             flag_spectral = 0;
@@ -513,7 +513,7 @@ void Spectral_DrawGraph_Line2(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData
 //				DrawLineX(GraphData[i]+18, 76+i, 18, 76+i, Horizontal_color_dara[i]);
 
 
-				if(GraphData_Prev[i]>GraphData[i])	DrawLineX(GraphData[i]+18, 76+i, GraphData_Prev[i]+18, 76+i, TFT_Black_Bkgr);
+				if(GraphData_Prev[i]>GraphData[i])	DrawLineX(GraphData[i]+18, 76+i, GraphData_Prev[i]+18, 76+i, TFT_Black);
 
 //				DrawLineX(GraphData[i]+18, 76+i, GraphData[i+1]+18, 76+i+1, color);
 				flag_spectral = 0;}
@@ -565,9 +565,9 @@ void Refresh_screen_Graph(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData[], 
 					if((Graph_Field&PPF_Bands)){TFT_FillRectangle_DMA(68, 18+PARGraph_G/4, 375, 20+PARGraph_G/4, TFT_PAR_Green);
 																			TFT_FillRectangle_DMA(68, 18+PARGraph_R/4, 375, 20+PARGraph_R/4, TFT_PAR_Red);
 																			TFT_FillRectangle_DMA(68, 18+PARGraph_IR/4, 375, 20+PARGraph_IR/4, TFT_PAR_IRed);}
-					DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i+1, 412-GraphData[i+1], (Graph_Field&PPF_Bands) ? ((ZeroX+i < 19+PARGraph_B/4) ? TFT_Black_Bkgr : (ZeroX+i < 19+PARGraph_G/4 ) ? TFT_PAR_Blue :
+					DrawLineX(ZeroX+i, 412-GraphData[i], ZeroX+i+1, 412-GraphData[i+1], (Graph_Field&PPF_Bands) ? ((ZeroX+i < 19+PARGraph_B/4) ? TFT_Black : (ZeroX+i < 19+PARGraph_G/4 ) ? TFT_PAR_Blue :
 																																							(ZeroX+i < 19+PARGraph_R/4) ? TFT_PAR_Green :
-																																							(ZeroX+i < 19+PARGraph_IR/4) ? TFT_PAR_Red : TFT_PAR_IRed) : TFT_Black_Bkgr);
+																																							(ZeroX+i < 19+PARGraph_IR/4) ? TFT_PAR_Red : TFT_PAR_IRed) : TFT_Black);
         }
         else if(direction == 0x01)
         {
@@ -576,10 +576,10 @@ void Refresh_screen_Graph(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData[], 
 																			TFT_FillRectangle_DMA(76+PARGraph_IR/3,45, 79+PARGraph_IR/3,253, TFT_PAR_IRed);}
 				
 				DrawLineX(253 - GraphData[graph_lenht-i], 72+i+1, 253 - GraphData[graph_lenht-i+1], 72+i,
-					(Graph_Field&PPF_Bands) ? (72+i+1 < 403-1000/3 ? TFT_Black_Bkgr :
+					(Graph_Field&PPF_Bands) ? (72+i+1 < 403-1000/3 ? TFT_Black :
 											   72+i+1 < 403-PARGraph_IR/3 ? TFT_PAR_IRed:
 											   72+i+1 < 403-PARGraph_R/3 ? TFT_PAR_Red:
-											   72+i+1 < 403-PARGraph_G/3 ? TFT_PAR_Green:TFT_PAR_Blue) : TFT_Black_Bkgr);
+											   72+i+1 < 403-PARGraph_G/3 ? TFT_PAR_Green:TFT_PAR_Blue) : TFT_Black);
 
         } else if(direction == 0x02)
 				{
@@ -587,11 +587,11 @@ void Refresh_screen_Graph(uint16_t ZeroX, uint16_t ZeroY, uint16_t GraphData[], 
 															TFT_FillRectangle_DMA(408-PARGraph_R/3, 19, 405-PARGraph_R/3,227, TFT_PAR_Red);
 															TFT_FillRectangle_DMA(408-PARGraph_IR/3,19, 405-PARGraph_IR/3,227, TFT_PAR_IRed);}
 					
-					DrawLineX(GraphData[i]+18, 76+i, GraphData[i+1]+18, 76+i+1, (Graph_Field&PPF_Bands) ? ((76+i < PARGraph_B/3) ? TFT_Black_Bkgr :
+					DrawLineX(GraphData[i]+18, 76+i, GraphData[i+1]+18, 76+i+1, (Graph_Field&PPF_Bands) ? ((76+i < PARGraph_B/3) ? TFT_Black :
            	(76+i < 74+PARGraph_G/3) ? TFT_PAR_Blue :
            	(76+i < 74+PARGraph_R/3) ? TFT_PAR_Green :
 						(76+i < 74+PARGraph_IR/3) ? TFT_PAR_Red : TFT_PAR_IRed)
-           	:TFT_Black_Bkgr);
+           	:TFT_Black);
 				}
 			}
 		Spectral_Axes(direction);
