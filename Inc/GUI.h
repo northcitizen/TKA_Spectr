@@ -21,7 +21,7 @@
 #include "CRI_Calculate.h"
 #include "Qspi_func.h"
 
-#define VERSION 1.1
+#define VERSION 1.2
 
 //Main Screen
 #define Title_Screen 						0x00
