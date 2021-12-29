@@ -1,8 +1,8 @@
 Debug/
-/Release
+Release/
 /startup
-/.settings
-/Drivers
+.settings/
+Drivers/
 /Middlewares/
 *.ioc
 *.launch
