@@ -10,3 +10,4 @@
 *.cproject
 *.ld
 *.code_review_properties
+/.settings/language.settings.xml
