@@ -147,7 +147,7 @@ const uint16_t exposure_timer_period[10] = {93,			186,			372,		744,		1488,	2976,
 volatile uint16_t	i=0, j=0;
 extern volatile uint8_t	exp_num;
 volatile uint8_t VGain = 0, LaserOnOff = 0, TFT_ON_OFF = 1, temp = 0, send_usb_block = 0, MeasureFlag_display = 0;
-double percentage_charge = 0, percentage_charge_prev = 101.0; //battery charge
+volatile double percentage_charge = 0.0, percentage_charge_prev = 101.0; //battery charge
 volatile uint16_t RGB565_480x272[130560] = {0x00000000};
 
 uint16_t bmp[108000] = {0x0000}; //buffer for image max 270х400
@@ -310,9 +310,9 @@ double Get_Battery_Level()
 	HAL_ADC_PollForConversion(&hadc1, 2);
 	adcResult = HAL_ADC_GetValue(&hadc1);
 	HAL_ADC_Stop(&hadc1);
-	if (adcResult > 3455) adcResult = 3455;
-	if (adcResult < 2750) adcResult = 2750;
-	return percentage_charge = (adcResult - 2750)*100.0 / 705;
+	if (adcResult >= 3455) adcResult = 3455;
+	if (adcResult <= 2750) adcResult = 2750;
+	return percentage_charge = (double)(adcResult - 2750)*100.0 / 705;
 }
 
 void packet_generator_data_send(void) //send ADC data
@@ -1533,12 +1533,15 @@ while (1) {
 		}
 
 		bat_refresh++;
-		if (bat_refresh == 10) {
-			Get_Battery_Level();
+		if (bat_refresh == 10000000) {
 			if (percentage_charge < percentage_charge_prev) {
 				GUI_Battery_Level(0, 0, percentage_charge);
 				percentage_charge_prev = percentage_charge;
 			}
+			if (percentage_charge > percentage_charge_prev) {
+							GUI_Battery_Level(0, 0, percentage_charge);
+							percentage_charge_prev = percentage_charge;
+						}
 			bat_refresh = 0;
 		}
 		__HAL_UART_ENABLE_IT(&huart3, UART_IT_RXNE);
@@ -1658,7 +1661,7 @@ void TIM2_IRQHandler(void)
 void TIM6_DAC_IRQHandler(void)
 {
 	pause_button = 0;
-	Get_Battery_Level();
+	percentage_charge = Get_Battery_Level();
 	
 	HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
   HAL_TIM_IRQHandler(&htim6);

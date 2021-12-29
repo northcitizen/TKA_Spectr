@@ -1707,7 +1707,7 @@ void GUI_Battery_Level(uint16_t X, uint16_t Y, double charge)
 			TFT_FillRectangle(X+36, Y+12, X+40, Y+24, TFT_White);
 		}
 		
-		sprintf (buffer, "%.1f%%", charge);
+		sprintf (buffer, "%.0f%%", charge);
 		TFT_SetFont(&Font8);
 		TFT_SetTextColor(TFT_White);
 		TFT_SetBackColor(TFT_Black);
