@@ -6,7 +6,9 @@ Middlewares/
 *.ioc
 *.launch
 *.mxproject
+*.project
 *.cproject
 *.ld
+*.project
 *.code_review_properties
 /.settings/language.settings.xml
