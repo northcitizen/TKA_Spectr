@@ -1,7 +1,7 @@
 #include "Calculate_Measure.h"
 float sum;
 uint16_t iq;
-uint8_t	Calculate_deltaEab_Done = 0;
+uint8_t	Calculate_deltaEab_Done = 0, mW_to_umol;
 extern uint8_t Measure_Color_xy, Source_Type;
 extern uint16_t colorimetry_XYZ1964[3], lambda_c_Measure, lambda_d_Measure, Measure_Field, colorimetry_XYZ1931[3];
 extern int16_t colorimetry_LAB[3];
@@ -52,7 +52,7 @@ float Calculate_PPFD_PPL(float R_data[], float Wavelenght[])
 
       uint16_t it = 0, beg = 0, end = 1024, Range_min = 700, Range_max = 1000;
        float sum2 = 0.0;
-
+       float converted = 0.0;
 
 	while(Wavelenght[it]<400)
 	{
@@ -67,24 +67,27 @@ float Calculate_PPFD_PPL(float R_data[], float Wavelenght[])
 	}
 	end = it-1;
 	 for(iq = 0; iq < 1024; iq++)
-               {
-                       if(Wavelenght[iq] > Range_min && Wavelenght[iq] < Range_max)
-	                      {
-	                              if(Wavelenght[iq] == Range_max || Wavelenght[iq] == Range_min)
-	                              {
-	                                      sum2 = sum2 + (0.5 * R_data[iq]*Wavelenght[iq]*0.00835936108917328);
-	                              } else
-	                              {
-	                                      sum2 = sum2 + (R_data[iq]*Wavelenght[iq]*0.00835936108917328);
-	                              }
-	                      }
-	              }
+     {
+         if(Wavelenght[iq] > Range_min && Wavelenght[iq] < Range_max)
+	     {
+	        if(Wavelenght[iq] == Range_max || Wavelenght[iq] == Range_min)
+	        {
+	        	(!mW_to_umol) ? (converted = R_data[iq])/*mW*/ : (converted = R_data[iq]*Wavelenght[iq]*0.00835936108917328);//umol
+	           sum2 = sum2 + (0.5 * converted);
+	        } else
+	        {
+	        	(!mW_to_umol) ? (converted = R_data[iq]) : (converted = R_data[iq]*Wavelenght[iq]*0.00835936108917328);
+	           sum2 = sum2 + converted;
+	        }
+	     }
+	  }
 
 
 	sum = 0;
 	for (iq = beg; iq < end; iq++)
 	{
-		sum = sum + (R_data[iq]*Wavelenght[iq]*0.00835936108917328);
+		(!mW_to_umol) ? (converted = R_data[iq]) : (converted = R_data[iq]*Wavelenght[iq]*0.00835936108917328);
+		sum = sum + converted;
 	}
 	return sum-sum2;
 }
@@ -93,6 +96,7 @@ float Calculate_PPFD_PPL_Range(float R_data[], float Wavelenght[], uint8_t Range
 {
 	uint16_t Range_min, Range_max;
 	sum = 0;
+	float converted = 0.0;
 	
 	if (Range == BLUE_RANGE)
 	{
@@ -118,10 +122,12 @@ float Calculate_PPFD_PPL_Range(float R_data[], float Wavelenght[], uint8_t Range
 		{
 			if(Wavelenght[iq] == Range_max || Wavelenght[iq] == Range_min)
 			{
-				sum = sum + (0.5 * R_data[iq]*Wavelenght[iq]*0.00835936108917328);
+				(!mW_to_umol) ? (converted = R_data[iq]) : (converted = R_data[iq]*Wavelenght[iq]*0.00835936108917328);
+				sum = sum + (0.5 * converted);
 			} else
-			{			
-				sum = sum + (R_data[iq]*Wavelenght[iq]*0.00835936108917328);
+			{
+				(!mW_to_umol) ? (converted = R_data[iq]) : (converted = R_data[iq]*Wavelenght[iq]*0.00835936108917328);
+				sum = sum + converted;
 			}
 		}
 	}
