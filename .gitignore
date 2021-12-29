@@ -3,6 +3,7 @@ Release/
 .settings/
 Drivers/
 Middlewares/
+tka_spectrum.elf (1).launch
 *.ioc
 *.launch
 *.mxproject
