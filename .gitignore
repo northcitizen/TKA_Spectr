@@ -1,9 +1,9 @@
 Debug/
 Release/
-/startup
+startup/
 .settings/
 Drivers/
-/Middlewares/
+Middlewares/
 *.ioc
 *.launch
 *.mxproject
