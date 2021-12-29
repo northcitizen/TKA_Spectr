@@ -1,1 +1,13 @@
 /Debug/
+/Release/
+/startup/
+/.settings/
+/Drivers/
+/Middlewares/
+*.ioc
+*.launch
+*.mxproject
+*.cproject
+*.ld
+*.code_review_properties
+/.settings/language.settings.xml
