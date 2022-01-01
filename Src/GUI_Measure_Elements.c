@@ -78,21 +78,12 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		if(!energy_light)
 		{
 			old_nan_El = 0;
-			if(Mode_Lx_Fl)
-				Value = floor(Value*10)/10.0/10.76;//convert to foot-candle
-			else
-			Value = floor(Value*10)/10.0;
+			(Mode_Lx_Fl) ? (Value = floor(Value*10)/10.0/10.76) : (Value = floor(Value*10)/10.0);
 		}
 
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
-
-	if(energy_light){
-		sprintf (buffer, "%.1f", Value);}
-	else{
-		sprintf (buffer, "%.1f", Value);
-	}
 
 	for (uint8_t i = 1; i <= 4; i++)
 	{
@@ -103,21 +94,50 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 			number++;
 		}
 	}
-
-	if(energy_light && number < old_num_e )
-	{
-		TFT_FillRectangle(X+40, Y, X+127, Y+26, TFT_Black);
-	}
-	else if(!energy_light && number < old_num_n)
-	{
-		TFT_FillRectangle(X+40, Y, X+127, Y+26, TFT_Black);
-	}
+		TFT_FillRectangle(X+30, Y, X+127, Y+26, TFT_Black);
 
 	if(energy_light){
 		old_num_e = number;}
 	else{
 		old_num_n = number;
 	}
+
+		if (!energy_light) {//Ev
+			if (Value >= 100.0 && Value <= 999.0) {
+				delta_pos += 23;
+				sprintf(buffer, "%.1f", Value);
+			}
+			if (Value <= 99.0)
+				sprintf(buffer, "%.2f", Value);
+			if (deg == 1)
+				sprintf(buffer, "%.0f", Value * 1000.0);
+			if(deg == 1 && Mode_Lx_Fl)
+			{
+				delta_pos -= 23;
+				sprintf(buffer, "%.1f", Value * 1000.0);
+			}if(deg == 1 && Mode_Lx_Fl && Value > 1.0)
+			{
+				delta_pos += 23;
+				sprintf(buffer, "%.0f", Value * 1000.0);
+			}
+
+
+		}else if(energy_light)//Ee
+		{
+			if (Value >= 100.0 && Value <= 999.0) {
+							delta_pos += 23;
+							sprintf(buffer, "%.1f", Value);
+						}
+						if (Value <= 99.0)
+							sprintf(buffer, "%.2f", Value);
+						if (deg != 2 && deg != 1)
+							sprintf(buffer, "%.0f", Value * 1000.0);
+						if (Value >= 100.0 && deg != 2)
+						{
+							sprintf(buffer, "%.0f", Value * 1000.0);
+							delta_pos-=23;
+						}
+		}
 
 	buffer[8] = 0;
 	TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
@@ -126,71 +146,17 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	if (Language_status == Ru && !energy_light)
 	{
 			if(deg != old_deg_e){
-			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black);
+			TFT_FillRectangle(X+230, Y+3, X+250, Y+26, TFT_Black);
 			TFT_SetTextColor(TFT_White);
-			TFT_SetFont(&Font26RU_arch_small);
-			if(deg){
-				if(Mode_Lx_Fl)
-				{
-					TFT_SetFont(&Font16EN_arch_small);
-					TFT_DrawChar(X+202, Y+5, 'k');
-					TFT_DrawChar(X+215, Y+5, 'f');
-					TFT_DrawChar(X+225, Y+5, 'c');
-				}else{
-					TFT_DrawCharRus(X+200, Y+4, 'к');
-					TFT_DrawCharRus(X+215, Y+4, 'л');
-					TFT_DrawCharRus(X+232, Y+4, 'к');
-				}
-			}else{
-				if(Mode_Lx_Fl)
-				{
-					TFT_SetFont(&Font16EN_arch_small);
-					TFT_DrawChar(X+215, Y+5, 'f');
-					TFT_SetFont(&Font16EN_arch_small);
-					TFT_DrawChar(X+225, Y+5, 'c');
-				}else
-				{
-					TFT_DrawCharRus(X+200, Y+4, 'л');
-					TFT_DrawCharRus(X+215, Y+4, 'к');
-				}
-			}
+
+			(Mode_Lx_Fl) ? GUI_TextEn_fc(X, Y) : GUI_TextRu_lx(X, Y);
 		}
 			old_deg_e = deg;
 	} else if (Language_status == En && !energy_light)
 	{
 		if(deg != old_deg_e){
-			TFT_FillRectangle(X+198, Y+3, X+250, Y+26, TFT_Black);
-			if (deg){
-				if(Mode_Lx_Fl)
-				{
-					TFT_SetFont(&Font16EN_arch_small);
-					TFT_DrawChar(X+202, Y+5, 'k');
-					TFT_DrawChar(X+215, Y+5, 'f');
-					TFT_DrawChar(X+225, Y+5, 'c');
-				}else
-				{
-					TFT_SetTextColor(TFT_White);
-					TFT_SetFont(&Font26EN_arch_small);
-					TFT_DrawChar(X+214, Y+4, 'l'-65);
-					TFT_DrawChar(X+200, Y+4, 'k'-65);
-					TFT_DrawChar(X+226, Y+4, 'x'-65);
-					old_rulx = 0;
-				}
-		}else{
-			if(Mode_Lx_Fl)
-			{
-				TFT_SetFont(&Font16EN_arch_small);
-				TFT_DrawChar(X+215, Y+5, 'f');
-				TFT_SetFont(&Font16EN_arch_small);
-				TFT_DrawChar(X+225, Y+5, 'c');
-			}else{
-				TFT_SetTextColor(TFT_White);
-				TFT_SetFont(&Font26EN_arch_small);
-				TFT_DrawChar(X+200, Y+4, 'l'-65);
-				TFT_DrawChar(X+212, Y+4, 'x'-65);
-			}
-			
-			}
+			TFT_FillRectangle(X+230, Y+3, X+250, Y+26, TFT_Black);
+			(Mode_Lx_Fl) ? GUI_TextEn_fc(X, Y) : GUI_TextEn_lx(X, Y);
 		}
 		
 		old_deg_e = deg;
@@ -199,16 +165,10 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	{	
 		if (deg != old_deg_e_wt)
 		{
-			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black);
+			TFT_FillRectangle(234, Y, 270, Y+26, TFT_Black);
 		}
-		if (deg == 2)
-		{
-			GUI_TextRu_mW_m2(234, Y);
-		}
-		else
-		{
-			GUI_TextRu_W_m2(234, Y);
-		}
+
+		GUI_TextRu_mW_m2(238, Y);
 		old_deg_e_wt = deg;
 
 	}
@@ -217,16 +177,9 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	{
 		if (deg != old_deg_e_wt)
 		{
-			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black);
+			TFT_FillRectangle(234, Y, 270, Y+26, TFT_Black);
 		}
-		if (deg == 2)
-		{
-			GUI_TextEn_mW_m2(234, Y);
-		}
-		else
-		{
-			GUI_TextEn_W_m2(234, Y);
-		}
+		GUI_TextEn_mW_m2(238, Y);
 		old_deg_e_wt = deg;
 	}
 	
@@ -314,14 +267,9 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 			Value = floor(Value*10)/10.0;
 	}
 
-	
-	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
-	
-		sprintf (buffer, "%.2f", Value);
-
 
 for (uint8_t i = 1; i <= 4; i++)
 	{
@@ -336,7 +284,7 @@ for (uint8_t i = 1; i <= 4; i++)
 	if(energy_light && number < old_numL_e )
 	{
 		TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black);
-	} 
+	}
 	else if(!energy_light && number < old_numL_n)
 	{
 		TFT_FillRectangle(X+40, Y, X+197, Y+26, TFT_Black);
@@ -347,89 +295,61 @@ for (uint8_t i = 1; i <= 4; i++)
 	else{
 		old_numL_n = number;
 	}
-	
+	if (!energy_light) {//Ev
+		if (Value >= 100.0 && Value <= 999.0) {
+			delta_pos += 23;
+			sprintf(buffer, "%.1f", Value);
+		}
+		if (Value <= 99.0)
+			sprintf(buffer, "%.2f", Value);
+		if (deg == 1)
+			sprintf(buffer, "%.0f", Value * 1000.0);
+		if(deg == 1 && Mode_Lx_Fl)
+		{
+			delta_pos -= 23;
+			sprintf(buffer, "%.1f", Value * 1000.0);
+		}if(deg == 1 && Mode_Lx_Fl && Value > 1.0)
+		{
+			delta_pos += 23;
+			sprintf(buffer, "%.0f", Value * 1000.0);
+		}
+
+
+	}else if(energy_light)//Ee
+	{
+			if (Value >= 100.0 && Value <= 999.0) {
+				delta_pos += 23;
+				sprintf(buffer, "%.1f", Value);
+			}
+			if (Value <= 99.0)
+				sprintf(buffer, "%.2f", Value);
+			if (deg != 2 && deg != 1)
+				sprintf(buffer, "%.0f", Value * 1000.0);
+			if (Value >= 100.0 && deg != 2) {
+				sprintf(buffer, "%.0f", Value * 1000.0);
+				delta_pos -= 23;
+			}
+	}
 	buffer[8] = 0;
 	TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
 	
 }
 	if (Language_status == Ru && !energy_light)
 	{
-		if (deg && old_deg_L != 1){
-			old_deg_L = 1;
-			TFT_FillRectangle(X+210, Y+3, X+250, Y+26, TFT_Black);
-			if(Mode_Lx_Fl)
-			{
-				TFT_SetFont(&Font11EN_arch_big);
-				TFT_DrawChar(X+200, Y+5, 'k');
-				TFT_DrawChar(X+215, Y+5, 'f');
-				TFT_SetFont(&Font11EN_arch_big);
-				TFT_DrawChar(X+225, Y+5, 'L');
-			}
-			else
-			GUI_TextRu_Cd_m2(X+205, Y, 1);
-		}else if(!deg && old_deg_L != 0){
-			old_deg_L = 0;
-			TFT_FillRectangle(X+210, Y, X+251, Y+26, TFT_Black);
-			if(Mode_Lx_Fl)
-			{
-				TFT_SetFont(&Font11EN_arch_big);
-				TFT_DrawChar(X+215, Y+5, 'f');
-				TFT_SetFont(&Font11EN_arch_big);
-				TFT_DrawChar(X+225, Y+5, 'L');
-			}
-			else
-			GUI_TextRu_Cd_m2(X+205, Y, 0);
-		}
+			TFT_FillRectangle(X+230, Y, X+251, Y+26, TFT_Black);
+			(Mode_Lx_Fl) ? GUI_TextEn_fL(X, Y) : GUI_TextRu_Cd_m2(X+210, Y, 0);
 	} 
 	else if (Language_status == En && !energy_light)
 	{
-		if (deg && old_deg_L != 1){
-			old_deg_L = 1;
 			TFT_FillRectangle(X+210, Y-5, X+251, Y+26, TFT_Black);
-			if(Mode_Lx_Fl)
-			{
-				TFT_SetFont(&Font11EN_arch_big);
-				TFT_DrawChar(X+200, Y+5, 'k');
-				TFT_DrawChar(X+215, Y+5, 'f');
-				TFT_SetFont(&Font11EN_arch_big);
-				TFT_DrawChar(X+225, Y+5, 'L');
-			}
-			else
-			GUI_TextEn_cd_m2(X+210, Y-4, 1);
-		}else if(!deg && old_deg_L != 0){
-			old_deg_L = 0;
-			TFT_FillRectangle(X+210, Y-5, X+251, Y+26, TFT_Black);
-			if(Mode_Lx_Fl)
-			{
-				TFT_SetFont(&Font11EN_arch_big);
-				TFT_DrawChar(X+215, Y+5, 'f');
-				TFT_SetFont(&Font11EN_arch_big);
-				TFT_DrawChar(X+225, Y+5, 'L');
-
-
-
-			}
-			else
-			GUI_TextEn_cd_m2(X+215, Y-4, 0);
-		}
-		
-	}
-
-	else
-	if (Language_status == Ru && energy_light)
+			(Mode_Lx_Fl) ? GUI_TextEn_fL(X, Y) : GUI_TextEn_cd_m2(X+215, Y-4, 0);
+	}else if (Language_status == Ru && energy_light)
 	{	
 		if (deg != old_deg_L_wt)
 		{
 			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black);
 		}
-		if (deg == 2)
-		{
 			GUI_TextRu_mW_m2_sr(X+210, Y);
-		}
-		else
-		{
-			GUI_TextRu_W_m2_sr(X+210, Y);
-		}
 		old_deg_L_wt = deg;
 
 	}
@@ -439,14 +359,7 @@ for (uint8_t i = 1; i <= 4; i++)
 		{
 			TFT_FillRectangle(230, Y, 270, Y+26, TFT_Black);
 		}
-		if (deg == 2)
-		{
 			GUI_TextEn_mW_m2_sr(X+210, Y);
-		}
-		else
-		{
-			GUI_TextEn_W_m2_sr(X+210, Y);
-		}
 		old_deg_L_wt = deg;
 	}
 }

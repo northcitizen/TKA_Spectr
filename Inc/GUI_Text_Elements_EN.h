@@ -79,4 +79,7 @@ void GUI_TextMsgEn_HighRadiance(uint16_t X, uint16_t Y);
 void GUI_TextMsgEn_LowRadiance(uint16_t X, uint16_t Y);
 void GUI_TextMsgEn_LowIrradiance(uint16_t X, uint16_t Y);
 void GUI_TextEn_CRI_no(uint16_t X, uint16_t Y, uint8_t direction);
+void GUI_TextEn_fL(uint16_t X,  uint16_t Y);
+void GUI_TextEn_fc(uint16_t X,  uint16_t Y);
+void GUI_TextEn_lx(uint16_t X,  uint16_t Y);
 #endif

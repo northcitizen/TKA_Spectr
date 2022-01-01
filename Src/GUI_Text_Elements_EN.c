@@ -1090,3 +1090,26 @@ void GUI_TextEn_CRI_no(uint16_t X, uint16_t Y, uint8_t direction)
 		TFT_direction = 0x00;
 	}
 }
+
+void GUI_TextEn_fL(uint16_t X,  uint16_t Y)
+{
+	TFT_SetFont(&Font12EN_arch_small);
+	TFT_DrawChar(X+215+5, Y+5+2, 'f'-65);
+	TFT_SetFont(&Font9EN_arch_big);
+	TFT_DrawChar(X+225, Y+5, 'L');
+}
+
+void GUI_TextEn_fc(uint16_t X,  uint16_t Y)
+{
+	TFT_SetFont(&Font12EN_arch_small);
+	TFT_DrawChar(X+230-5, Y+5+2, 'f'-65);
+	TFT_DrawChar(X+236-5, Y+5+2, 'c'-65);
+}
+
+void GUI_TextEn_lx(uint16_t X,  uint16_t Y)
+{
+	TFT_SetTextColor(TFT_White);
+	TFT_SetFont(&Font12EN_arch_small);
+	TFT_DrawChar(X+230-5, Y+4+2, 'l'-65);
+	TFT_DrawChar(X+236-5, Y+4+2, 'x'-65);
+}

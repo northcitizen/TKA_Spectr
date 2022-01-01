@@ -824,3 +824,10 @@ void GUI_TextRu_CRI_no(uint16_t X, uint16_t Y, uint8_t direction)
 		TFT_direction = 0x00;
 	}
 }
+
+void GUI_TextRu_lx(uint16_t X, uint16_t Y)
+{
+	TFT_SetFont(&Font12RU_arch_small);
+	TFT_DrawCharRus(X+230-5, Y+4+2, 'л');
+	TFT_DrawCharRus(X+236-5, Y+4+2, 'к');
+}

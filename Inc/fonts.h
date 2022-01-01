@@ -61,11 +61,13 @@ extern sFONT Font16RU;
 extern sFONT Font14RU;
 extern sFONT Font16RU_arch_small;
 extern sFONT Font16RU_arch_big;
+
 extern sFONT Font16EN_arch_small;
 extern sFONT Font16EN_arch_big;
 extern sFONT Font26EN_arch_big;
 extern sFONT Font26EN_arch_digit;
 extern sFONT Font26EN_arch_small;
+
 extern sFONT Font26RU_arch_small;
 extern sFONT Font26RU_arch_big;
 extern sFONT Font12RU_arch_small;
