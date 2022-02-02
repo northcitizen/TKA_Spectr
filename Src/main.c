@@ -40,7 +40,7 @@
 #define FLASH_DATA_SIZE								21514				//number of uint64_t data 
 #define FLASH_CRC_ADDR 								0x0812A050	//addr for FLASH CRC check 
 
-//#define SERVICE
+#define SERVICE
 #define BT
 
 extern volatile float progress_bar;
@@ -665,7 +665,7 @@ void usb_receive_processing(void)
 						dataToSend[1] = 0x12;
 						dataToSend[2] = 0x1A;
 						memset(dataToReceive, 0, sizeof(dataToReceive));
-						HAL_Delay(3);
+						//HAL_Delay(3);
 					break;
 					
 					case CMD_FLASH_WR_DATA :
@@ -681,7 +681,7 @@ void usb_receive_processing(void)
 						}
 						HAL_FLASH_Lock();
 						memset(dataToReceive, 0, sizeof(dataToReceive));
-						HAL_Delay(3);
+						//HAL_Delay(3);
 					break;
 					
 					case CMD_FLASH_READ_DATA :
@@ -705,7 +705,7 @@ void usb_receive_processing(void)
 					
 						USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
 						memset(dataToReceive, 0, sizeof(dataToReceive));
-						HAL_Delay(3);
+						//HAL_Delay(3);
 					break;
 					case CMD_CRC_LOAD_STATUS:
 						dataToSend[0] = 0xAB;
@@ -719,7 +719,7 @@ void usb_receive_processing(void)
 						}
 						USBD_CUSTOM_HID_SendReport(&hUsbDeviceFS, dataToSend, 64);
 						memset(dataToReceive, 0, sizeof(dataToReceive));
-						HAL_Delay(3);
+						//HAL_Delay(3);
 					break;	
 						
 				case CMD_CALCULATED_DATA_TRANSMIT : 
@@ -1727,7 +1727,7 @@ void EXTI9_5_IRQHandler(void)
 	}
 
 	HAL_NVIC_ClearPendingIRQ(EXTI9_5_IRQn);
-  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_7);
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_7);
 }
 
 
@@ -1852,6 +1852,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
