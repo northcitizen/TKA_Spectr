@@ -471,12 +471,12 @@ void SD_Witer(uint16_t file_cnt, uint8_t Language_status, uint8_t Memory_Data_sa
 	{
 
 
-	(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Ee_ru, sizeof(SD_Text_Ee_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Ee_en, sizeof(SD_Text_Ee_en), &byteswritten));//Ee
+	(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Eu_ru, sizeof(SD_Text_Eu_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Eu_en, sizeof(SD_Text_Eu_en), &byteswritten));//Ee
 	sprintf(measure_buff, "%.2f",  E_day); //Ee
 	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 	memset(measure_buff, 0, 12);
 
-	(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Eu_ru, sizeof(SD_Text_Eu_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Eu_en, sizeof(SD_Text_Eu_en), &byteswritten));//Eu
+	(Language_status==Ru)?(f_write(&MyFile, &SD_Text_Ee_ru, sizeof(SD_Text_Ee_ru), &byteswritten)):(f_write(&MyFile, &SD_Text_Ee_en, sizeof(SD_Text_Ee_en), &byteswritten));//Eu
 	sprintf(measure_buff, "%.1f",  E_day_Wt); //Eu
 	f_write(&MyFile, &measure_buff, sizeof(measure_buff), &byteswritten);
 	memset(measure_buff, 0, 12);
