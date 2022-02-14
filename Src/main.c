@@ -21,6 +21,7 @@
 #include "tmp144.h"
 #include "stm32_hal_legacy.h"
 
+volatile extern uint8_t colorRendCRI;
 
 //CMD DEFINITION
 #define CMD_DATA_TRANSMIT 						0x01
@@ -40,7 +41,7 @@
 #define FLASH_DATA_SIZE								21514				//number of uint64_t data 
 #define FLASH_CRC_ADDR 								0x0812A050	//addr for FLASH CRC check 
 
-#define SERVICE
+//#define SERVICE
 #define BT
 
 extern volatile float progress_bar;
@@ -54,7 +55,7 @@ extern volatile uint8_t SPECTRAL_DONE, START_MEASURE_VALUE_FLAG;
  volatile  uint8_t start;
  uint8_t USB_MEASURE = 0x0, TOUCH_SCREEN = 0x0;
  extern volatile uint8_t Rotation_Screen_Rend, CRICQS_done;
- extern int8_t Ra, Rall, R9, Ri[14], Q_i[15], Qf, Qa, Qp;
+ extern int8_t Ra, Rall, R9, Ri[15], Q_i[15], Qf, Qa, Qp;
  uint8_t Calc_ColorRend;
 
 //USB
@@ -1401,10 +1402,11 @@ int main(void)
 	{
 		Factor2 = Rabs_calc_Factor2_Settings_change(Exposure_Factor, EnergyFactor_E);
 	}
-
 	GUI_screen_state = Calibration_Load_1byte(SCREENADDR, 3);
 
-	Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
+  colorRendCRI = Calibration_Load_1byte(SET_COLORRENDFIELD, 3);
+
+		Image_load(TKA_LOGO_BMP, TKA_LOGO_BMP_SIZEX*TKA_LOGO_BMP_SIZEY);
 
 #ifdef BT
 	BlueTooth_Module_Init();
@@ -1718,6 +1720,8 @@ void EXTI9_5_IRQHandler(void)
 		if(send_usb_block == 0 && (!pause))
 			{
 				memcpy(Line_buff, Line, sizeof(Line));
+				//START_MEASURE_VALUE_FLAG = 1;
+
 			}
 			i = 0;
 

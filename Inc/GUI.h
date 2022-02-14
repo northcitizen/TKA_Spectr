@@ -84,7 +84,7 @@
 #define Color_CIE_Lab				0x02
 #define Color_CIE_Luv				0x04
 
-#define CRI_CQS						0x01
+#define CRI_CQS					    0x01
 #define CIE_xy_1931_1964			0x01
 
 typedef enum{

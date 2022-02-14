@@ -2,7 +2,7 @@
 #include "GUI_Measure_Elements.h"
 
 double Ri_temp[15];
-int8_t Ra = 0, Rall= 0, R9= 0, Ri[15]= {0};
+volatile int8_t Ra = 0, Rall= 0, R9= 0, Ri[15]= {0};
 
 // float tc = 2782.69542;
 extern float WaveLenght[1024];

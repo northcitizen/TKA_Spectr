@@ -68,17 +68,17 @@ void GUI_Text_E_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 		if(energy_light && deg == 2)
 		{
 			old_nan_Ee = 0;
-			Value = floor(Value*10)/10.0;
+			Value = /*floor*/(Value*10)/10.0;
 		}
 		else if (energy_light && deg != 2)
 		{
 			old_nan_Ee = 0;
-			Value = floor(Value*100)/100.0;
+			Value = /*floor*/(Value*100)/100.0;
 		}
 		if(!energy_light)
 		{
 			old_nan_El = 0;
-			(Mode_Lx_Fl) ? (Value = floor(Value*10)/10.0/10.76) : (Value = floor(Value*10)/10.0);
+			(Mode_Lx_Fl) ? (Value = /*floor*/(Value*10)/10.0/10.76) : (Value = /*floor*/(Value*10)/10.0);
 		}
 
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
@@ -251,20 +251,20 @@ void GUI_Text_L_Measure(uint16_t X, uint16_t Y, float Value, uint8_t energy_ligh
 	if(energy_light && deg == 2)
 	{
 		old_nan_Ee = 0;
-			Value = floor(Value*10)/10.0;
+			Value = /*floor*/(Value*10)/10.0;
 	}
 	else if (energy_light && deg != 2)
 	{
 		old_nan_Ee = 0;
-			Value = floor(Value*100)/100.0;
+			Value = /*floor*/(Value*100)/100.0;
 	}
 	if(!energy_light)
 	{
 		old_nan_El = 0;
 		if(Mode_Lx_Fl)
-			Value = (floor(Value*10)/10.0)/3.426;//convert to foot-lambert
+			Value = (/*floor*/(Value*10)/10.0)/3.426;//convert to foot-lambert
 		else
-			Value = floor(Value*10)/10.0;
+			Value = /*floor*/(Value*10)/10.0;
 	}
 
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
@@ -390,7 +390,7 @@ void GUI_Text_PPF_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, uin
 			TFT_FillRectangle(X+70, Y, X+197, Y+26, TFT_Black);
 		}
 	old_nan_PPF = 0;
-	Value = floor(Value*10)/10.0;
+	Value = /*floor*/(Value*10)/10.0;
 	
 	if((Value/1000) >= 1.0)
 	{
@@ -497,7 +497,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 			TFT_FillRectangle(X+98, Y+65, X+195, Y+87, TFT_Black);
 		}
 	old_nan_PPFRGB = 0;
-	ValueB = floor(ValueB*10)/10.0;
+	ValueB = /*floor*/(ValueB*10)/10.0;
 	
 	if((ValueB/1000) > 1.0)
 	{
@@ -529,7 +529,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 	buffer[8] = 0;
 	TFT_DisplayString(X+delta_pos, Y, (uint8_t *)buffer, LEFT_MODE);
 	
-	ValueG = floor(ValueG*10)/10.0;
+	ValueG = /*floor*/(ValueG*10)/10.0;
 	if((ValueG/1000) > 1.0)
 	{
 		ValueG = ValueG/(1000);
@@ -560,7 +560,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 	buffer[8] = 0;
 	TFT_DisplayString(X+delta_pos, Y+22, (uint8_t *)buffer, LEFT_MODE);
 	
-	ValueR = floor(ValueR*10)/10.0;
+	ValueR = /*floor*/(ValueR*10)/10.0;
 	if((ValueR/1000) > 1.0)
 	{
 		ValueR = ValueR/(1000);
@@ -592,7 +592,7 @@ void GUI_Text_PPFRGB_Measure(uint16_t X, uint16_t Y, float ValueR, float ValueG,
 	TFT_DisplayString(X+delta_pos, Y+44, (uint8_t *)buffer, LEFT_MODE);
 	
 
-	ValueFR = floor(ValueFR*10)/10.0;
+	ValueFR = /*floor*/(ValueFR*10)/10.0;
 	if((ValueFR/1000) > 1.0)
 	{
 		ValueFR = ValueFR/(1000);
@@ -1043,7 +1043,7 @@ void GUI_Text_lambdaD_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 		}
 
 	if(preGUI_screen_state != GUI_screen_state){old_nan_lambdaD = 0;}
-	Value = floor(Value*10)/10.0;
+	Value = /*floor*/(Value*10)/10.0;
 	char buffer[7] = {0};
 	uint8_t	delta_pos = 122, number = 0;
 	uint32_t dec = 10;
@@ -1117,7 +1117,7 @@ void GUI_Text_lambdaC_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope,
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
-	Value = floor(Value*10)/10.0;
+	Value = /*floor*/(Value*10)/10.0;
 	sprintf (buffer, "%.1f", Value);
 	for (uint8_t i = 1; i <= 4; i++)
 	{
@@ -1183,7 +1183,7 @@ void GUI_Text_deltaE_Measure(uint16_t X, uint16_t Y, float Value, uint8_t nope, 
 			TFT_FillRectangle(X + 40, Y, X + 250, Y + 26, TFT_Black);
 		}
 	old_nan_deltaE = 0;
-	Value = floor(Value*10)/10.0;
+	Value = /*floor*/(Value*10)/10.0;
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
@@ -1251,8 +1251,8 @@ void GUI_Text_EbEr_Measure(uint16_t X, uint16_t Y, float ValueEB, float ValueER,
 			 TFT_FillRectangle(X+40-50, Y, X+250-50, Y+26, TFT_Black);
 				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black);}
 	old_nan_EBER = 0;
-	ValueEB = floor(ValueEB*100)/100.0;
-	ValueER = floor(ValueER*100)/100.0;
+	ValueEB = /*floor*/(ValueEB*100)/100.0;
+	ValueER = /*floor*/(ValueER*100)/100.0;
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black);
 	TFT_SetFont(&Font26EN_arch_digit);
@@ -1347,8 +1347,8 @@ void GUI_Text_LbLr_Measure(uint16_t X, uint16_t Y, float ValueLB, float ValueLR,
 				TFT_FillRectangle(X+40-50, Y+35, X+250-50, Y+59, TFT_Black);}
 		
 	old_nan_LBLR = 0;
-	ValueLB = floor(ValueLB*100)/100.0;
-	ValueLR = floor(ValueLR*100)/100.0;
+	ValueLB = /*floor*/(ValueLB*100)/100.0;
+	ValueLR = /*floor*/(ValueLR*100)/100.0;
 	
 	TFT_SetTextColor(grey ? TFT_Grey : TFT_White);
 	TFT_SetBackColor(TFT_Black);

@@ -95,8 +95,8 @@ extern uint8_t Measure_Color_xy;
 double SDWr_Status_bar = 0;
 volatile uint8_t LAMBDA_TYPE;
 extern uint16_t	Measure_Field;
-extern uint8_t	Graph_Field, Color_Field, Color_rend_Field, Language_status, Source_Type, Mode_EL, Bluetooth;
-
+extern uint8_t	Graph_Field, Color_Field, Language_status, Source_Type, Mode_EL, Bluetooth;
+volatile extern uint8_t Color_rend_Field;
 
 FATFS SDFatFs;  /* File system object for SD card logical drive */
 FIL MyFile;     /* File object */
@@ -117,7 +117,7 @@ HAL_StatusTypeDef	flash_ok = HAL_ERROR;
 		HAL_FLASH_Unlock();
 		HAL_FLASH_Unlock();
 	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR); 
-		HAL_Delay(100);
+		//HAL_Delay(100);
 		EraseInitStruct3.TypeErase = FLASH_TYPEERASE_PAGES;
 		EraseInitStruct3.Banks = FLASH_BANK_2; 
 		EraseInitStruct3.Page = (uint32_t)48;
@@ -125,7 +125,7 @@ HAL_StatusTypeDef	flash_ok = HAL_ERROR;
 
 	 HAL_FLASHEx_Erase(&EraseInitStruct3, &PAGEError);
 
-	HAL_Delay(50);
+	//HAL_Delay(50);
 
 	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR); 
 		HAL_FLASH_Lock();
@@ -191,7 +191,7 @@ HAL_StatusTypeDef	flash_ok = HAL_ERROR;
 		HAL_FLASH_Unlock();
 		HAL_FLASH_Unlock();
 	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
-		HAL_Delay(100);
+		//HAL_Delay(100);
 		EraseInitStruct3.TypeErase = FLASH_TYPEERASE_PAGES;
 		EraseInitStruct3.Banks = FLASH_BANK_2;
 		EraseInitStruct3.Page = (uint32_t)49;
@@ -199,7 +199,7 @@ HAL_StatusTypeDef	flash_ok = HAL_ERROR;
 
 	 HAL_FLASHEx_Erase(&EraseInitStruct3, &PAGEError);
 
-	HAL_Delay(50);
+	//HAL_Delay(50);
 
 	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
 		HAL_FLASH_Lock();
@@ -211,7 +211,6 @@ HAL_StatusTypeDef	flash_ok = HAL_ERROR;
 					}
 		HAL_FLASH_Lock();
 }
-
 
 void Calculate_SD_Data()
 {
